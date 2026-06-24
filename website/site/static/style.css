@@ -1,0 +1,997 @@
+/* Crew of the True Hand — nautical D&D theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  --bg-deep: #0a2a3f;
+  --bg-mid: #143850;
+  --bg-foam: #2a5a73;
+  --parchment: #f1e3c1;
+  --parchment-dark: #d9c79c;
+  --parchment-shadow: #c4b08a;
+  --ink: #2a1f12;
+  --ink-soft: #4d3a23;
+  --rope: #b48e54;
+  --rope-dark: #7a5a30;
+  --wood: #4d2f17;
+  --wood-light: #6c4022;
+  --brass: #c19a4a;
+  --brass-bright: #e6c069;
+  --sea-foam: #b9dbe0;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+
+  --status-active: #2b7a4b;
+  --status-active-main: #8a2e2e;
+  --status-unresolved: #c08a2e;
+  --status-completed: #5e6e7a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  line-height: 1.65;
+  background:
+    radial-gradient(ellipse at top, var(--bg-foam) 0%, var(--bg-mid) 30%, var(--bg-deep) 70%),
+    var(--bg-deep);
+  background-attachment: fixed;
+}
+
+/* ---------- subtle water shimmer behind everything ---------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(95deg,
+      transparent 0px, transparent 60px,
+      rgba(185, 219, 224, 0.04) 60px, rgba(185, 219, 224, 0.04) 62px);
+  opacity: 0.6;
+}
+
+/* ---------- header / nav ---------- */
+.site-header {
+  background:
+    linear-gradient(180deg, var(--wood-light) 0%, var(--wood) 100%);
+  color: var(--parchment);
+  padding: 1rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 4px solid var(--brass);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 1;
+}
+.site-title a {
+  color: var(--parchment);
+  text-decoration: none;
+  font-family: 'Cinzel', serif;
+  font-size: 1.45rem;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+.site-title a em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--brass-bright);
+}
+.site-title .anchor {
+  color: var(--brass-bright);
+  margin-right: 0.35em;
+  font-size: 1.2em;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+}
+.site-nav a {
+  color: var(--parchment);
+  text-decoration: none;
+  padding: 0.35rem 0.85rem;
+  border-radius: 3px;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.04em;
+}
+.site-nav a:hover {
+  background: rgba(193, 154, 74, 0.3);
+  color: var(--brass-bright);
+}
+.site-nav a.active {
+  background: rgba(193, 154, 74, 0.4);
+  color: #fff;
+}
+
+/* ---------- content card ---------- */
+.content {
+  max-width: 1080px;
+  margin: 2.5rem auto;
+  padding: 2.8rem 3.2rem;
+  background: var(--parchment);
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(0,0,0,0.04) 0, transparent 40%),
+    radial-gradient(circle at 82% 75%, rgba(0,0,0,0.06) 0, transparent 50%),
+    radial-gradient(circle at 55% 50%, rgba(196, 176, 138, 0.4) 0, transparent 65%);
+  border: 1px solid var(--parchment-shadow);
+  box-shadow: var(--shadow), inset 0 0 60px rgba(122, 90, 48, 0.15);
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+/* rope dividers at the top and bottom edges of the content card */
+.content::before, .content::after {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  height: 12px;
+  background-image: repeating-linear-gradient(108deg,
+    var(--rope-dark) 0 3px,
+    var(--rope) 3px 11px,
+    var(--rope-dark) 11px 14px);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.content::before { top: -6px; }
+.content::after  { bottom: -6px; }
+
+/* ---------- typography ---------- */
+h1, h2, h3, h4 {
+  font-family: 'Cinzel', serif;
+  color: var(--wood);
+  margin-top: 1.6em;
+  margin-bottom: 0.55em;
+  line-height: 1.2;
+  letter-spacing: 0.015em;
+}
+h1 {
+  font-size: 2.2rem;
+  margin-top: 0;
+  border-bottom: 2px solid var(--parchment-shadow);
+  padding-bottom: 0.3em;
+}
+h1 em { color: var(--wood-light); }
+h2 {
+  font-size: 1.45rem;
+  border-bottom: 1px dashed var(--parchment-shadow);
+  padding-bottom: 0.25em;
+}
+h3 { font-size: 1.18rem; }
+h4 { font-size: 1.02rem; color: var(--ink-soft); }
+
+p { margin: 0.6em 0; }
+ul { margin: 0.6em 0 0.6em 1.4em; padding: 0; }
+li { margin: 0.3em 0; }
+
+a {
+  color: #6b3d1a;
+  text-decoration: underline;
+  text-decoration-color: rgba(180, 142, 84, 0.4);
+  text-underline-offset: 2px;
+}
+a:hover { color: #8a4f23; text-decoration-color: var(--brass); }
+
+.entity-link {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+  color: var(--wood-light);
+  padding-bottom: 0.5px;
+}
+.entity-link:hover {
+  background: rgba(193, 154, 74, 0.18);
+  border-bottom-color: var(--brass);
+}
+
+hr {
+  border: none;
+  border-top: 1px dashed var(--parchment-shadow);
+  margin: 1.5em 0;
+}
+
+code {
+  background: rgba(77, 47, 23, 0.08);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.92em;
+}
+
+.muted { color: var(--ink-soft); opacity: 0.85; }
+.small { font-size: 0.85rem; }
+
+.breadcrumb {
+  font-size: 0.88rem;
+  margin-bottom: 1.4rem;
+  color: var(--ink-soft);
+}
+.breadcrumb a {
+  color: var(--wood-light);
+  text-decoration: none;
+}
+.breadcrumb a:hover { color: var(--wood); text-decoration: underline; }
+
+/* ---------- index hero ---------- */
+.hero {
+  text-align: center;
+  padding: 0.5rem 0 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px dashed var(--parchment-shadow);
+}
+.hero h1 {
+  font-size: 2.8rem;
+  margin: 0 0 0.2em;
+  border: none;
+  letter-spacing: 0.05em;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--wood-light);
+}
+.tagline {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 1.08rem;
+  max-width: 50ch;
+  margin: 0 auto;
+}
+
+/* ---------- card grids ---------- */
+.grid {
+  display: grid;
+  gap: 1.3rem;
+  margin: 1.2rem 0;
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+.card {
+  background: rgba(255, 250, 226, 0.7);
+  border: 1px solid var(--parchment-shadow);
+  border-radius: 4px;
+  padding: 1.15rem 1.3rem;
+  text-decoration: none;
+  color: var(--ink);
+  display: block;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4), 0 1px 3px rgba(0,0,0,0.08);
+}
+a.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--brass);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+.card h2, .card h3 {
+  margin-top: 0;
+  margin-bottom: 0.4em;
+}
+.card h2 .icon { color: var(--brass); margin-right: 0.35em; }
+.card p { margin: 0.3em 0; }
+
+.pc-card .portrait {
+  max-width: 200px;
+  margin-bottom: 0.8rem;
+}
+
+/* ---------- portraits ---------- */
+.portrait {
+  width: 100%;
+  max-width: 240px;
+  display: block;
+  margin: 0 auto 1rem;
+  border: 5px solid var(--wood);
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px var(--brass),
+    0 6px 16px rgba(0,0,0,0.4);
+}
+.portrait-large {
+  float: right;
+  max-width: 320px;
+  margin: 0 0 1.2rem 1.6rem;
+}
+
+/* ---------- detail page ---------- */
+.detail { overflow: hidden; }
+.detail-body { max-width: 64ch; }
+.detail-body p, .detail-body ul, .detail-body ol {
+  max-width: 64ch;
+}
+
+.meta-block {
+  background: rgba(180, 142, 84, 0.13);
+  border-left: 4px solid var(--brass);
+  padding: 0.85rem 1.1rem;
+  margin: 1rem 0 1.4rem;
+  font-size: 0.93rem;
+  border-radius: 0 4px 4px 0;
+}
+.meta-row { padding: 0.15em 0; }
+.meta-label {
+  font-weight: 600;
+  color: var(--wood);
+  margin-right: 0.4em;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.04em;
+  font-size: 0.92em;
+}
+.meta-value { color: var(--ink); }
+
+.meta-line {
+  margin: 0.4rem 0 1.6rem;
+  font-size: 0.95rem;
+}
+
+/* ---------- status chips ---------- */
+.status-chip {
+  display: inline-block;
+  padding: 0.25em 0.85em;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #fff;
+  background: var(--status-active);
+  vertical-align: middle;
+}
+.status-chip.status-active        { background: var(--status-active); }
+.status-chip.status-active-main   { background: var(--status-active-main); }
+.status-chip.status-unresolved    { background: var(--status-unresolved); color: var(--ink); }
+.status-chip.status-completed     { background: var(--status-completed); }
+
+.status-heading {
+  border-bottom: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+.status-heading .status-chip { font-size: 0.95rem; padding: 0.35em 1em; }
+
+/* ---------- quest list ---------- */
+.quest-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.8rem 0 1.6rem;
+}
+.quest-list li {
+  padding: 0.6em 0;
+  border-bottom: 1px dotted var(--parchment-shadow);
+}
+.quest-list li:last-child { border-bottom: none; }
+
+/* ---------- session list ---------- */
+.session-list {
+  list-style: none;
+  padding-left: 0;
+}
+.session-list li {
+  padding: 0.45em 0;
+  border-bottom: 1px dotted var(--parchment-shadow);
+}
+
+/* The captain's log — one row per session */
+.session-log {
+  list-style: none;
+  padding: 0;
+  margin: 1.4rem 0 0;
+  counter-reset: none;
+}
+.session-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 200px) 1fr;
+  gap: 1.6rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px dotted var(--parchment-shadow);
+  align-items: start;
+}
+.session-row:last-child { border-bottom: none; }
+.session-row-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.session-row-date {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: var(--wood);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+  padding-bottom: 1px;
+  align-self: flex-start;
+}
+.session-row-date:hover {
+  color: var(--status-active-main);
+  border-bottom-color: var(--brass);
+}
+.session-row-locs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.session-row-loc {
+  font-family: 'Cinzel', serif;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-soft);
+  text-decoration: none;
+  background: rgba(193, 154, 74, 0.12);
+  border: 1px solid var(--rope);
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.session-row-loc:hover {
+  background: rgba(193, 154, 74, 0.28);
+  color: var(--wood);
+  border-color: var(--brass);
+}
+.session-row-loc-none {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--parchment-shadow);
+  color: var(--ink-soft);
+  opacity: 0.55;
+}
+.session-row-summary {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: 68ch;
+}
+
+@media (max-width: 720px) {
+  .session-row {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    padding: 1rem 0;
+  }
+}
+
+/* ---------- session pages ---------- */
+.session-summary {
+  margin: 1.2rem 0 2rem;
+}
+.session-summary > p:first-of-type {
+  font-style: italic;
+  color: var(--ink-soft);
+  border-left: 3px solid var(--brass);
+  padding-left: 0.9rem;
+  margin-left: -0.95rem;
+  margin-bottom: 1.6rem;
+  font-size: 1.02rem;
+}
+.session-summary h2 {
+  font-size: 1.25rem;
+  margin-top: 1.6rem;
+  border-bottom: 1px dashed var(--parchment-shadow);
+  padding-bottom: 0.2em;
+}
+.session-summary p {
+  max-width: 64ch;
+}
+.session-notes, .raw-transcript { margin-top: 1.6rem; }
+.session-notes details, .raw-transcript details {
+  background: rgba(255, 250, 226, 0.55);
+  border: 1px solid var(--parchment-shadow);
+  padding: 0.7rem 1.1rem;
+  border-radius: 4px;
+}
+.session-notes summary, .raw-transcript summary {
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  color: var(--wood);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.2em 0;
+  font-size: 0.92rem;
+}
+.session-notes summary:hover, .raw-transcript summary:hover { color: var(--brass); }
+.notes-body { margin-top: 0.6rem; }
+.notes-body p, .notes-body li { font-size: 0.94rem; color: var(--ink-soft); }
+
+.transcript-body {
+  margin-top: 1rem;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 0.7rem;
+  font-size: 0.92rem;
+  border-top: 1px dashed var(--parchment-shadow);
+}
+.transcript-body p {
+  border-bottom: 1px dotted var(--parchment-shadow);
+  padding: 0.7em 0;
+  margin: 0;
+  max-width: none;
+}
+.transcript-body p:last-child { border-bottom: none; }
+
+/* ---------- footer ---------- */
+.rope-divider {
+  height: 10px;
+  margin: 1rem auto;
+  width: 70%;
+  max-width: 600px;
+  background-image: repeating-linear-gradient(108deg,
+    var(--rope-dark) 0 3px,
+    var(--rope) 3px 11px,
+    var(--rope-dark) 11px 14px);
+  border-radius: 6px;
+  opacity: 0.55;
+}
+
+.site-footer {
+  position: relative;
+  z-index: 1;
+  color: var(--parchment-dark);
+  text-align: center;
+  padding: 1.5rem 1rem 2.5rem;
+  font-style: italic;
+  font-size: 0.93rem;
+}
+
+/* ---------- NPC Sea Chart ---------- */
+.subhead {
+  text-align: center;
+  color: var(--ink-soft);
+  margin-top: -0.4rem;
+  margin-bottom: 2.2rem;
+  font-size: 1rem;
+}
+
+.chart-port {
+  margin: 2.4rem 0 2.2rem;
+}
+
+.chart-port-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid var(--brass);
+  position: relative;
+  margin-bottom: 1.35rem;
+}
+.chart-port-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -5px;
+  height: 1px;
+  background: var(--brass);
+  opacity: 0.45;
+}
+
+.chart-port-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--wood);
+  text-decoration: none;
+  border: none;
+}
+a.chart-port-name:hover {
+  color: var(--brass);
+  background: none;
+  border: none;
+}
+
+.chart-port-gloss {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+  letter-spacing: 0.02em;
+}
+
+.chart-port-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.1rem;
+}
+
+.npc-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+.npc-card-head h3 {
+  margin: 0 0 0.15em;
+  font-size: 1.06rem;
+}
+.npc-card p { margin-top: 0.3em; }
+
+.last-seen {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 0.5rem;
+}
+
+/* Adrift cartouche */
+.chart-adrift {
+  margin-top: 3rem;
+  padding: 1.4rem 1.8rem 1.8rem;
+  background: rgba(120, 90, 50, 0.06);
+  border: 1px dashed var(--parchment-shadow);
+  border-radius: 4px;
+  position: relative;
+}
+.chart-adrift::before {
+  content: "≈";
+  position: absolute;
+  top: -0.78em;
+  left: 1.6rem;
+  background: var(--parchment);
+  padding: 0 0.45em;
+  color: var(--brass);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.chart-adrift-header { justify-content: center; }
+.chart-adrift-header .chart-port-name {
+  font-style: italic;
+  letter-spacing: 0.18em;
+}
+
+/* Standing chips (smaller than .status-chip; different namespace) */
+.standing-chip {
+  display: inline-block;
+  padding: 0.18em 0.7em;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #fff;
+  flex-shrink: 0;
+  white-space: nowrap;
+  vertical-align: middle;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+}
+.standing-ally  { background: #2b7a4b; }
+.standing-lead  { background: #c08a2e; color: var(--ink); }
+.standing-foe   { background: #8a2e2e; }
+.standing-crew  { background: #355c79; }
+.standing-other { background: #7a6a4f; }
+.standing-ghost { background: #8a8378; opacity: 0.85; }
+
+/* ---------- The Roster (NPC table) ---------- */
+.roster-wrap {
+  margin: 1.4rem 0 2rem;
+  overflow-x: auto;
+  border: 1px solid var(--parchment-shadow);
+  border-radius: 3px;
+  box-shadow: inset 0 0 30px rgba(122, 90, 48, 0.08);
+}
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+  background: rgba(255, 250, 226, 0.35);
+}
+.roster-table thead th {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--parchment);
+  background: var(--wood);
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  border-bottom: 2px solid var(--brass);
+  white-space: nowrap;
+}
+.roster-table tbody td {
+  padding: 0.6rem 0.85rem;
+  vertical-align: top;
+  line-height: 1.5;
+}
+/* Alternating tint per NPC (each NPC is its own tbody) */
+.roster-table tbody.npc-block:nth-of-type(even) td {
+  background: rgba(193, 154, 74, 0.07);
+}
+.roster-table tbody.npc-block:hover td {
+  background: rgba(193, 154, 74, 0.17);
+}
+/* Main row: tight under, no rule above */
+.roster-table tr.npc-main td { padding-bottom: 0.35rem; }
+/* Description row: indented continuation, divider only at block end */
+.roster-table tr.npc-desc td {
+  padding-top: 0.1rem;
+  padding-left: 1.5rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--parchment-shadow);
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+.roster-table tbody.npc-block:last-of-type tr.npc-desc td {
+  border-bottom: none;
+}
+
+.roster-table .col-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.roster-table .col-name a {
+  color: var(--wood);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+  padding-bottom: 1px;
+}
+.roster-table .col-name a:hover {
+  color: var(--status-active-main);
+  border-bottom-color: var(--brass);
+}
+.roster-table td.col-affil,
+.roster-table td.col-met { font-size: 0.88rem; }
+.roster-table td.col-affil { color: var(--ink-soft); font-style: italic; }
+.roster-table .col-status { white-space: nowrap; text-align: center; }
+.roster-table .col-status .standing-chip {
+  font-size: 0.62rem;
+  padding: 0.16em 0.6em;
+}
+.roster-table .muted { font-style: normal; opacity: 0.55; }
+
+/* ---------- The Chart (locations) ---------- */
+.map-plate {
+  position: relative;
+  margin: 1.6rem auto 2.2rem;
+  width: 100%;
+  aspect-ratio: 1573 / 1000;
+  background: rgba(241, 227, 193, 0.35);
+  border: 1px solid var(--parchment-shadow);
+  box-shadow:
+    inset 0 0 60px rgba(122, 90, 48, 0.18),
+    0 6px 22px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+.map-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* .map-pin's left/top is the geographic point.
+   The dot is absolutely positioned and centered on that point.
+   The label hangs to the right of the dot. */
+.map-pin {
+  position: absolute;
+  width: 0;
+  height: 0;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  line-height: 1;
+}
+.map-pin-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: var(--brass);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2.5px var(--parchment),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s, background 0.15s;
+}
+.map-pin-label {
+  position: absolute;
+  top: 0;
+  left: 9px;
+  transform: translateY(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--wood);
+  background: rgba(241, 227, 193, 0.94);
+  padding: 0.18em 0.5em;
+  border-radius: 2px;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: color 0.15s, background 0.15s;
+}
+.map-pin:hover .map-pin-dot {
+  transform: translate(-50%, -50%) scale(1.6);
+  background: var(--status-active-main);
+}
+.map-pin:hover .map-pin-label {
+  color: var(--status-active-main);
+  background: var(--parchment);
+}
+
+/* Per-pin label direction. Default is east (rendered with no extra class).
+   For the others, override left/top and transform so the label's near edge
+   sits just outside the 10px dot. */
+.map-pin.map-pin-dir-w .map-pin-label {
+  left: auto;
+  right: 9px;
+  transform: translateY(-50%);
+}
+.map-pin.map-pin-dir-n .map-pin-label {
+  left: 0;
+  top: auto;
+  bottom: 9px;
+  transform: translateX(-50%);
+}
+.map-pin.map-pin-dir-s .map-pin-label {
+  left: 0;
+  top: 9px;
+  transform: translateX(-50%);
+}
+.map-pin.map-pin-dir-ne .map-pin-label {
+  left: 7px;
+  top: auto;
+  bottom: 7px;
+  transform: none;
+}
+.map-pin.map-pin-dir-nw .map-pin-label {
+  left: auto;
+  right: 7px;
+  top: auto;
+  bottom: 7px;
+  transform: none;
+}
+.map-pin.map-pin-dir-se .map-pin-label {
+  left: 7px;
+  top: 7px;
+  transform: none;
+}
+.map-pin.map-pin-dir-sw .map-pin-label {
+  left: auto;
+  right: 7px;
+  top: 7px;
+  transform: none;
+}
+
+/* Region labels: no dot; label is centered on the coordinate. */
+.map-pin-region .map-pin-dot { display: none; }
+.map-pin-region .map-pin-label {
+  left: 0;
+  transform: translate(-50%, -50%);
+  background: rgba(241, 227, 193, 0.88);
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.74rem;
+  color: var(--wood);
+  padding: 0.18em 0.55em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+.map-pin-region:hover .map-pin-label {
+  color: var(--status-active-main);
+  background: var(--parchment);
+}
+
+/* Cartouches: corner labels for off-chart places */
+.map-cartouches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.1rem;
+  margin: 1.4rem 0 2.4rem;
+}
+.cartouche {
+  border: 1px dashed var(--brass);
+  border-radius: 3px;
+  padding: 0.85rem 1rem 0.9rem;
+  background: rgba(193, 154, 74, 0.06);
+  position: relative;
+}
+.cartouche::before {
+  content: "✦";
+  position: absolute;
+  top: -0.7em;
+  left: 0.9rem;
+  background: var(--parchment);
+  padding: 0 0.35em;
+  color: var(--brass);
+  font-size: 0.9rem;
+}
+.cartouche h4 {
+  margin: 0 0 0.45em;
+  font-family: 'Cinzel', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--wood);
+  letter-spacing: 0.06em;
+}
+.cartouche ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cartouche li {
+  padding: 0.18em 0;
+  font-size: 0.95rem;
+}
+.cartouche a {
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px dotted var(--rope);
+}
+.cartouche a:hover { color: var(--wood); border-bottom-color: var(--brass); }
+
+/* The alphabetical fallback roster */
+.location-roster {
+  margin-top: 2.2rem;
+  border-top: 1px dashed var(--parchment-shadow);
+  padding-top: 1.4rem;
+}
+.location-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  columns: 2;
+  column-gap: 2.5rem;
+}
+.location-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.35em 0;
+  border-bottom: 1px dotted var(--parchment-shadow);
+  break-inside: avoid;
+}
+.location-list a {
+  text-decoration: none;
+  color: var(--wood-light);
+  font-weight: 500;
+  border-bottom: none;
+}
+.location-list a:hover { color: var(--brass); }
+.loc-type {
+  font-size: 0.74rem;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 720px) {
+  .content { padding: 1.8rem 1.4rem; margin: 1rem; }
+  .portrait-large { float: none; max-width: 240px; margin: 0 auto 1rem; }
+  .site-header { flex-direction: column; align-items: flex-start; padding: 1rem; }
+  .hero h1 { font-size: 2rem; }
+  .chart-port-name { font-size: 1.15rem; letter-spacing: 0.1em; }
+  .chart-adrift { padding: 1.2rem 1.1rem 1.4rem; }
+  .map-pin-label { font-size: 0.66rem; padding: 0.1em 0.32em; letter-spacing: 0.02em; }
+  .map-pin-region .map-pin-label { font-size: 0.62rem; letter-spacing: 0.12em; }
+  .map-pin-dot { width: 7px; height: 7px; }
+  .location-list { columns: 1; }
+}
