@@ -104,10 +104,12 @@ When you finish a long rest, you turn a wand, staff, or rod into your arcane fir
 You can use your arcane firearm as a spellcasting focus for your artificer spells. When you cast an artificer spell through the firearm, roll a d8, and you gain a bonus to one of the spell’s damage rolls equal to the number rolled.
 
 Arcane Firearm: Special
+
 Tool Expertise (TCoE, pg. 13)
 Your proficiency bonus is doubled for any ability check you make that uses your proficiency with a tool.
 
 Tool Expertise: Special
+
 Flash of Genius (TCoE, pg. 13)
 When you or another creature you can see within 30 feet of you makes an ability check or a saving throw, you can use your reaction to add +4 to the roll.
 
@@ -117,3 +119,36 @@ Flash of Genius: 1 Reaction
 Uses:
 /
 Long Rest
+
+### Artificer infusions
+
+* Enhanced arcane focus
+* Repulsion shield
+* Armor of magical strength
+
+## Prepared spells
+
+### Cantrip
+
+* Fire Bolt
+* Mage Hand
+
+### 1st level
+
+* Bless
+* Detect Magic
+* Disguise Self
+* Faerie Fire
+* Feather Fall
+* Grease
+* Identify
+* Shield
+* Thunderwave
+
+### 2nd level
+
+* Blur
+* Misty Step
+* Scorching Ray
+* Shatter
+* Thunderwave
