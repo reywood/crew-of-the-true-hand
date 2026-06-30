@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fiz — Battle Reference</title>
+<style>
+  /* ============================================================
+     Hisfiz Spinfizzler — printable battle reference
+     Self-contained: no external fonts, no external assets.
+     Optimized for Letter / A4 printing at 0.4in margin.
+     ============================================================ */
+
+  :root {
+    --ink:        #2a1f12;
+    --ink-soft:   #5b4a30;
+    --paper:      #f9f3e3;
+    --paper-2:    #f1e8cf;
+    --brass:      #a67a2e;
+    --brass-deep: #6b4c12;
+    --rule:       #c4ae7a;
+
+    --chip-action:   #8a4f23;
+    --chip-bonus:    #9b6b1d;
+    --chip-reaction: #8a2e2e;
+    --chip-none:     #5e6e7a;
+    --chip-slow:     #4d3a23;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0.55in 0.5in;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Cambria, Georgia, 'Times New Roman', serif;
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+
+  /* ---- header ---- */
+  header.sheet-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .sheet-head h1 {
+    margin: 0;
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    font-variant: small-caps;
+    line-height: 1;
+  }
+  .sheet-head .subtitle {
+    margin: 0.15rem 0 0;
+    font-size: 10.5pt;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .sheet-head .tagline {
+    font-size: 9pt;
+    color: var(--ink-soft);
+    font-style: italic;
+    text-align: right;
+    max-width: 30ch;
+  }
+
+  /* ---- stats strip ---- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.4rem;
+    margin: 0.4rem 0 0.9rem;
+    padding: 0.45rem 0.5rem;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+  }
+  .stat {
+    text-align: center;
+    font-size: 8.5pt;
+  }
+  .stat .label {
+    display: block;
+    font-variant: small-caps;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    font-size: 7.5pt;
+  }
+  .stat .value {
+    display: block;
+    font-size: 13pt;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .stat .fillbox {
+    display: inline-block;
+    min-width: 2.5ch;
+    border-bottom: 1.5px solid var(--brass-deep);
+    text-align: center;
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  /* ---- body / sections ----
+     Each section is its own page-friendly unit: a full-width header at the
+     top, then a 2-column grid of action cards below. Sections try to stay
+     together — if one can't fit on the current page, the whole section moves
+     to the next page. This is far more reliable for print than relying on
+     CSS multi-column to flow across pages. */
+  .columns {
+    /* simple block wrapper now */
+  }
+
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0.8rem;
+  }
+
+  /* The 2-column grid lives INSIDE each section, below the h2. Multi-column
+     works reliably within a single page since the section is page-bounded. */
+  .section-grid {
+    column-count: 2;
+    column-gap: 0.4in;
+    column-rule: 1px dotted var(--rule);
+  }
+  .section-grid > .action {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    /* margin tweak: first card in each column shouldn't have top space */
+  }
+  .section-grid > .action:first-child {
+    padding-top: 0;
+  }
+  section h2 {
+    margin: 0 0 0.25rem;
+    padding-bottom: 0.1rem;
+    font-size: 11pt;
+    font-variant: small-caps;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--brass-deep);
+    border-bottom: 1.5px solid var(--brass);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  section h2 .meta {
+    margin-left: auto;
+    font-size: 8pt;
+    color: var(--ink-soft);
+    font-variant: normal;
+    font-style: italic;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+
+  /* ---- action cards ---- */
+  .action {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 0.25rem 0;
+    border-bottom: 0.5px dotted var(--rule);
+  }
+  .action:last-child { border-bottom: none; }
+  .action-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin-bottom: 0.1rem;
+  }
+  .action-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: var(--ink);
+  }
+  .chip {
+    display: inline-block;
+    font-size: 7pt;
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: white;
+    background: var(--chip-action);
+    padding: 0.08em 0.5em;
+    border-radius: 2px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .chip-bonus    { background: var(--chip-bonus); }
+  .chip-reaction { background: var(--chip-reaction); }
+  .chip-none     { background: var(--chip-none); }
+  .chip-slow     { background: var(--chip-slow); }
+
+  .effect {
+    margin: 0.05rem 0;
+    font-size: 9.5pt;
+    color: var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .effect .label {
+    font-variant: small-caps;
+    font-weight: 700;
+    color: var(--ink-soft);
+    font-size: 8.5pt;
+    letter-spacing: 0.04em;
+  }
+  .flavor {
+    margin: 0.1rem 0 0;
+    font-size: 8.5pt;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.3;
+  }
+
+  /* ---- dice icons ---- */
+  .dice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    vertical-align: middle;
+    padding: 0.05em 0.25em;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    line-height: 1;
+  }
+  .dice .count {
+    font-weight: 700;
+    font-size: 11pt;
+    color: var(--ink);
+  }
+  .die {
+    width: 1.85em;
+    height: 1.85em;
+    display: inline-block;
+    color: var(--brass-deep);
+    vertical-align: middle;
+  }
+  .die-label {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--brass-deep);
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+  }
+  @media print {
+    .dice { background: white; border-color: black; }
+    .die-label { color: black; }
+  }
+
+  /* ---- inline pills for spell slots & uses ---- */
+  .slots {
+    display: inline-flex;
+    gap: 0.18rem;
+    margin-left: 0.3rem;
+    vertical-align: middle;
+  }
+  .slot {
+    width: 0.7em;
+    height: 0.7em;
+    border: 1.2px solid var(--brass-deep);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ---- footer ---- */
+  footer {
+    margin-top: 0.5rem;
+    padding-top: 0.3rem;
+    border-top: 1px dotted var(--rule);
+    font-size: 7.5pt;
+    color: var(--ink-soft);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ---- print tuning ---- */
+  @media print {
+    @page { size: letter; margin: 0.4in; }
+    body {
+      background: white;
+      padding: 0;
+      font-size: 9.8pt;
+    }
+    .section-grid {
+      column-gap: 0.3in;
+    }
+    .stats { background: #fff; }
+    .chip { color: black !important; background: white !important; border: 1px solid currentColor; padding: 0.04em 0.4em; }
+    .stat .fillbox { border-color: black; }
+    section h2 { color: black; border-color: black; }
+    .die { color: black; }
+    .slot { border-color: black; }
+    /* Strong: every action card stays whole and the section header tries to
+       stay with its first card. */
+    section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .action {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    section h2 {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     Reusable inline SVG dice — referenced via <use> below.
+     ============================================================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="d4" viewBox="0 0 24 24">
+      <polygon points="12,3 22,21 2,21" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <text x="11.5" y="18.5" text-anchor="middle" font-size="11" font-family="Cambria, serif" font-weight="700" fill="#bb0000">4</text>
+    </symbol>
+    <symbol id="d6" viewBox="0 0 24 24">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <text x="12" y="16" text-anchor="middle" font-size="12" font-family="Cambria, serif" font-weight="700" fill="#bb0000">6</text>
+    </symbol>
+    <symbol id="d8" viewBox="0 0 24 24">
+      <polygon points="12,2 22,12 12,22 2,12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="0.7" opacity="0.3"/>
+      <text x="12" y="16" text-anchor="middle" font-size="12" font-family="Cambria, serif" font-weight="700" fill="#bb0000">8</text>
+    </symbol>
+    <symbol id="d10" viewBox="0 0 24 24">
+      <polygon points="12,2 21,9 18,22 6,22 3,9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <text x="12" y="16.5" text-anchor="middle" font-size="11" font-family="Cambria, serif" font-weight="700" fill="#bb0000">10</text>
+    </symbol>
+    <symbol id="d12" viewBox="0 0 24 24">
+      <polygon points="12,2 22,8 22,16 12,22 2,16 2,8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-family="Cambria, serif" font-weight="700" fill="#bb0000">12</text>
+    </symbol>
+    <symbol id="d20" viewBox="0 0 24 24">
+      <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <line x1="3" y1="7" x2="21" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
+      <line x1="21" y1="7" x2="3" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
+      <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
+      <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-family="Cambria, serif" font-weight="700" fill="#bb0000">20</text>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="sheet-head">
+  <div>
+    <h1>Hisfiz "Fiz" Spinfizzler</h1>
+    <p class="subtitle">Rock Gnome &middot; Artillerist Artificer &middot; Level 7</p>
+  </div>
+  <div class="tagline">
+    Halruaan tinker, captain of three brass cannons that never were.<br>
+    "Cover me, I'm cranking the gauge."
+  </div>
+</header>
+
+<!-- stats strip: known values shown; fill-in blanks for things that drift -->
+<div class="stats">
+  <div class="stat"><span class="label">Init</span><span class="value">+1</span></div>
+  <div class="stat"><span class="label">AC</span><span class="value">16</span></div>
+  <div class="stat"><span class="label">HP</span><span class="value">52</span></div>
+  <div class="stat"><span class="label">Spell DC</span><span class="value">15</span></div>
+  <div class="stat"><span class="label">Spell Atk</span><span class="value">+8</span></div>
+  <div class="stat"><span class="label">Prof</span><span class="value">+3</span></div>
+</div>
+
+<div class="columns">
+
+  <!-- ============================================================
+       ELDRITCH CANNON — the signature; lead with it.
+       ============================================================ -->
+  <section>
+    <h2>Eldritch Cannon <span class="meta">conjured Small or Tiny construct, AC 18, HP 35</span></h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Create Cannon</span>
+        <span class="chip">Action</span>
+        <span class="chip chip-slow">1/Long Rest (or spell slot)</span>
+      </div>
+      <div class="effect">Conjure cannon in unoccupied space within 5 ft. Pick mode below. Lasts 1 hour or until destroyed/dismissed.</div>
+      <div class="flavor">Unfolds a brass tinker's gauge from his pack — legs telescope out, gears engage, and a stubby barrel pops into place with a tinny <em>fwip</em>.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Flamethrower (cannon)</span>
+        <span class="chip chip-bonus">Bonus Action</span>
+      </div>
+      <div class="effect"><span class="label">15-ft cone &middot; DEX DC 15</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        fire damage (half on save).
+      </div>
+      <div class="flavor">The cannon's nozzle glows orange — a hand-pumped reservoir of brass-yellow oil ignites, and a roaring jet erupts.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Force Ballista (cannon)</span>
+        <span class="chip chip-bonus">Bonus Action</span>
+      </div>
+      <div class="effect"><span class="label">120 ft &middot; ranged spell attack +8</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        force damage. Target is pushed 5 ft. on hit.
+      </div>
+      <div class="flavor">A spring-loaded arm cranks back with a ratchet's <em>click-click-click</em> and looses a shimmering bolt of compressed force.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Protector (cannon)</span>
+        <span class="chip chip-bonus">Bonus Action</span>
+      </div>
+      <div class="effect"><span class="label">10-ft radius around cannon</span></div>
+      <div class="effect">
+        Each creature of choice gains
+        <span class="dice"><span class="count">1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        + 4 temp HP.
+      </div>
+      <div class="flavor">A net of glowing copper filaments fans out from the cannon, weaving a faintly humming ward around nearby allies.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ARTIFICER FEATURES — utility / passive
+       ============================================================ -->
+  <section>
+    <h2>Artificer Features</h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Magical Tinkering</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect">Imbue a Tiny non-magical object: 5-ft radius light, 6-sec recorded message, odor/sound, or up to 25 words of static text. Up to 4 active.</div>
+      <div class="flavor">Fiz murmurs to a small trinket and taps it with a brass screwdriver; it sparks faintly to life with the chosen quirk.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Arcane Firearm</span>
+        <span class="chip chip-none">Passive</span>
+      </div>
+      <div class="effect">Once per turn when casting an artificer spell through your firearm, add <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span> to one damage roll.</div>
+      <div class="flavor">A single rifling chamber on the wand glows hot mid-cast — the spell exits with an extra cannon-kick.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Right Tool for the Job</span>
+        <span class="chip chip-slow">1 hr (during rest)</span>
+      </div>
+      <div class="effect">Conjure one set of artisan's tools in a space within 5 ft. Vanishes on next use.</div>
+      <div class="flavor">Fiz tinkers for an hour and a fully-formed set of tools simply <em>is</em>, brass-bound and gleaming.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Infuse Item</span>
+        <span class="chip chip-slow">Long Rest</span>
+      </div>
+      <div class="effect">Up to 3 nonmagical objects become magic items per the chosen infusions. Re-allocable on long rest.</div>
+      <div class="flavor">An evening's bench-work, brass shavings on the workbench, and three of Fiz's gadgets wake up humming.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Tool Expertise</span>
+        <span class="chip chip-none">Passive</span>
+      </div>
+      <div class="effect">Double proficiency bonus on any ability check made with a tool.</div>
+      <div class="flavor">Fiz hums to himself, hands working faster than the eye, and the lock simply concedes.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ARTIFICER INFUSIONS — active items, attuned
+       ============================================================ -->
+  <section>
+    <h2>Infusions <span class="meta">3 active &middot; attuned</span></h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Enhanced Arcane Focus</span>
+        <span class="chip chip-none">Passive</span>
+      </div>
+      <div class="effect"><span class="label">Wand (arcane firearm)</span></div>
+      <div class="effect"><strong>+1</strong> to spell attack rolls (already included in +8 above). Ignore <strong>half cover</strong> when making spell attack rolls.</div>
+      <div class="flavor">A brass wand etched with concentric grooves that hum faintly when sighted — aiming with it just <em>feels</em> true.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Repulsion Shield</span>
+        <span class="chip chip-none">Passive +AC</span>
+        <span class="chip chip-reaction">Reaction</span>
+      </div>
+      <div class="effect"><span class="label">Shield &middot; <span class="slots"><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span></span> charges (regain 1d4 at dawn)</span></div>
+      <div class="effect"><strong>Passive:</strong> +1 AC (already included above).</div>
+      <div class="effect"><strong>Reaction (1 charge):</strong> When hit by a melee attack, push the attacker up to 15 ft away.</div>
+      <div class="flavor">A coiled-brass shield boss snaps outward like a bear trap in reverse — the attacker is hurled back before they can press the strike.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Armor of Magical Strength</span>
+        <span class="chip chip-none">Free</span>
+        <span class="chip chip-reaction">Reaction</span>
+      </div>
+      <div class="effect"><span class="label">Armor &middot; <span class="slots"><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span></span> charges (regain all at dawn)</span></div>
+      <div class="effect"><strong>Free (1 charge):</strong> Add INT mod (<strong>+4</strong>) to a STR check or STR save.</div>
+      <div class="effect"><strong>Reaction (1 charge):</strong> When knocked prone, remain standing.</div>
+      <div class="flavor">Hidden brass clockwork inside the breastplate braces against the moment of impact — the armor holds the line for him.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       REACTIONS — pull out the lone reactions so they're easy to grab
+       ============================================================ -->
+  <section>
+    <h2>Reactions</h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Flash of Genius</span>
+        <span class="chip chip-reaction">Reaction</span>
+        <span class="chip chip-slow">4/Long Rest</span>
+      </div>
+      <div class="effect"><span class="label">Trigger</span> You or a creature within 30 ft makes an ability check or saving throw.</div>
+      <div class="effect">Add <strong>+4</strong> to the roll.</div>
+      <div class="flavor">"Mind the second valve!" Fiz shouts a flurry of technical instructions — a critical hint, perfectly timed.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Shield (1st-level slot)</span>
+        <span class="chip chip-reaction">Reaction</span>
+      </div>
+      <div class="effect">+5 AC until next turn. Also negates incoming Magic Missile.</div>
+      <div class="flavor">Brass plates snap into place mid-air with a sharp <em>clang</em>.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Protection (cannon, automatic)</span>
+        <span class="chip chip-none">No Action</span>
+      </div>
+      <div class="effect">Cannon is a Small/Tiny construct: AC 18, HP 5× artificer level. Counts as your ally. Resists damage that targets it directly per DM.</div>
+      <div class="flavor">The brass cannon hisses and creaks — it will not budge from its bracing.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CANTRIPS
+       ============================================================ -->
+  <section>
+    <h2>Cantrips <span class="meta">at-will</span></h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Fire Bolt</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">120 ft &middot; ranged spell atk +8</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d10"/></svg><span class="die-label">d10</span></span>
+        fire on hit. (Add <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span> via Arcane Firearm, 1/turn.)
+      </div>
+      <div class="flavor">Fiz levels his wand-arquebus — a chambered <em>click</em>, then a glowing ember-shot whistles forth like a tiny mortar round.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Mage Hand</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect">Spectral hand within 30 ft. Carries ≤10 lb, no attacks or spells. Lasts 1 min.</div>
+      <div class="flavor">A translucent brass-fingered hand materializes mid-air, articulated like one of his clockwork prototypes.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       1st-LEVEL SPELLS — prepared list (FT = Fey Touched, free 1/LR)
+       ============================================================ -->
+  <section>
+    <h2>1st-Level Spells <span class="meta">DC 15 &middot; <span class="slots"><span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span></span></span></h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Shield</span>
+        <span class="chip chip-reaction">Reaction</span>
+      </div>
+      <div class="effect"><span class="label">Trigger</span> Hit by an attack, or targeted by Magic Missile.</div>
+      <div class="effect">+5 AC until start of next turn. Negates Magic Missile.</div>
+      <div class="flavor">Brass plates snap into place mid-air with a sharp metallic <em>clang</em>, deflecting the blow.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Thunderwave</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">15-ft cube &middot; CON DC 15</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        thunder, push 10 ft. on fail (half &amp; no push on save).
+      </div>
+      <div class="flavor">Fiz strikes his arcane firearm against the ground — a percussion blast ripples outward like a cannon's report.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Bless</span>
+        <span class="chip">Action</span>
+        <span class="chip chip-slow">FT: 1/LR free</span>
+      </div>
+      <div class="effect"><span class="label">30 ft &middot; up to 3 creatures &middot; Conc 1 min</span></div>
+      <div class="effect">
+        Each target adds
+        <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d4"/></svg><span class="die-label">d4</span></span>
+        to attack rolls and saving throws.
+      </div>
+      <div class="flavor">Fiz hands out tiny brass talismans that hum faintly — small charms for small fortunes.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Faerie Fire</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">60 ft &middot; 20-ft cube &middot; DEX DC 15 &middot; Conc 1 min</span></div>
+      <div class="effect">Targets that fail are outlined in light — attacks vs them have advantage; they can't benefit from invisibility.</div>
+      <div class="flavor">A fine drift of glowing brass filings settles over the area, clinging to anyone they touch and limning them in pale gold.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Grease</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">60 ft &middot; 10-ft square &middot; DEX DC 15</span></div>
+      <div class="effect">Difficult terrain. Anyone in or entering the area falls prone on a failed save. Lasts 1 min.</div>
+      <div class="flavor">A canister of brass-yellow lubricant clatters down and slicks the floor — instant ice-rink.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Feather Fall</span>
+        <span class="chip chip-reaction">Reaction</span>
+      </div>
+      <div class="effect"><span class="label">Trigger</span> You or a creature within 60 ft begins to fall.</div>
+      <div class="effect">Up to 5 falling creatures descend at 60 ft/round, take no fall damage, land on their feet. 1 min.</div>
+      <div class="flavor">Fiz thumbs a hand-held device — tiny brass parasols unfurl mid-air around each falling target.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Disguise Self</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">Self &middot; 1 hour</span></div>
+      <div class="effect">Look like any creature of same size &plusmn; 1 ft &amp; weight &plusmn; 10 lb. Visual only. Investigation vs DC 15 to detect.</div>
+      <div class="flavor">Fiz unfolds a brass-and-fabric mask; it shimmers and conforms to a new face like wet clay setting.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Detect Magic</span>
+        <span class="chip">Action</span>
+        <span class="chip chip-slow">Ritual</span>
+      </div>
+      <div class="effect"><span class="label">Self &middot; 30-ft sphere &middot; Conc 10 min</span></div>
+      <div class="effect">Sense the presence of any magic within 30 ft. Use action to study an aura you see to learn its school.</div>
+      <div class="flavor">Fiz peers through a brass-rimmed monocle — magical auras shimmer like heat-haze around enchanted things.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Identify</span>
+        <span class="chip chip-slow">1 min &middot; Ritual</span>
+      </div>
+      <div class="effect"><span class="label">Touch</span></div>
+      <div class="effect">Learn a magic item's properties, attunement requirement, and charges. Or learn spells affecting an object/creature.</div>
+      <div class="flavor">Fiz takes a quiet ten minutes at his workbench, brass loupe in hand, and the item gives up its secrets.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2nd-LEVEL SPELLS — prepared list
+       ============================================================ -->
+  <section>
+    <h2>2nd-Level Spells <span class="meta">DC 15 &middot; <span class="slots"><span class="slot"></span><span class="slot"></span><span class="slot"></span></span></span></h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Misty Step</span>
+        <span class="chip chip-bonus">Bonus Action</span>
+        <span class="chip chip-slow">FT: 1/LR free</span>
+      </div>
+      <div class="effect">Teleport up to 30 ft to an unoccupied space you can see.</div>
+      <div class="flavor">Fiz vanishes in a puff of brass-tinted vapor and reappears with a quiet mechanical <em>click</em>.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Scorching Ray</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">120 ft &middot; three rays, each +8 to hit</span></div>
+      <div class="effect">
+        Each ray:
+        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d6"/></svg><span class="die-label">d6</span></span>
+        fire. (Add <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span> Arcane Firearm to one ray, 1/turn.)
+      </div>
+      <div class="flavor">Three glowing brass tubes snap up from his bandolier and loose searing rays in rapid sequence — <em>fzzt-fzzt-fzzt</em>.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Shatter</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">60 ft &middot; 10-ft sphere &middot; CON DC 15</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">3</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        thunder (half on save). Inorganic objects take auto damage.
+      </div>
+      <div class="flavor">Fiz lobs a tiny crystal capsule that detonates with a glass-shattering pulse you feel in your teeth.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Blur</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">Self &middot; Conc 1 min</span></div>
+      <div class="effect">Attackers have disadvantage on attack rolls against you. Negated by blindsight, truesight, or non-sight senses.</div>
+      <div class="flavor">Fiz's outline ripples — he flickers between two slightly-offset versions of himself, brass edges blurring.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Thunderwave (upcast)</span>
+        <span class="chip">Action</span>
+        <span class="chip chip-slow">2nd-level slot</span>
+      </div>
+      <div class="effect"><span class="label">15-ft cube &middot; CON DC 15</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">3</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        thunder, push 10 ft. on fail (half &amp; no push on save).
+      </div>
+      <div class="flavor">A heavier charge in the firearm's chamber — the percussive boom hits harder and rattles teeth across the cube.</div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WEAPONS
+       ============================================================ -->
+  <section>
+    <h2>Weapons</h2>
+    <div class="section-grid">
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Hand Crossbow</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">30/120 ft &middot; +DEX to hit</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">1</span><svg class="die"><use href="#d6"/></svg><span class="die-label">d6</span></span>
+        piercing + DEX.
+      </div>
+      <div class="flavor">A short bolt cracks from the brass-clad crossbow strapped to his off-hand.</div>
+    </div>
+
+    <div class="action">
+      <div class="action-head">
+        <span class="action-name">Dagger</span>
+        <span class="chip">Action</span>
+      </div>
+      <div class="effect"><span class="label">Melee or thrown 20/60 ft &middot; +DEX</span></div>
+      <div class="effect">
+        <span class="dice"><span class="count">1</span><svg class="die"><use href="#d4"/></svg><span class="die-label">d4</span></span>
+        piercing + DEX. Finesse, light.
+      </div>
+      <div class="flavor">A quick stab or thrown blade, drawn from the sheath on his bandolier.</div>
+    </div>
+    </div>
+  </section>
+
+</div><!-- /.columns -->
+
+<footer>
+  Hisfiz Spinfizzler &middot; Rock Gnome Artillerist Artificer &middot; battle reference card.
+  Stats marked with blanks (AC / HP / Init) update faster than the sheet — pen them in.
+</footer>
+
+</body>
+</html>
