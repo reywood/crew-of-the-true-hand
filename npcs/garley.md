@@ -1,6 +1,6 @@
 ---
-name: Garley
-aliases: Garley
+name: Garley Gond
+aliases: Garley Gond, Garley, Gond
 type: Ally
 location: Waterdeep
 role: Inventor
