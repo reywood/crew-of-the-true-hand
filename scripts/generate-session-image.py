@@ -157,6 +157,26 @@ label them, do NOT add speech bubbles, do NOT add any text, letters, numbers, \
 or captions anywhere in the image."""
 
 
+import re
+
+
+def slugify(text: str) -> str:
+    """Match the slugify function in website/generate.py so beat image
+    filenames line up with what the site generator expects."""
+    s = text.replace("'", "").replace("’", "")
+    s = re.sub(r"[^\w\s-]", "", s.lower())
+    s = re.sub(r"[\s_-]+", "-", s).strip("-")
+    return s
+
+
+# Section titles to skip when generating beat images. These sections tend to be
+# bullet lists of leads and status, not story beats worth illustrating.
+BEAT_SKIP_TITLES = {
+    "what's next", "whats next", "loose ends", "next steps",
+    "up next", "next", "leads", "loose threads",
+}
+
+
 def load_summary(date: str) -> str:
     path = SUMMARIES_DIR / f"{date}.md"
     if not path.exists():
@@ -165,6 +185,45 @@ def load_summary(date: str) -> str:
               file=sys.stderr)
         sys.exit(1)
     return path.read_text(encoding="utf-8")
+
+
+def extract_beats(summary: str) -> list:
+    """Return a list of (title, slug, body_text) for each ## section in the
+    summary that is worth illustrating (i.e. not a "What's next" style list).
+    Order preserves document order."""
+    beats = []
+    current_title = None
+    current_body = []
+
+    def maybe_flush():
+        if current_title is None:
+            return
+        title_l = current_title.strip().lower()
+        if title_l in BEAT_SKIP_TITLES:
+            return
+        body = "\n".join(current_body).strip()
+        if not body:
+            return
+        # Skip sections whose body is entirely bullets — probably a list of
+        # leads, not a story beat.
+        non_bullet = [
+            ln for ln in body.splitlines()
+            if ln.strip() and not ln.strip().startswith(("-", "*"))
+        ]
+        if not non_bullet:
+            return
+        beats.append((current_title.strip(), slugify(current_title), body))
+
+    for raw in summary.splitlines():
+        m = re.match(r"^\s*##\s+(.*)$", raw)
+        if m:
+            maybe_flush()
+            current_title = m.group(1).strip()
+            current_body = []
+        elif current_title is not None:
+            current_body.append(raw)
+    maybe_flush()
+    return beats
 
 
 def extract_pivotal_moment(summary: str) -> str:
@@ -178,21 +237,27 @@ def extract_pivotal_moment(summary: str) -> str:
     return ""
 
 
-def build_contents(summary: str) -> list:
-    """Multimodal input: portraits + text, in the order the model reads best."""
-    contents = []
+def _portrait_parts() -> list:
+    """The shared PC-portrait block appended to every generation."""
+    parts = []
     for slug, description in PC_PORTRAITS:
         portrait = CHARACTERS_DIR / f"{slug}.jpeg"
         if not portrait.exists():
             print(f"WARN: portrait missing at {portrait}", file=sys.stderr)
             continue
-        contents.append(
+        parts.append(
             types.Part.from_bytes(
                 data=portrait.read_bytes(), mime_type="image/jpeg"
             )
         )
-        contents.append(f"Reference portrait ({slug}): {description}")
+        parts.append(f"Reference portrait ({slug}): {description}")
+    return parts
 
+
+def build_contents(summary: str) -> list:
+    """Multimodal input for the HERO image (session-level banner).
+    Portraits + style + pivotal moment + full summary."""
+    contents = _portrait_parts()
     contents.append(STYLE_INSTRUCTIONS)
 
     pivotal = extract_pivotal_moment(summary)
@@ -214,6 +279,31 @@ def build_contents(summary: str) -> list:
     return contents
 
 
+def build_beat_contents(title: str, body: str, summary: str) -> list:
+    """Multimodal input for a BEAT image (one story beat within a session).
+    Portraits + style + this beat only, with a smaller-scale directive."""
+    contents = _portrait_parts()
+    contents.append(STYLE_INSTRUCTIONS)
+    contents.append(
+        "This is a SMALLER inline illustration for one beat within a session "
+        "recap — not the session's hero banner. Compose intimately: closer to "
+        "the characters, one small moment, not a sweeping panorama. Fewer "
+        "figures, more focus. Only include PCs actually named in THIS BEAT's "
+        "text below."
+    )
+    contents.append(
+        f"BEAT TITLE: {title}\n\n"
+        f"BEAT TEXT — illustrate ONLY this moment:\n\n{body}"
+    )
+    # Give the model the broader summary as background so it knows what came
+    # before and after this beat (helps with continuity of costume, setting).
+    contents.append(
+        "Background context (do NOT depict — for continuity only):\n\n"
+        + summary
+    )
+    return contents
+
+
 def extract_image(response) -> bytes:
     """Pull the first inline_data image bytes out of a Gemini response."""
     for candidate in getattr(response, "candidates", []) or []:
@@ -227,6 +317,38 @@ def extract_image(response) -> bytes:
     raise RuntimeError("no image found in Gemini response")
 
 
+def _generate_one(client, model: str, aspect: str, contents: list,
+                  output: Path, label: str, force: bool) -> None:
+    """Call Gemini and write bytes to disk. Skips if already present unless
+    force is set. Any errors bubble up so the caller decides what to do."""
+    if output.exists() and not force:
+        print(f"  skip: {output.name} already exists (--force to regenerate)")
+        return
+    print(f"  {label}: calling {model}…")
+    response = client.models.generate_content(
+        model=model,
+        contents=contents,
+        config=types.GenerateContentConfig(
+            image_config=types.ImageConfig(aspect_ratio=aspect),
+        ),
+    )
+    try:
+        image_bytes = extract_image(response)
+    except RuntimeError as e:
+        text_bits = []
+        for candidate in getattr(response, "candidates", []) or []:
+            for part in getattr(candidate.content, "parts", []) or []:
+                if getattr(part, "text", None):
+                    text_bits.append(part.text)
+        if text_bits:
+            print("  model text response:\n" + "\n".join(text_bits),
+                  file=sys.stderr)
+        raise
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_bytes(image_bytes)
+    print(f"  wrote {output.name} ({len(image_bytes) / 1024:.0f} KB)")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0] if __doc__ else "",
@@ -234,15 +356,27 @@ def main():
     parser.add_argument("date", help="Session date, YYYY-MM-DD")
     parser.add_argument(
         "--force", action="store_true",
-        help="Overwrite an existing image for this date.",
+        help="Overwrite existing images for this date.",
     )
     parser.add_argument(
         "--model", default="gemini-2.5-flash-image",
         help="Gemini image model id (default: gemini-2.5-flash-image).",
     )
     parser.add_argument(
-        "--aspect", default="16:9",
-        help='Aspect ratio, e.g. "16:9", "3:2", "4:3", "1:1" (default: 16:9).',
+        "--hero", action="store_true",
+        help="Generate ONLY the session hero image (skip beat images).",
+    )
+    parser.add_argument(
+        "--beats", action="store_true",
+        help="Generate ONLY the beat images (skip the hero).",
+    )
+    parser.add_argument(
+        "--hero-aspect", default="16:9",
+        help='Hero image aspect ratio (default: 16:9).',
+    )
+    parser.add_argument(
+        "--beat-aspect", default="3:2",
+        help='Beat image aspect ratio (default: 3:2, more intimate).',
     )
     args = parser.parse_args()
 
@@ -253,42 +387,44 @@ def main():
               file=sys.stderr)
         sys.exit(2)
 
-    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
-    output = IMAGES_DIR / f"{args.date}.jpg"
-    if output.exists() and not args.force:
-        print(f"{output} already exists — use --force to regenerate.")
-        return 0
+    # Default (neither --hero nor --beats given): do both.
+    do_hero = args.hero or not (args.hero or args.beats)
+    do_beats = args.beats or not (args.hero or args.beats)
 
     summary = load_summary(args.date)
-    contents = build_contents(summary)
+    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
-    print(f"Calling {args.model} for {args.date}…")
     client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(
-        model=args.model,
-        contents=contents,
-        config=types.GenerateContentConfig(
-            image_config=types.ImageConfig(aspect_ratio=args.aspect),
-        ),
-    )
+    print(f"[{args.date}]")
 
-    try:
-        image_bytes = extract_image(response)
-    except RuntimeError as e:
-        print(f"ERROR: {e}", file=sys.stderr)
-        # Dump any text the model returned instead of an image, for debug.
-        text_bits = []
-        for candidate in getattr(response, "candidates", []) or []:
-            for part in getattr(candidate.content, "parts", []) or []:
-                if getattr(part, "text", None):
-                    text_bits.append(part.text)
-        if text_bits:
-            print("Model text response:", file=sys.stderr)
-            print("\n".join(text_bits), file=sys.stderr)
-        sys.exit(1)
+    if do_hero:
+        hero_out = IMAGES_DIR / f"{args.date}.jpg"
+        try:
+            _generate_one(client, args.model, args.hero_aspect,
+                          build_contents(summary), hero_out,
+                          "hero", args.force)
+        except RuntimeError as e:
+            print(f"ERROR generating hero: {e}", file=sys.stderr)
+            return 1
 
-    output.write_bytes(image_bytes)
-    print(f"Wrote {output} ({len(image_bytes) / 1024:.0f} KB)")
+    if do_beats:
+        beats = extract_beats(summary)
+        if not beats:
+            print("  no beats found in summary.")
+        beats_dir = IMAGES_DIR / args.date
+        for i, (title, slug, body) in enumerate(beats, 1):
+            beat_out = beats_dir / f"{slug}.jpg"
+            try:
+                _generate_one(
+                    client, args.model, args.beat_aspect,
+                    build_beat_contents(title, body, summary),
+                    beat_out, f"beat {i}/{len(beats)}: {title}", args.force,
+                )
+            except RuntimeError as e:
+                print(f"  ERROR generating beat '{title}': {e}",
+                      file=sys.stderr)
+                # Keep going — one failing beat shouldn't kill the rest.
+
     print("Next: python3 website/generate.py")
     return 0
 

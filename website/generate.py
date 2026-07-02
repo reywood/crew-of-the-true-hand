@@ -404,6 +404,13 @@ def load_sessions():
         transcript_text = read(transcripts[date]) if date in transcripts else ""
         summary_text = read(summaries[date]) if date in summaries else ""
         image_path = session_images.get(date)
+        # Per-section beat images: summaries/images/<date>/<beat-slug>.jpg
+        beat_images = {}
+        beats_dir = SUMMARIES_DIR / "images" / date
+        if beats_dir.exists() and beats_dir.is_dir():
+            for ext in ("*.jpg", "*.jpeg", "*.png", "*.webp"):
+                for p in beats_dir.glob(ext):
+                    beat_images[p.stem] = p
         # Card-summary one-liner: prefer the summary's "*In brief: ...*" line,
         # then fall back to the notes' first line.
         card_summary = ""
@@ -431,6 +438,7 @@ def load_sessions():
                   "summary_md": summary_text,
                   "image_src": image_path,
                   "image_name": image_path.name if image_path else "",
+                  "beat_images": beat_images,
                   "has_notes": bool(note_text),
                   "has_transcript": bool(transcript_text),
                   "has_summary": bool(summary_text),
@@ -534,6 +542,15 @@ def setup_output():
         for ext in ("*.jpg", "*.jpeg", "*.png", "*.webp"):
             for img in session_src.glob(ext):
                 shutil.copy2(img, session_img_dir / img.name)
+        # Per-date beat image subdirectories.
+        for beats_src in session_src.iterdir():
+            if not beats_src.is_dir():
+                continue
+            beats_dst = session_img_dir / beats_src.name
+            beats_dst.mkdir(parents=True, exist_ok=True)
+            for ext in ("*.jpg", "*.jpeg", "*.png", "*.webp"):
+                for img in beats_src.glob(ext):
+                    shutil.copy2(img, beats_dst / img.name)
 
 
 def index_page(pcs, npcs, locations, quests, sessions):
@@ -1000,10 +1017,47 @@ def session_list_page(sessions, locations, link_map):
                 current_nav="sessions.html")
 
 
+def _inject_beat_images(summary_html: str, date: str, beat_images: dict) -> str:
+    """After each <h2>Title</h2> in the rendered summary, insert a
+    <figure class="beat-image beat-{right,left}"> if we have an image whose
+    slug matches slugify(title). Alternates float side for a book feel."""
+    if not beat_images:
+        return summary_html
+
+    pattern = re.compile(r"(<h2>)(.*?)(</h2>)", re.DOTALL)
+    side_iter = iter(["beat-right", "beat-left"] * 20)
+
+    def replace(m):
+        opener, inner, closer = m.groups()
+        # inner is already HTML — strip tags AND unescape entities
+        # (linkified h2s carry <a>…</a> and apostrophes render as &#x27;).
+        title_text = re.sub(r"<[^>]+>", "", inner)
+        title_text = html.unescape(title_text).strip()
+        slug = slugify(title_text)
+        img_path = beat_images.get(slug)
+        if not img_path:
+            return m.group(0)
+        side = next(side_iter)
+        img_name = img_path.name
+        return (
+            f'{opener}{inner}{closer}'
+            f'<figure class="beat-image {side}">'
+            f'<img src="images/sessions/{date}/{html.escape(img_name)}" '
+            f'alt="{html.escape(title_text)}" loading="lazy">'
+            f'</figure>'
+        )
+
+    return pattern.sub(replace, summary_html)
+
+
 def detail_page_session(s, link_map):
     summary_md = s.meta.get("summary_md", "")
     summary_html = (md_to_html(summary_md) if summary_md
                     else "<p><em>No summary available for this session.</em></p>")
+    summary_html = _inject_beat_images(
+        summary_html, s.meta.get("date", s.slug),
+        s.meta.get("beat_images") or {},
+    )
 
     note_text = s.body or ""
     notes_section = ""

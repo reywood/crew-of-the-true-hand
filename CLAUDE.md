@@ -68,10 +68,17 @@ When uncertain, consider spawning a parallel `general-purpose` Agent per transcr
 ### 2.5. Generate a hero image (optional)
 
 ```
-python3 scripts/generate-session-image.py YYYY-MM-DD
+python3 scripts/generate-session-image.py YYYY-MM-DD           # hero + all beats
+python3 scripts/generate-session-image.py YYYY-MM-DD --hero    # hero only
+python3 scripts/generate-session-image.py YYYY-MM-DD --beats   # beats only
 ```
 
-Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits (`characters/*.jpeg`) as reference and the session summary as the scene description. Writes `summaries/images/YYYY-MM-DD.jpg`. The site generator picks up any file it finds in that folder and embeds it as a full-width hero at the top of the session detail page — no `generate.py` change needed per session.
+Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits (`characters/*.jpeg`) as reference and the session summary as the scene description.
+
+- **Hero**: `summaries/images/YYYY-MM-DD.jpg` (16:9 landscape banner shown above the summary).
+- **Beats**: one image per `##` section of the summary, saved to `summaries/images/YYYY-MM-DD/<slugified-section-title>.jpg` (3:2 inline illustrations floated alternately left/right within each section, matching the beat's title via slug lookup). Sections whose title is "What's next" / "Loose ends" / "Next steps" (or which contain only bullet lists) are skipped.
+
+The site generator picks up any files it finds in those paths and embeds them automatically — no `generate.py` change needed per session.
 
 Requires: `pip install google-genai` and a `GEMINI_API_KEY` (get one at https://aistudio.google.com/apikey — the free tier is plenty). The key can be either an exported env var or a `.env` file at the project root (`GEMINI_API_KEY=...`, one line). `.env` is git-ignored.
 

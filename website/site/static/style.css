@@ -501,6 +501,49 @@ a.card:hover {
 .session-summary {
   margin: 1.2rem 0 2rem;
 }
+
+/* Beat images — one per ## section, floated alternately for a book feel. */
+.beat-image {
+  width: 44%;
+  max-width: 360px;
+  margin: 0.4rem 0 0.8rem;
+  padding: 0;
+  border: 1px solid var(--parchment-shadow);
+  box-shadow:
+    0 0 0 1px var(--brass) inset,
+    0 3px 10px rgba(0, 0, 0, 0.22);
+  background: var(--wood);
+  overflow: hidden;
+}
+.beat-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: cover;
+}
+.beat-image.beat-right {
+  float: right;
+  margin-left: 1.1rem;
+  clear: right;
+}
+.beat-image.beat-left {
+  float: left;
+  margin-right: 1.1rem;
+  clear: left;
+}
+/* Clear any lingering floats when a new ## section starts, so the next
+   section's image starts fresh instead of stacking under the previous one. */
+.session-summary h2 { clear: both; }
+
+@media (max-width: 720px) {
+  .beat-image {
+    float: none;
+    width: 100%;
+    max-width: none;
+    margin: 0.8rem 0;
+  }
+}
 .session-summary > p:first-of-type {
   font-style: italic;
   color: var(--ink-soft);
@@ -515,9 +558,6 @@ a.card:hover {
   margin-top: 1.6rem;
   border-bottom: 1px dashed var(--parchment-shadow);
   padding-bottom: 0.2em;
-}
-.session-summary p {
-  max-width: 64ch;
 }
 .session-notes, .raw-transcript { margin-top: 1.6rem; }
 .session-notes details, .raw-transcript details {
