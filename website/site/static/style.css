@@ -466,6 +466,38 @@ a.card:hover {
 }
 
 /* ---------- session pages ---------- */
+.session-hero {
+  margin: 1.2rem 0 1.8rem;
+  padding: 0;
+  border: 1px solid var(--parchment-shadow);
+  box-shadow:
+    0 0 0 1px var(--brass) inset,
+    0 4px 14px rgba(0, 0, 0, 0.28);
+  background: var(--wood);
+  overflow: hidden;
+  position: relative;
+}
+.session-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 480px;
+  object-fit: cover;
+  object-position: center;
+}
+.session-hero::after {
+  /* soft parchment vignette at the bottom edge so the illustration
+     doesn't fight the parchment card underneath */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 22%;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(241, 227, 193, 0) 0%,
+    rgba(241, 227, 193, 0.55) 100%);
+}
+
 .session-summary {
   margin: 1.2rem 0 2rem;
 }

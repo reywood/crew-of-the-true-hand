@@ -65,6 +65,18 @@ Cross-references:
 
 When uncertain, consider spawning a parallel `general-purpose` Agent per transcript-bearing session — pattern proven on the existing summaries. Brief the agent with: the campaign context, the four PCs, the session date, the file paths, the format above, and "return the markdown content directly — no preamble." Write the agent's returned text to disk yourself.
 
+### 2.5. Generate a hero image (optional)
+
+```
+python3 scripts/generate-session-image.py YYYY-MM-DD
+```
+
+Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits (`characters/*.jpeg`) as reference and the session summary as the scene description. Writes `summaries/images/YYYY-MM-DD.jpg`. The site generator picks up any file it finds in that folder and embeds it as a full-width hero at the top of the session detail page — no `generate.py` change needed per session.
+
+Requires: `pip install google-genai` and a `GEMINI_API_KEY` (get one at https://aistudio.google.com/apikey — the free tier is plenty). The key can be either an exported env var or a `.env` file at the project root (`GEMINI_API_KEY=...`, one line). `.env` is git-ignored.
+
+Skip this step if you don't want an image, or add it later. The session page renders fine either way.
+
 ### 3. Add the session's location annotation
 
 Open `website/generate.py` and find `SESSION_LOCATIONS` (near `session_list_page`). Add an entry mapping the new date to a list of location slugs in order of importance:
