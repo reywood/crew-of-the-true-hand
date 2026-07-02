@@ -76,12 +76,12 @@ Every action card has the same shape:
 Stack chips when an ability has multiple modes (e.g. a Repulsion Shield is `[Passive +AC] [Reaction]`).
 
 ### Dice notation
-Always wrap dice in this triple — count + icon + bold dN label — so the player can grab the right die at a glance:
+Always wrap dice in this triple — count + bold dN label + icon — so the player can grab the right die at a glance:
 ```html
 <span class="dice">
   <span class="count">2</span>
-  <svg class="die"><use href="#d8"/></svg>
   <span class="die-label">d8</span>
+  <svg class="die"><use href="#d8"/></svg>
 </span>
 ```
 The SVG sprite at the top of the file defines `#d4`, `#d6`, `#d8`, `#d10`, `#d12`, `#d20`. Don't re-render the sprite per file — copy it from Fiz's card.

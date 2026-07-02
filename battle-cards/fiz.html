@@ -244,8 +244,8 @@
     color: var(--ink);
   }
   .die {
-    width: 1.85em;
-    height: 1.85em;
+    width: 1.7em;
+    height: 1.7em;
     display: inline-block;
     color: var(--brass-deep);
     vertical-align: middle;
@@ -303,7 +303,7 @@
     .chip {   border: 1px solid currentColor; padding: 0.04em 0.4em; } /* color: black !important;background: white !important; */
     .stat .fillbox { border-color: black; }
     section h2 { color: black; border-color: black; }
-    .die { color: black; }
+    .die { color: darkred; }
     .slot { border-color: black; }
     /* Strong: every action card stays whole and the section header tries to
        stay with its first card. */
@@ -332,31 +332,35 @@
   <defs>
     <symbol id="d4" viewBox="0 0 24 24">
       <polygon points="12,3 22,21 2,21" fill="none" stroke="currentColor" stroke-width="1.6"/>
-      <text x="11.5" y="18.5" text-anchor="middle" font-size="11" font-family="Cambria, serif" font-weight="700" fill="#bb0000">4</text>
+      <!-- <text x="11.5" y="18.5" text-anchor="middle" font-size="11" font-family="Cambria, serif" font-weight="700" fill="#bb0000">4</text> -->
     </symbol>
     <symbol id="d6" viewBox="0 0 24 24">
       <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
-      <text x="12" y="16" text-anchor="middle" font-size="12" font-family="Cambria, serif" font-weight="700" fill="#bb0000">6</text>
     </symbol>
     <symbol id="d8" viewBox="0 0 24 24">
       <polygon points="12,2 22,12 12,22 2,12" fill="none" stroke="currentColor" stroke-width="1.6"/>
-      <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="0.7" opacity="0.3"/>
-      <text x="12" y="16" text-anchor="middle" font-size="12" font-family="Cambria, serif" font-weight="700" fill="#bb0000">8</text>
+      <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="0.7" opacity="0.8"/>
     </symbol>
     <symbol id="d10" viewBox="0 0 24 24">
-      <polygon points="12,2 21,9 18,22 6,22 3,9" fill="none" stroke="currentColor" stroke-width="1.6"/>
-      <text x="12" y="16.5" text-anchor="middle" font-size="11" font-family="Cambria, serif" font-weight="700" fill="#bb0000">10</text>
+      <!-- Stretched octagonal silhouette: top and bottom peaks with a
+           bulging equator at the widest point, evoking the pentagonal
+           trapezohedron. Distinct from the d8 diamond (4 points, no bulge). -->
+      <polygon points="12,2 24,12 12,22 0,12" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <!-- Subtle zigzag hint at the equator: the boundary between the
+           upper and lower halves of ten kite faces. -->
+      <polyline points="1,12 7,10 12,14 17,10 23,12" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.8"/>
+      <line x1="12" y1="2" x2="7" y2="10" stroke="currentColor" stroke-width="0.7" opacity="0.8"/>
+      <line x1="12" y1="2" x2="17" y2="10" stroke="currentColor" stroke-width="0.7" opacity="0.8"/>
+      <line x1="12" y1="22" x2="12" y2="14" stroke="currentColor" stroke-width="0.7" opacity="0.8"/>
     </symbol>
     <symbol id="d12" viewBox="0 0 24 24">
       <polygon points="12,2 22,8 22,16 12,22 2,16 2,8" fill="none" stroke="currentColor" stroke-width="1.6"/>
-      <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-family="Cambria, serif" font-weight="700" fill="#bb0000">12</text>
     </symbol>
     <symbol id="d20" viewBox="0 0 24 24">
       <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="currentColor" stroke-width="1.6"/>
       <line x1="3" y1="7" x2="21" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
       <line x1="21" y1="7" x2="3" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
       <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
-      <text x="12" y="15.5" text-anchor="middle" font-size="7.5" font-family="Cambria, serif" font-weight="700" fill="#bb0000">20</text>
     </symbol>
   </defs>
 </svg>
@@ -408,7 +412,7 @@
       </div>
       <div class="effect"><span class="label">15-ft cone &middot; DEX DC 15</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        <span class="dice"><span class="count">2</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span>
         fire damage (half on save).
       </div>
       <div class="flavor">The cannon's nozzle glows orange — a hand-pumped reservoir of brass-yellow oil ignites, and a roaring jet erupts.</div>
@@ -419,9 +423,9 @@
         <span class="action-name">Force Ballista (cannon)</span>
         <span class="chip chip-bonus">Bonus Action</span>
       </div>
-      <div class="effect"><span class="label">120 ft &middot; ranged spell attack +8</span></div>
+      <div class="effect"><span class="label">120 ft &middot; ranged spell attack, <b>+7</b> to hit</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        <span class="dice"><span class="count">2</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span>
         force damage. Target is pushed 5 ft. on hit.
       </div>
       <div class="flavor">A spring-loaded arm cranks back with a ratchet's <em>click-click-click</em> and looses a shimmering bolt of compressed force.</div>
@@ -435,7 +439,7 @@
       <div class="effect"><span class="label">10-ft radius around cannon</span></div>
       <div class="effect">
         Each creature of choice gains
-        <span class="dice"><span class="count">1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        <span class="dice"><span class="count">1</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span>
         + 4 temp HP.
       </div>
       <div class="flavor">A net of glowing copper filaments fans out from the cannon, weaving a faintly humming ward around nearby allies.</div>
@@ -464,7 +468,7 @@
         <span class="action-name">Arcane Firearm</span>
         <span class="chip chip-none">Passive</span>
       </div>
-      <div class="effect">Once per turn when casting an artificer spell through your firearm, add <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span> to one damage roll.</div>
+      <div class="effect">Once per turn when casting an artificer spell through your firearm, add <span class="dice"><span class="count">+1</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span> to one damage roll.</div>
       <div class="flavor">A single rifling chamber on the wand glows hot mid-cast — the spell exits with an extra cannon-kick.</div>
     </div>
 
@@ -592,8 +596,8 @@
       </div>
       <div class="effect"><span class="label">120 ft &middot; ranged spell atk +8</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d10"/></svg><span class="die-label">d10</span></span>
-        fire on hit. (Add <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span> via Arcane Firearm, 1/turn.)
+        <span class="dice"><span class="count">2</span><span class="die-label">d10</span><svg class="die"><use href="#d10"/></svg></span>
+        fire on hit. (Add <span class="dice"><span class="count">+1</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span> via Arcane Firearm, 1/turn.)
       </div>
       <div class="flavor">Fiz levels his wand-arquebus — a chambered <em>click</em>, then a glowing ember-shot whistles forth like a tiny mortar round.</div>
     </div>
@@ -633,7 +637,7 @@
       </div>
       <div class="effect"><span class="label">15-ft cube &middot; CON DC 15</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        <span class="dice"><span class="count">2</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span>
         thunder, push 10 ft. on fail (half &amp; no push on save).
       </div>
       <div class="flavor">Fiz strikes his arcane firearm against the ground — a percussion blast ripples outward like a cannon's report.</div>
@@ -648,7 +652,7 @@
       <div class="effect"><span class="label">30 ft &middot; up to 3 creatures &middot; Conc 1 min</span></div>
       <div class="effect">
         Each target adds
-        <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d4"/></svg><span class="die-label">d4</span></span>
+        <span class="dice"><span class="count">+1</span><span class="die-label">d4</span><svg class="die"><use href="#d4"/></svg></span>
         to attack rolls and saving throws.
       </div>
       <div class="flavor">Fiz hands out tiny brass talismans that hum faintly — small charms for small fortunes.</div>
@@ -742,8 +746,8 @@
       <div class="effect"><span class="label">120 ft &middot; three rays, each +8 to hit</span></div>
       <div class="effect">
         Each ray:
-        <span class="dice"><span class="count">2</span><svg class="die"><use href="#d6"/></svg><span class="die-label">d6</span></span>
-        fire. (Add <span class="dice"><span class="count">+1</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span> Arcane Firearm to one ray, 1/turn.)
+        <span class="dice"><span class="count">2</span><span class="die-label">d6</span><svg class="die"><use href="#d6"/></svg></span>
+        fire. (Add <span class="dice"><span class="count">+1</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span> Arcane Firearm to one ray, 1/turn.)
       </div>
       <div class="flavor">Three glowing brass tubes snap up from his bandolier and loose searing rays in rapid sequence — <em>fzzt-fzzt-fzzt</em>.</div>
     </div>
@@ -755,7 +759,7 @@
       </div>
       <div class="effect"><span class="label">60 ft &middot; 10-ft sphere &middot; CON DC 15</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">3</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        <span class="dice"><span class="count">3</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span>
         thunder (half on save). Inorganic objects take auto damage.
       </div>
       <div class="flavor">Fiz lobs a tiny crystal capsule that detonates with a glass-shattering pulse you feel in your teeth.</div>
@@ -779,7 +783,7 @@
       </div>
       <div class="effect"><span class="label">15-ft cube &middot; CON DC 15</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">3</span><svg class="die"><use href="#d8"/></svg><span class="die-label">d8</span></span>
+        <span class="dice"><span class="count">3</span><span class="die-label">d8</span><svg class="die"><use href="#d8"/></svg></span>
         thunder, push 10 ft. on fail (half &amp; no push on save).
       </div>
       <div class="flavor">A heavier charge in the firearm's chamber — the percussive boom hits harder and rattles teeth across the cube.</div>
@@ -801,7 +805,7 @@
       </div>
       <div class="effect"><span class="label">30/120 ft &middot; +DEX to hit</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">1</span><svg class="die"><use href="#d6"/></svg><span class="die-label">d6</span></span>
+        <span class="dice"><span class="count">1</span><span class="die-label">d6</span><svg class="die"><use href="#d6"/></svg></span>
         piercing + DEX.
       </div>
       <div class="flavor">A short bolt cracks from the brass-clad crossbow strapped to his off-hand.</div>
@@ -814,7 +818,7 @@
       </div>
       <div class="effect"><span class="label">Melee or thrown 20/60 ft &middot; +DEX</span></div>
       <div class="effect">
-        <span class="dice"><span class="count">1</span><svg class="die"><use href="#d4"/></svg><span class="die-label">d4</span></span>
+        <span class="dice"><span class="count">1</span><span class="die-label">d4</span><svg class="die"><use href="#d4"/></svg></span>
         piercing + DEX. Finesse, light.
       </div>
       <div class="flavor">A quick stab or thrown blade, drawn from the sheath on his bandolier.</div>
