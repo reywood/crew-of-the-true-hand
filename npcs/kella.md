@@ -3,7 +3,8 @@ name: Kella
 aliases: Kella
 type: Bounty
 location: Darkhope
-first_seen: 2025-11-12
+affiliation: Zhentarim (estranged)
+first_seen: mentioned 2025-09-23
 ---
 
-A bounty out of Darkhope mentioned early in the campaign. Her father is famous in Darkar; Teldor is her grandfather. Whether the crew is still pursuing this bounty is unclear.
+A blonde Zhentarim agent, hunted across the Sword Coast — Xolkin and his flying-snake company were riding on her trail when they first turned up at Nightstone, believing she had gone to ground somewhere in the village or the goblin cave beyond it. Her father is famous in Darkar (Yartar was also named); her grandfather is called Teldor. Xolkin later suggested she had "stolen" something from him. Whether the crew ever means to collect the bounty is unclear.
