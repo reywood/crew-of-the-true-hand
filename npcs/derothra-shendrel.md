@@ -6,4 +6,4 @@ location: Triboar
 first_seen: mentioned 2025-12-07
 ---
 
-A figure in Triboar who Molak said knows the genie's name — the missing piece to actually using the bottle salvaged from the True Hand. The bottle's inscription reads, "To speak my name is to unmake chains."
+Leader of the village of Triboar, north up the road past Waterdeep. Per Molak, she knows the genie's true name — the missing piece to actually using the bottle salvaged from the *True Hand*. Speak the name aloud, Molak said, and the bottle grants a wish. The bottle's inscription reads, "To speak my name is to unmake chains."
