@@ -372,6 +372,34 @@ a.card:hover {
 }
 .quest-list li:last-child { border-bottom: none; }
 
+/* Inline dependency indicators under each quest bullet. */
+.quest-list-deps {
+  margin: 0.25rem 0 0 0.1rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.quest-dep {
+  line-height: 1.4;
+}
+.quest-dep .dep-arrow {
+  display: inline-block;
+  color: var(--brass-deep);
+  font-weight: 700;
+  margin-right: 0.25em;
+}
+.quest-dep a {
+  color: var(--wood-light);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.quest-dep a:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
 /* ---------- home page ---------- */
 .home-quests {
   margin: 1.6rem 0 2rem;

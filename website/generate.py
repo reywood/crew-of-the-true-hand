@@ -1291,8 +1291,37 @@ def quest_list_page(quests, link_map):
             f'<h2 class="status-heading"><span class="status-chip status-{status_class}">{html.escape(status)}</span></h2>')
         chunks.append("<ul class='quest-list'>")
         for q in items:
+            helps = q.meta.get("helps") or []
+            supported_by = q.meta.get("supported_by") or []
+            dep_lines = []
+            if helps:
+                links = " · ".join(
+                    f'<a href="{d.href}">{html.escape(d.name)}</a>'
+                    for d in helps
+                )
+                dep_lines.append(
+                    f'<span class="quest-dep quest-dep-helps">'
+                    f'<span class="dep-arrow">&rarr;</span> helps: {links}'
+                    f'</span>'
+                )
+            if supported_by:
+                links = " · ".join(
+                    f'<a href="{d.href}">{html.escape(d.name)}</a>'
+                    for d in supported_by
+                )
+                dep_lines.append(
+                    f'<span class="quest-dep quest-dep-supports">'
+                    f'<span class="dep-arrow">&larr;</span> steps toward this: {links}'
+                    f'</span>'
+                )
+            deps_html = (
+                f'<div class="quest-list-deps">{"".join(dep_lines)}</div>'
+                if dep_lines else ""
+            )
             chunks.append(
-                f'<li><a href="{q.href}"><strong>{html.escape(q.name)}</strong></a> — {md_inline(q.summary or "")}</li>')
+                f'<li><a href="{q.href}"><strong>{html.escape(q.name)}</strong></a> — '
+                f'{md_inline(q.summary or "")}{deps_html}</li>'
+            )
         chunks.append("</ul>")
     body = "\n".join(chunks)
     return page("Quests", linkify_html(body, "quests.html", link_map),
