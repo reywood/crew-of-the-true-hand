@@ -30,6 +30,7 @@ STATIC = WEB / "static"
 CHAR_DIR = ROOT / "characters"
 NPC_DIR = ROOT / "npcs"
 LOC_DIR = ROOT / "locations"
+ITEM_DIR = ROOT / "items"
 NOTES_DIR = ROOT / "session notes"
 TRANS_DIR = ROOT / "transcripts"
 SUMMARIES_DIR = ROOT / "summaries"
@@ -52,6 +53,17 @@ def read(p):
 
 
 def parse_frontmatter(text):
+    """Minimal YAML-ish frontmatter parser.
+
+    Handles two list forms in addition to plain scalar values:
+      - Inline comma-list:   aliases: Foo, Bar, Baz
+      - YAML-style bullets:  carried:
+                             - Item one
+                             - Item two
+
+    A field with no value on its own line and dashed bullets on the
+    following lines becomes a list. Anything else is a scalar (or an
+    inline comma-list)."""
     if not text.startswith("---"):
         return {}, text
     m = re.match(r"^---\s*\n(.*?)\n---\s*\n?", text, re.DOTALL)
@@ -59,14 +71,37 @@ def parse_frontmatter(text):
         return {}, text
     body = text[m.end():]
     fm = {}
-    for line in m.group(1).split("\n"):
+    lines = m.group(1).split("\n")
+    i = 0
+    while i < len(lines):
+        line = lines[i]
         if ":" not in line:
+            i += 1
             continue
         k, _, v = line.partition(":")
         k, v = k.strip(), v.strip()
+        # Empty value + following bullet lines = list.
+        if not v:
+            items = []
+            j = i + 1
+            while j < len(lines):
+                nxt = lines[j].lstrip()
+                if nxt.startswith("- "):
+                    items.append(nxt[2:].strip())
+                    j += 1
+                elif nxt.startswith("-") and len(nxt) > 1 and nxt[1] != " ":
+                    # tolerate "-item" with no space
+                    items.append(nxt[1:].strip())
+                    j += 1
+                else:
+                    break
+            fm[k] = items
+            i = j
+            continue
         if "," in v:
             v = [x.strip() for x in v.split(",") if x.strip()]
         fm[k] = v
+        i += 1
     return fm, body
 
 
@@ -157,7 +192,7 @@ class Entity:
 
     @property
     def href(self):
-        prefix = {"pc": "pc", "npc": "npc", "location": "loc",
+        prefix = {"pc": "pc", "npc": "npc", "location": "loc", "item": "item",
                   "quest": "quest", "session": "session"}[self.kind]
         return f"{prefix}-{self.slug}.html"
 
@@ -403,6 +438,15 @@ def load_sessions():
         note_text = read(notes[date]) if date in notes else ""
         transcript_text = read(transcripts[date]) if date in transcripts else ""
         summary_text = read(summaries[date]) if date in summaries else ""
+        # A summary may lead with a `---` YAML frontmatter block (currently
+        # used to declare a `carried:` list of items acquired that session).
+        # Split it off so the rendered body doesn't show the raw block.
+        summary_fm, summary_body = parse_frontmatter(summary_text) if summary_text else ({}, "")
+        summary_text_render = summary_body if summary_fm else summary_text
+        carried = summary_fm.get("carried") if summary_fm else None
+        if isinstance(carried, str):
+            carried = [carried]
+        carried = carried or []
         image_path = session_images.get(date)
         # Per-section beat images: summaries/images/<date>/<beat-slug>.jpg
         beat_images = {}
@@ -414,8 +458,8 @@ def load_sessions():
         # Card-summary one-liner: prefer the summary's "*In brief: ...*" line,
         # then fall back to the notes' first line.
         card_summary = ""
-        if summary_text:
-            for ln in summary_text.split("\n"):
+        if summary_text_render:
+            for ln in summary_text_render.split("\n"):
                 s = ln.strip()
                 if s.startswith("*In brief:") and s.endswith("*"):
                     card_summary = s[len("*In brief:"):-1].strip()
@@ -435,10 +479,11 @@ def load_sessions():
             kind="session", slug=date, name=f"Session {date}",
             aliases=[date], body=note_text,
             meta={"transcript": transcript_text, "date": date,
-                  "summary_md": summary_text,
+                  "summary_md": summary_text_render,
                   "image_src": image_path,
                   "image_name": image_path.name if image_path else "",
                   "beat_images": beat_images,
+                  "carried": carried,
                   "has_notes": bool(note_text),
                   "has_transcript": bool(transcript_text),
                   "has_summary": bool(summary_text),
@@ -458,6 +503,7 @@ NAV = [
     ("characters.html", "Characters"),
     ("npcs.html", "NPCs"),
     ("locations.html", "Locations"),
+    ("items.html", "Items"),
     ("quests.html", "Quests"),
 ]
 
@@ -578,6 +624,38 @@ QUEST_DEPENDENCIES = {
     "Vandal Lovelace":                    ["Find Harshnag"],
     "Naxene":                             ["Find Harshnag"],
 }
+
+
+def _normalize_tag_list(value):
+    """Coerce a frontmatter field (string, list, or None) to a lowercased,
+    stripped list of tag strings."""
+    if not value:
+        return []
+    if isinstance(value, str):
+        parts = [p.strip() for p in value.split(",")]
+    else:
+        parts = [str(p).strip() for p in value]
+    return [p.lower() for p in parts if p]
+
+
+def _attach_item_expertise(items, npcs):
+    """Cross-reference items and NPCs by expertise tags. Populates:
+      item.meta['helpers']       — list of NPC Entities that could help
+      npc.meta['can_help_with']  — list of item Entities they could help with
+    """
+    for item in items:
+        item.meta.setdefault("helpers", [])
+    for npc in npcs:
+        npc.meta.setdefault("can_help_with", [])
+    for item in items:
+        needs = set(_normalize_tag_list(item.meta.get("expertise_needed")))
+        if not needs:
+            continue
+        for npc in npcs:
+            exp = set(_normalize_tag_list(npc.meta.get("expertise")))
+            if needs & exp:
+                item.meta["helpers"].append(npc)
+                npc.meta["can_help_with"].append(item)
 
 
 def _attach_quest_deps(quests):
@@ -1070,14 +1148,31 @@ def _extract_session_dates(value):
     return [s.strip() for s in str(value).split(",") if s.strip()]
 
 
+def _render_expertise_link_block(label, entries):
+    """Render a small cross-reference block used on item + NPC pages."""
+    if not entries:
+        return ""
+    links = ", ".join(
+        f'<a href="{ent.href}">{html.escape(ent.name)}</a>'
+        for ent in entries
+    )
+    return (
+        '<aside class="expertise-link">'
+        f'<span class="expertise-label">{html.escape(label)}:</span> {links}'
+        '</aside>'
+    )
+
+
 def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None):
     rendered = md_to_html(e.body)
     linked = linkify_html(rendered, e.href, link_map)
     meta_rows = []
     # 'sessions' is rendered separately as the mentioned-in block, so skip it
-    # here to avoid showing it twice.
+    # here to avoid showing it twice. Same for the computed cross-reference
+    # lists (helpers / can_help_with) — they get their own rendering below.
     skip = {"name", "aliases", "summary", "transcript", "has_notes",
-            "has_transcript", "date", "status_class", "section", "sessions"}
+            "has_transcript", "date", "status_class", "section", "sessions",
+            "helpers", "can_help_with"}
     for k, v in e.meta.items():
         if k in skip:
             continue
@@ -1099,9 +1194,19 @@ def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None)
         session_lookup or {},
     )
 
+    # Cross-reference by expertise (populated by _attach_item_expertise):
+    #   items get "Who could help" (NPCs with matching expertise)
+    #   NPCs get "Could help with" (items whose expertise_needed matches)
+    helpers_block = _render_expertise_link_block(
+        "Who could help", e.meta.get("helpers") or [])
+    can_help_block = _render_expertise_link_block(
+        "Could help with", e.meta.get("can_help_with") or [])
+
     body = f"""<article class="detail">
   <h1>{html.escape(e.name)}</h1>
   {sessions_block}
+  {helpers_block}
+  {can_help_block}
   {meta_block}
   <div class="detail-body">
   {linked}
@@ -1109,6 +1214,65 @@ def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None)
 </article>"""
     bc = f'<a href="{list_href}">{html.escape(list_label)}</a> &rsaquo; {html.escape(e.name)}'
     return page(e.name, body, current_nav=list_href, breadcrumb=bc)
+
+
+ITEM_STATUS_ORDER = ["Unresolved", "Active", "Consumed", "Lost", "Sold"]
+ITEM_STATUS_CLASS = {
+    "Unresolved": "unresolved",
+    "Active":     "active",
+    "Consumed":   "completed",
+    "Lost":       "completed",
+    "Sold":       "completed",
+}
+
+
+def item_list_page(items, link_map):
+    """Group items by status, unresolved first so mysteries lead."""
+    grouped = {}
+    for it in items:
+        status = it.meta.get("status", "Active")
+        if isinstance(status, list):
+            status = status[0] if status else "Active"
+        grouped.setdefault(status, []).append(it)
+
+    chunks = [
+        '<h1>The Ledger</h1>',
+        '<p class="subhead"><em>Everything the crew has hauled ashore. Unresolved mysteries lead.</em></p>',
+    ]
+    order = ITEM_STATUS_ORDER + [s for s in grouped if s not in ITEM_STATUS_ORDER]
+    for status in order:
+        bucket = grouped.get(status, [])
+        if not bucket:
+            continue
+        cls = ITEM_STATUS_CLASS.get(status, "active")
+        chunks.append(
+            f'<h2 class="status-heading"><span class="status-chip status-{cls}">{html.escape(status)}</span></h2>'
+        )
+        chunks.append('<ul class="item-list">')
+        for it in sorted(bucket, key=lambda x: x.name.lower()):
+            holder = it.meta.get("holder", "")
+            if isinstance(holder, list):
+                holder = ", ".join(holder)
+            typ = it.meta.get("type", "")
+            if isinstance(typ, list):
+                typ = typ[0] if typ else ""
+            meta_bits = []
+            if typ:
+                meta_bits.append(f'<span class="item-type">{html.escape(typ)}</span>')
+            if holder:
+                meta_bits.append(f'<span class="item-holder">held by {html.escape(holder)}</span>')
+            meta_line = f'<span class="item-meta">{" · ".join(meta_bits)}</span>' if meta_bits else ""
+            summary = md_inline(it.summary or "")
+            chunks.append(
+                f'<li><a class="item-name" href="{it.href}">{html.escape(it.name)}</a>'
+                f'{meta_line}'
+                f'<p class="item-blurb">{summary}</p></li>'
+            )
+        chunks.append('</ul>')
+
+    body = "\n".join(chunks)
+    return page("Items", linkify_html(body, "items.html", link_map),
+                current_nav="items.html")
 
 
 def quest_list_page(quests, link_map):
@@ -1312,9 +1476,20 @@ def detail_page_session(s, link_map):
             f'</figure>\n'
         )
 
+    carried = s.meta.get("carried") or []
+    carried_html = ""
+    if carried:
+        items = "".join(f'<li>{md_inline(it)}</li>' for it in carried)
+        carried_html = f"""
+  <aside class="carried">
+    <h2>Items acquired</h2>
+    <ul>{items}</ul>
+  </aside>
+"""
+
     body = f"""<article class="detail">
   <h1>{html.escape(s.name)}</h1>
-{hero_html}  <section class="session-summary">
+{hero_html}{carried_html}  <section class="session-summary">
   {summary_html}
   </section>
   {notes_section}
@@ -1333,12 +1508,14 @@ def main():
     pcs = load_pcs()
     npcs = load_dir_entities("npc", NPC_DIR)
     locations = load_dir_entities("location", LOC_DIR)
+    items = load_dir_entities("item", ITEM_DIR)
     quests = load_quests()
     _attach_quest_deps(quests)
+    _attach_item_expertise(items, npcs)
     sessions = load_sessions()
     session_lookup = {s.slug: s for s in sessions}
 
-    all_entities = pcs + npcs + locations + quests + sessions
+    all_entities = pcs + npcs + locations + items + quests + sessions
     link_map = build_link_map(all_entities)
 
     setup_output()
@@ -1359,6 +1536,11 @@ def main():
         write_page(e.href, detail_page_generic(
             e, "locations.html", "Locations", link_map, session_lookup))
 
+    write_page("items.html", item_list_page(items, link_map))
+    for e in items:
+        write_page(e.href, detail_page_generic(
+            e, "items.html", "Items", link_map, session_lookup))
+
     write_page("quests.html", quest_list_page(quests, link_map))
     for q in quests:
         write_page(q.href, detail_page_quest(q, link_map, session_lookup))
@@ -1367,10 +1549,10 @@ def main():
     for s in sessions:
         write_page(s.href, detail_page_session(s, link_map))
 
-    total = 6 + len(pcs) + len(npcs) + len(locations) + len(quests) + len(sessions)
+    total = 7 + len(pcs) + len(npcs) + len(locations) + len(items) + len(quests) + len(sessions)
     print(f"Generated {total} pages into {SITE}")
     print(f"  PCs: {len(pcs)}, NPCs: {len(npcs)}, Locations: {len(locations)},"
-          f" Quests: {len(quests)}, Sessions: {len(sessions)}")
+          f" Items: {len(items)}, Quests: {len(quests)}, Sessions: {len(sessions)}")
 
 
 if __name__ == "__main__":

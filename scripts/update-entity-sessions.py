@@ -32,6 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SUMMARIES_DIR = ROOT / "summaries"
 NPC_DIR = ROOT / "npcs"
 LOC_DIR = ROOT / "locations"
+ITEM_DIR = ROOT / "items"
 
 
 def parse_frontmatter(text: str):
@@ -183,6 +184,11 @@ def main():
     loc_counts = process_dir(LOC_DIR, session_texts, args.dry_run)
     print(f"  {sum(loc_counts.values())} files, "
           f"{loc_counts['updated'] + loc_counts['added'] + loc_counts['removed']} changes\n")
+
+    print("Items:")
+    item_counts = process_dir(ITEM_DIR, session_texts, args.dry_run) if ITEM_DIR.exists() else {"unchanged": 0, "updated": 0, "removed": 0, "added": 0}
+    print(f"  {sum(item_counts.values())} files, "
+          f"{item_counts['updated'] + item_counts['added'] + item_counts['removed']} changes\n")
 
     if args.dry_run:
         print("(dry run — no files written)")

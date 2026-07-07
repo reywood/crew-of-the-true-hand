@@ -634,6 +634,83 @@ a.card:hover {
   }
 }
 
+/* ---------- Item ledger (items.html) ---------- */
+.item-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.8rem 0 1.8rem;
+}
+.item-list > li {
+  padding: 0.8rem 0;
+  border-bottom: 1px dotted var(--parchment-shadow);
+}
+.item-list > li:last-child { border-bottom: none; }
+.item-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--wood);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+  padding-bottom: 1px;
+}
+.item-name:hover {
+  color: var(--status-active-main);
+  border-bottom-color: var(--brass);
+}
+.item-meta {
+  margin-left: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.item-type {
+  font-variant: small-caps;
+  font-weight: 700;
+  color: var(--wood);
+  letter-spacing: 0.05em;
+  margin-right: 0.15em;
+}
+.item-holder {
+  color: var(--ink-soft);
+}
+.item-blurb {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  max-width: 68ch;
+  color: var(--ink);
+}
+
+/* Expertise cross-reference block on item + NPC detail pages */
+.expertise-link {
+  margin: 0.4rem 0 0.6rem;
+  padding: 0.55rem 0.9rem;
+  background: rgba(193, 154, 74, 0.09);
+  border-left: 3px solid var(--brass);
+  border-radius: 0 3px 3px 0;
+  font-size: 0.93rem;
+  line-height: 1.45;
+}
+.expertise-link .expertise-label {
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  color: var(--wood);
+  letter-spacing: 0.05em;
+  margin-right: 0.3em;
+}
+.expertise-link a {
+  color: var(--wood-light);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.expertise-link a:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
 /* ---------- 'Mentioned in sessions' block on NPC / location / quest pages ---------- */
 .mentioned-in {
   margin: 0.6rem 0 1rem;
@@ -712,6 +789,38 @@ span.session-chip-missing {
 
 .session-summary {
   margin: 1.2rem 0 2rem;
+}
+
+/* "Items acquired" block on a session detail page */
+.carried {
+  margin: 1.2rem 0 1.4rem;
+  padding: 0.9rem 1.2rem 1rem;
+  background: rgba(193, 154, 74, 0.09);
+  border-left: 4px solid var(--brass);
+  border-radius: 0 4px 4px 0;
+}
+.carried > h2 {
+  margin: 0 0 0.4em;
+  font-size: 1rem;
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--wood);
+  border: none;
+  padding: 0;
+}
+.carried ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  list-style: "◆  ";
+}
+.carried li {
+  padding: 0.15rem 0;
+  line-height: 1.45;
+}
+.carried li::marker {
+  color: var(--brass);
+  font-size: 0.7em;
 }
 
 /* Beat images — one per ## section, floated alternately for a book feel. */
