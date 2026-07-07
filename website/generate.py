@@ -553,22 +553,169 @@ def setup_output():
                     shutil.copy2(img, beats_dst / img.name)
 
 
+QUEST_IMPACT_SCORE = {
+    # Higher = more central to the campaign's spine. Completed drops out.
+    "Active — main arc": 4,
+    "Active — lead":     3,
+    "Active — region":   3,
+    "Unresolved":        2,
+    "Personal":          1,
+    "Completed":         0,
+}
+
+
+# Quest dependency graph. Key = source quest name; value = list of quest names
+# it helps achieve. Both directions (forward "helps" and backward "supported by")
+# are computed from this single table so we only encode each edge once.
+# The Personal section (Fiz/Toz/Woz) is not surfaced as quests, so no edges
+# should reference those; keep dependencies within the surfaced quest set.
+QUEST_DEPENDENCIES = {
+    "Find Harshnag":                      ["Reach the Oracle"],
+    "Get to Silverymoon via the Harpers": ["Find Harshnag"],
+    "Visit the Eye of Annam":             ["Reach the Oracle"],
+    "Old Gnawbone":                       ["Reach the Oracle"],
+    "Vexalanthus":                        ["Reach the Oracle"],
+    "Vandal Lovelace":                    ["Find Harshnag"],
+    "Naxene":                             ["Find Harshnag"],
+}
+
+
+def _attach_quest_deps(quests):
+    """Walk QUEST_DEPENDENCIES, resolve each side to a quest Entity, and
+    stash the forward and reverse lists on each quest's meta. Warns to
+    stderr if any name in the table does not match a real quest."""
+    import sys as _sys
+    by_name = {q.name: q for q in quests}
+    helps = {q.name: [] for q in quests}
+    supports = {q.name: [] for q in quests}
+    for src_name, targets in QUEST_DEPENDENCIES.items():
+        if src_name not in by_name:
+            print(f"WARN: dep source quest not found: {src_name!r}",
+                  file=_sys.stderr)
+            continue
+        for tgt_name in targets:
+            if tgt_name not in by_name:
+                print(f"WARN: dep target quest not found: {tgt_name!r} "
+                      f"(referenced by {src_name!r})", file=_sys.stderr)
+                continue
+            helps[src_name].append(by_name[tgt_name])
+            supports[tgt_name].append(by_name[src_name])
+    for q in quests:
+        q.meta["helps"] = helps[q.name]
+        q.meta["supported_by"] = supports[q.name]
+
+
+def _quest_recency(quest) -> str:
+    """Latest YYYY-MM-DD referenced in a quest's body — the parenthetical
+    session dates at the end of each quest bullet in quests.md. Returns
+    empty string if the quest carries no date."""
+    dates = re.findall(r"\b(\d{4}-\d{2}-\d{2})\b", quest.body or "")
+    return max(dates) if dates else ""
+
+
+def _top_active_quests(quests, limit=6):
+    """Rank active quests by (impact × recency). Completed quests drop out;
+    impact wins ties, most-recent-session wins within an impact tier."""
+    ranked = []
+    for q in quests:
+        impact = QUEST_IMPACT_SCORE.get(q.status, 0)
+        if impact == 0:
+            continue
+        recency = _quest_recency(q) or "0000-00-00"
+        ranked.append((impact, recency, q))
+    ranked.sort(key=lambda t: (t[0], t[1]), reverse=True)
+    return ranked[:limit]
+
+
 def index_page(pcs, npcs, locations, quests, sessions):
-    active_quests = [q for q in quests if q.status and "Active" in q.status]
+    top_quests = _top_active_quests(quests, limit=6)
     recent = sessions[::-1][:3] if sessions else []
-    cards = f"""
+
+    cards = """
 <section class="hero">
   <h1>The Crew of the <em>True Hand</em></h1>
   <p class="tagline">A four-soul company aboard borrowed sails, chasing the cause of giants run wild across the North.</p>
 </section>
-<section class="grid grid-2">
+"""
+
+    if top_quests:
+        cards += """
+<section class="home-quests">
+  <h2>What's on your plate</h2>
+  <p class="muted small home-quests-note">Ranked by story impact, then by the last session that touched it.</p>
+  <ul class="home-quest-list">"""
+        for _impact, recency, q in top_quests:
+            status_class = q.meta.get("status_class", "active")
+            last_touched = ""
+            if recency and recency != "0000-00-00":
+                last_touched = (
+                    f'<a class="home-quest-touch" href="session-{recency}.html">'
+                    f'last touched · session {recency}</a>'
+                )
+            summary = md_inline(q.summary or "")
+
+            deps_html = ""
+            helps = q.meta.get("helps") or []
+            supported_by = q.meta.get("supported_by") or []
+            dep_lines = []
+            if helps:
+                links = " · ".join(
+                    f'<a href="{d.href}">{html.escape(d.name)}</a>'
+                    for d in helps
+                )
+                dep_lines.append(
+                    f'<span class="home-quest-dep"><span class="dep-arrow">&rarr;</span> '
+                    f'helps: {links}</span>'
+                )
+            if supported_by:
+                links = " · ".join(
+                    f'<a href="{d.href}">{html.escape(d.name)}</a>'
+                    for d in supported_by
+                )
+                dep_lines.append(
+                    f'<span class="home-quest-dep"><span class="dep-arrow">&larr;</span> '
+                    f'steps toward this: {links}</span>'
+                )
+            if dep_lines:
+                deps_html = f'<p class="home-quest-deps">{" ".join(dep_lines)}</p>'
+
+            cards += f"""
+    <li class="home-quest">
+      <div class="home-quest-head">
+        <a class="home-quest-name" href="{q.href}">{html.escape(q.name)}</a>
+        <span class="status-chip status-{status_class}">{html.escape(q.status or "")}</span>
+      </div>
+      <p class="home-quest-line">{summary}</p>
+      {deps_html}
+      {last_touched}
+    </li>"""
+        cards += """
+  </ul>
+  <p class="home-more"><a href="quests.html">See the full quest log &rsaquo;</a></p>
+</section>
+"""
+
+    if recent:
+        cards += "<section class='recent'><h2>Most recent sessions</h2><ul class='session-list'>"
+        for s in recent:
+            cards += f'<li><a href="{s.href}">{html.escape(s.name)}</a> — {html.escape(s.summary)}</li>'
+        cards += "</ul></section>"
+
+    # Directory / navigation grid — moved beneath the actionable content so
+    # active players see quests and sessions first. Still useful as a
+    # browsing directory for casual visitors.
+    active_quests = [q for q in quests if q.status and "Active" in q.status]
+    cards += f"""
+<section class="home-directory">
+<h2>Browse the archive</h2>
+<div class="grid grid-2">
   <a class="card" href="characters.html">
     <h2><span class="icon">⚓</span> The Crew</h2>
     <p>{len(pcs)} player characters, each with their own port of call.</p>
   </a>
   <a class="card" href="quests.html">
     <h2><span class="icon">🧭</span> Quests</h2>
-    <p>{len(active_quests)} active threads, side leads, and completed jobs. The big one: find the Oracle in the Spine of the World.</p>
+    <p>{len(active_quests)} active threads, side leads, and completed jobs.</p>
   </a>
   <a class="card" href="sessions.html">
     <h2><span class="icon">📜</span> Sessions</h2>
@@ -582,13 +729,9 @@ def index_page(pcs, npcs, locations, quests, sessions):
     <h2><span class="icon">🗺</span> Locations</h2>
     <p>{len(locations)} ports and waypoints across Faerûn.</p>
   </a>
+</div>
 </section>
 """
-    if recent:
-        cards += "<section class='recent'><h2>Most recent sessions</h2><ul class='session-list'>"
-        for s in recent:
-            cards += f'<li><a href="{s.href}">{html.escape(s.name)}</a> — {html.escape(s.summary)}</li>'
-        cards += "</ul></section>"
     return page("Home", cards, current_nav="index.html")
 
 
@@ -952,14 +1095,42 @@ def quest_list_page(quests, link_map):
                 current_nav="quests.html")
 
 
+def _render_dep_line(label, arrow_class, deps):
+    """Render one directional dependency line, e.g.
+       → Helps achieve: [Reach the Oracle]"""
+    if not deps:
+        return ""
+    links = ", ".join(
+        f'<a href="{d.href}">{html.escape(d.name)}</a>'
+        for d in deps
+    )
+    return (
+        f'<p class="dep-line">'
+        f'<span class="dep-arrow {arrow_class}">&rarr;</span> '
+        f'<span class="dep-label">{html.escape(label)}:</span> {links}'
+        f'</p>'
+    )
+
+
 def detail_page_quest(q, link_map):
     rendered = md_to_html(q.body)
     linked = linkify_html(rendered, q.href, link_map)
     status_class = q.meta.get("status_class", "active")
     chip = f'<span class="status-chip status-{status_class}">{html.escape(q.status or "")}</span>'
+
+    helps = q.meta.get("helps") or []
+    supported_by = q.meta.get("supported_by") or []
+    deps_html = ""
+    if helps or supported_by:
+        forward = _render_dep_line("Helps achieve", "dep-forward", helps)
+        backward = _render_dep_line("Steps toward this", "dep-backward",
+                                    supported_by)
+        deps_html = f'<aside class="quest-deps">{forward}{backward}</aside>'
+
     body = f"""<article class="detail">
   <h1>{html.escape(q.name)}</h1>
   <p class="meta-line">{chip} <span class="muted">{html.escape(q.meta.get("section", ""))}</span></p>
+  {deps_html}
   <div class="detail-body">
   {linked}
   </div>
@@ -1117,6 +1288,7 @@ def main():
     npcs = load_dir_entities("npc", NPC_DIR)
     locations = load_dir_entities("location", LOC_DIR)
     quests = load_quests()
+    _attach_quest_deps(quests)
     sessions = load_sessions()
 
     all_entities = pcs + npcs + locations + quests + sessions

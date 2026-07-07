@@ -372,6 +372,175 @@ a.card:hover {
 }
 .quest-list li:last-child { border-bottom: none; }
 
+/* ---------- home page ---------- */
+.home-quests {
+  margin: 1.6rem 0 2rem;
+  padding: 1.2rem 1.4rem 1.4rem;
+  background: rgba(193, 154, 74, 0.08);
+  border: 1px solid var(--parchment-shadow);
+  border-left: 4px solid var(--brass);
+  border-radius: 0 4px 4px 0;
+}
+.home-quests > h2 {
+  margin-top: 0;
+  border-bottom: none;
+  font-size: 1.4rem;
+}
+.home-quests-note {
+  margin: -0.35rem 0 0.8rem;
+  font-style: italic;
+}
+.home-quest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.home-quest {
+  padding: 0.75rem 0;
+  border-bottom: 1px dotted var(--parchment-shadow);
+}
+.home-quest:last-child { border-bottom: none; }
+.home-quest-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.15rem;
+}
+.home-quest-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--wood);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+  padding-bottom: 1px;
+}
+.home-quest-name:hover {
+  color: var(--status-active-main);
+  border-bottom-color: var(--brass);
+}
+.home-quest-head .status-chip {
+  font-size: 0.65rem;
+  padding: 0.18em 0.7em;
+}
+.home-quest-line {
+  margin: 0.1rem 0 0.25rem;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.home-quest-touch {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+  display: inline-block;
+  margin-top: 0.2rem;
+}
+.home-quest-touch:hover {
+  color: var(--wood);
+  border-bottom-color: var(--rope);
+}
+.home-quest-deps {
+  margin: 0.2rem 0 0.1rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.home-quest-dep {
+  display: block;
+  line-height: 1.35;
+}
+.home-quest-dep .dep-arrow {
+  display: inline-block;
+  color: var(--brass-deep);
+  font-weight: 700;
+  margin-right: 0.2em;
+}
+.home-quest-dep a {
+  color: var(--wood-light);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.home-quest-dep a:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
+/* Quest detail page: dependency block below the status chip */
+.quest-deps {
+  margin: 0.6rem 0 1.4rem;
+  padding: 0.7rem 1rem;
+  background: rgba(193, 154, 74, 0.09);
+  border-left: 3px solid var(--brass);
+  border-radius: 0 3px 3px 0;
+}
+.quest-deps .dep-line {
+  margin: 0.15rem 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+  line-height: 1.45;
+}
+.quest-deps .dep-arrow {
+  display: inline-block;
+  color: var(--brass-deep);
+  font-weight: 700;
+  margin-right: 0.35em;
+  transform: none;
+}
+.quest-deps .dep-arrow.dep-backward {
+  transform: scaleX(-1);
+}
+.quest-deps .dep-label {
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  color: var(--wood);
+  letter-spacing: 0.04em;
+  font-size: 0.88em;
+  margin-right: 0.15em;
+}
+.quest-deps a {
+  color: var(--wood-light);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.quest-deps a:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+.home-more {
+  margin: 0.8rem 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+.home-more a {
+  color: var(--wood);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.home-more a:hover { color: var(--brass); }
+
+.home-directory {
+  margin-top: 2.2rem;
+  border-top: 1px dashed var(--parchment-shadow);
+  padding-top: 1.4rem;
+}
+.home-directory > h2 {
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+  border-bottom: none;
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
+.home-directory .card h2 {
+  font-size: 1.1rem;
+}
+
 /* ---------- session list ---------- */
 .session-list {
   list-style: none;
