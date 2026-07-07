@@ -1,6 +1,7 @@
 ---
 name: Cormeer
 aliases: Cormeer
+sessions: 2026-06-16
 type: Acquaintance
 location: Waterdeep
 race: Goliath

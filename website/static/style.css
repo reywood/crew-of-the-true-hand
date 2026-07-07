@@ -634,6 +634,49 @@ a.card:hover {
   }
 }
 
+/* ---------- 'Mentioned in sessions' block on NPC / location / quest pages ---------- */
+.mentioned-in {
+  margin: 0.6rem 0 1rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+}
+.mentioned-in-label {
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  color: var(--wood);
+  letter-spacing: 0.05em;
+  font-size: 0.78rem;
+  margin-right: 0.15rem;
+}
+a.session-chip, span.session-chip {
+  display: inline-block;
+  padding: 0.14em 0.55em;
+  font-size: 0.78rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.04em;
+  color: var(--wood);
+  background: rgba(193, 154, 74, 0.14);
+  border: 1px solid var(--rope);
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+a.session-chip:hover {
+  background: rgba(193, 154, 74, 0.28);
+  color: var(--status-active-main);
+  border-color: var(--brass);
+}
+span.session-chip-missing {
+  opacity: 0.55;
+  cursor: default;
+}
+
 /* ---------- session pages ---------- */
 .session-hero {
   margin: 1.2rem 0 1.8rem;

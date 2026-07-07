@@ -1,6 +1,7 @@
 ---
 name: Trades Ward
 aliases: Trades Ward
+sessions: 2026-06-16
 type: District
 location: Waterdeep
 ---

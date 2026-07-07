@@ -1,6 +1,7 @@
 ---
 name: Waterdeep
 aliases: Waterdeep
+sessions: 2025-12-07, 2026-01-13, 2026-03-08, 2026-06-16
 type: City
 region: Sword Coast
 nickname: City of Splendors

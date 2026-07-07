@@ -1,6 +1,7 @@
 ---
 name: Baros Ravenkind
 aliases: Baros Ravenkind, Baros, Ravenkind
+sessions: 2026-03-08
 type: Lead
 location: Silverymoon
 first_seen: mentioned 2026-03-08

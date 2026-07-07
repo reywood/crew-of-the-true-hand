@@ -1,6 +1,7 @@
 ---
 name: Kryptgarden Forest
 aliases: Kryptgarden Forest, Kryptgarden
+sessions: 2026-06-16
 type: Forest
 ---
 

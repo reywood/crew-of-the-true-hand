@@ -1,6 +1,7 @@
 ---
 name: Nightstone
 aliases: Nightstone
+sessions: 2025-09-23, 2025-11-12, 2025-12-07, 2025-12-17, 2026-01-13, 2026-03-08
 type: Village
 region: Sword Coast (near Ardeep Forest)
 ---

@@ -1,6 +1,7 @@
 ---
 name: Snigbat
 aliases: Snigbat
+sessions: 2025-12-07
 type: Ally
 location: With the crew
 first_seen: 2025-12-07

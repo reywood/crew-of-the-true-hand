@@ -1,6 +1,7 @@
 ---
 name: Derothra Shendrel
 aliases: Derothra Shendrel, Derothra, Shendrel
+sessions: 2025-12-07
 type: Lead
 location: Triboar
 first_seen: mentioned 2025-12-07

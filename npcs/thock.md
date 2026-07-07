@@ -1,6 +1,7 @@
 ---
 name: Thock
 aliases: Thock
+sessions: 2025-11-12
 type: Enemy (slain)
 location: Nightstone goblin cave
 first_seen: 2025-11-12

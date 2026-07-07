@@ -1,6 +1,7 @@
 ---
 name: Boz Hark
 aliases: Boz Hark, Bozhark
+sessions: 2025-12-07
 type: Enemy (slain)
 location: Nightstone goblin cave
 first_seen: 2025-12-07

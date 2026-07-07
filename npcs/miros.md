@@ -1,6 +1,7 @@
 ---
 name: Miros
 aliases: Miros
+sessions: 2026-03-08, 2026-05-12
 type: Ally
 location: Golden Fields
 race: Yeti

@@ -1,6 +1,7 @@
 ---
 name: Ardeep Forest
 aliases: Ardeep Forest, Ardeep
+sessions: 2025-09-23, 2025-11-12
 type: Forest
 near: Nightstone
 ---

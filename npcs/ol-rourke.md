@@ -1,6 +1,7 @@
 ---
 name: Ol' Rourke
 aliases: Ol' Rourke, Rourke
+sessions: 2025-09-23, 2026-06-16
 type: Old shipmate
 location: Waterdeep (docks)
 role: Navigator

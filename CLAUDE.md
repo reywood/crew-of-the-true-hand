@@ -84,6 +84,17 @@ Requires: `pip install google-genai` and a `GEMINI_API_KEY` (get one at https://
 
 Skip this step if you don't want an image, or add it later. The session page renders fine either way.
 
+### 2.6. Refresh entity session mentions
+
+```
+python3 scripts/update-entity-sessions.py           # apply
+python3 scripts/update-entity-sessions.py --dry-run # preview
+```
+
+Scans every session summary in `summaries/` and writes a `sessions: YYYY-MM-DD, YYYY-MM-DD, …` line into the frontmatter of each NPC and location markdown file — word-boundary, case-sensitive matches against the entity's `aliases:` list. The site generator reads that field and renders a *"Mentioned in sessions"* chip row at the top of each NPC/location detail page, with clickable jumps to the matching session pages. Quests get the same treatment automatically from the `(YYYY-MM-DD)` parentheticals already inside each bullet in `quests.md` — no per-quest field needed.
+
+Re-run this whenever a summary is added, expanded, or an entity gets a new alias.
+
 ### 3. Add the session's location annotation
 
 Open `website/generate.py` and find `SESSION_LOCATIONS` (near `session_list_page`). Add an entry mapping the new date to a list of location slugs in order of importance:

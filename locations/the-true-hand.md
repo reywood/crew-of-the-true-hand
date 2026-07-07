@@ -1,6 +1,7 @@
 ---
 name: The True Hand
 aliases: True Hand, The True Hand
+sessions: 2025-09-23, 2025-11-12, 2026-01-27, 2026-02-10, 2026-06-16
 type: Ship (wrecked)
 captain: Toz
 home_port: Athkatla

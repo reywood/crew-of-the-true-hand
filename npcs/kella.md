@@ -1,6 +1,7 @@
 ---
 name: Kella
 aliases: Kella
+sessions: 2025-09-23, 2025-11-12, 2026-01-13, 2026-05-12
 type: Bounty
 location: Darkhope
 affiliation: Zhentarim (estranged)

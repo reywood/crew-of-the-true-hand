@@ -1,6 +1,7 @@
 ---
 name: Daniel Windraven
 aliases: Daniel Windraven, Windraven
+sessions: 2025-11-12, 2025-12-07
 type: Ally
 location: Ardeep Forest
 affiliation: Emerald Enclave

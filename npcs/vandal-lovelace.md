@@ -1,6 +1,7 @@
 ---
 name: Vandal Lovelace
 aliases: Vandal Lovelace, Vandal
+sessions: 2026-06-16
 type: Ally
 location: Waterdeep
 role: Bard

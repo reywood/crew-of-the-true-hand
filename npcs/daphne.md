@@ -1,6 +1,7 @@
 ---
 name: Daphne
 aliases: Daphne
+sessions: 2025-12-17
 type: Ally
 location: Nightstone
 first_seen: 2025-12-17

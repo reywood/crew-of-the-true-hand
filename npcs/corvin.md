@@ -1,6 +1,7 @@
 ---
 name: Corvin
 aliases: Corvin
+sessions: 2025-12-17, 2026-01-13
 type: Politically uneasy
 location: Nightstone
 first_seen: 2025-12-17

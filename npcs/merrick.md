@@ -1,6 +1,7 @@
 ---
 name: Merrick
 aliases: Merrick
+sessions: 2025-12-17
 type: Acquaintance
 location: Nightstone
 role: Guard

@@ -1,6 +1,7 @@
 ---
 name: Orin
 aliases: Orin
+sessions: 2026-03-08, 2026-05-12
 type: Acquaintance
 location: Golden Fields
 race: Halfling

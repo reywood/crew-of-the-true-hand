@@ -1,6 +1,7 @@
 ---
 name: Lifferloss
 aliases: Lifferloss
+sessions: 2026-03-08, 2026-05-12
 type: Ally
 location: Golden Fields
 affiliation: Emerald Enclave

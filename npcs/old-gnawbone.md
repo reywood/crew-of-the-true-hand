@@ -1,6 +1,7 @@
 ---
 name: Old Gnawbone
 aliases: Old Gnawbone, Gnawbone
+sessions: 2026-06-16
 type: Lead
 location: Kryptgarden Forest
 race: Green dragon

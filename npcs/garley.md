@@ -1,6 +1,7 @@
 ---
 name: Garley Gond
 aliases: Garley Gond, Garley, Gond
+sessions: 2026-06-16
 type: Ally
 location: Waterdeep
 role: Inventor

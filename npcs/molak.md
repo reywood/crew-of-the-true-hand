@@ -1,6 +1,7 @@
 ---
 name: Molak
 aliases: Molak
+sessions: 2025-09-23, 2025-11-12, 2025-12-07
 type: Ally
 location: Nightstone
 first_seen: 2025-09-23

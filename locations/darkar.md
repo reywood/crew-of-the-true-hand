@@ -1,6 +1,7 @@
 ---
 name: Darkar
 aliases: Darkar
+sessions: 2025-11-12
 type: Settlement
 ---
 

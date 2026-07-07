@@ -1,6 +1,7 @@
 ---
 name: Harshnag
 aliases: Harshnag
+sessions: 2026-03-08, 2026-06-16
 type: Ally (sought)
 location: Silverymoon (last known)
 race: Frost giant

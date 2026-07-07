@@ -1,6 +1,7 @@
 ---
 name: Triboar
 aliases: Triboar
+sessions: 2025-12-07, 2025-12-17, 2026-01-13
 type: Town
 hazard: Fire giants
 ---

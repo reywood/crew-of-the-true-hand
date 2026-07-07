@@ -1,6 +1,7 @@
 ---
 name: Vexalanthus
 aliases: Vexalanthus
+sessions: 2026-06-16
 type: Lead
 location: High Road
 race: Copper dragon

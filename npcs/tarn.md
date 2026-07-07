@@ -1,6 +1,7 @@
 ---
 name: Tarn
 aliases: Tarn
+sessions: 2026-03-08
 type: Acquaintance
 location: Golden Fields
 role: Castelan

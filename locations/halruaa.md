@@ -1,6 +1,7 @@
 ---
 name: Halruaa
 aliases: Halruaa
+sessions: 2026-01-27, 2026-06-16
 type: Nation
 region: South
 government: Technocracy

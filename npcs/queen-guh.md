@@ -1,6 +1,7 @@
 ---
 name: Queen Guh
 aliases: Queen Guh, Guh
+sessions: 2026-06-02
 type: Adversary
 race: Hill giant
 first_seen: mentioned 2026-06-02

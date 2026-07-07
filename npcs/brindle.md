@@ -1,6 +1,7 @@
 ---
 name: Brindle Stormtide
 aliases: Brindle Stormtide, Brindle, Stormtide
+sessions: 2026-06-16
 type: Lead
 location: Waterdeep, Dock Ward
 race: Halfling

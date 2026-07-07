@@ -1,6 +1,7 @@
 ---
 name: Liera
 aliases: Liera
+sessions: 2025-09-23
 type: Old shipmate
 location: Pearl Isles (origin)
 role: Cook

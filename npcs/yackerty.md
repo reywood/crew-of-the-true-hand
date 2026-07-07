@@ -1,6 +1,7 @@
 ---
 name: Yackerty
 aliases: Yackerty
+sessions: 2026-06-16
 type: Lead
 location: Waterdeep, Trades Ward
 race: Dwarf

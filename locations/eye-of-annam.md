@@ -1,6 +1,7 @@
 ---
 name: Eye of Annam
 aliases: Eye of Annam
+sessions: 2026-02-10
 type: Holy site
 ---
 

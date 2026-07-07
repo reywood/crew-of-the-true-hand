@@ -1039,12 +1039,45 @@ def npc_chart_page(npcs, locations, link_map):
                 current_nav="npcs.html")
 
 
-def detail_page_generic(e, list_href, list_label, link_map):
+def _render_mentioned_in(dates, session_lookup):
+    """Render a 'Mentioned in sessions' block below the h1 of a detail page.
+    dates: iterable of YYYY-MM-DD strings; sorted+deduped internally.
+    session_lookup: dict {date: session Entity} for hrefs."""
+    seen = sorted({d for d in dates if d})
+    if not seen:
+        return ""
+    chips = []
+    for d in seen:
+        s = session_lookup.get(d)
+        if s:
+            chips.append(f'<a class="session-chip" href="{s.href}">{html.escape(d)}</a>')
+        else:
+            chips.append(f'<span class="session-chip session-chip-missing">{html.escape(d)}</span>')
+    return (
+        '<aside class="mentioned-in">'
+        '<span class="mentioned-in-label">Mentioned in sessions:</span> '
+        + " ".join(chips)
+        + '</aside>'
+    )
+
+
+def _extract_session_dates(value):
+    """Normalize a frontmatter sessions field into a list of YYYY-MM-DD."""
+    if not value:
+        return []
+    if isinstance(value, list):
+        return [str(v).strip() for v in value if str(v).strip()]
+    return [s.strip() for s in str(value).split(",") if s.strip()]
+
+
+def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None):
     rendered = md_to_html(e.body)
     linked = linkify_html(rendered, e.href, link_map)
     meta_rows = []
+    # 'sessions' is rendered separately as the mentioned-in block, so skip it
+    # here to avoid showing it twice.
     skip = {"name", "aliases", "summary", "transcript", "has_notes",
-            "has_transcript", "date", "status_class", "section"}
+            "has_transcript", "date", "status_class", "section", "sessions"}
     for k, v in e.meta.items():
         if k in skip:
             continue
@@ -1060,8 +1093,15 @@ def detail_page_generic(e, list_href, list_label, link_map):
         )
     meta_block = (f'<aside class="meta-block">{"".join(meta_rows)}</aside>'
                   if meta_rows else "")
+
+    sessions_block = _render_mentioned_in(
+        _extract_session_dates(e.meta.get("sessions")),
+        session_lookup or {},
+    )
+
     body = f"""<article class="detail">
   <h1>{html.escape(e.name)}</h1>
+  {sessions_block}
   {meta_block}
   <div class="detail-body">
   {linked}
@@ -1112,7 +1152,7 @@ def _render_dep_line(label, arrow_class, deps):
     )
 
 
-def detail_page_quest(q, link_map):
+def detail_page_quest(q, link_map, session_lookup=None):
     rendered = md_to_html(q.body)
     linked = linkify_html(rendered, q.href, link_map)
     status_class = q.meta.get("status_class", "active")
@@ -1127,9 +1167,15 @@ def detail_page_quest(q, link_map):
                                     supported_by)
         deps_html = f'<aside class="quest-deps">{forward}{backward}</aside>'
 
+    # Quests carry their session dates inline in the body as (YYYY-MM-DD)
+    # parentheticals, so extract from there rather than a frontmatter field.
+    session_dates = re.findall(r"\b(\d{4}-\d{2}-\d{2})\b", q.body or "")
+    sessions_block = _render_mentioned_in(session_dates, session_lookup or {})
+
     body = f"""<article class="detail">
   <h1>{html.escape(q.name)}</h1>
   <p class="meta-line">{chip} <span class="muted">{html.escape(q.meta.get("section", ""))}</span></p>
+  {sessions_block}
   {deps_html}
   <div class="detail-body">
   {linked}
@@ -1290,6 +1336,7 @@ def main():
     quests = load_quests()
     _attach_quest_deps(quests)
     sessions = load_sessions()
+    session_lookup = {s.slug: s for s in sessions}
 
     all_entities = pcs + npcs + locations + quests + sessions
     link_map = build_link_map(all_entities)
@@ -1304,15 +1351,17 @@ def main():
 
     write_page("npcs.html", npc_table_page(npcs, link_map))
     for e in npcs:
-        write_page(e.href, detail_page_generic(e, "npcs.html", "NPCs", link_map))
+        write_page(e.href, detail_page_generic(
+            e, "npcs.html", "NPCs", link_map, session_lookup))
 
     write_page("locations.html", locations_chart_page(locations, link_map))
     for e in locations:
-        write_page(e.href, detail_page_generic(e, "locations.html", "Locations", link_map))
+        write_page(e.href, detail_page_generic(
+            e, "locations.html", "Locations", link_map, session_lookup))
 
     write_page("quests.html", quest_list_page(quests, link_map))
     for q in quests:
-        write_page(q.href, detail_page_quest(q, link_map))
+        write_page(q.href, detail_page_quest(q, link_map, session_lookup))
 
     write_page("sessions.html", session_list_page(sessions, locations, link_map))
     for s in sessions:

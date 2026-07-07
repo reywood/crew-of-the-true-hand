@@ -1,6 +1,7 @@
 ---
 name: Strog Thunderblade
 aliases: Strog Thunderblade, Strog, Thunderblade
+sessions: 2026-03-08
 type: Acquaintance
 location: Golden Fields
 race: Half-orc
