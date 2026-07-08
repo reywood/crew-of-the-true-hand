@@ -7,9 +7,9 @@
 
 [MUSIC: low ember bed; wind rising thin behind it]
 
-VANDAL: *(hushed, drawing close)* Listen. There is a chalk, friend, that draws its own maps. It rests on a giant's desk, high above the world, and it scribbles what the wind knows before the wind is willing to speak of it. And on a certain day, in a certain tower drifting north toward Goldenfields, that little piece of chalk began to scrawl, all on its own, a great black storm dead across the road ahead.
+VANDAL: *(hushed, drawing close)* Listen. High above the North, friend, in a castle that sails upon the wind, there lies on a giant's desk a little piece of chalk that draws its own maps. It wanders. It scribbles. It knows what the wind knows before the wind is willing to say it aloud. And on the road to Goldenfields, that little chalk began to scrawl — furiously — a great black storm, dead across our heroes' path.
 
-VANDAL: *(quoted, cold, hushed)* And the cloud giant, who had checked the sky himself, said — no such storm was forecast.
+VANDAL: *(quoted, cold, hushed)* And the cloud giant, who had read the sky himself that very morning, said — no such storm was forecast.
 
 [STING: sharp low chord, held — 3s]
 
@@ -19,7 +19,7 @@ VANDAL: *(quoted, cold, hushed)* And the cloud giant, who had checked the sky hi
 
 [MUSIC: signature theme, brief]
 
-VANDAL: *(bright, storyteller)* Well met. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, our four heroes ride the clouds toward Goldenfields — and something with wings of stone comes riding in on a wind that has no business blowing.
+VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight — three days aloft in a cloud giant's tower, four gifts fairly won, and stone wings riding in on a wind that has no business blowing.
 
 [MUSIC: settles under, becomes bed]
 
@@ -27,9 +27,11 @@ VANDAL: *(bright, storyteller)* Well met. Draw close to the fire. I am Vandal Lo
 
 ## [ACT ONE — Three days in the cloud tower]
 
-VANDAL: *(warm, unfolding)* Picture it. A castle of mist and stone, floating on nothing at all, drifting the long slow path toward the granary-fields of Goldenfields. Three days, the crossing. And inside — the private house of the cloud giant Zephyros. Shelves of books at twenty feet, at forty feet, at sixty. Journals in a script no small hand was meant to read. And at the heart of his study, a seven-foot sphere of polished metal, embossed with one great giant rune, hanging in the air as though the air had been asked politely.
+VANDAL: *(warm, unfolding)* Now, I was not aboard for this one — I have the tale from the four who lived it, and all four of them agree about the chalk. Picture it as they told it to me. The tower of Zephyros the cloud giant, drifting the slow three-day road to Goldenfields. A floor of solid cloud that gives underfoot like new snow. A great six-walled hall, lit by flaming orbs on heavy chains. Bookshelves jutting from the walls at twenty feet, at forty, at sixty, groaning under journals in Giant script that no small hand was ever meant to open. And floating at the heart of the study, a sphere of polished metal, seven feet across, embossed with a single great rune. The helm, friend, of the whole flying castle — though the crew did not know that yet.
 
-VANDAL: *(amused)* Zephyros, for his part, kept to his writing, and let the four wander where they willed — save the second floor. Up those stairs lived his griffins. And griffins, friend, do not ask twice.
+VANDAL: *(amused)* Zephyros kept to his writing and let the four wander where they willed — save the second floor. Up those hundred feet of stair lived his griffins, hungry for meat at every hour, and griffins do not ask twice.
+
+VANDAL: *(sly)* And Toz — Toz, being a storm sorcerer with three idle days on his hands — knelt down and cast Gust straight into the cloud floor. The mists parted. He kept at it until he had blasted a hole clean through, a thousand feet of empty morning yawning below, and then dropped an apple in, just to watch it fall. Mark this, friend: the clouds of that tower drink magic. It will matter.
 
 [STING: chime — 1s]
 
@@ -39,13 +41,17 @@ VANDAL: *(amused)* Zephyros, for his part, kept to his writing, and let the four
 
 VANDAL: *(measured, unfolding)* Now here is a truth of the road. A traveller with a good tale in his pocket is never quite empty-handed.
 
-VANDAL: *(warm)* Fiz spied it first — a bit of chalk drifting across the giant's maps of its own accord, drawing lines that faded almost as quick as they were drawn. Toz coaxed the giant to part with it. He drew out the splinter of the *True Hand* he had carried since Valkyr, and told Zephyros the tale of his ship's wreck, and asked the giant's blessing to one day return to the sea. Zephyros — moved, I think, in whatever place a cloud giant keeps his moving — pressed the chalk into the halfling's hand. Laid on a map, it grants a keen sense of wind and weather. And he unrolled a map of Faerûn, sized for a small captain, with Goldenfields marked plain, and gave that too.
+VANDAL: *(warm)* It was Fiz who spied it first — that bit of chalk, drifting across the giant's maps all on its own, sketching lines that faded as fast as they were drawn, and never wearing down. Divination magic, woven into chalk: it reads the wind and the weather, and writes what it reads. Toz wanted it badly. So he paid for it the old way. He drew out the splinter of the *True Hand*'s hull he has carried since Valkyr, told Zephyros the tale of his ship's wreck, and asked the giant's blessing to return one day to the sea. And Zephyros — moved, in whatever high place a cloud giant keeps his moving — pressed the chalk into the halfling's hands.
 
-VANDAL: *(warm)* Fiz turned up a slim book — *Giant Runes of the Realms*, by one Volotham Gedarm. Zephyros offered to trade it for a tale of Halruaa. Fiz refused the bargain — and then spun the tale anyway. And the giant, laughing, let him keep the book.
+VANDAL: *(quoted, gently)* "I would hope and pray for you to return to the sea where you belong. May this aid you on your journey."
 
-VANDAL: *(reflective)* And out on the entry ledge, where the wind cuts sharp, Woz spent his hours with one of the griffins. Fed it ogre thumbs. Traded it a hunter's story. Sat with it, until the beast leaned into him as beasts will lean into one who is truly of the wild. Zephyros watched. And in Zephyros's great palm, when he came back inside, was a small bronze figurine. A griffin, in miniature. Speak the word, once every five days, and a friendly griffin will come.
+VANDAL: *(warm)* And he unrolled, besides, a map of all Faerûn, sized for a small captain, with Goldenfields marked plain upon it.
 
-VANDAL: *(quiet, amused)* Four heroes. Four gifts. And a giant well-pleased.
+VANDAL: *(telling)* Fiz, meanwhile, had turned up a slim volume in the stacks — *Giant Runes of the Realms*, by one Volotham Gedarm. Zephyros offered a trade: the book, for a story of far Halruaa. And Fiz — I do love this — refused the bargain, and then told the tale anyway, free, as one host's gift to another. The giant let him keep the book. And within the hour it paid for itself: ten minutes of study, and the tinker stood before that great floating sphere and named the rune upon it. The sky rune. The very word that steers the castle.
+
+VANDAL: *(reflective)* And out on the entry ledge, where the wind cuts sharp, Woz kept his own kind of company. He sat with one of the griffins, hour upon hour. Fed it ogre thumbs from his pack — gulped down gratefully, I'm told. Traded it a hunter's story. And the beast leaned into him, as beasts will lean into a cleric of Eldath, who carries the patience of still water. Zephyros watched it all from his desk. And when Woz came in from the cold, there in the giant's palm lay a small bronze figurine of a griffin. Speak the word, once in five days, and a friendly griffin comes.
+
+VANDAL: *(quiet, amused)* Four heroes. Four gifts. And a giant well pleased with his passengers.
 
 [STING: chime — 1s]
 
@@ -53,11 +59,11 @@ VANDAL: *(quiet, amused)* Four heroes. Four gifts. And a giant well-pleased.
 
 ## [ACT THREE — An ill wind]
 
-VANDAL: *(dropping into serious)* And then the chalk. The little chalk that had drifted so aimlessly all afternoon. It began to move with purpose. It scribbled — furious, insistent — across the route between the tower and Goldenfields. And where it scribbled, it drew a storm. A great black smear of a storm. Dead in their path.
+VANDAL: *(dropping)* And then the chalk turned prophet.
 
-VANDAL: *(measured, taut)* Zephyros frowned. He had checked the sky himself. No such storm was forecast. He hauled down scrolls, and instruments, and told the crew, plainly — something is wrong in the world. This storm is only its symptom. And then he slipped away into a deep trance, to speak with friends he keeps on other planes.
+VANDAL: *(measured, taut)* All afternoon it had drifted, idle. Now it moved with purpose — scribbling, furious, insistent, over the stretch of map between the tower and Goldenfields. And what it drew was a storm. A great black smear of a storm, dead in their path. Zephyros bent over it and frowned. He had read the sky himself; no such storm was forecast. And weather that comes unforecast, friend, is weather that something has made.
 
-VANDAL: *(softer)* Leaving the four heroes on watch. As, outside, the clouds went dark. And the lightning began to walk along the curtain walls.
+VANDAL: *(grave)* The giant hauled scrolls and strange instruments down from the forbidden floor, and told the crew plainly: something is wrong in the world, and this storm is only its symptom. I must contact my friends on the other planes. And with that he sank into a trance so deep that no shaking would stir him — leaving four small heroes standing watch in a flying castle, as the clouds outside went black, and the lightning began to walk along the curtain walls.
 
 [STING: bridge — 2s]
 
@@ -65,15 +71,23 @@ VANDAL: *(softer)* Leaving the four heroes on watch. As, outside, the clouds wen
 
 ## [ACT FOUR — Stone wings at the curtain]
 
-VANDAL: *(quickening)* Five came in on the wind. Gargoyles. Stone wings, stone teeth, stone hearts if they had hearts at all. They burst through the curtain that screened the tower's open face, and the runt led them, and there was no parley in any face of them.
+VANDAL: *(quickening)* Five came in on the wind. Gargoyles — wings of stone, teeth of stone, and no hearts at all — bursting through the great blue curtain that screens the tower's open face, the runt of them leading, and no parley in any face of them. They fell upon the nearest living thing in pairs, biting and clawing, stupid and savage as an avalanche.
 
-VANDAL: *(urgent)* They swarmed. Two would fall on one crewman, biting and clawing in pairs, and then move to the next. Toz answered in kind — called down a rolling patch of storm-cloud of his own, thirty feet by ten, and any gargoyle that started its turn inside was cracked with lightning. Hal waded in with his halberd, and — mark this, friend — for the first time, a second stroke followed the first, for the crew had crossed into their fifth season of skill on the road behind them. Woz held the line, patched the wounded, gave ground when the claws came thick, and closed again when they thinned.
+VANDAL: *(urgent)* But hear how the crew answered. Fiz's little Eldritch Cannon barked bolts of force while the tinker sent Fire Bolts hissing down the hall — and every shot struck harder than it ever had, for he had lately learned to pour his magic through the rod itself. Arcane Firearm, the artificers of Halruaa call that trick. Toz spoke a word of Shatter — and stone, friend, does not love Shatter; the sound alone cracked them in great chunks. Then he conjured a Tidal Wave, thirty feet of seawater out of empty air, and slammed four of the creatures off their feet at once.
 
-VANDAL: *(measured)* They put the swarm down. But not before shield and armour took a hard beating, and the four were bloodied by the last.
+VANDAL: *(leaning, wondering)* And the water sank into the cloud floor. And the clouds — remember, the clouds drink magic — the clouds answered. They turned black. They became a storm bank in miniature, arcing lightning into every gargoyle that lingered within it. The tower itself, friend, took the storm sorcerer's side.
 
-VANDAL: *(dropping)* Zephyros woke with a gasp as the last stone body fell. Told what had come — he shook his head. Stone constructs, he said, cannot summon a storm. These were not the enemy. These were only — heralds. Scouts. And what walks behind the scouts, friend, is worse.
+VANDAL: *(measured)* Woz set a Spiritual Weapon swinging in the air and hurled a Guiding Bolt that lit the runt up like a beacon, patching the line when the claws came thick, closing it again when they thinned. And Hal waded in with his halberd, Shield of Faith shimmering about him — and for the first time in all these tales, a second stroke followed the first, for the crew had crossed into their fifth season of skill upon the road. When stone teeth found the gaps in his plate, he laid his own hands upon the wounds and stood back up.
 
-VANDAL: *(softer)* He urged them to rest. Long, and deep, before whatever follows arrives.
+VANDAL: *(steadier)* They put the swarm down. All five. Bloodied, dented, and breathing.
+
+VANDAL: *(dropping, drawing close)* And Zephyros woke with a gasp as the last stone body cracked upon the floor. They told him what had come. And the giant shook his head, slow as weather, and said —
+
+VANDAL: *(quoted, grave)* "Stone constructs could not bring this storm. Something else comes. These were only the harbingers. The scouts."
+
+VANDAL: *(quoted, cold)* Scouts of what, they asked him. "Of some terrible evil. I know not what. I know that it comes."
+
+VANDAL: *(softer)* He urged them to rest — long, and deep — before whatever follows the scouts arrives.
 
 [MUSIC: minor swell — 4s]
 
@@ -81,9 +95,9 @@ VANDAL: *(softer)* He urged them to rest. Long, and deep, before whatever follow
 
 ## [CLOSING — 30s]
 
-VANDAL: *(reflective, drawing to a close)* And so a chapter closes, aboard a cloud tower drifting north, inside a storm that no forecast foresaw. Ahead of the four — Goldenfields, still. And an unseen thing that sent stone wings ahead of it. And a giant on a bench of the planes, listening for what his friends will say. And a chalk that scribbles what the wind cannot yet be trusted to say aloud.
+VANDAL: *(reflective, closing)* And so a chapter closes aboard a cloud tower drifting north, inside a storm no forecast foresaw. Ahead of the four — Goldenfields still, where hill giants have been thieving grain for their Queen Guh. Behind them — whatever it is that sends stone wings ahead of itself. A giant waits on word from the other planes. A chalk writes what the wind dares not say. And a sealed second floor, and a sky-rune sphere that steers the castle, keep their secrets a little longer.
 
-VANDAL: *(warm)* Rest well tonight, heroes. The road waits — and today, the road is the sky.
+VANDAL: *(warm)* Rest well tonight, heroes. The road waits at dawn — and this time, the road is the sky.
 
 VANDAL: *(warm, signature)* I am Vandal Lovelace. This has been a Tale of the True Hand.
 

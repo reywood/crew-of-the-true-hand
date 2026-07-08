@@ -1,13 +1,13 @@
 # Tales of the True Hand — 2026-05-12
-## The Night the Bells Rang in Golden Fields
+## The Harvest Thieves
 
 ---
 
 ## [COLD OPEN — 25s]
 
-[MUSIC: low ember bed; a thin mist-wet wind, and the far bark of a small voice in the dark]
+[MUSIC: low ember bed; a mist-damp hush, one far-off drunken voice]
 
-VANDAL: *(hushed, drawing close)* Listen, friend. There is a night I have since gathered an account of — a night in the granary-town of Golden Fields, when the mist lay thick on the cobbles, and every window was dark, and every good soul in the abbey's shadow was abed. And out of that mist came a drunken halfling, shouting one word into the fog, over and over, until the door of an inn cracked open to hear him.
+VANDAL: *(hushed, drawing close)* Listen. In the granary-town of Golden Fields, on a night when the mist lay on the cobbles like wet wool, a drunken halfling came stumbling up the inn lane, shouting one word into the fog. And out of that fog came the answer to him. Ten goblins. Four bugbears. Two ogres. And every last one of them, friend, with a sack of pumpkins over its shoulder.
 
 VANDAL: *(quoted, cold, hushed)* "Raid! Raid! Raid!"
 
@@ -19,65 +19,69 @@ VANDAL: *(quoted, cold, hushed)* "Raid! Raid! Raid!"
 
 [MUSIC: signature theme, brief]
 
-VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, our four heroes wake to a raid in the mist — and before the sun rises, the abbey bell will ring for something far worse than goblins.
+VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, our four heroes wake to thieves in the mist — and before the sun rises, the abbey bell will be ringing for something far worse than goblins.
 
 [MUSIC: settles under, becomes bed]
 
 ---
 
-## [ACT ONE — The inn in the mist]
+## ACT ONE — The inn in the mist
 
-VANDAL: *(warm, unfolding)* Picture it. Miros the yeti — yes, friend, a yeti keeps the inn at Golden Fields, and a fine innkeeper he makes — Miros' hearth banked low. Under his roof, four road-weary heroes. Naxene the wizard, who has followed them from Waterdeep. A drunken halfling by the name of Orin, snoring in a corner. And one Shalvis — a stranger, sharing a room with a young woman called Jessica Darkhope, sister to the late and unlamented Kella. Mark that name, friend. Shalvis was Zhentarim. The crew did not yet know.
+VANDAL: *(warm, unfolding)* Picture it. Golden Fields — the great granary of the North, an abbey-town under the smiling wooden gaze of Shontea, goddess of the harvest. And at its inn, a hearth banked low, and a yeti asleep behind the bar. Yes, friend — a yeti keeps the inn at Golden Fields. Miros, by name, of the Emerald Enclave, and a finer innkeeper you will not meet between here and the Spine of the World. Under his roof that night: our four heroes. Naxene, the Waterdhavian noble with the ink-stained fingers. Orin the halfling bard, drunk in a corner. And one Shalvis — a quiet stranger, sharing a room with a young woman named Jessica Darkhope. Sister, friend, to the late and hunted Kella.
 
-VANDAL: *(measured, unfolding)* A few streets away, in his little grove near the town's heart, the druid Lifferloss slept beside his treants. And above all of them, the great abbey stood silent in the mist.
+VANDAL: *(measured, aside)* Now — I was not under that roof. I have this night from the four themselves, gathered later beside a certain statue in the City of Splendours. And I will tell you a thing they did not know as they slept, for a bard's trade is knowing things. Shalvis was Zhentarim. Mark it. The tale will want it later.
 
-VANDAL: *(dropping, drawing close)* And then — the drunken shout at the door. Orin, sober-frightened. And through the window Fiz — small Fiz of Halruaa — saw them coming. Ten goblins. Four bugbears. Two ogres. Sacks over their shoulders, pumpkins and vegetables spilling from every one. Woz's bumper crop of the day before — his good work, blessed by Eldath — had drawn the raiders like flies to a windfall.
+VANDAL: *(amused, softer)* A few streets toward the town's heart, in his grove, the awakened tree Lifferloss stood dreaming whatever old trees dream, his treants rooted around him. And in the fields beyond the wall — ah, friend, here is the bitter joke of it. The day before, Woz — Eldath's own gentle cleric — had lent his back to the harvest, and lent his magic too. A Plant Growth, cast over the crops, and the fields had answered with a bumper crop the like of which Golden Fields had never seen. A kindness. A blessing. And a dinner-bell, rung for every hungry thing in the hills.
 
-[STING: chime — 1s]
-
----
-
-## [ACT TWO — The brawl at Miros' porch]
-
-VANDAL: *(quickening)* Out onto the porch they piled — four heroes and their allies, into the mist and the torchlight. Woz laid a Spike Growth across the cobbles, and the raiders came blundering into the thorns as if the very stones had grown teeth. Toz — captain Toz, small storm sorcerer with the sea in his blood — called down a Tidal Wave that flattened six goblins and a bugbear under a wall of bludgeoning water. And then, on its heels, a Lightning Bolt, cracking through the ogre and the last goblins, the Heart of the Storm searing extra arcs into any raider foolish enough to stand close.
-
-VANDAL: *(warm)* Fiz blessed the party, set down his Force Ballista at his heel, and picked bugbears apart with Scorching Ray and Fire Bolt. Hal — Hal Stormguard, oathsworn — traded blows at the porch rail. Naxene threw up Mage Armor and joined in with her own fire and her Magic Missile. And then — mark this, friend — she cast a Suggestion on a wounded ogre, and *convinced* the great brute that its own bugbear allies were the real enemy. And the ogre turned on them.
-
-VANDAL: *(amused)* Miros the yeti bear-hugged a bugbear into the dirt. Orin, brought back from the brink of his own dying, snatched up his daggers and chucked them from behind the horses. When the last raider fell — well, near-last — the surviving ogre stood frozen in the spike-field, and one lone bugbear slipped away into the mist unpursued. The party let him go. A choice, friend. Choices in the mist have a way of coming back.
+VANDAL: *(dropping, drawing close)* And so — the shout in the fog. Orin, sober-frightened, scrambling for the door. And through the window, Fiz of Halruaa counted what was coming up the lane behind him. Goblins. Bugbears. Ogres. Sacks of vegetables bouncing on their backs, come back for the rest of the pantry.
 
 [STING: chime — 1s]
 
 ---
 
-## [ACT THREE — The grove ablaze]
+## ACT TWO — The brawl at the inn-yard
 
-VANDAL: *(dropping into serious)* But Golden Fields was screaming. Not one wave — the town itself was under attack. Woz's keen sight — half-elf, Eldath-blessed — picked out the two centres of trouble. The livestock pens being emptied to the east. And, worse, the town centre. Lifferloss' grove. On fire.
+VANDAL: *(quickening)* Out onto the porch they piled, heroes and allies both, into the mist and the torchlight. Woz laid a Spike Growth across the cobbles, and the raiders came blundering into it as if the very stones had grown teeth. Toz — Captain Toz Greenbottle, the storm living in his halfling blood — sent a Tidal Wave down the lane that flattened six goblins and a bugbear under a wall of falling water. And on its heels, a Lightning Bolt, cracking through an ogre and the goblins behind it, the Heart of the Storm arcing off him to bite at every raider fool enough to stand near.
 
-VANDAL: *(urgent)* They ran. Through the mist and the shouting they came, and found the grove in ruin. Two of Lifferloss' treants burning like torches. A bugbear jeering at them. Goblins whooping in the flames. An ogre tearing the door off a nearby house. And a panicked horse, harnessed to a burning wagon, dragging fire down the alleys of the town.
+VANDAL: *(warm)* Fiz spoke a Bless over his companions, set his Eldritch Cannon down at his heel — the little Force Ballista, thumping away like a smith's hammer — and picked at the bugbears with Scorching Ray and Fire Bolt while his Arcane Firearm barked along. Hal Stormguard held the front, trading blows at the porch rail. And Naxene — mark this, friend — threw up her Mage Armor, joined in with Fire Bolt and Magic Missile, and then laid a Suggestion on a wounded ogre. She *convinced* the great brute, sweet as you please, that the bugbears at its side were the true enemy. And the ogre turned on its own.
 
-VANDAL: *(quickening)* Toz opened again with a Tidal Wave — and this one drowned the goblins and doused the burning treants in a single sweep. Lifferloss himself, wounded and furious, waded in with his slam attacks. He caught a bugbear about the middle and *hurled* the creature bodily into another. Hal carved through bugbears with his maul. Naxene's Fire Bolt cooked one into a bonfire of its own.
+VANDAL: *(amused)* Miros the yeti bear-hugged a bugbear flat into the dirt. Orin — dragged back from the very brink of his dying — came up throwing daggers from behind the horses, and when the fight was done, went straight back inside and helped himself to somebody else's beer. A bard, friend. We are what we are.
 
-VANDAL: *(theatrical, storyteller)* And then Toz — theatrical Toz — called down a Thunder Wave that took the runaway horse *and* the burning wagon *and* the ogre all at once. The horse into a wall. The house down atop the ogre. An unlucky villager beneath the beams with it, I am sorry to say. Not every stroke of storm falls where it is meant.
+VANDAL: *(quieter)* When the yard fell still, one ogre stood frozen in the thorn-field, too frightened to move. And one bugbear had slipped away into the mist, unpursued. The crew let him go. A choice, friend. Choices made in the mist have a way of coming back.
 
-VANDAL: *(measured, taut)* Woz kept the pressure with Guiding Bolt and Spiritual Weapon. And Shalvis — the Zhentarim man they did not know as one — took a morningstar to the chest, and went down, and did not get up again.
+[STING: chime — 1s]
+
+---
+
+## ACT THREE — The grove ablaze
+
+VANDAL: *(dropping, grave)* But Golden Fields was screaming. This was no single raiding party — the whole town was under the knife. Woz's keen eyes picked the trouble out of the dark: the livestock pens to the east, being emptied stall by stall. And worse — far worse — a red glow at the town's heart. Lifferloss' grove was burning.
+
+VANDAL: *(urgent)* They ran. And they came to ruin. Two of the grove's treants alight like festival torches. Goblins whooping in the firelight, a bugbear jeering up at the old trees. An ogre tearing the door off a house entire. And a panicked horse, still harnessed to a burning wagon, dragging fire down the alleys of the town.
+
+VANDAL: *(quickening)* Toz opened again with a Tidal Wave — and this one, friend, did double duty, drowning the goblins and dousing the burning treants in a single sweep. Old Lifferloss himself waded in, wounded and furious, swinging limbs like siege-beams — he caught one bugbear about the middle and *hurled* it bodily into another. Hal carved through bugbears with his maul. Naxene's Fire Bolt cooked one into a bonfire of its own. Woz kept the pressure on with a Guiding Bolt and his Spiritual Weapon hanging bright in the smoke.
+
+VANDAL: *(theatrical, storyteller)* And then Toz ended the affair as only Toz would. A Thunderwave — one great clap of the storm's hand — that took the runaway horse, the burning wagon, and the ogre, all at once. The horse into a wall. The house down atop the ogre. And, I am sorry to say it, an unlucky villager beneath the beams as well. Not every stroke of storm falls where it is meant, friend. The captain will carry that one.
+
+VANDAL: *(measured, taut)* And in the smoke and the shouting, Shalvis — the Zhentarim man nobody knew for one — took a morningstar full in the chest. He went down on the cobbles. And he did not get up again.
 
 [STING: bridge — 2s]
 
 ---
 
-## [ACT FOUR — The bell in the mist]
+## ACT FOUR — The bell answers
 
-VANDAL: *(softer, drawing close)* And then, friend — as the last bugbear dropped, and the crew stood in the smoke and the wet — the abbey bell began to ring.
+VANDAL: *(softer, drawing close)* And then, friend — as the last bugbear dropped, and the crew stood bleeding in the wet — the abbey bell began to ring.
 
 VANDAL: *(quoted, measured)* Ding-dong-gong. Ding-dong-gong.
 
-VANDAL: *(taut)* The watchtower bells answered from the walls. Braziers flared to life along every parapet. And the goblins and hobgoblins still fighting in the alleys — every one of them — turned, as one, and *ran*. In a single direction. Toward a fixed point on the town wall.
+VANDAL: *(taut)* The watchtower bells answered it from the walls, one after another, all around the town. Braziers flared to life along every parapet. And the goblins and hobgoblins still loose in the alleys — every last one of them — turned as a single creature, and ran. Not scattering. Not fleeing for the fields. Running in one direction, toward one fixed point on the town wall.
 
-VANDAL: *(dropping into serious)* The streets went quiet. Unnervingly quiet. And through that quiet, from far off across the mist, drifted a guard's shout. One word, friend. One word carried on the wind.
+VANDAL: *(dropping, chilling)* And the streets went quiet. The kind of quiet, friend, that is worse than screaming. And through that quiet, from far off across the mist, drifted a guard's voice. One word, carried on the wind.
 
 VANDAL: *(quoted, cold, hushed)* "Giants."
 
-VANDAL: *(measured)* Coordinated. The raiders had been sent to open the gate. The gate was opening now.
+VANDAL: *(grave)* The raid had never been the attack. The raid was the errand — thieves sent ahead to fill their sacks and open the way. And now the way was opening.
 
 [MUSIC: minor swell — 4s]
 
@@ -85,11 +89,9 @@ VANDAL: *(measured)* Coordinated. The raiders had been sent to open the gate. Th
 
 ## [CLOSING — 30s]
 
-VANDAL: *(reflective, drawing to a close)* And so a chapter closes, on the porch of Miros' inn and in the smoking grove of Lifferloss, with the abbey bell tolling and the braziers of Golden Fields burning bright. Shalvis lies dead in the street outside, and his secret dies with him — for now. One bugbear runs free in the mist. Lifferloss is stabilised, barely, and his grove is scorched. Miros the yeti lies where he fell in the second wave, his fate not yet spoken. And a townsperson lies beneath a collapsed house, under a storm they never asked for.
+VANDAL: *(reflective, drawing to a close)* And so a chapter closes, on the porch of Miros' inn and in the scorched grove of Lifferloss, with the bells of Golden Fields tolling into the dark. Shalvis lies dead in the street, and his secret lies down with him — while upstairs, Jessica Darkhope wakes to the news. One bugbear runs loose in the mist. Old Lifferloss stands, but only barely. Miros the yeti lies where he fell in the second wave, his fate not yet spoken. And the four heroes stand in the smoke with the best of their magic already spent — spent on the errand-boys, friend — while out beyond the wall, through the fog, comes the tread of the masters.
 
-VANDAL: *(grave)* And on the wind, out of the fog beyond the wall — the tread of giants, and no spell slots left to spend on them.
-
-VANDAL: *(warm)* Rest well tonight, heroes. The bell rings for you now. And the road to dawn runs through the gate.
+VANDAL: *(warm)* Rest well tonight, heroes. The bell rings for you now, and it will ring till dawn.
 
 VANDAL: *(warm, signature)* I am Vandal Lovelace. This has been a Tale of the True Hand.
 

@@ -1,5 +1,5 @@
 # Tales of the True Hand — 2025-09-23
-## A wreck, a bottle, and a bell that would not stop
+## The Bell That Would Not Stop
 
 ---
 
@@ -7,7 +7,7 @@
 
 [MUSIC: low ember bed; a distant bell tolling, faint and unbroken]
 
-VANDAL: *(hushed, drawing close)* Listen. There came a night, on the coast south of Nightstone, when a good ship called the *True Hand* was broken to splinters by boulders flung out of the dark. And from her wreckage, four survivors dragged an ornate bottle, etched in the first tongue of the world. And upon it, in letters older than kingdoms, was written —
+VANDAL: *(hushed, drawing close)* Listen. On a night of black water, off a coast south of a village called Nightstone, a good ship named the *True Hand* was struck out of the dark. Not by reef. Not by storm. By boulders — thrown. And from her wreckage, the survivors pulled a bottle, ornate and old, etched in Primordial, the first tongue of the world. And the etching read —
 
 VANDAL: *(quoted, cold, hushed)* "To speak my name is to unmake chains."
 
@@ -19,83 +19,93 @@ VANDAL: *(quoted, cold, hushed)* "To speak my name is to unmake chains."
 
 [MUSIC: signature theme, brief]
 
-VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight — the very beginning. A wreck on the shore, a bell that would not stop, and four strangers thrown together into a village of ghosts.
+VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight — the first chapter of the whole tale. A wreck on the shore, a bell that would not stop, and four strangers walking into a village of ghosts.
 
 [MUSIC: settles under, becomes bed]
 
 ---
 
-## [ACT ONE — Four survivors and a bottle]
+## ACT ONE — A bottle from the wreck
 
-VANDAL: *(warm, unfolding)* Now, this is a tale I was not there to witness. An account I have since gathered, patched together, and set in its proper order. Trust me all the same.
+VANDAL: *(warm, unfolding)* Now, I was not there for this one, friend. This account I have gathered since, from those who lived it, and set in its proper order. Trust it all the same — a bard's stitching holds.
 
-VANDAL: *(measured, telling)* Picture it. A coast south of Nightstone. Timbers scattered across the sand. Four of the crew still drawing breath — Ol' Rourke the navigator, Fish Hook Finn the deckhand, Liera of the Pearl Isles who kept the galley, and Garret "Ox" Dorn. And with them, four who would become something more than crew — Fiz of Halruaa, small and clever; Hal, the paladin; Toz, the halfling captain; and Woz, the cleric of Eldath.
+VANDAL: *(measured, telling)* Picture it. A grey morning on the Sword Coast. Timbers strewn along the sand like a giant's cast bones. Four of the ship's crew still drawing breath — Ol' Rourke the navigator, Fish Hook Finn the deckhand, Liera of the Pearl Isles who kept the galley, and Garret "Ox" Dorn. And with them, four more, who did not yet know what they were about to become. Fiz of Halruaa, a rock gnome tinker with a wand that barks fire. Hal Stormguard, a paladin out of the Silver Marches, sworn to the Oath of Vengeance. Toz Greenbottle, halfling, captain of the ship now lying in pieces behind him. And Woz — Toz's adopted brother — a half-elven cleric of Eldath, the goddess of quiet waters. There was little quiet in the water that night.
 
-VANDAL: *(leaning in)* From the wreck they pulled a bottle. Ornate. Old. Written upon in Primordial. And Toz — who speaks that tongue — turned it in his hands and read the words aloud.
+VANDAL: *(leaning in)* From the wreck they saved one thing worth more than their lives, though they did not know it yet. A bottle. Old past reckoning, and written upon in Primordial. Toz speaks that tongue, friend — a storm sorcerer hears it in his blood — and he turned the bottle in his hands and read the words aloud.
 
 VANDAL: *(quoted, hushed)* "To speak my name is to unmake chains."
 
-VANDAL: *(warm)* A bottle with a delivery on it. A fat fee promised by one Molak — a retired adventurer of some renown — who kept an inn at Nightstone, a small ritzy village at the edge of Ardeep Forest. And so, inland they walked.
+VANDAL: *(warm)* And here is the mundane miracle of it: the bottle had a delivery on it. A fat fee, promised by one Molak — a retired adventurer of some renown — who kept the inn at Nightstone, a small, well-kept village at the edge of Ardeep Forest, where the nobility of Waterdeep ride to hunt. So inland they walked, salt still in their boots.
 
-VANDAL: *(dry, amused)* On the road, two goblins stepped from the brush and demanded a toll. Fiz put one down in a single burst of fire. A killing that seemed to sit ill with him afterwards. Mark that, friend. The first drop of blood is remembered long after the hundredth is forgotten.
-
-[STING: chime — 1s]
-
----
-
-## [ACT TWO — The bell that would not stop]
-
-VANDAL: *(dropping into serious)* And now — imagine. They come within sight of Nightstone. And somewhere in the village, a bell is pealing. Without pause. Without answer.
-
-VANDAL: *(measured)* The drawbridge lay open. The watchtowers stood empty. Boulder-craters pocked the keep-mound at the river's centre — the same manner of ruin that had wrecked their ship. Around the gate, tracks of goblinoid feet, and the pads of some outsized wolf. And in the courtyard — two hulking wolf-things, later reckoned wargs, tearing apart a dog beside a fresh-dug pit.
-
-VANDAL: *(amused, warm)* Fiz — small Fiz, tinker and inventor — took up a pebble. Upon it, with a small magic, he graved six seconds of speech. *If you need help, stop ringing the bell for one minute.* And with a flick of Mage Hand, he floated the pebble up into the tower.
-
-VANDAL: *(dropping)* The bell stopped. For exactly one minute. And then it began again.
-
-VANDAL: *(quickening)* Under cover of that mad, senseless clanging, the four ran the gauntlet — past the wargs, into the temple. And there they found no beleaguered villager. Only two more goblins. One swinging gleefully from the bell rope. The other turning Fiz's little rock over in its hands, and frowning at it.
-
-VANDAL: *(dry)* Both were killed.
+VANDAL: *(dry, amused)* On the road, two goblins stepped from the brush and demanded a toll. Fiz answered with a Fire Bolt, and one goblin paid the toll instead. A single burst of flame, and a small life ended — and it sat ill with the tinker afterwards, friend. Mark that. The first blood is remembered long after the hundredth is forgotten.
 
 [STING: chime — 1s]
 
 ---
 
-## [ACT THREE — The warg on the drawbridge]
+## ACT TWO — The bell of Nightstone
 
-VANDAL: *(taut)* And then the flight. Woz threw down a fog — a gift of Eldath — to cover the retreat. The beasts were fooled for a heartbeat, no more. One caught Hal's scent at the drawbridge, and charged.
+VANDAL: *(dropping into serious)* And then Nightstone. They heard it before they saw it. A bell, somewhere in the village, pealing without pause. Without pattern. Without answer.
 
-VANDAL: *(dropping, grave)* Friend. I will tell you plain. That fight nearly ended this tale in its first hour. Hal was downed. And in the chaos, a hand went for the bottle — ready to speak the unknown name and unmake, blind, whatever chains held whatever slept within.
+VANDAL: *(measured)* The drawbridge lay open. The watchtowers stood empty. And the village square was pocked with craters — great boulders sitting where they had fallen, one clean through a farmhouse roof. Toz looked on those stones a long moment, and said what all of them were thinking.
 
-VANDAL: *(quickening)* But Toz — quick Toz — worked one of the tower winches with Mage Hand and cranked the drawbridge up mid-fight. The warg was stranded upon the timber. It toppled dead down the ramp. The bridge slammed shut behind them.
+VANDAL: *(quoted, low)* "Those rocks remind me of something that happened to our ship."
 
-VANDAL: *(softer)* A near thing. A very near thing.
+VANDAL: *(darker)* Around the gate, the tracks of goblin feet — and the pads of something wolf-shaped, and far too large. In the courtyard, beside a fresh-dug pit, two hulking beasts — wargs, friend, the wolves that goblinkind breeds for war — stood with their faces buried in the carcass of a dog.
+
+VANDAL: *(amused, warm)* Now watch what a tinker does with a problem. Fiz took up a pebble. With his Magical Tinkering he graved six seconds of speech upon it — *if you need help, stop ringing the bell for one minute* — and with Mage Hand he floated it up and into the bell tower.
+
+VANDAL: *(dropping)* The bell stopped. For one minute — one exact minute, friend. And then it began again.
+
+VANDAL: *(quickening)* So under cover of that mad, ceaseless clanging, the four slipped past the feeding wargs and into the temple. And at the top of the tower they found no desperate villager. They found two goblins. One swinging from the bell rope, whooping, gleeful as a child on a swing. The other turning Fiz's talking pebble over and over in its claws, frowning at it.
+
+VANDAL: *(dry)* Neither goblin left the tower.
+
+[STING: chime — 1s]
+
+---
+
+## ACT THREE — The warg on the drawbridge
+
+VANDAL: *(taut)* Then came the leaving, and the leaving nearly ended everything. Woz called up a Fog Cloud — a grey mercy of Eldath, rolled across the courtyard to blind the beasts. It bought them heartbeats, no more. One warg caught a scent at the drawbridge, and charged.
+
+VANDAL: *(grave)* Friend, I will tell it plain, as it was told to me. Woz went down on the timbers of that bridge. The cleric of the goddess of peace, bleeding out in the first hour of the tale, with a monster standing over him fit to finish it.
+
+VANDAL: *(conspiratorial)* And in that panic, hands went to the bottle. *Should we open it?* someone said. *It seems we have no other choice.* Speak the unknown name. Unmake the chains. Loose whatever slept inside, blind, and hope it was kindly. That is how close it came.
+
+VANDAL: *(quickening)* But Toz — quick Toz, with his brother dying on the planks — sent his Mage Hand to the tower winch instead, and cranked the drawbridge up mid-fight. The bridge groaned skyward with the warg still on it, stranded on the tilting timber. And Hal Stormguard, in his armour, threw himself into the moat and swam. He reached the rising bridge where Woz hung dangling from its edge, laid one hand upon him — and the paladin's gift did the rest. Lay on Hands, friend. The oldest magic the Oath carries: a touch, and the dying breathe.
+
+VANDAL: *(softer)* The warg toppled dead down the ramp. The bridge slammed home behind them. And on the far side of the wall, four strangers sat in the mud and learned what they now owed one another.
 
 [STING: bridge — 2s]
 
 ---
 
-## [ACT FOUR — Riders on the road]
+## ACT FOUR — Riders on the road
 
-VANDAL: *(warm, unfolding)* Now, as the four caught their breath outside the wall, hoofbeats came up the road. A company of adventurers, on horseback, led by a man with a small winged snake circling his shoulder.
+VANDAL: *(warm, unfolding)* They were still catching their breath when the hoofbeats came. A company of adventurers, up the south road on horseback, led by a man with a small winged snake circling his shoulder — and if you know the Realms, friend, you know what a flying snake at a man's shoulder tends to mean. His name, the crew would learn in time, was Xolkin.
 
-VANDAL: *(measured)* He called a woman's name into the ruined village — *Kayla! Kella!* — thinking her the one who had rung the bell. He was hunting a blonde Zhentarim agent by that name, believed hidden somewhere in Nightstone, or in a cave in the Ardeep beyond.
+VANDAL: *(measured)* He rode in shouting a woman's name at the ruined walls — *Kayla! Kella!* — thinking her the one who had rung the bell. He was hunting, he said, a blonde agent of the Zhentarim called Kella, gone to ground somewhere in Nightstone — or in a cave in the Ardeep beyond.
 
-VANDAL: *(warm)* The two parties threw in together. Dropped the drawbridge. And swept the village, room by ruined room, killing every goblin they found. An old woman with a loaf of bread survived. Of the townsfolk — no sign at all. As if they had been lifted, wholesale, out of their own homes.
+VANDAL: *(plain)* Two battered companies, one emptied village. They threw in together. Down came the drawbridge, and they swept Nightstone room by ruined room, and every goblin they found, they finished. But of the townsfolk themselves — nothing. No bodies in the houses. No bones in the pit. As if the whole village had been lifted, wholesale, out of its own life. Mark that, friend, and hold it.
 
 [STING: bridge — 2s]
 
 ---
 
-## [ACT FIVE — Molak's inn, and orcs at the gate]
+## ACT FIVE — Molak's inn, and orcs at the gate
 
-VANDAL: *(measured, telling)* They pushed into the Nightstone Inn — Molak's own house. A goblin lay dead over a table with a crossbow bolt in its chest. Another was rummaging in the kitchen, and was quickly finished. And upstairs, in what looked to be Molak's private quarters — a tapestry of a mountain landscape upon the wall, and a heavy wooden chest at the foot of the bed.
+VANDAL: *(measured, telling)* Last, they pushed into the Nightstone Inn — Molak's own house, the man they had crossed a coastline to find. A goblin lay dead across a table, a crossbow bolt in its chest that none of them had fired. Another rummaged in the kitchen, and was quickly finished. And upstairs, in what could only be Molak's private quarters — a tapestry of a mountain landscape on the wall, and a heavy wooden chest. Of Molak himself, no sign at all.
 
-VANDAL: *(warm)* Fiz, being Fiz, set to work on the lock.
+VANDAL: *(amused)* Fiz, being Fiz, knelt to the lock and set to work.
 
-VANDAL: *(dropping into serious, quickening)* And before that lock could yield, the shout went up from the watchtowers. An orc warband — twenty strong, led by a huge, badly wounded brute with a shaman at his side — massing at the drawbridge.
+VANDAL: *(dropping into serious, quickening)* And before it yielded, the shout went up from the watchtowers. An orc warband at the drawbridge — twenty strong, javelins out, led by a brute of a chieftain already carved half to pieces by some earlier battle, with a shaman at his elbow working to knit him back together. The orcs made their terms known at a bellow.
 
-VANDAL: *(taut)* The crew and the riders took to the walls. And there, in the first night of their tale, they fought them off.
+VANDAL: *(quoted, cold)* "Let us in, and we will kill you all! Let us in now — and we will let you go peacefully!"
+
+VANDAL: *(dry)* Orc diplomacy, friend, is a blade with two dull edges.
+
+VANDAL: *(taut)* The crew and the riders took to the walls, and the bridge stayed up, and Fire Bolts and crossbow quarrels rained down from the height. And there, on the first night of their tale, above a village that was not theirs, they held.
 
 [MUSIC: minor swell — 4s]
 
@@ -103,9 +113,11 @@ VANDAL: *(taut)* The crew and the riders took to the walls. And there, in the fi
 
 ## [CLOSING — 30s]
 
-VANDAL: *(reflective, drawing to a close)* And so a chapter opens. A village emptied of its people. An innkeeper unaccounted for. A chest half-picked in an upstairs room. A trail into Ardeep Forest, after a woman called Kella. And somewhere out beyond the walls — hands that throw boulders at ships and villages both, for reasons no one yet understands.
+VANDAL: *(reflective, drawing to a close)* And so the first chapter closes, friend, with more questions than blood. A village emptied of its people. An innkeeper unaccounted for, and his chest half-picked in an upstairs room. A woman named Kella, and a trail running into Ardeep Forest. And somewhere beyond the walls, something that throws boulders — at ships, at villages, at the world as it was. I could tell you what I know of giants, and of the great ordering called the Ordning that once held them all in their places. But that, friend, is for the nights ahead.
 
-VANDAL: *(dropping, personal)* And in a pack, wrapped in cloth — a bottle. Etched in Primordial. Waiting for a name to be spoken. Waiting, friend, for someone under pressure to speak it blind.
+VANDAL: *(dropping, personal)* And in a pack, wrapped in oilcloth — a bottle. Etched in the first tongue of the world. Waiting for its name. Waiting, friend, for someone desperate enough to speak it blind.
+
+VANDAL: *(warm)* Rest well tonight, heroes. Nightstone keeps its secrets till morning.
 
 VANDAL: *(warm, signature)* I am Vandal Lovelace. This has been a Tale of the True Hand.
 
