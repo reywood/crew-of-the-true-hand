@@ -25,8 +25,7 @@ These fixed assets play in every episode and cover the bulk of cue lines. Land t
 - **Purpose**: act break / beat transition. Most-used sting in the show.
 
 ### Sting — bridge (18 uses, cued as `[STING: bridge — 2s]`)
-- **Need**: a warmer 2-second transitional flourish — a small arpeggio, harp roll, or held choir chord that closes one thought and opens the next. Lighter than the low-chord sting; not as final as the chime.
-- **Search terms**: "medieval harp flourish", "cinematic bridge sting", "story transition musical".
+- **Have candidate**: `Ascending harp bridge.mp3` (Pixabay, 4.27 s — freesound_community). Head/tail silence already trimmed via `ffmpeg silencedetect`. Slightly longer than the cue's 2 s target, but the natural phrase length reads better than a hard truncation.
 
 ### Sting — sharp low chord, held (11 uses, cued as `[STING: sharp low chord, held — 3s]`)
 - **Have candidate**: `Tension stinger — ambience.mp3` (Pixabay, 3.87 s — SOLEMAN ALI). Head and tail silence already trimmed off the original; sits right on the target 3 s.

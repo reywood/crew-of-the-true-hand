@@ -122,3 +122,20 @@ Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/
 ```
 
 Plain-text fallback: *Tavern ambience by freesound_community from Pixabay (https://pixabay.com).*
+
+---
+
+## Ascending harp bridge.mp3
+
+- **Source**: Pixabay — uploader [`freesound_community`](https://pixabay.com/users/freesound_community-46691455/), Pixabay sound ID 40490
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 4.27 s (locally re-encoded — 1.77 s of head silence and 2.94 s of tail silence trimmed off the original 8.98 s Pixabay download; silence boundaries detected via `ffmpeg -af silencedetect=noise=-40dB`)
+- **Status**: Candidate for the Tier-1 `[STING: bridge — 2s]` cue (18 uses — between acts within a session). Ascending harp phrase; slightly longer than the cue's 2 s target, but the natural phrase length reads better than a hard truncation. May shorten further at concat time if it drags.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=40490">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=40490">Pixabay</a>
+```
+
+Plain-text fallback: *Ascending harp bridge by freesound_community from Pixabay (https://pixabay.com).*
