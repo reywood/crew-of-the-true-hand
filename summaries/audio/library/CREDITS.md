@@ -95,8 +95,8 @@ Plain-text fallback: *Fireplace ambience by freesound_community from Pixabay (ht
 
 - **Source**: Pixabay — uploader [`SOLEMAN ALI` (`gd_salman`)](https://pixabay.com/users/gd_salman-13705087/), Pixabay sound ID 355381
 - **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
-- **Duration**: 4.9 s (locally re-encoded — last 3 s of silence trimmed off the original 7.9 s Pixabay download)
-- **Status**: Candidate for the Tier-1 `[STING: sharp low chord, held — 3s]` cue (11 uses — the cold-open tag under Vandal's opening "Listen…"). Close to the target 3 s; may still be shortened further at concat time with an ffmpeg `-t` argument.
+- **Duration**: 3.87 s (locally re-encoded — 1 s of silence trimmed off the head and 3 s of silence trimmed off the tail of the original 7.9 s Pixabay download)
+- **Status**: Candidate for the Tier-1 `[STING: sharp low chord, held — 3s]` cue (11 uses — the cold-open tag under Vandal's opening "Listen…"). Duration now sits right on the cue's 3-second target once the head/tail are ffmpeg-faded.
 
 **Attribution** (voluntary per the Pixabay Content License):
 

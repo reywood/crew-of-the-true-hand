@@ -29,7 +29,7 @@ These fixed assets play in every episode and cover the bulk of cue lines. Land t
 - **Search terms**: "medieval harp flourish", "cinematic bridge sting", "story transition musical".
 
 ### Sting — sharp low chord, held (11 uses, cued as `[STING: sharp low chord, held — 3s]`)
-- **Have candidate**: `Tension stinger — ambience.mp3` (Pixabay, 4.9 s — SOLEMAN ALI). Trailing silence already trimmed off the original; close to the target 3 s. Audition alongside a couple of alternatives before locking it in.
+- **Have candidate**: `Tension stinger — ambience.mp3` (Pixabay, 3.87 s — SOLEMAN ALI). Head and tail silence already trimmed off the original; sits right on the target 3 s.
 
 ### Music — minor swell (10 uses, cued as `[MUSIC: minor swell — 4s]`)
 - **Need**: a 4-second minor-key musical swell — orchestral or choral crescendo — that lands under the pre-CLOSING beat where the tension resolves before Vandal signs off.
