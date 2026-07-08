@@ -46,17 +46,17 @@ The 11 cold-opens each use a distinct `[MUSIC: low ember bed; <flavor>]` cue. Ev
 
 Overlay assets to source (each ~15–30 s loopable):
 
-| Overlay | Cued in |
-|---|---|
-| Wind — thin, high (pine forest) | 2025-11-12, 2026-01-27 |
-| Wind — soft, over wheat | 2026-02-10 |
-| Wind — mist-wet, with a distant small voice | one session |
-| Rain — light, with distant heavy wing-beats | one session |
-| Slow water drip on stone (cave) | 2025-12-07 |
-| Distant tavern hum (crowd murmur, mugs) | 2026-06-16 |
-| Crackling hell-fire under the earth | 2026-01-13 |
-| Distant iron bell tolling — urgent | 2026-05-12 |
-| Distant iron bell tolling — faint, unbroken | one session |
+| Overlay | Cued in | Status |
+|---|---|---|
+| Wind — thin, high (pine forest) | 2025-11-12, 2026-01-27 | needed |
+| Wind — soft, over wheat | 2026-02-10 | needed |
+| Wind — mist-wet, with a distant small voice | one session | needed |
+| Rain — light, with distant heavy wing-beats | one session | needed |
+| Slow water drip on stone (cave) | 2025-12-07 | needed |
+| Distant tavern hum (crowd murmur, mugs) | 2026-06-16 | needed |
+| Crackling hell-fire under the earth | 2026-01-13 | needed |
+| Distant iron bell tolling — urgent | 2026-05-12 | ✅ `Church bell — single (musical).mp3` (needs distant/reverb treatment) |
+| Distant iron bell tolling — faint, unbroken | one session | ✅ `Church bell — single (film SFX).mp3` (needs distant/reverb treatment) |
 
 Roughly 6–7 unique overlay recordings would cover all 11 cold-opens with some sharing (both "wind" cues can share one asset, both "bell" cues can share one). None of these have candidates yet.
 
