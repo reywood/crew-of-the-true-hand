@@ -18,9 +18,7 @@ These fixed assets play in every episode and cover the bulk of cue lines. Land t
 - **Plan**: reuse a different 6-second segment of `The Britons.mp3` — a full-swell resolution phrase, then fade. Consider running it through a light reverb / EQ so it doesn't sound identical to the intro cue.
 
 ### Hearth ambience bed (11 uses, cued as `[MUSIC: settles under, becomes bed]`)
-- **Need**: a soft crackling-hearth loop, seamless, low volume, roughly 30–60 seconds (looped by ffmpeg during longer story stretches).
-- **Notes**: pairs with the storyteller framing. Should be quiet enough to sit under narration at ~ -22 dB without competing.
-- **Search terms**: "fireplace crackle loop", "cozy hearth ambient", "campfire bed".
+- **Have**: `Fireplace.mp3` (Pixabay, 32.3 s). Long enough to seamless-loop under a full act with ffmpeg. Also forms the base layer for every `[MUSIC: low ember bed; <flavor>]` cold-open cue.
 
 ### Sting — chime (22 uses, cued as `[STING: chime — 1s]`)
 - **Have candidate**: `Ship bell — two chimes.mp3` (Pixabay, 2.9 s). Needs trimming to ~1 second — either one bell strike or both, faded.

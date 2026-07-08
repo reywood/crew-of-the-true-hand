@@ -71,3 +71,20 @@ Sound Effect by <a href="https://pixabay.com/users/universfield-28281460/?utm_so
 ```
 
 Plain-text fallback: *Film SFX single church bell by Universfield from Pixabay (https://pixabay.com).*
+
+---
+
+## Fireplace.mp3
+
+- **Source**: Pixabay — uploader [`freesound_community`](https://pixabay.com/users/freesound_community-46691455/), Pixabay sound ID 6160
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 32.3 s
+- **Status**: Registered as the Tier-1 hearth ambience bed. Covers `[MUSIC: settles under, becomes bed]` (11 uses, one per session) and forms the base layer for every `[MUSIC: low ember bed; <flavor>]` cold-open cue. Long enough to loop seamlessly under a full act; ffmpeg will handle the loop + fade.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6160">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6160">Pixabay</a>
+```
+
+Plain-text fallback: *Fireplace ambience by freesound_community from Pixabay (https://pixabay.com).*
