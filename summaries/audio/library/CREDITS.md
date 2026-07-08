@@ -67,7 +67,7 @@ Plain-text fallback: *Musical single church bell by Universfield from Pixabay (h
 **Attribution** (voluntary per the Pixabay Content License):
 
 ```html
-Sound Effect by <a href="https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=352062">Universfield</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=352062">Pixabay</a>
+Sound Effect by <a href="https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=352062">Universfield</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=352062">Pixabay</a>
 ```
 
 Plain-text fallback: *Film SFX single church bell by Universfield from Pixabay (https://pixabay.com).*
