@@ -16,25 +16,25 @@ The core loop — new session → notes / transcript → summary → images → 
 
 ## Audio & podcast pipeline
 
-### Music beds and stingers
+### Sustained under-bed mixing (music/ambience under speech)
 
-Scripts under `summaries/audio-scripts/` are peppered with `[MUSIC: …]` and `[STING: …]` cue lines, but the TTS pipeline currently ignores them — those cues render as plain silence. Wiring them up needs:
+Pipeline v2 handles discrete `[STING: …]` cues and one-off `[MUSIC: …]` cues (signature theme, minor swell, outro theme) — it splices those in as inline elements between speech chunks. What it does NOT do yet is **layer sustained beds under the narration itself**: the `[MUSIC: settles under, becomes bed]` cue that starts every episode, and the `[MUSIC: low ember bed; <flavor>]` cold-open cues, are silently skipped. The show currently doesn't have the hearth-crackle-under-Vandal atmosphere its whole storyteller conceit was built around.
 
-1. A small asset library:
-   - Intro / outro theme (5–8s each).
-   - 2–3 sting variants — a low held chord, a chime, a bridge.
-   - An ambient bed for cold-open / hearth sections.
-   - Public-domain / royalty-free works fine at this scale: Free Music Archive, YouTube Audio Library, Kevin MacLeod. Epidemic Sound / Artlist for more polish.
-2. Parser upgrades in `scripts/generate-session-audio.py` to map cue labels → asset paths, honoring the duration hint (e.g. `[STING: chime — 1s]`).
-3. ffmpeg work to layer beds *under* narration with sidechain ducking (~ -18 dB when Vandal speaks) and drop stings between chunks.
+Wiring this needs sidechain-style ffmpeg mixing:
+1. Track the current bed state through the events list (idle → hearth on → hearth off).
+2. Render the speech-plus-stings track as one bus, then mix in `Fireplace.mp3` (looped to length) at ~ -22 dB during any "bed on" span.
+3. For cold-open ambience overlays (tavern hum, cave drip, distant bells, wind, rain, hell-fire), also layer the specific asset per the flavor label.
+4. Apply a light sidechain compressor keyed to speech so the bed ducks another ~2 dB when Vandal is speaking, then rises back up in the silences.
 
-Estimated effort: a few hours once assets are picked. Highest-impact single change to the audio product.
+Estimated effort: a solid afternoon of ffmpeg filtergraph work. Highest-remaining-impact change to the audio product now that Tier-1 discrete assets are in.
 
-### Intro / outro stinger (cheap subset of the above)
+### Attributions in the podcast feed
 
-Independent of the full music-bed lift, a single 3–5 second musical stinger dropped in before `"Well met, friend"` and after `"…This has been a Tale of the True Hand."` would give the show sonic branding at low effort. Uses the same ffmpeg concat mechanism the pipeline already relies on.
+Every episode of "Tales of the True Hand" now uses at least four Pixabay assets and one Kevin MacLeod track (The Britons, CC BY 4.0). Pixabay's license doesn't require attribution — but The Britons does, and any future CC-BY asset we add will too. Thread the attribution list from `summaries/audio/library/CREDITS.md` through `podcast_feed()` in `website/generate.py` so every episode's `<description>` / `<content:encoded>` carries the required credits automatically. Currently the attribution lives only in the repo's CREDITS.md, which listeners won't see.
 
-Candidate track already in hand: `summaries/audio/library/The Britons.mp3` — Kevin MacLeod, CC BY 4.0. See `summaries/audio/library/CREDITS.md` for the required attribution wording, which must land in every episode's show notes / feed description once we ship it. Concrete next steps: pick a strong 4–6 second segment, fade in/out, splice it in as `[MUSIC: signature theme]` in `scripts/generate-session-audio.py`, and thread the CC BY line into `podcast_feed()` in `website/generate.py` so it appears in every `<description>`.
+### In-run TTS dedup
+
+When the same spoken line appears twice in one script (e.g. `"You should have taken our offer."` in 2026-06-16, once in the cold open and once in Act Four), both hit the TTS API on first run because we only check the pre-run manifest for cache hits, not the in-progress one. Cheap fix in `scripts/generate-session-audio.py`: also consult `manifest_out["chunks"]` on cache miss before calling ElevenLabs. Small dollar impact per episode; still cleaner behavior.
 
 ### Chapter markers (MP3 ID3 chapters)
 

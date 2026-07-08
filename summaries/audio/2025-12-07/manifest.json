@@ -1,0 +1,7 @@
+{
+  "date": "2025-12-07",
+  "voice_id": "tEo3d4j7gzVojBL5Z4Pt",
+  "model_id": "eleven_multilingual_v2",
+  "chunks": {},
+  "note": "migrated from legacy flat layout; TTS chunks were not preserved. Re-run scripts/generate-session-audio.py --force-tts to regenerate with the new pipeline."
+}
