@@ -23,7 +23,7 @@ Do NOT add an asset to the library without also adding its entry here. Do NOT mo
 
 ## Ship bell — two chimes.mp3
 
-- **Source**: Pixabay (author and sound URL not yet recorded — TODO: capture the exact Pixabay URL and uploader name for the source-tracking column below)
+- **Source**: Pixabay — uploader `freesound_community` (direct sound URL not recorded; searchable on pixabay.com by uploader name if needed)
 - **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
 - **Duration**: 2.9 s
 - **Status**: Candidate STING asset — a two-chime ship's bell suitable for `[STING: chime — 1s]` cue lines. Not yet wired into the audio pipeline.
