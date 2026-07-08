@@ -26,6 +26,7 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 - `quests.md` — Single-file quest log; the website parses each `- **Name**` bullet under each `## section` as a quest. Section headings determine status (Main arc / Allies / Hotspots / Side leads / Personal / Completed).
 - `website/` — Static site generator (`generate.py`, stdlib only) plus theme CSS. Run `python3 website/generate.py` to regenerate `website/site/` after any source change. See `website/README.md` for the full file format and cross-linking rules.
 - `battle-cards/` — Printable single-page combat reference HTML cards, one per PC (`fiz.html` exists; `hal.html`, `toz.html`, `woz.html` to come). Self-contained: inline CSS, inline SVG dice, no external assets. See `battle-cards/README.md` for the layout model, dice notation, chip taxonomy, character voices, and the step-by-step recipe for building a new one. Use `fiz.html` as the working template — copy it, then swap content.
+- `TODO.md` — Running list of open work on the audio / podcast pipeline (music beds and stingers, chapter markers, HTTPS + custom domain, directory submission, etc.). Read this before proposing new podcast-side features so you don't duplicate what's already scoped out.
 
 ## Working in this repo
 
