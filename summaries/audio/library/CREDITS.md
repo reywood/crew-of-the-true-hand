@@ -23,11 +23,17 @@ Do NOT add an asset to the library without also adding its entry here. Do NOT mo
 
 ## Ship bell — two chimes.mp3
 
-- **Source**: Pixabay — uploader `freesound_community` (direct sound URL not recorded; searchable on pixabay.com by uploader name if needed)
+- **Source**: Pixabay — uploader [`freesound_community`](https://pixabay.com/users/freesound_community-46691455/), Pixabay sound ID 102730
 - **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
 - **Duration**: 2.9 s
 - **Status**: Candidate STING asset — a two-chime ship's bell suitable for `[STING: chime — 1s]` cue lines. Not yet wired into the audio pipeline.
 
-**Attribution**: Not required by the Pixabay Content License. We voluntarily credit uploaders in the podcast show notes as a courtesy — see the Pixabay author/URL once captured.
+**Attribution**: Not required by the Pixabay Content License. We voluntarily credit uploaders in the podcast show notes as a courtesy. Pixabay's generated attribution snippet (use verbatim when the license permits HTML; use the plain-text fallback below for text-only channels):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=102730">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=102730">Pixabay</a>
+```
+
+Plain-text fallback: *Ship bell sound effect by freesound_community from Pixabay (https://pixabay.com).*
 
 **Redistribution note**: Pixabay's license forbids redistributing raw assets "as-is on any stock or wallpaper platform." Keeping the file inside this project's git repo is standard project use and is allowed; do NOT publish this MP3 to any stock or free-download site.
