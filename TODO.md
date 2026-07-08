@@ -34,6 +34,8 @@ Estimated effort: a few hours once assets are picked. Highest-impact single chan
 
 Independent of the full music-bed lift, a single 3–5 second musical stinger dropped in before `"Well met, friend"` and after `"…This has been a Tale of the True Hand."` would give the show sonic branding at low effort. Uses the same ffmpeg concat mechanism the pipeline already relies on.
 
+Candidate track already in hand: `summaries/audio/library/The Britons.mp3` — Kevin MacLeod, CC BY 4.0. See `summaries/audio/library/CREDITS.md` for the required attribution wording, which must land in every episode's show notes / feed description once we ship it. Concrete next steps: pick a strong 4–6 second segment, fade in/out, splice it in as `[MUSIC: signature theme]` in `scripts/generate-session-audio.py`, and thread the CC BY line into `podcast_feed()` in `website/generate.py` so it appears in every `<description>`.
+
 ### Chapter markers (MP3 ID3 chapters)
 
 Podcast apps (Overcast, Apple, Pocket Casts) render ID3 chapter tags as tappable seek points. Add one chapter per `## ACT` heading in the script so listeners can skip to specific beats. Options: `mutagen` (Python) to write CTOC / CHAP frames directly, or `ffmpeg -f ffmetadata` to pass a metadata file at concat time.
