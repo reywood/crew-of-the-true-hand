@@ -105,3 +105,20 @@ Sound Effect by <a href="https://pixabay.com/users/gd_salman-13705087/?utm_sourc
 ```
 
 Plain-text fallback: *Tension stinger ambience by SOLEMAN ALI from Pixabay (https://pixabay.com).*
+
+---
+
+## Tavern ambience.mp3
+
+- **Source**: Pixabay — uploader [`freesound_community`](https://pixabay.com/users/freesound_community-46691455/), Pixabay sound ID 73008
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 37.5 s
+- **Status**: Registered for the Tier-2 "distant tavern hum (crowd murmur, mugs)" overlay in the 2026-06-16 cold open. Long enough to seamless-loop under a full cold-open beat.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=73008">freesound_community</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=73008">Pixabay</a>
+```
+
+Plain-text fallback: *Tavern ambience by freesound_community from Pixabay (https://pixabay.com).*
