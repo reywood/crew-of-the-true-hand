@@ -70,14 +70,18 @@ DEFAULT_MODEL_ID = "eleven_multilingual_v2"
 DEFAULT_OUTPUT_FORMAT = "mp3_44100_128"
 
 # Volume levels (in dB) for library assets relative to the speech track.
-# Speech chunks are left at 0 dB. Music / sting elements are duckedto sit under
-# the narration without competing.
+# Speech chunks are left at 0 dB. Music / sting elements are ducked to sit
+# under the narration without competing.
 MUSIC_INTRO_DB = -6.0    # signature theme — brighter, near speech level
 MUSIC_MID_DB = -8.0      # minor swell — pushed under the closing line
 MUSIC_OUTRO_DB = -4.0    # outro theme — full swell, closer to speech level
 STING_CHIME_DB = -5.0
 STING_BRIDGE_DB = -6.0
 STING_LOW_CHORD_DB = -3.0  # cold-open tag — wants to hit
+# Sustained under-beds — much quieter, sit well below the narration.
+HEARTH_BED_DB = -22.0        # crackling fire under a full act of speech
+COLD_OPEN_HEARTH_DB = -24.0  # a touch quieter under the low-chord sting
+COLD_OPEN_OVERLAY_DB = -20.0 # tavern/drip/bell overlay in cold-open ambience
 
 # --------------------------------------------------------------------------
 # delivery presets (unchanged from v1)
@@ -165,13 +169,23 @@ STING_ASSETS = {
     "sharp low chord":  ("Tension stinger — ambience.mp3", STING_LOW_CHORD_DB, None),
 }
 
-# Music cues that we handle inline (v2). Sustained beds are NOT here — they
-# need v3 sidechain mixing under the speech track.
+# Music cues that we handle inline (v2/v3). The signature theme is NOT here —
+# it's rendered as a bed span so it can fade under the title line instead of
+# cutting off abruptly. The outro theme stays inline because it plays after
+# all narration is done. The minor swell plays inline right before the closing.
 MUSIC_ASSETS = {
-    "signature theme": ("The Britons.mp3", MUSIC_INTRO_DB, (0.0, 8.0)),   # first 8 s
     "outro theme":     ("The Britons.mp3", MUSIC_OUTRO_DB, (300.0, 6.7)),  # last swell
     "minor swell":     ("Minor swell.mp3", MUSIC_MID_DB,   None),
 }
+
+# Signature theme is rendered as its own bed span so it can play through and
+# fade under the title line rather than ending abruptly. Uses the same Britons
+# track, first 20 s.
+SIGNATURE_ASSET = "The Britons.mp3"
+SIGNATURE_SEGMENT = (0.0, 20.0)
+SIGNATURE_DB = -12.0        # quiet enough to sit under Vandal's title line
+SIGNATURE_FADE_OUT = 6.0    # long tail so it recedes gradually under narration
+SIGNATURE_HEADROOM_MS = 2500  # play intro alone this long before speech comes in
 
 
 def resolve_sting_cue(label: str):
@@ -187,13 +201,158 @@ def resolve_sting_cue(label: str):
 
 def resolve_music_cue(label: str):
     """Return (asset_path, volume_db, segment_or_None) or None if no match /
-    if this cue is a sustained bed we don't handle in v2."""
+    if this cue is a sustained bed we handle separately (see resolve_bed_start)."""
     lo = label.lower()
     for key in sorted(MUSIC_ASSETS.keys(), key=lambda k: -len(k)):
         if key in lo:
             filename, db, segment = MUSIC_ASSETS[key]
             return (LIBRARY_DIR / filename, db, segment)
     return None
+
+
+# --------------------------------------------------------------------------
+# sustained under-bed handling
+# --------------------------------------------------------------------------
+
+HEARTH_ASSET = "Fireplace.mp3"
+
+# Cold-open ambience overlays. When a [MUSIC: low ember bed; <flavor>] cue
+# appears, we start a hearth bed AND layer one of these on top per the flavor
+# keyword. Unmatched flavors fall back to hearth-only.
+BED_OVERLAY_ASSETS = {
+    "tavern":               ("Tavern ambience.mp3",              COLD_OPEN_OVERLAY_DB),
+    "drip":                 ("Cave drip.mp3",                    COLD_OPEN_OVERLAY_DB),
+    "bell tolling, urgent": ("Church bell — single (musical).mp3", COLD_OPEN_OVERLAY_DB),
+    "bell tolling, faint":  ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 4.0),
+    "bell tolling":         ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 2.0),
+    # wind flavors, rain + wing-beats, hell-fire crackle: not yet in library —
+    # cold-open bed falls back to hearth-only.
+}
+
+
+def resolve_bed_overlay(label: str):
+    """Given a `[MUSIC: low ember bed; <flavor>]` label, return
+    (overlay_path, volume_db) for the matching overlay, or None if no
+    overlay is available. Hearth is always added by the caller."""
+    lo = label.lower()
+    for key in sorted(BED_OVERLAY_ASSETS.keys(), key=lambda k: -len(k)):
+        if key in lo:
+            filename, db = BED_OVERLAY_ASSETS[key]
+            return (LIBRARY_DIR / filename, db)
+    return None
+
+
+def is_cold_open_bed_cue(label: str) -> bool:
+    return "low ember bed" in label.lower()
+
+
+def is_hearth_bed_start_cue(label: str) -> bool:
+    lo = label.lower()
+    return "settles under" in lo or "becomes bed" in lo
+
+
+def is_signature_bed_cue(label: str) -> bool:
+    """The signature-theme cue closes the cold-open bed AND opens a signature
+    bed (Britons intro) that plays through the title line and fades out under
+    the next bed transition."""
+    return "signature theme" in label.lower()
+
+
+def is_bed_end_cue(label: str) -> bool:
+    """Cues that terminate any currently-playing bed. minor swell replaces
+    the bed at the show's emotional close; outro theme wraps the show."""
+    lo = label.lower()
+    return "minor swell" in lo or "outro theme" in lo
+
+
+def probe_duration_ms(path: Path) -> int:
+    """ffprobe → duration in milliseconds. Returns 0 on failure."""
+    try:
+        out = subprocess.run(
+            ["ffprobe", "-v", "error",
+             "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
+            capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        return int(float(out) * 1000)
+    except (subprocess.CalledProcessError, ValueError):
+        return 0
+
+
+def render_bed(hearth_path: Path, overlay_path, duration_sec: float,
+                out_path: Path, hearth_db: float = HEARTH_BED_DB,
+                overlay_db: float = COLD_OPEN_OVERLAY_DB) -> Path:
+    """Build a bed of the given duration by looping the hearth asset (and,
+    if provided, an overlay), setting per-track volumes, applying fade in
+    and fade out. Written to out_path; returns out_path."""
+    fade_in = 1.0
+    fade_out = 1.5
+    fade_out_start = max(0.0, duration_sec - fade_out)
+    if overlay_path is not None:
+        cmd = [
+            "ffmpeg", "-y",
+            "-stream_loop", "-1", "-i", str(hearth_path),
+            "-stream_loop", "-1", "-i", str(overlay_path),
+            "-filter_complex",
+            f"[0:a]volume={hearth_db}dB,atrim=0:{duration_sec}[a0];"
+            f"[1:a]volume={overlay_db}dB,atrim=0:{duration_sec}[a1];"
+            f"[a0][a1]amix=inputs=2:duration=first:normalize=0,"
+            f"afade=t=in:st=0:d={fade_in},"
+            f"afade=t=out:st={fade_out_start}:d={fade_out}[out]",
+            "-map", "[out]",
+            "-ac", "1", "-ar", "44100",
+            "-c:a", "libmp3lame", "-b:a", "128k",
+            "-loglevel", "error",
+            str(out_path),
+        ]
+    else:
+        cmd = [
+            "ffmpeg", "-y",
+            "-stream_loop", "-1", "-i", str(hearth_path),
+            "-af",
+            f"volume={hearth_db}dB,"
+            f"atrim=0:{duration_sec},"
+            f"afade=t=in:st=0:d={fade_in},"
+            f"afade=t=out:st={fade_out_start}:d={fade_out}",
+            "-ac", "1", "-ar", "44100",
+            "-c:a", "libmp3lame", "-b:a", "128k",
+            "-loglevel", "error",
+            str(out_path),
+        ]
+    subprocess.run(cmd, check=True)
+    return out_path
+
+
+def mix_top_with_beds(top_path: Path, bed_specs, out_path: Path) -> None:
+    """bed_specs: list of (bed_path, delay_ms). Mixes top_path (the speech +
+    inline-music bus) with each bed at its start offset. Uses amix with
+    normalize=0 so the top layer's level isn't attenuated by the mix."""
+    if not bed_specs:
+        shutil.copy2(top_path, out_path)
+        return
+    inputs = ["-i", str(top_path)]
+    for bed_path, _ in bed_specs:
+        inputs.extend(["-i", str(bed_path)])
+    filters = []
+    labels = ["[0:a]"]
+    for i, (_, delay_ms) in enumerate(bed_specs, start=1):
+        filters.append(f"[{i}:a]adelay={delay_ms}|{delay_ms}[b{i}]")
+        labels.append(f"[b{i}]")
+    n = len(bed_specs) + 1
+    filters.append(
+        f"{''.join(labels)}amix=inputs={n}:duration=first:"
+        f"dropout_transition=0:normalize=0[out]"
+    )
+    cmd = [
+        "ffmpeg", "-y", *inputs,
+        "-filter_complex", ";".join(filters),
+        "-map", "[out]",
+        "-ac", "1", "-ar", "44100",
+        "-c:a", "libmp3lame", "-b:a", "128k",
+        "-loglevel", "error",
+        str(out_path),
+    ]
+    subprocess.run(cmd, check=True)
 
 
 # --------------------------------------------------------------------------
@@ -397,7 +556,12 @@ def main():
                         help="Invalidate the TTS cache and re-call ElevenLabs "
                         "for every speech chunk.")
     parser.add_argument("--no-music", action="store_true",
-                        help="Skip music/sting layering — voice only.")
+                        help="Skip all music/sting layering — voice only. "
+                        "Implies --no-beds.")
+    parser.add_argument("--no-beds", action="store_true",
+                        help="Skip sustained under-bed mixing (hearth ambience "
+                        "and cold-open overlays). Inline stings and one-off "
+                        "music cues still play. Useful to A/B a mix.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Parse the script but don't call ElevenLabs "
                         "or stitch anything.")
@@ -460,7 +624,14 @@ def main():
 
         speech_texts = [ev[1] for ev in events if ev[0] == "speak"]
 
-        stitched_paths = []
+        # --- Pass 1: resolve every event to a concrete audio element on
+        # disk (speech chunk from cache or new TTS, silence, sting, inline
+        # music) and capture its duration in ms. Bed cues are left as
+        # markers with no audio element attached — they're consumed in
+        # pass 2 to find the sustained under-bed spans.
+        top_layer = []  # list of dicts: {"path": Path, "dur_ms": int, "kind": str, "label": str}
+        bed_markers = []  # list of dicts: {"at_ms": int, "kind": "start_hearth"|"start_cold_open"|"end", "label": str}
+        cursor_ms = 0
         speech_idx = 0
 
         for i, ev in enumerate(events):
@@ -473,13 +644,9 @@ def main():
                 chunk_path = chunks_dir / f"{chunk_id}.mp3"
 
                 if h in existing_chunks and (chunks_dir / f"{existing_chunks[h]}.mp3").exists():
-                    # Reuse the cached chunk under its original filename.
                     cached_id = existing_chunks[h]
                     cached_path = chunks_dir / f"{cached_id}.mp3"
                     if cached_id != chunk_id:
-                        # Speech ordering changed but content matches an old
-                        # chunk — copy under the new name so lookups stay
-                        # position-stable for reruns.
                         shutil.copy2(cached_path, chunk_path)
                     print(f"  [{speech_idx + 1}/{len(speech_texts)}] "
                           f"({delivery_key}) [cache hit] "
@@ -507,7 +674,9 @@ def main():
                         return 1
 
                 manifest_out["chunks"][h] = chunk_id
-                stitched_paths.append(chunk_path)
+                dur_ms = probe_duration_ms(chunk_path)
+                top_layer.append({"path": chunk_path, "dur_ms": dur_ms, "kind": "speak"})
+                cursor_ms += dur_ms
                 speech_idx += 1
 
             elif kind == "silence":
@@ -515,53 +684,195 @@ def main():
                 sil_path = silence_cache / f"silence-{dur}.mp3"
                 if not sil_path.exists():
                     synth_silence(dur, sil_path)
-                stitched_paths.append(sil_path)
+                top_layer.append({"path": sil_path, "dur_ms": dur, "kind": "silence"})
+                cursor_ms += dur
 
             elif kind == "sting":
                 label = ev[1]
                 if args.no_music:
-                    stitched_paths.append(synth_silence(400, silence_cache / "sting-fallback.mp3")
-                                          if not (silence_cache / "sting-fallback.mp3").exists()
-                                          else silence_cache / "sting-fallback.mp3")
+                    fb = silence_cache / "sting-fallback.mp3"
+                    if not fb.exists():
+                        synth_silence(400, fb)
+                    top_layer.append({"path": fb, "dur_ms": 400, "kind": "sting"})
+                    cursor_ms += 400
                     continue
                 resolved = resolve_sting_cue(label)
                 if resolved is None:
-                    # Unrecognized sting — fall back to a short silence.
                     fallback = silence_cache / "sting-unknown.mp3"
                     if not fallback.exists():
                         synth_silence(500, fallback)
-                    stitched_paths.append(fallback)
+                    top_layer.append({"path": fallback, "dur_ms": 500, "kind": "sting"})
+                    cursor_ms += 500
                     continue
                 src, db, segment = resolved
                 slug = re.sub(r"[^a-z0-9]+", "-", label.lower())[:40].strip("-")
                 asset_path = asset_cache / f"sting-{slug}.mp3"
                 render_asset(src, asset_path, db, segment)
-                stitched_paths.append(asset_path)
+                dur_ms = probe_duration_ms(asset_path)
+                top_layer.append({"path": asset_path, "dur_ms": dur_ms, "kind": "sting"})
+                cursor_ms += dur_ms
 
             elif kind == "music":
                 label = ev[1]
+
+                # Register bed markers at THIS cursor position, before
+                # advancing for any inline element the cue may also carry.
+                if not args.no_music and not args.no_beds:
+                    if is_cold_open_bed_cue(label):
+                        bed_markers.append({"at_ms": cursor_ms,
+                                             "kind": "start_cold_open",
+                                             "label": label})
+                    elif is_hearth_bed_start_cue(label):
+                        bed_markers.append({"at_ms": cursor_ms,
+                                             "kind": "start_hearth",
+                                             "label": label})
+                    elif is_signature_bed_cue(label):
+                        # Transition: closes the cold-open bed and opens the
+                        # signature bed at the same position. Then inject a
+                        # short silence into the top layer so the intro theme
+                        # plays alone for a beat before the title-line speech
+                        # comes in.
+                        bed_markers.append({"at_ms": cursor_ms,
+                                             "kind": "start_signature",
+                                             "label": label})
+                        headroom_path = silence_cache / f"signature-headroom-{SIGNATURE_HEADROOM_MS}.mp3"
+                        if not headroom_path.exists():
+                            synth_silence(SIGNATURE_HEADROOM_MS, headroom_path)
+                        top_layer.append({"path": headroom_path,
+                                           "dur_ms": SIGNATURE_HEADROOM_MS,
+                                           "kind": "silence"})
+                        cursor_ms += SIGNATURE_HEADROOM_MS
+                    elif is_bed_end_cue(label):
+                        bed_markers.append({"at_ms": cursor_ms,
+                                             "kind": "end",
+                                             "label": label})
+
                 if args.no_music:
                     continue
                 resolved = resolve_music_cue(label)
                 if resolved is None:
-                    # Sustained beds and unhandled music — no inline element.
-                    # (Deliberate: v2 doesn't sidechain-mix beds under speech.)
                     continue
                 src, db, segment = resolved
                 slug = re.sub(r"[^a-z0-9]+", "-", label.lower())[:40].strip("-")
                 asset_path = asset_cache / f"music-{slug}.mp3"
                 render_asset(src, asset_path, db, segment)
-                stitched_paths.append(asset_path)
+                dur_ms = probe_duration_ms(asset_path)
+                top_layer.append({"path": asset_path, "dur_ms": dur_ms, "kind": "music"})
+                cursor_ms += dur_ms
 
         save_manifest(manifest_path, manifest_out)
-        print(f"Stitching {len(stitched_paths)} elements → {final_path.name}")
-        concat_mp3s(stitched_paths, final_path)
+
+        # --- Pass 2: resolve bed markers into concrete spans and render
+        # each span's bed track. A cold-open marker overrides / restarts;
+        # a hearth marker starts a new span; an end marker closes any open
+        # span. Adjacent overlapping markers close the previous span at
+        # this position before opening the new one.
+        bed_specs = []  # list of (bed_path, delay_ms) for the final mix
+        if not args.no_music and not args.no_beds:
+            active = None
+            marker_kind_to_type = {
+                "start_cold_open": "cold_open",
+                "start_hearth":    "hearth",
+                "start_signature": "signature",
+            }
+            for m in bed_markers:
+                if m["kind"] in marker_kind_to_type:
+                    if active is not None:
+                        active["end_ms"] = m["at_ms"]
+                        if active["end_ms"] > active["start_ms"]:
+                            bed_specs.append(_render_bed_span(active, asset_cache))
+                    active = {
+                        "start_ms": m["at_ms"],
+                        "type": marker_kind_to_type[m["kind"]],
+                        "label": m["label"],
+                    }
+                elif m["kind"] == "end":
+                    if active is not None:
+                        active["end_ms"] = m["at_ms"]
+                        if active["end_ms"] > active["start_ms"]:
+                            bed_specs.append(_render_bed_span(active, asset_cache))
+                        active = None
+            # If a span is still open at end of show, close it at total
+            # cursor position (this shouldn't happen in well-formed scripts).
+            if active is not None:
+                active["end_ms"] = cursor_ms
+                if active["end_ms"] > active["start_ms"]:
+                    bed_specs.append(_render_bed_span(active, asset_cache))
+
+        # --- Pass 3: concat the top layer to top.mp3, then mix in the
+        # rendered beds at their offsets.
+        top_path = tmp_dir / "top.mp3"
+        top_paths = [e["path"] for e in top_layer]
+        print(f"Concatenating {len(top_paths)} top-layer elements")
+        concat_mp3s(top_paths, top_path)
+
+        if bed_specs:
+            print(f"Mixing {len(bed_specs)} under-bed span(s) → {final_path.name}")
+            mix_top_with_beds(top_path, bed_specs, final_path)
+        else:
+            print(f"No under-beds → {final_path.name}")
+            shutil.copy2(top_path, final_path)
 
     size_kb = final_path.stat().st_size / 1024
     print(f"Wrote {final_path} ({size_kb:.0f} KB)")
     n_speech = len(manifest_out["chunks"])
     print(f"  Cached {n_speech} speech chunks under {chunks_dir}")
     return 0
+
+
+def _render_bed_span(span: dict, asset_cache: Path):
+    """Render a single bed span (dict with start_ms, end_ms, type, label)
+    into an MP3 in asset_cache. Returns (bed_path, delay_ms) for the mix."""
+    duration_sec = (span["end_ms"] - span["start_ms"]) / 1000.0
+    slug = span["type"]
+    out_path = asset_cache / f"bed-{slug}-{int(duration_sec)}s.mp3"
+    print(f"  bed span: {slug} — {duration_sec:.1f}s @ {span['start_ms'] / 1000:.1f}s")
+
+    if span["type"] == "signature":
+        # Signature theme intro: play from the start of Britons, extend across
+        # the title line, and fade out over the tail so it recedes gradually
+        # under narration instead of ending abruptly.
+        _render_signature_bed(duration_sec, out_path)
+    else:
+        hearth_path = LIBRARY_DIR / HEARTH_ASSET
+        overlay_path = None
+        overlay_db = COLD_OPEN_OVERLAY_DB
+        hearth_db = HEARTH_BED_DB
+        if span["type"] == "cold_open":
+            hearth_db = COLD_OPEN_HEARTH_DB
+            overlay = resolve_bed_overlay(span["label"])
+            if overlay is not None:
+                overlay_path, overlay_db = overlay
+        render_bed(hearth_path, overlay_path, duration_sec, out_path,
+                   hearth_db=hearth_db, overlay_db=overlay_db)
+    return (out_path, span["start_ms"])
+
+
+def _render_signature_bed(duration_sec: float, out_path: Path) -> Path:
+    """Render the signature-theme bed (Britons intro). Plays louder at the
+    top so it punches, then fades gradually under the title line."""
+    source = LIBRARY_DIR / SIGNATURE_ASSET
+    start_offset, max_segment = SIGNATURE_SEGMENT
+    segment = min(duration_sec, max_segment)
+    fade_in = 0.4
+    fade_out = min(SIGNATURE_FADE_OUT, max(1.5, segment * 0.6))
+    fade_out_start = max(0.0, segment - fade_out)
+    cmd = [
+        "ffmpeg", "-y",
+        "-ss", str(start_offset),
+        "-t", str(segment),
+        "-i", str(source),
+        "-af",
+        f"volume={SIGNATURE_DB}dB,"
+        f"afade=t=in:st=0:d={fade_in},"
+        f"afade=t=out:st={fade_out_start}:d={fade_out}",
+        "-ac", "1", "-ar", "44100",
+        "-c:a", "libmp3lame", "-b:a", "128k",
+        "-loglevel", "error",
+        str(out_path),
+    ]
+    subprocess.run(cmd, check=True)
+    return out_path
 
 
 if __name__ == "__main__":
