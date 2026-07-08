@@ -139,3 +139,20 @@ Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/
 ```
 
 Plain-text fallback: *Ascending harp bridge by freesound_community from Pixabay (https://pixabay.com).*
+
+---
+
+## Minor swell.mp3
+
+- **Source**: Pixabay — uploader [`Rson201`](https://pixabay.com/users/rson201-55690538/), Pixabay sound ID 553814
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 9.58 s (locally re-encoded — head and tail silence trimmed via `ffmpeg silencedetect` from the original 10.68 s Pixabay download)
+- **Status**: Candidate for the Tier-1 `[MUSIC: minor swell — 4s]` cue (10 uses — the reflective breath after the last narrative beat, before Vandal's closing "Rest well tonight, heroes." signature). Runs longer than the 4 s cue calls for; the audio pipeline will either fade in on the peak portion (~5 s in) or overlap the tail into the closing signature.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/rson201-55690538/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=553814">Rson201</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=553814">Pixabay</a>
+```
+
+Plain-text fallback: *Deep rising cinematic swell by Rson201 from Pixabay (https://pixabay.com).*

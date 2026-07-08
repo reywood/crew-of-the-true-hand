@@ -31,8 +31,7 @@ These fixed assets play in every episode and cover the bulk of cue lines. Land t
 - **Have candidate**: `Tension stinger — ambience.mp3` (Pixabay, 3.87 s — SOLEMAN ALI). Head and tail silence already trimmed off the original; sits right on the target 3 s.
 
 ### Music — minor swell (10 uses, cued as `[MUSIC: minor swell — 4s]`)
-- **Need**: a 4-second minor-key musical swell — orchestral or choral crescendo — that lands under the pre-CLOSING beat where the tension resolves before Vandal signs off.
-- **Search terms**: "orchestral minor swell", "emotional cinematic build", "melancholy strings crescendo".
+- **Have candidate**: `Minor swell.mp3` (Pixabay, 9.58 s — Rson201, "Deep rising cinematic swell"). Head/tail silence already trimmed. Runs longer than the 4 s cue calls for; the pipeline will either fade in on the peak portion (~5 s in) or overlap the tail into the closing signature.
 
 ---
 
