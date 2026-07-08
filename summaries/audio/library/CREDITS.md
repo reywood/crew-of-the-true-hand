@@ -88,3 +88,20 @@ Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/
 ```
 
 Plain-text fallback: *Fireplace ambience by freesound_community from Pixabay (https://pixabay.com).*
+
+---
+
+## Tension stinger — ambience.mp3
+
+- **Source**: Pixabay — uploader [`SOLEMAN ALI` (`gd_salman`)](https://pixabay.com/users/gd_salman-13705087/), Pixabay sound ID 355381
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 7.9 s
+- **Status**: Candidate for the Tier-1 `[STING: sharp low chord, held — 3s]` cue (11 uses — the cold-open tag under Vandal's opening "Listen…"). Needs a 3-second trim; the full clip is longer than the cue calls for. Alternate use: keep at full length as a slower ambient build in a specific act if a moment warrants it.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/gd_salman-13705087/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=355381">SOLEMAN ALI</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=355381">Pixabay</a>
+```
+
+Plain-text fallback: *Tension stinger ambience by SOLEMAN ALI from Pixabay (https://pixabay.com).*
