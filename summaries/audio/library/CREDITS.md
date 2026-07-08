@@ -156,3 +156,20 @@ Sound Effect by <a href="https://pixabay.com/users/rson201-55690538/?utm_source=
 ```
 
 Plain-text fallback: *Deep rising cinematic swell by Rson201 from Pixabay (https://pixabay.com).*
+
+---
+
+## Cave drip.mp3
+
+- **Source**: Pixabay — uploader [`solarmusic`](https://pixabay.com/users/solarmusic-27851065/), Pixabay sound ID 114694
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 20.08 s (locally re-encoded — 3.5 s of tail silence trimmed off the original 23.6 s Pixabay download)
+- **Status**: Registered for the Tier-2 "slow water drip on stone (cave)" overlay in the 2025-12-07 cold open. Long enough to loop under the cold-open beat under a layer of `Fireplace.mp3`.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/solarmusic-27851065/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=114694">solarmusic</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=114694">Pixabay</a>
+```
+
+Plain-text fallback: *Cave drip ambience by solarmusic from Pixabay (https://pixabay.com).*

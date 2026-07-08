@@ -47,7 +47,7 @@ Overlay assets to source (each ~15–30 s loopable):
 | Wind — soft, over wheat | 2026-02-10 | needed |
 | Wind — mist-wet, with a distant small voice | one session | needed |
 | Rain — light, with distant heavy wing-beats | one session | needed |
-| Slow water drip on stone (cave) | 2025-12-07 | needed |
+| Slow water drip on stone (cave) | 2025-12-07 | ✅ `Cave drip.mp3` (20.08 s loop) |
 | Distant tavern hum (crowd murmur, mugs) | 2026-06-16 | ✅ `Tavern ambience.mp3` (37.5 s loop) |
 | Crackling hell-fire under the earth | 2026-01-13 | needed |
 | Distant iron bell tolling — urgent | 2026-05-12 | ✅ `Church bell — single (musical).mp3` (needs distant/reverb treatment) |
