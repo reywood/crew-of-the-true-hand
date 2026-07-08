@@ -600,6 +600,11 @@ a.card:hover {
   flex-direction: column;
   gap: 0.45rem;
 }
+.session-row-date-line {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
 .session-row-date {
   font-family: 'Cinzel', serif;
   font-weight: 600;
@@ -611,6 +616,13 @@ a.card:hover {
   padding-bottom: 1px;
   align-self: flex-start;
 }
+.session-row-audio {
+  font-size: 0.95rem;
+  color: var(--brass);
+  line-height: 1;
+  cursor: help;
+}
+.session-row-audio:hover { color: var(--status-active-main); }
 .session-row-date:hover {
   color: var(--status-active-main);
   border-bottom-color: var(--brass);
@@ -813,6 +825,79 @@ span.session-chip-missing {
   background: linear-gradient(to bottom,
     rgba(241, 227, 193, 0) 0%,
     rgba(241, 227, 193, 0.55) 100%);
+}
+
+.podcast-cta {
+  margin: -0.4rem 0 1.4rem;
+  font-size: 0.95rem;
+}
+.podcast-link {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--wood);
+  text-decoration: none;
+  background: rgba(193, 154, 74, 0.14);
+  border: 1px solid var(--brass);
+  padding: 0.28em 0.9em;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.podcast-link:hover {
+  background: rgba(193, 154, 74, 0.28);
+  color: var(--status-active-main);
+}
+.podcast-cta-tail {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  margin-left: 0.4rem;
+}
+.podcast-cta code {
+  font-family: 'Cascadia Code', 'Menlo', monospace;
+  font-size: 0.82em;
+  background: rgba(193, 154, 74, 0.14);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}
+
+.session-audio {
+  margin: 1.2rem 0 1.6rem;
+  padding: 0.9rem 1.1rem 1rem;
+  background: var(--parchment);
+  border: 1px solid var(--parchment-shadow);
+  box-shadow: 0 0 0 1px var(--brass) inset;
+  border-radius: 4px;
+}
+.session-audio figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.8rem;
+  margin-bottom: 0.55rem;
+}
+.session-audio-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wood);
+  background: rgba(193, 154, 74, 0.18);
+  border: 1px solid var(--brass);
+  padding: 0.15em 0.65em;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.session-audio-caption {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+.session-audio audio {
+  width: 100%;
+  display: block;
 }
 
 .session-summary {
