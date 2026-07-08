@@ -87,6 +87,32 @@ You can stack cues (e.g. `*(quoted, cold, hushed)*`) — the first word the pipe
 - **Quoted lines** — when Vandal ventriloquizes another character, use the `quoted` cue and short, punchy phrasing. The listener needs to hear the shift.
 - **Old-salt / bard cadence.** Slightly heightened diction ("Picture it.", "So it was that…", "And now — well.") without going into pastiche. If you feel yourself writing "verily" or "forsooth," delete.
 
+## D&D 5e flair — use the game's language *inside* Vandal's voice
+
+The show is a D&D 5e campaign recap and should sound like one. Vandal is a bard of the Forgotten Realms; he knows the world by its real names. Weave the game's vocabulary into his storytelling — not on top of it as a modern gloss, but as part of how a Faerûnian narrator would naturally speak of these things.
+
+**Do use, precisely and without paraphrase:**
+
+- **Spell names** as spoken by the caster or observed by an onlooker. *"Toz called down a Thunderwave, and the goblins went flying like leaves"* — not *"Toz released a burst of thunder magic."* Same for `Fairy Fire`, `Dust Devil`, `Fog Cloud`, `Spike Growth`, `Guiding Bolt`, `Faerie Fire`, `Grease`, `Zone of Truth`, `Continual Flame`, `Cure Wounds`, `Sanctuary`, `Suggestion`, `Fireball`, `Counterspell`, and so on. Capitalize spell names in the script — the TTS layer treats them as proper nouns.
+- **Class features and iconic abilities.** Hal's *Divine Smite*, Woz's *Channel Divinity*, Fiz's *Arcane Firearm* and his *Eldritch Cannon* (his little floating drone), Toz's *Wind Speaker* / *Storm's Fury*.
+- **Monster and creature names verbatim.** *Gargoyle. Ogre. Cambion. Yeti. Hill giant. Cloud giant. Frost giant. Fire giant. Storm giant. Hobgoblin. Bugbear. Kobold. Blue dragon (wyrmling). Green dragon. Owlbear. Drow. Beholder. Displacer beast. Doppelganger. Cultist. Goliath.* If the note calls it a gargoyle, Vandal calls it a gargoyle.
+- **Faerûn setting terminology.** Real place names (`Waterdeep`, `Neverwinter`, `Nightstone`, `Golden Fields` or `Goldenfields`, `Triboar`, `Bryn Shandar`, `Silver Marches`, `Spine of the World`, `Halruaa`, `Underdark`, `Sword Coast`, `Toril`, `Faerûn`). Real factions (`Harpers`, `Zhentarim`, `Lords' Alliance`, `Emerald Enclave`, `Order of the Gauntlet`, `Force Grey`). Real gods (`Eldath`, `Silvanus`, `Torm`, `Asmodeus`, `Tempus`, `Selûne`, `Mystra`). Real currencies — `gold pieces`, `silver`, `copper`, `platinum`, `electrum`. Real races as adjectives — `elven`, `dwarven`, `halfling`, `tiefling`, `dragonborn`.
+- **Magic items and their proper 5e names** when the crew has one. If they picked up a `Bag of Holding` or an `Alchemy Jug` or a `Ring of Protection`, name it. Consult `items/*.md` before writing to get the canonical name.
+- **The Ordning.** Central to Storm King's Thunder — the giant hierarchy, and its breakage, is the show's spine. When it fits, name it: *"The Ordning, friend, is broken. And when the ordering of the world goes, it is the hungriest who rise first."*
+
+**Do NOT surface pure metagame mechanics.** Those break the fiction. Rewrite them in-world:
+
+- Rolls, DCs, saving throws, ability checks, advantage/disadvantage, natural 20s, natural 1s → describe the effect, not the mechanic.
+  - Bad: *"Fiz rolled a 3 on his Perception check"*
+  - Good: *"Fiz looked and saw nothing at all"*
+- Hit points, damage numbers, spell slots, class levels — same.
+  - Bad: *"The gargoyle dealt sixteen points of acid damage to the Eldritch Cannon"*
+  - Fair game: *"the pseudopod snapped the cannon to pieces in a single blow"* (the existing scripts occasionally reference numbers — sparingly, as a bard would say "he was struck a dozen times." Use for punch, not for accounting.)
+- Initiative, rounds, turns — collapse into narrative time. *"And then combat begins"* is fine as a beat, but avoid *"on his first turn, Hal…"*.
+- Level-ups can be acknowledged in-world — a session where the party crossed into a new tier is a legitimate beat. Existing scripts frame this as *"the crew had crossed into their fifth season of skill"* or similar. Keep it lyrical, not literal.
+
+**The test**: if a listener has never played D&D, would they still understand the story? If a listener has played, would they smile at the right proper noun landing at the right moment? Both should be true. Vandal is the storyteller; the game's language is his working vocabulary.
+
 ## Length target
 
 **Aim for ~10 minutes of finished audio, roughly 8,000 characters of Vandal spoken text** (spoken cues only — [MUSIC] and [STING] lines don't count, delivery cues don't count). Storytelling pace is roughly 150 words per minute; the pipeline plays at that rate.
