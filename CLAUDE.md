@@ -17,6 +17,10 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 - `session notes/` — Terse bullet-style recaps named `YYYY-MM-DD.md` for the real-world session date. Each file is a few lines to a couple dozen, often shorthand ("kill them", "up to level four"). **Written from Fiz's perspective** — first-person "I" / "me" refers to Fiz, so loot or interactions phrased that way belong to Fiz unless another PC is named. Fiz sometimes refers to himself in the third person when paired with another PC ("Toz and Fiz go in village", "Hal and Fiz talk to Naxine"), so third-person Fiz mentions are not a different narrator. Do not rewrite these into prose unless asked — the terseness is the style.
 - `transcripts/` — Raw auto-transcribed audio of sessions as `YYYY-MM-DD.txt`. These are large (80–120KB), unpunctuated walls of speech with no speaker tags, and contain a lot of table chatter, dice rolls, and mechanics talk mixed with in-character dialogue. **The session-notes date may not match the transcript date** (e.g. the 2025-12-17 notes summarize that session, but `transcripts/2025-12-17.txt` is the raw recording of that same evening). Use transcripts as source-of-truth when expanding or reconciling notes, but expect signal-to-noise issues.
 - `summaries/` — Generated detailed session recaps as `YYYY-MM-DD.md`. Each file leads with an italic `*In brief: ...*` line, then `##` sections, then `## What's next` / `## Loose ends`. These are derived from the corresponding session notes + transcript and are the **primary content of the session detail pages on the website**. Notes and transcripts stay around as collapsible reference material on the same page. When a new session is added, generate a new summary file (or hand-write one) so the website has something rich to render.
+  - `summaries/images/` — Gemini-generated hero + beat illustrations (see step 2.5).
+  - `summaries/audio-scripts/YYYY-MM-DD.md` — "Tales of the True Hand" storyteller-voiced audio script (see step 2.7). Uses format `# Tales of the True Hand — YYYY-MM-DD` / `## <subtitle>` / `[COLD OPEN]` / `[TITLE]` / `## ACT ONE/TWO/…` / `## CLOSING`, with every spoken line prefixed `VANDAL: *(delivery cue)* …`. The narrator is Vandal Lovelace; he only actually met the crew at 2026-06-16, so earlier sessions are framed as retelling. Signature open: *"Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand."* Signature close: *"I am Vandal Lovelace. This has been a Tale of the True Hand."*
+  - `summaries/audio/YYYY-MM-DD.mp3` — ElevenLabs TTS output built from the script (see step 2.8). Site generator copies these into `site/audio/sessions/` and wires an inline `<audio>` player on each session page + emits an iTunes-compatible RSS feed at `/feed.xml`.
+  - `summaries/podcast-cover.jpg` — 1400×1400 JPEG podcast cover; regenerate with `scripts/generate-podcast-cover.py` (Gemini + Pillow). Site generator copies to `site/images/podcast-cover.jpg`; `feed.xml`'s `<itunes:image>` points there.
 - `npcs/` and `locations/` — One markdown file per entity, each with frontmatter (`name`, `aliases`, `type`, `location`, `first_seen`, etc.) and a short markdown body. These are the source of truth for everyone/everywhere the website knows about. NPCs may carry an `expertise: dragons, Draconic, ...` field — the site cross-references those tags against items' `expertise_needed:` to surface "Who could help" / "Could help with" blocks on each detail page.
 - `items/` — One markdown file per magical, mysterious, or narratively significant item the crew has acquired. Frontmatter: `name`, `aliases`, `type` (Magic item / Weapon / Focus / Book / Mystery / Trophy / Keepsake / Memento), `holder` (PC name or "Party"), `status` (Unresolved / Active / Consumed / Lost), `origin` (session date), and optional `expertise_needed:` tags. Everyday loot (coin, generic potions/scrolls, consumables) stays in the session's `carried:` list without getting its own file — see the criteria in the item-catalog thread.
 - `quests.md` — Single-file quest log; the website parses each `- **Name**` bullet under each `## section` as a quest. Section headings determine status (Main arc / Allies / Hotspots / Side leads / Personal / Completed).
@@ -96,6 +100,37 @@ Scans every session summary in `summaries/` and writes a `sessions: YYYY-MM-DD, 
 
 Re-run this whenever a summary is added, expanded, or an entity gets a new alias.
 
+### 2.7. Write an audio script (optional)
+
+Write `summaries/audio-scripts/YYYY-MM-DD.md` in the "Tales of the True Hand" storyteller register. Use `summaries/audio-scripts/2026-06-16.md` as the canonical template — copy its structure and delivery-cue vocabulary rather than inventing new ones. Key rules:
+- Line 1: `# Tales of the True Hand — YYYY-MM-DD` (the H1 is required and drives the podcast feed episode grouping).
+- Line 2: `## <subtitle>` — becomes the episode title in the podcast feed (e.g. `## The Cambion at the Gate`).
+- Sections: `[COLD OPEN — 25s]` / `[TITLE — 8s]` / `## ACT ONE …` (3–5 acts) / `[CLOSING — 30s]`.
+- Every spoken line begins `VANDAL: *(delivery cue)* …`. Draw cues from the vocabulary in existing scripts: `hushed, urgent, cold, chilling, quoted, bright, theatrical, storyteller, signature, warm, amused, sly, dropping, quickening, dropping into serious, softer, closing, telling, personal, unfolding, leaning, taut, murmured, drawing close, wondering, reflective, measured, grave`. The audio generator maps these to ElevenLabs stability / style presets.
+- Include `[MUSIC: …]` and `[STING: …]` cue lines between sections. These are ignored by the TTS layer but keep the script readable.
+- Target ~5,000–7,500 characters of Vandal spoken text (~6–7 minutes at TTS pace).
+- Vandal was only present at the 2026-06-16 session. For every other date frame it as retelling — *"an account I have since gathered"* — not personal witness.
+
+For a batch of sessions, spawning parallel `general-purpose` Agents with the reference script and the summary path is the proven pattern.
+
+### 2.8. Generate the session audio (optional)
+
+```
+.venv/bin/python scripts/generate-session-audio.py YYYY-MM-DD --voice tEo3d4j7gzVojBL5Z4Pt --force
+```
+
+Reads `summaries/audio-scripts/YYYY-MM-DD.md`, calls ElevenLabs TTS chunk-by-chunk with prosody-continuity via `previous_text` / `next_text`, stitches with ffmpeg's concat filter, and writes `summaries/audio/YYYY-MM-DD.mp3`. The default voice ID above is Cormac ("Irish Fantasy Storyteller") — a professional voice, so it requires a **paid** ElevenLabs plan; the free tier can't use it via API. Needs `ELEVENLABS_API_KEY` in the same `.env` used by the image script (git-ignored). Watch the character budget: each script is 5–7k chars, so a full re-run of all sessions is 55–75k chars.
+
+The site generator picks up any `.mp3` in `summaries/audio/`, copies it to `site/audio/sessions/`, renders an inline `<audio>` player on that session's detail page, adds a small ♬ badge on the sessions list row, and lists it as an episode in `site/feed.xml`. No `generate.py` change needed per session.
+
+### 2.9. Regenerate the podcast cover (rare)
+
+```
+.venv/bin/python scripts/generate-podcast-cover.py --force
+```
+
+Runs Gemini image + Pillow normalization to write `summaries/podcast-cover.jpg` as a 1400×1400 JPEG. Only needed if the show's cover art changes; a good cover survives many episodes.
+
 ### 3. Add the session's location annotation
 
 Open `website/generate.py` and find `SESSION_LOCATIONS` (near `session_list_page`). Add an entry mapping the new date to a list of location slugs in order of importance:
@@ -129,4 +164,10 @@ The generator wipes `website/site/` and rebuilds from scratch — never hand-edi
 
 ### 6. Deploy (when ready)
 
-`./website/migrations/001-create-s3-bucket.sh` re-syncs the site to the S3 bucket. The first four steps of that script are idempotent-ish and the file-sync step (`aws s3 sync ... --delete`) handles incremental updates correctly. Only run this when the user asks; do not deploy on every regeneration.
+For an existing bucket (which is the normal case now), just run the sync directly:
+
+```bash
+aws s3 sync website/site/ s3://crew-of-the-true-hand/ --delete
+```
+
+`./website/migrations/001-create-s3-bucket.sh` exists for the first-time provisioning path. Do NOT re-run the full script for redeploys — it uses `set -euo pipefail` and aborts on the `create-bucket` call ("BucketAlreadyOwnedByYou") before it ever reaches the sync step. The sync one-liner above is the only step you need. Only deploy when the user asks; do not deploy on every regeneration.
