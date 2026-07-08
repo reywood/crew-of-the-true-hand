@@ -5,11 +5,11 @@
 
 ## [COLD OPEN — 25s]
 
-[MUSIC: low ember bed; a distant bell tolling, urgent and iron]
+[MUSIC: low ember bed; an iron bell tolling, far off and urgent]
 
-VANDAL: *(hushed, drawing close)* Listen, friend. There is a sound that the granary-town of Golden Fields had come to dread — the hammering of the alarm bell, iron on iron, calling every soul to the abbey walls. And on this day, when four small heroes climbed the tower to see what was coming — they saw hill giants. And behind the giants, orcs. And on the orcs' shoulders — catapults. But not for stones, friend.
+VANDAL: *(hushed, drawing close)* Listen. In the granary-town of Golden Fields, where the wheat stands tall around a smiling wooden goddess, the abbey bell had been ringing all night. First for goblins. Then for ogres. And now — as four weary heroes climbed to the top of the wall — for something worse. Hill giants, striding through the young wheat. Orcs at their heels, hauling catapults of green timber and knotted rope. And those catapults, friend, were not loaded with stones.
 
-VANDAL: *(quoted, cold, hushed)* For goblins. Living goblins. Screaming as they flew.
+VANDAL: *(quoted, cold, hushed)* They were loaded with goblins.
 
 [STING: sharp low chord, held — 3s]
 
@@ -19,65 +19,69 @@ VANDAL: *(quoted, cold, hushed)* For goblins. Living goblins. Screaming as they 
 
 [MUSIC: signature theme, brief]
 
-VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, the crew stands the wall at Golden Fields a second time — and learns, at last, the hungry name behind the raiding.
+VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, the crew stands the wall at Golden Fields a second time — and learns, from a butcher's knife, the name of the hunger behind it all.
 
 [MUSIC: settles under, becomes bed]
 
 ---
 
-## [ACT ONE — The bell]
+## ACT ONE — The bell
 
-VANDAL: *(warm, unfolding)* Picture it. Morning in Golden Fields — that great abbey-granary in the heart of the North, where sheaves are stacked to the rafters and the road to Waterdeep runs long and straight south. And then, without warning, the bell. The great alarm bell of the abbey, hammering out its iron warning across the fields.
+VANDAL: *(warm, unfolding)* Picture it, friend. Golden Fields — the great granary of the North, an abbey-town twice the size of little Nightstone, where a wooden statue of Shontea stands smiling among the wheat and the harvest feeds half the Sword Coast. You will remember, from our last fire, how the goblins came in the night. Ogres and bugbears among them, sacks of pumpkins on their backs, and the Crew of the True Hand fighting them lane by lane until the raiders broke and ran. And you will remember how that tale ended — with the abbey bell tolling, braziers flaring on the watchtowers, and a guard's voice carrying on the wind. *The giants are coming.*
 
-VANDAL: *(measured)* The crew moved as one, as crews will when the road has taught them well. Toz and Fiz and Hal and Woz — they turned the villagers toward the abbey, and there the good abbot met them, hands still floury from the morning's bread, and pressed his healing to two of the four before they could so much as ask. A small kindness, friend. But mark it. In the great tales, small kindnesses become, in time, great things.
+VANDAL: *(measured, aside)* Now — a word of honesty between us, for I was not on that wall. I had this account from the four themselves, a little while after, at the foot of a certain statue in the City of Splendours. But that meeting is its own tale, friend, and it keeps. Tonight belongs to Golden Fields.
 
-VANDAL: *(quickening)* Then to the bell tower they went, boots ringing on the stair. A woman of the town climbed with them — armed, and grim, and known to the guards above. At the top of the stair she turned to them and said, plainly, that she must go to the wall to help. And the crew — being who they are — followed her up.
+VANDAL: *(quickening)* The bell would not stop. Iron on iron, over and over, and the streets filling with folk who did not know which way to run. So the crew told them. To the abbey — to Shontea's house — go, and bar the doors behind you. And at the abbey the abbot met them coming, and laid his hands on the two of the four worst-marked from the night's fighting, and their wounds closed like water smoothing over a thrown stone. A small kindness, friend. Mark it. In the great tales, small kindnesses become, in time, great things.
 
-[STING: chime — 1s]
-
----
-
-## [ACT TWO — On the wall]
-
-VANDAL: *(taut, unfolding)* And from the top of the wall of Golden Fields, they saw at last what was coming.
-
-VANDAL: *(grave)* Hill giants. Three of them, or more, striding the fields with clubs the size of felled oaks. And around their ankles — like hounds around a huntsman — a rabble of goblins and orcs. Auxiliaries. Warband kin. The kind of company hill giants keep when they mean to break a wall.
-
-VANDAL: *(dropping, drawing close)* But it was what the orcs *carried* that turned the storyteller's blood. Catapults. Rough-timbered, rope-strung, made in some crooked forest camp — and loaded not with stones, friend. Not with fire. With goblins. Small green souls, bound at the wrist, screaming as the ropes cranked, screaming as they were flung, screaming as they cleared the wall and struck the granary rooftops beyond. Living warheads, friend. That is the word for it.
-
-VANDAL: *(quieter, chilling)* I have told many tales in my time. I have not, before, told one of that.
+VANDAL: *(steadier)* A woman of the town had fallen in beside them — armed, steady, known by name to the men above. At the foot of the bell tower she turned and said, plain as bread, that the guards on the wall would need her more than the abbey did. And the four — being the four — went up after her.
 
 [STING: chime — 1s]
 
 ---
 
-## [ACT THREE — The wall holds]
+## ACT TWO — What the wall saw
 
-VANDAL: *(quickening)* And then the fighting of it. Toz Greenbottle — captain of the wrecked *True Hand*, small halfling with a storm in his palm — called lightning down along the wall-walk, and a giant's shoulder cooked black inside its own hide. Hal Stormguard, halberd two-handed, waded to the parapet and swung down, and swung down again, into the reaching hand of the nearest brute. Fiz of Halruaa — small Fiz, tinker and inventor — set his little cannon on the stones and let its fire chatter across the field. And Woz — half-elf, Nature cleric of Eldath, quietest of the four — held the ground behind them. Wounds mended. A goblin's fall softened before it struck the tiles. Peace kept where peace could be kept.
+VANDAL: *(taut, unfolding)* And from the top of the wall of Golden Fields, they saw what the bell had been trying to say all along.
 
-VANDAL: *(measured)* The giants fell. One, and then another, and then the last. And when the last great body crashed to the earth outside the wall, the surviving goblins and orcs broke — turned tail and ran back into the fields, dragging their catapults behind them, cursing in tongues no bard would set to song.
+VANDAL: *(grave)* Hill giants. Great slope-shouldered brutes, near as tall as the wall itself, coming on through the young wheat with clubs like felled trees. And around their ankles, a rabble of goblins and orcs — auxiliaries, camp-kin, the small hungry company that gathers to a hill giant the way gulls gather to a fishing boat.
 
-VANDAL: *(warm)* Golden Fields held. A second time, now. And the wall-guards, who had grown used to the crew's shadow on their parapets, gave them a small ragged cheer.
+VANDAL: *(dropping, drawing close)* But it was the catapults, friend. The orcs were hauling catapults — crooked engines lashed up in some forest camp by hands that did not care if they lasted the week. And they were not loading them with stones. Not with fire. With goblins. Their own goblins — flung up, and over the wall, and down into the town behind. Living warheads, friend, dropped screaming onto rooftops and lanes, each one a raider delivered inside the walls where no gate need be broken.
+
+VANDAL: *(quieter, chilling)* I have carried a great many tales in this old satchel of mine. Before this one, I had never carried a tale of that.
+
+[STING: chime — 1s]
+
+---
+
+## ACT THREE — The wall holds
+
+VANDAL: *(measured)* Now, the fighting of it. I tell it as it was told to me — and the wall-guards of Golden Fields do not tell a thing small.
+
+VANDAL: *(quickening)* Toz Greenbottle — captain of the drowned *True Hand*, halfling, with the storm living in his very blood — stood at the parapet and sent his lightning down the giants' line, and the air about him crackled and bit at everything near, for that is the way of a storm sorcerer roused. Fiz of Halruaa set his Eldritch Cannon on the wall-walk — that small thundering contraption of his — and it barked fire across the field while his Arcane Firearm, the wand-arquebus, barked along with it. Hal Stormguard met the first great hand that came over the stones, and when his sword bit, it bit with the light of his oath behind it — a Divine Smite, friend, radiant as a debt repaid. And Woz — quiet Woz, Eldath's own — walked the wall behind the three of them, closing wounds as fast as the giants could open them.
+
+VANDAL: *(measured)* And the giants fell. One, and then another, and then the last — and when the last of them crashed down into the trampled wheat, the whole field seemed to hold its breath. Then the goblins broke. The orcs broke with them, dragging their wretched engines back the way they had come, and the fields swallowed the survivors whole.
+
+VANDAL: *(warm)* Golden Fields held, friend. Battered, scorched, short a few roofs and more than a few sheaves — but held. Twice raided since the crew came to it, and twice still standing.
 
 [STING: bridge — 2s]
 
 ---
 
-## [ACT FOUR — The skinning knife]
+## ACT FOUR — The butcher's knife
 
-VANDAL: *(softer, unfolding)* And now the part of the tale that turned it. For among the giant corpses on the field, one of the four — I believe it was Fiz, though Toz will tell you otherwise — turned up a curious thing. A knife. But too great a knife for any humanoid hand to hold. Two feet of blade, a haft you could hardly close a fist upon, and a curve to the edge that spoke plainly of its trade.
+VANDAL: *(softer, unfolding)* And now the turn of the tale. For when the crew came down among the giant dead, they found on one of the bodies a thing that asked more questions than any sword ever could.
 
-VANDAL: *(grave, telling)* A skinning knife, friend. The tool of a butcher. Of a giant butcher. The kind of blade a hill giant carries not to kill a foe, but to dress the meat once the killing is done.
+VANDAL: *(measured, telling)* A knife. A skinning knife — but sized for no hand that will ever shake yours, friend. A blade the length of your arm. A haft you could not close your fist around. An edge curved for one trade, and one trade only. Not a weapon. A *tool*. The tool of a butcher who dresses his meat where it falls.
 
-VANDAL: *(drawing close)* And that little detail — that ugly little detail — cracked the tale wide.
+VANDAL: *(drawing close)* And standing there among the corpses, with that knife in their hands, the four of them read the whole bloody season at last, the way an old sailor reads weather. The raids on the granary-town. The bugbears slipping over walls with sacks of vegetables. The emptied livestock pens. The catapults, even — every goblin flung over that wall was a thief delivered to where the food was. None of it was war, friend. Not one raid of it. It was *harvest*.
 
-VANDAL: *(measured, unfolding)* An insight, taken then and there, on all that had passed in the North since the crew had come to it. The raids. The catapults. The living warheads. The auxiliaries. Every scrap of it, friend, in service to one purpose. The hill giants of the North are not making war for war's sake. They are gathering food. Grain and beast and, I fear, worse than either. Gathering it, and carrying it, all of it, to *her*.
+VANDAL: *(grave)* The hill giants of the North are gathering food. Grain, and cattle, and — I will say it plainly — whatever else that knife was made to dress. Gathering it, and hauling it, all of it, to a single mouth. Their queen.
 
 VANDAL: *(quoted, cold, hushed)* Guh.
 
-VANDAL: *(softer, chilling)* Queen Guh. A hungry mountain of a giantess, somewhere out in the wild, whose appetite the raids are meant to fill. Every catapult, every goblin screaming through the sky, every skinning knife on every field — a bite. A single bite. For her.
+VANDAL: *(softer, chilling)* Queen Guh. A mountain of hunger somewhere out in the hills, with every hill giant in the North for her foraging party. Golden Fields was never the enemy, friend. Golden Fields was the pantry.
 
-VANDAL: *(reflective)* The Ordning, friend, is broken. And when the ordering of the world goes, it is the hungriest who rise first.
+VANDAL: *(reflective)* The Ordning, friend, is broken — the old ordering of giantkind, that held storm above cloud, and cloud above fire and frost, and all of them above the hills. And when the ordering of the world goes, it is the hungriest who rise first. Mark that. No one in Faerûn hungers like Guh.
 
 [MUSIC: minor swell — 4s]
 
@@ -85,9 +89,9 @@ VANDAL: *(reflective)* The Ordning, friend, is broken. And when the ordering of 
 
 ## [CLOSING — 30s]
 
-VANDAL: *(reflective, drawing to a close)* And so a chapter closes, friend, on the walls of Golden Fields — its granaries still standing, its abbot's bread still rising, and its guards a little the better for four small heroes on their parapet. Ahead of the crew — a queen. A butcher-queen, somewhere in the hills, whose name the wind has finally spoken. And behind them, a village saved a second time, that may yet need saving a third. And behind *that*, still unresolved, the road that runs south to the City of Splendours, where I first crossed their path — but that, friend, is a tale for a fortnight hence.
+VANDAL: *(reflective, drawing to a close)* And so the chapter closes on the walls of Golden Fields — granaries still standing, the abbey bell silent at last, the town counting what the season has cost it. Ahead of the crew, a queen to find, somewhere out in the hills — and beneath her, the harder question. Why now? Why is a mountain of hunger being fattened, and for what table? And south of all of it, the long road to Waterdeep — where, though they did not yet know it, an old storyteller was waiting to cross their path.
 
-VANDAL: *(warm)* Rest well tonight, heroes. The road waits for you at dawn — and this time, it climbs into the hills.
+VANDAL: *(warm)* Rest well tonight, heroes. The hills will keep till morning.
 
 VANDAL: *(warm, signature)* I am Vandal Lovelace. This has been a Tale of the True Hand.
 
