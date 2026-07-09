@@ -42,11 +42,11 @@
     <pubDate>Tue, 02 Jun 2026 12:00:00 +0000</pubDate>
     <description>Golden Fields takes its second raid since the crew arrived, and an insight check reveals what the hill giants are actually after.</description>
     <itunes:summary>Golden Fields takes its second raid since the crew arrived, and an insight check reveals what the hill giants are actually after.</itunes:summary>
-    <itunes:duration>08:02</itunes:duration>
+    <itunes:duration>07:57</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
     <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-06-02.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-06-02.mp3" length="7727690" type="audio/mpeg"/>
+    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-06-02.mp3" length="7639918" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-05-12 — The Harvest Thieves</title>
@@ -163,7 +163,7 @@
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
     <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2025-09-23.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-09-23.mp3" length="9058054" type="audio/mpeg"/>
+    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-09-23.mp3" length="9072265" type="audio/mpeg"/>
   </item>
 </channel>
 </rss>
