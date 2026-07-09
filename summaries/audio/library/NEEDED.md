@@ -49,7 +49,7 @@ Overlay assets to source (each ~15–30 s loopable):
 | Rain — light | 2026-02-10 | ✅ `Rain.mp3` (180 s seamless loop; thunder layer not yet added) |
 | Slow water drip on stone (cave) | 2025-12-07 | ✅ `Cave drip.mp3` (20.08 s loop) |
 | Distant tavern hum (crowd murmur, mugs) | 2026-06-16 | ✅ `Tavern ambience.mp3` (37.5 s loop) |
-| Crackling hell-fire under the earth | 2026-01-13 | needed |
+| Crackling hell-fire under the earth | 2026-01-13 | ✅ `Hell-fire crackle.mp3` (115 s loop) |
 | Distant iron bell tolling — urgent | 2026-05-12 | ✅ `Church bell — single (musical).mp3` (needs distant/reverb treatment) |
 | Distant iron bell tolling — faint, unbroken | one session | ✅ `Church bell — single (film SFX).mp3` (needs distant/reverb treatment) |
 

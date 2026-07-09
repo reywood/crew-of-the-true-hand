@@ -226,13 +226,15 @@ BED_OVERLAY_ASSETS = {
     "bell tolling, faint":  ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 4.0),
     "bell tolling":         ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 2.0),
     "wheat":                ("Wind over wheat.mp3",                COLD_OPEN_OVERLAY_DB),
+    "hissing":              ("Hell-fire crackle.mp3",              COLD_OPEN_OVERLAY_DB),
     "mist":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
     "damp":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
     "rain":                 ("Rain.mp3",                           COLD_OPEN_OVERLAY_DB),
     "pine":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
     "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
-    # hell-fire crackle (2026-01-13): not yet in library. Cold-open bed
-    # falls back to hearth-only for that one.
+    # All Tier-2 cold-open overlays now covered. Optional layers (distant voice
+    # for mist-damp, thunder for rain, distant wing-beats) are secondary and
+    # not yet wired.
 }
 
 

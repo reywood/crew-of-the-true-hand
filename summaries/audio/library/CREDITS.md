@@ -241,3 +241,20 @@ Sound Effect by <a href="https://pixabay.com/users/dragon-studio-38165424/?utm_s
 ```
 
 Plain-text fallback: *Calming rain loop by DRAGON-STUDIO from Pixabay (https://pixabay.com).*
+
+---
+
+## Hell-fire crackle.mp3
+
+- **Source**: Pixabay — uploader [`floraphonic`](https://pixabay.com/users/floraphonic-38928062/), Pixabay sound ID 188211
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 114.96 s (no trimming needed — clean loop-ready recording, no silence detected)
+- **Status**: Registered as the Tier-2 "hell-fire crackle" overlay for the 2026-01-13 cold open (`[MUSIC: low ember bed; a slow crackle of embers, and something hissing beneath the earth]`). Wired on the "hissing" keyword.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/floraphonic-38928062/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=188211">floraphonic</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=188211">Pixabay</a>
+```
+
+Plain-text fallback: *Burning fire loop by floraphonic from Pixabay (https://pixabay.com).*
