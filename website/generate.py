@@ -860,6 +860,16 @@ def index_page(pcs, npcs, locations, quests, sessions):
             cards += f'<li><a href="{s.href}">{html.escape(s.name)}</a> — {html.escape(s.summary)}</li>'
         cards += "</ul></section>"
 
+    # Podcast CTA — surface "Tales of the True Hand" to first-time visitors.
+    cards += """
+<section class="home-podcast">
+  <h2><span aria-hidden="true">&#9836;</span> Listen: Tales of the True Hand</h2>
+  <p>A storyteller-voiced audio recap of every session, narrated by Vandal Lovelace beside the hearth.</p>
+  <p class="podcast-cta"><a href="sessions.html" class="podcast-link">Play an episode</a>
+  <span class="podcast-cta-tail">— or subscribe by adding <code>feed.xml</code> to your podcast app of choice.</span></p>
+</section>
+"""
+
     # Directory / navigation grid — moved beneath the actionable content so
     # active players see quests and sessions first. Still useful as a
     # browsing directory for casual visitors.

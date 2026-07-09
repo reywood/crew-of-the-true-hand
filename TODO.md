@@ -54,9 +54,9 @@ Podcast apps (Overcast, Apple, Pocket Casts) render ID3 chapter tags as tappable
 
 ## Website features
 
-### Homepage / nav podcast link
+### Nav-bar podcast link
 
-`sessions.html` has the Subscribe CTA. `index.html` and the nav bar don't mention the podcast at all. Adding a small "Listen: Tales of the True Hand" link somewhere prominent would surface it to first-time visitors.
+`sessions.html` has the Subscribe CTA and `index.html` now carries a "Listen: Tales of the True Hand" section (a `home-podcast` block in `index_page()` linking to `sessions.html` / `feed.xml`). The **nav bar** (`NAV` in `website/generate.py`) still doesn't mention the podcast — a small "Listen" entry there would surface it on every page, not just home and sessions.
 
 ### Site search
 
