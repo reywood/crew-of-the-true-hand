@@ -225,9 +225,10 @@ BED_OVERLAY_ASSETS = {
     "bell tolling, urgent": ("Church bell — single (musical).mp3", COLD_OPEN_OVERLAY_DB),
     "bell tolling, faint":  ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 4.0),
     "bell tolling":         ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 2.0),
-    "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
+    "wheat":                ("Wind over wheat.mp3",                COLD_OPEN_OVERLAY_DB),
     "pine":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
-    # wind flavors — over-wheat / mist-wet — and rain + wing-beats and hell-fire
+    "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
+    # remaining wind flavor (mist-wet) and rain + wing-beats and hell-fire
     # crackle: not yet in library. Cold-open bed falls back to hearth-only.
 }
 

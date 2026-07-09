@@ -190,3 +190,20 @@ Sound Effect by <a href="https://pixabay.com/users/traian1984-41907904/?utm_sour
 ```
 
 Plain-text fallback: *Wind through trees ambience by Traian Mitroi from Pixabay (https://pixabay.com).*
+
+---
+
+## Wind over wheat.mp3
+
+- **Source**: Pixabay — uploader [`freesound_community`](https://pixabay.com/users/freesound_community-46691455/), Pixabay sound ID 7159
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 132.18 s (locally re-encoded — head/tail silence trimmed from the original 137.66 s Pixabay download)
+- **Status**: Registered as the Tier-2 "wind — soft, over wheat" overlay for the 2026-03-08 cold open (`[MUSIC: low ember bed; a soft wind moving over ripe wheat]`). Long enough to loop under a full cold-open beat.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=7159">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=7159">Pixabay</a>
+```
+
+Plain-text fallback: *Wheat in the wind ambience by freesound_community from Pixabay (https://pixabay.com).*

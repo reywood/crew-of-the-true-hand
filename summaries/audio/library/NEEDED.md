@@ -44,7 +44,7 @@ Overlay assets to source (each ~15–30 s loopable):
 | Overlay | Cued in | Status |
 |---|---|---|
 | Wind — thin, high (pine forest) | 2025-11-12, 2026-01-27 | ✅ `Wind through trees.mp3` (86 s loop) |
-| Wind — soft, over wheat | 2026-02-10 | needed |
+| Wind — soft, over wheat | 2026-03-08 | ✅ `Wind over wheat.mp3` (132 s loop) |
 | Wind — mist-wet, with a distant small voice | one session | needed |
 | Rain — light, with distant heavy wing-beats | one session | needed |
 | Slow water drip on stone (cave) | 2025-12-07 | ✅ `Cave drip.mp3` (20.08 s loop) |
