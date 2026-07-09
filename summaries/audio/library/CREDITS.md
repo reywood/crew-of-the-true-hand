@@ -224,3 +224,20 @@ Sound Effect by <a href="https://pixabay.com/users/tanweraman-29554143/?utm_sour
 ```
 
 Plain-text fallback: *Ambient wind by Aman Kumar from Pixabay (https://pixabay.com).*
+
+---
+
+## Rain.mp3
+
+- **Source**: Pixabay — uploader [`DRAGON-STUDIO`](https://pixabay.com/users/dragon-studio-38165424/), Pixabay sound ID 398653
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 180.02 s (no trimming needed — no silence detected; the file is an explicit seamless-loop upload)
+- **Status**: Registered as the Tier-2 "rain" overlay for the 2026-02-10 cold open (`[MUSIC: low ember bed; rain thickening, and the far-off roll of wrong-coloured thunder]`). Thunder layer is not yet added and will need a separate asset if we want it.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/dragon-studio-38165424/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=398653">DRAGON-STUDIO</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=398653">Pixabay</a>
+```
+
+Plain-text fallback: *Calming rain loop by DRAGON-STUDIO from Pixabay (https://pixabay.com).*

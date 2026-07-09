@@ -228,10 +228,11 @@ BED_OVERLAY_ASSETS = {
     "wheat":                ("Wind over wheat.mp3",                COLD_OPEN_OVERLAY_DB),
     "mist":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
     "damp":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
+    "rain":                 ("Rain.mp3",                           COLD_OPEN_OVERLAY_DB),
     "pine":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
     "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
-    # rain (2026-02-10) and hell-fire crackle (2026-01-13): not yet in library.
-    # Cold-open bed falls back to hearth-only for those.
+    # hell-fire crackle (2026-01-13): not yet in library. Cold-open bed
+    # falls back to hearth-only for that one.
 }
 
 
