@@ -220,13 +220,15 @@ HEARTH_ASSET = "Fireplace.mp3"
 # appears, we start a hearth bed AND layer one of these on top per the flavor
 # keyword. Unmatched flavors fall back to hearth-only.
 BED_OVERLAY_ASSETS = {
-    "tavern":               ("Tavern ambience.mp3",              COLD_OPEN_OVERLAY_DB),
-    "drip":                 ("Cave drip.mp3",                    COLD_OPEN_OVERLAY_DB),
+    "tavern":               ("Tavern ambience.mp3",                COLD_OPEN_OVERLAY_DB),
+    "drip":                 ("Cave drip.mp3",                      COLD_OPEN_OVERLAY_DB),
     "bell tolling, urgent": ("Church bell — single (musical).mp3", COLD_OPEN_OVERLAY_DB),
     "bell tolling, faint":  ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 4.0),
     "bell tolling":         ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 2.0),
-    # wind flavors, rain + wing-beats, hell-fire crackle: not yet in library —
-    # cold-open bed falls back to hearth-only.
+    "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
+    "pine":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
+    # wind flavors — over-wheat / mist-wet — and rain + wing-beats and hell-fire
+    # crackle: not yet in library. Cold-open bed falls back to hearth-only.
 }
 
 

@@ -173,3 +173,20 @@ Sound Effect by <a href="https://pixabay.com/users/solarmusic-27851065/?utm_sour
 ```
 
 Plain-text fallback: *Cave drip ambience by solarmusic from Pixabay (https://pixabay.com).*
+
+---
+
+## Wind through trees.mp3
+
+- **Source**: Pixabay — uploader [`Traian Mitroi` (`traian1984`)](https://pixabay.com/users/traian1984-41907904/), Pixabay sound ID 186986
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 86.08 s (locally re-encoded — head/tail silence trimmed from the original 90.24 s Pixabay download)
+- **Status**: Registered as the Tier-2 "wind — thin, high (pine forest)" overlay. Covers cold-open cues in 2025-11-12 (pine forest ambience under Vandal's opening) and 2026-01-27 (aboard Zephyros's floating tower). Long enough to loop under a full cold-open beat.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/traian1984-41907904/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=186986">Traian Mitroi</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=186986">Pixabay</a>
+```
+
+Plain-text fallback: *Wind through trees ambience by Traian Mitroi from Pixabay (https://pixabay.com).*
