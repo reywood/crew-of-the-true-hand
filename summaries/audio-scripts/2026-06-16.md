@@ -1,5 +1,5 @@
 # Tales of the True Hand — 2026-06-16
-## The Crew comes to Waterdeep
+## Milk-White Eyes at the Deep Water Inn
 
 ---
 
@@ -7,7 +7,7 @@
 
 [MUSIC: low ember bed; a distant tavern hum]
 
-VANDAL: *(hushed, drawing close)* Listen. There came a night, in the City of Splendours, when a dozen souls in a dockside inn set down their cups all at once. Their laughter died in their throats. Their eyes turned milk-white — a colour no living eye should be. And from the mouth of a stout woman, in a voice one traveller had heard before, in a dream beneath the sea, came seven words.
+VANDAL: *(hushed, drawing close)* Listen. There came a night, in the City of Splendours, when a dozen souls in a dockside inn set down their cups all at once. Their laughter died in their throats. Their eyes turned milk-white — a colour no living eye should be. And from the mouth of a stout woman with a kitchen knife in her hand, in a voice one traveller had heard before — in a dream, beneath a black and sleeping sea — came six words.
 
 VANDAL: *(quoted, cold, hushed)* "You should have taken our offer."
 
@@ -19,85 +19,89 @@ VANDAL: *(quoted, cold, hushed)* "You should have taken our offer."
 
 [MUSIC: signature theme, brief]
 
-VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, the four heroes reach the City of Splendours — and find its splendours reach back.
+VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand. Tonight, the four heroes come to Waterdeep — and tonight, for once, your storyteller was standing in the tale.
 
 [MUSIC: settles under, becomes bed]
 
 ---
 
-## [ACT ONE — At the gate]
+## ACT ONE — At the south gate
 
-VANDAL: *(warm, unfolding)* Picture it. Four road-weary travellers, dust on their boots, come up out of the south to the great south gate of Waterdeep. And on the parchment of every hand within the city — their own faces, on the front page of the Waterdeep Wazoo. Not, I confess, entirely flattering. But faces enough, and famous enough, that the gate guard tipped his cap and did the only sensible thing. He asked for an autograph.
+VANDAL: *(measured, personal)* A confession, before we begin. Every tale I have told at this fire, I carried to you secondhand. Not this one. This one I saw with my own eyes. I told you, last time, that an old storyteller was waiting to cross their path in the City of Splendours. Friend — that storyteller was me.
 
-VANDAL: *(amused)* Fair play. He got one. The Crew of the True Hand walked into Waterdeep as celebrities.
+VANDAL: *(warm, unfolding)* But the gate first. Picture it. Four road-weary travellers come up out of the south to the great gate of Waterdeep — and on the front page of the Waterdeep Wazoo, in every hand in the city, their own four faces. "Giant Killers," ran the headline. The gate guard did the only sensible thing a man can do when legends walk up to his post. He asked for an autograph.
 
-VANDAL: *(shifting quieter)* Just ahead of them, though, a goliath and his wife were being turned away. The guard had mistaken the great man for a giant — an easy error in these days, when giants walk the North with murder in their hearts. The goliath — Cormeer, by name, who speaks Common and Elvish and Giant and Yeti besides — pleaded that he was only a man come for work at the docks. The guard was unconvinced.
+VANDAL: *(amused)* They signed. He traded them a fresh copy for it — with a fine map of the city folded inside.
 
-VANDAL: *(warm)* But Fiz — small Fiz of Halruaa, tinker and inventor — Fiz vouched for the man. And in he went, that great goliath, with gratitude spilling from every pocket. Mark that small kindness. In the great tales, small kindnesses become, in time, great things.
+VANDAL: *(shifting, quieter)* Just ahead of them, though, a very different welcome. A goliath and his wife, being turned away at that same gate. The guard had taken the great grey man for a giant — an easy fear, in days when true giants walk the North with murder in their hearts. The goliath, Cormeer by name, pleaded in four tongues — Common, Elvish, Giant, and Yeti besides — that he was only a man with work waiting at the docks, under a ship-man called Brindle. Hold that name, friend. It comes back.
 
-[STING: chime — 1s]
-
----
-
-## [ACT TWO — In Chazlauth's house]
-
-VANDAL: *(measured, unfolding)* Their next stop, the house of one Chazlauth. Now — a word about Chazlauth. Waterdeep is a city of splendours. And Chazlauth's chosen splendour, above all others, is dragons. When the four heroes crossed his threshold, a silver dragon no larger than a house cat was underfoot. Stolen, illegal, and adorable. And Chazlauth did not seem troubled at all.
-
-VANDAL: *(warm)* The wizard spoke to them of Force Gray — that famous, and now-fallen, company of Waterdeep, of which the giant Harshnag had once been counted a member. He pointed them at a bard — your storyteller, if you will forgive me the vanity — who kept vigil at the statue of Harshnag in the North Ward.
-
-VANDAL: *(leaning in)* And then Chazlauth spoke a name that has since become the very heart of their tale. Old Gnawbone. A green dragon, dwelling in Kryptgarden Forest, hating the giants for reasons of her own. A monster, friend. But perhaps — perhaps — a monster who might one day serve their turn.
-
-VANDAL: *(warm)* To each of the four, Chazlauth pressed a potion of poison resistance. And Naxene the noble — you'll remember Naxene — offered them the run of her guest house in the city. They took both, gratefully.
+VANDAL: *(warm)* And Fiz — small Fiz of Halruaa, no taller than the guard's belt — spoke up and vouched that a goliath is no more a giant than a gnome is a halfling. In went Cormeer and his wife, and the big man swore he would remember it. Mark that small kindness. In the great tales, small kindnesses become, in time, great things.
 
 [STING: chime — 1s]
 
 ---
 
-## [ACT THREE — At the statue]
+## ACT TWO — Chazlauth's dragons
 
-VANDAL: *(shifting, personal)* And now — well. I confess. This next part I know because I was there.
+VANDAL: *(measured, unfolding)* Naxene — the noblewoman you will remember from Golden Fields — walked them next to the house of a wizard called Chazlauth. And a word about Chazlauth. Waterdeep is a city of splendours, and every soul in it chooses their own. Chazlauth's splendour is dragons. Dragon lore, dragon heraldry, the Draconic tongue — and, darting between the crew's boots as the door swung open, a baby silver dragon. A wyrmling, friend, bright as a new coin. Stolen. Illegal. Adorable. Chazlauth was not troubled in the least.
 
-VANDAL: *(warm)* At the plinth of the great statue of Harshnag — axe on shoulder, "Death to giants" painted across its base — the four came to me. And I told them what I knew.
+VANDAL: *(warm, telling)* Over the recovered hatchling, the wizard gave them what they had come for. Force Gray — the famous, now-fallen adventuring company of Waterdeep, which counted Laeral Silverhand, Open Lord of the city, in its ranks. And counted, too, a frost giant. Harshnag. The very giant the crew has been chasing word of since the cloud giant Zephyros first spoke his name.
 
-VANDAL: *(measured, telling)* That Harshnag's last letter, sent by raven, had placed him in Silverymoon. That the Harpers — a secret and scattered order of the Realms — kept a network of teleporting circles that could bring the crew to that city in the space of a breath. That the Harper they must seek out was Yackerty, a dwarf, in the Trades Ward of Waterdeep itself.
+VANDAL: *(leaning)* Then Chazlauth leaned close and offered a name I suspect will echo through many fires to come. Old Gnawbone. A green dragon — ancient, patient, venomous — dwelling in Kryptgarden Forest, who hates the giants for reasons all her own. A monster, make no mistake. But when a giant lord's conch must be pried from a giant lord's hand... perhaps a monster is exactly what the work requires. He named a gentler prospect too: Vexalanthus, a copper dragon and old ally of Force Gray, who patrols the High Road still.
 
-VANDAL: *(warm)* And I confirmed what the cloud giant Zephyros had already suggested to them: reach Harshnag, and Harshnag will reach the Oracle. Find the Oracle, and the Oracle will name the way to a giant lord's conch. And perhaps a dragon — perhaps — may prove the means to take that conch.
+VANDAL: *(warm)* Into each of four sets of hands the wizard pressed a Potion of Poison Resistance. And Naxene offered her guest house for as long as they cared to stay. They took both, gratefully.
 
-VANDAL: *(quieter)* I did not tell them what Yackerty would demand of them. I could not. Some doors, friend, are only opened by the hand that knocks.
+[STING: chime — 1s]
+
+---
+
+## ACT THREE — The bard at the statue
+
+VANDAL: *(shifting, personal)* And now — well. Now the tale walks up to me.
+
+VANDAL: *(warm)* In the North Ward of Waterdeep stands a statue of Harshnag. Axe on shoulder, gaze to the north, and across the plinth, in paint the Watch never quite scrubs off, three words: death to giants. I keep a vigil there most days, friend. I sing about him. I served with Force Gray myself, in my time, in my way — and when four strangers came to the plinth asking after my old companion, I confess my heart went up like a struck spark.
+
+VANDAL: *(measured, telling)* I told them what I knew. That Harshnag's last letter came to me by raven, and placed him in Silverymoon. That the fastest way there is no road at all, but the Harpers — that scattered, secret, half-organized order of meddlers and do-gooders, marked by silver harp pins and tattoos, who keep a network of teleportation circles across the Realms. Fiz's face lit at that; he had befriended a Harper once, back home in Halruaa. And I gave them the name of the Harper to seek. Yackerty. A dwarf, in the Trades Ward of this very city.
+
+VANDAL: *(warm)* And I confirmed the chain that Zephyros had first hinted at. Reach Harshnag, and Harshnag can bring you to the Oracle, high in the Spine of the World. Reach the Oracle, and the Oracle can name the way to a giant lord's conch. And to take a conch from a giant lord — well. That, friend, is where a dragon may earn her keep.
+
+VANDAL: *(quieter)* One more thing I told them, because it gladdened them much. Their old shipmate Ol' Rourke — navigator of the True Hand, one of the few the sea gave back — was alive, and loud, and holding court at the Deep Water Inn in the Dock Ward. I offered to walk them there come morning. I wanted to see their faces when they found him.
 
 [STING: bridge — 2s]
 
 ---
 
-## [ACT FOUR — The falling statue]
+## ACT FOUR — The statue that fell
 
-VANDAL: *(amused, storyteller)* Come the morning — and here is a story worth carrying home. A statue. Brass. Two storeys tall. Walking of its own accord through the streets of Waterdeep, as things sometimes do in this city. It began to fail. It tilted. It tilted further. And it began, ponderously, to fall. Toward a crowd.
+VANDAL: *(low)* Toz slept badly that night. The same dream as always, worse than ever — stranded in black water, something vast beneath, a cold voice bidding him enter the sea. Hold that too, friend. The dream was not done with him.
 
-VANDAL: *(bright)* In perfect unison — as if they had practised it a hundred times — Toz and Fiz cast Feather Fall. And that great brass thing settled to earth like a leaf. Fiz, being Fiz, then diagnosed the fault. And the inventor of the statue — one Garley Gond, of Waterdeep — was so overcome that he pulled a leaking magical bladder from the machine's belly, and pressed it into the tinker's hands.
+VANDAL: *(amused, storyteller)* But the morning first — and here is a story worth carrying home. A statue. Brass. Two storeys tall. Walking through the streets on its own two feet, as things sometimes do in Waterdeep. I saw it myself, over the rooftops. And then I saw it stagger. It tilted. It tilted further. And it began, ponderously, to fall — toward a street full of people.
 
-VANDAL: *(amused)* An alchemy jug. The kind that will give you fresh water when you thirst, wine when you feast, oil when you mend, and rarer draughts besides. A good day, friend, for Fiz of Halruaa.
+VANDAL: *(bright)* In perfect unison, as if they had drilled it a hundred mornings, Toz and Fiz threw up twin Feather Falls. Two storeys of brass and gearwork came down onto the cobbles soft as a leaf on a pond. Not a soul was scratched. And while the crowd was still remembering how to breathe, Fiz was already elbow-deep in the machine's workings, talking its maker through the fault.
+
+VANDAL: *(warm)* That maker — Garley Gond, a guildsman of the Wonderbringer's own faith — was so overcome that he drew a leaking magical bladder from the statue's belly and pressed it on the little gnome then and there. Fiz's tinker's eye knew it at once. An Alchemy Jug, friend. Water when you thirst, wine when you feast, oil when you mend — and rarer draughts besides.
 
 [STING: bridge — 2s]
 
 ---
 
-## [ACT FIVE — At the Deep Water Inn]
+## ACT FIVE — The Deep Water Inn
 
-VANDAL: *(dropping into serious)* And then the docks. And then the Deep Water Inn.
+VANDAL: *(measured)* Then we walked for the docks, the five of us. On the way, Toz slipped aside into a timbered Wave Hall of Valkur — god of sailors, captain of captains — and confessed to the priest there that he had loved the sea all his life, and now could barely stand to look at it. He came out with Valkur's holy book under his arm and penance to attempt. A captain trying to find his way back to the water, friend. Remember it.
 
-VANDAL: *(measured)* There, upon a table, stood Ol' Rourke — navigator of the wrecked True Hand — telling any who would listen the tale of the giants who had sunk his ship. He gave the crew a name they had already heard: Brindle Stormtide, halfling, who could set them up with a new vessel.
+VANDAL: *(warm)* At the Deep Water Inn we found Ol' Rourke exactly as promised — up on a table, one boot on a stool, giving a crowd the tale of the giants that sank the True Hand. The reunion was loud, and it was good. And Rourke gave them a name for the days ahead: Brindle Stormtide, a halfling who deals in ships — the same Brindle the goliath had named at the gate. Two roads, one door.
 
-VANDAL: *(warm)* Toz had stopped on the way in at the Wave Hall — the temple of Valkur, god of sailors — and confessed to the priest his growing fear of water, and of the shape that spoke to him from beneath the sleeping sea. He left the temple with scripture, and with penance to attempt.
-
-VANDAL: *(dropping, drawing close)* And then — friend. And then the story I opened with. A woman in the room went still. Her eyes turned milk-white. And in a voice one of the four had heard before, from beneath the waves in his sleep, she said —
+VANDAL: *(dropping, drawing close)* And then, friend — the story I opened with. A stout woman, a kitchen knife still in her hand, leaned in over Toz's shoulder. "Excuse me, sir," she said. And her eyes went milk-white. And in the voice from beneath the black water of his dreams —
 
 VANDAL: *(quoted, cold, hushed)* "You should have taken our offer."
 
-VANDAL: *(measured, taut)* Twelve patrons and two of the City Watch turned with her.
+VANDAL: *(taut)* A dozen patrons turned with her, white-eyed. Two of the City Watch stepped in front of the only door — and their eyes were white too.
 
-VANDAL: *(quickening)* But the four moved fast. Fiz opened with a dart-flourish and a thrown poisoned dagger. Woz kept the peace with a quarterstaff — non-lethal, as an Eldath cleric will. Toz shape-watered a lit lamp before its flame could take the ceiling. And the instigator dropped. And when he dropped, every white eye in the room cleared, as if a candle had been snuffed.
+VANDAL: *(quickening)* I have seen my share of tavern brawls. I have never seen one begin like that. But the four moved as if they had been waiting for it all their lives. Fiz opened with a flourish — hurled a dagger the length of the room into the dart board, dead centre, just to turn the puppets' heads — and his next dagger carried poison, and found the man behind it all. For there was a man, friend, calm amid the madness, who gave the four one cold sentence: "We wish to claim what is ours." Woz waded in with his quarterstaff and laid the thralls down gently, sparing every one — for Eldath's own do not butcher the borrowed. Toz caught a falling oil lamp with Shape Water and drowned the flame before it could take the room. And the instigator, pressed from every side, went down and did not rise.
 
-VANDAL: *(quieter)* But the words, friend. The words remain.
+VANDAL: *(quieter)* And the moment he fell, every white eye in that room cleared at once — like a candle snuffed. The barkeep stared at the knife in her hand. The Watchmen stared at their crossbows. Not one could say what had held them. But I heard the words, friend, with my own ears. Our offer. What is ours.
+
+VANDAL: *(darker)* Something beneath the sea has been making Toz an offer in his sleep. And something, friend, does not take kindly to being refused.
 
 [MUSIC: minor swell — 4s]
 
@@ -105,9 +109,9 @@ VANDAL: *(quieter)* But the words, friend. The words remain.
 
 ## [CLOSING — 30s]
 
-VANDAL: *(reflective, drawing to a close)* And so a chapter closes, in a guest house lent by a noblewoman. Ahead of the four — Yackerty, in the Trades Ward. Old Gnawbone, in Kryptgarden Forest. Harshnag, somewhere in Silverymoon. A ship, perhaps, if Brindle Stormtide is willing. And whoever, from beneath the sea, still dreams to Toz — still watches, still offers.
+VANDAL: *(reflective, drawing to a close)* And so the chapter closes in a guest house lent by a noblewoman. Ahead of the four: Yackerty the Harper, in the Trades Ward. Silverymoon beyond him, and Harshnag, and the Oracle beyond them both. A green dragon in Kryptgarden Forest, if they dare her. A ship, perhaps, if Brindle Stormtide is willing. And a voice beneath the sea that has stopped asking politely.
 
-VANDAL: *(warm)* Rest well tonight, heroes. The road waits for you at dawn.
+VANDAL: *(warm)* Rest well tonight, heroes. I will keep the vigil at the statue a while longer.
 
 VANDAL: *(warm, signature)* I am Vandal Lovelace. This has been a Tale of the True Hand.
 
