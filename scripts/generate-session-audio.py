@@ -15,11 +15,19 @@ Cache behavior:
     ElevenLabs call. Editing a single line in the script re-TTSes only that
     chunk. Change --voice or --model to invalidate everything.
 
-Music / sting layering (v2):
+Music / sting layering (v3):
     STING cues → replaced by the matching asset in summaries/audio/library/.
     Discrete MUSIC cues (signature theme, minor swell, outro theme) → played
-    inline at low mixed volume. Sustained under-beds (hearth ambience mixed
-    under speech) are NOT handled here — that's v3 sidechain-mix work.
+    inline at low mixed volume.
+    Sustained under-beds (hearth ambience + cold-open flavor overlays) ARE now
+    mixed under the narration: a `[MUSIC: settles under, becomes bed]` or
+    `[MUSIC: low ember bed; <flavor>]` cue opens a bed span that runs until the
+    next bed-transition cue (signature theme / minor swell / outro theme). The
+    bed loops Fireplace.mp3 (plus a per-flavor overlay in cold opens), normalized
+    to an absolute target of ~-40 dBFS (≈18 dB under the ~-22 dBFS voice) and
+    sidechain-ducked ~2 dB more under Vandal's voice, rising in the silences.
+    Disable with --no-beds; music-only re-runs still reuse the TTS chunk cache
+    and cost zero ElevenLabs credits.
 
 Requires:
     pip install elevenlabs
@@ -79,9 +87,14 @@ STING_CHIME_DB = -5.0
 STING_BRIDGE_DB = -6.0
 STING_LOW_CHORD_DB = -3.0  # cold-open tag — wants to hit
 # Sustained under-beds — much quieter, sit well below the narration.
-HEARTH_BED_DB = -22.0        # crackling fire under a full act of speech
-COLD_OPEN_HEARTH_DB = -24.0  # a touch quieter under the low-chord sting
-COLD_OPEN_OVERLAY_DB = -20.0 # tavern/drip/bell overlay in cold-open ambience
+# These are ABSOLUTE target mean levels (dBFS), not relative attenuations: each
+# bed asset is normalized to hit its target regardless of the asset's own
+# inherent loudness (Fireplace.mp3 is ~-42 dBFS raw, Rain ~-20, etc.). Speech
+# sits at ~-22 dBFS, so a hearth bed at -40 dBFS reads ~18 dB under the voice —
+# present in the gaps, unobtrusive under narration. See render_bed().
+HEARTH_BED_DB = -40.0        # crackling fire under a full act of speech
+COLD_OPEN_HEARTH_DB = -42.0  # a touch quieter under the low-chord sting
+COLD_OPEN_OVERLAY_DB = -36.0 # tavern/drip/bell overlay in cold-open ambience
 
 # --------------------------------------------------------------------------
 # delivery presets (unchanged from v1)
@@ -287,23 +300,48 @@ def probe_duration_ms(path: Path) -> int:
         return 0
 
 
+_ASSET_MEAN_CACHE = {}
+
+
+def _asset_mean_dbfs(path: Path) -> float:
+    """Measure an asset's mean volume (dBFS) via ffmpeg volumedetect, memoized
+    per path. Bed assets vary wildly in inherent loudness (Fireplace ~-42 dBFS,
+    Rain ~-20), so we normalize each to an absolute target rather than applying a
+    fixed relative attenuation that lands them at unpredictable levels."""
+    key = str(path)
+    if key not in _ASSET_MEAN_CACHE:
+        proc = subprocess.run(
+            ["ffmpeg", "-t", "30", "-i", str(path),
+             "-af", "volumedetect", "-f", "null", "-"],
+            capture_output=True, text=True,
+        )
+        m = re.search(r"mean_volume:\s*(-?[0-9.]+) dB", proc.stderr)
+        # Fall back to a neutral guess if volumedetect is silent (never observed).
+        _ASSET_MEAN_CACHE[key] = float(m.group(1)) if m else -23.0
+    return _ASSET_MEAN_CACHE[key]
+
+
 def render_bed(hearth_path: Path, overlay_path, duration_sec: float,
                 out_path: Path, hearth_db: float = HEARTH_BED_DB,
                 overlay_db: float = COLD_OPEN_OVERLAY_DB) -> Path:
     """Build a bed of the given duration by looping the hearth asset (and,
-    if provided, an overlay), setting per-track volumes, applying fade in
-    and fade out. Written to out_path; returns out_path."""
+    if provided, an overlay), normalizing each track to its ABSOLUTE target
+    level (hearth_db / overlay_db are dBFS targets, not attenuations), applying
+    fade in and fade out. Written to out_path; returns out_path."""
     fade_in = 1.0
     fade_out = 1.5
     fade_out_start = max(0.0, duration_sec - fade_out)
+    # Gain to move each asset from its measured mean up/down to the target level.
+    hearth_gain = hearth_db - _asset_mean_dbfs(hearth_path)
     if overlay_path is not None:
+        overlay_gain = overlay_db - _asset_mean_dbfs(overlay_path)
         cmd = [
             "ffmpeg", "-y",
             "-stream_loop", "-1", "-i", str(hearth_path),
             "-stream_loop", "-1", "-i", str(overlay_path),
             "-filter_complex",
-            f"[0:a]volume={hearth_db}dB,atrim=0:{duration_sec}[a0];"
-            f"[1:a]volume={overlay_db}dB,atrim=0:{duration_sec}[a1];"
+            f"[0:a]volume={hearth_gain}dB,atrim=0:{duration_sec}[a0];"
+            f"[1:a]volume={overlay_gain}dB,atrim=0:{duration_sec}[a1];"
             f"[a0][a1]amix=inputs=2:duration=first:normalize=0,"
             f"afade=t=in:st=0:d={fade_in},"
             f"afade=t=out:st={fade_out_start}:d={fade_out}[out]",
@@ -318,7 +356,7 @@ def render_bed(hearth_path: Path, overlay_path, duration_sec: float,
             "ffmpeg", "-y",
             "-stream_loop", "-1", "-i", str(hearth_path),
             "-af",
-            f"volume={hearth_db}dB,"
+            f"volume={hearth_gain}dB,"
             f"atrim=0:{duration_sec},"
             f"afade=t=in:st=0:d={fade_in},"
             f"afade=t=out:st={fade_out_start}:d={fade_out}",
@@ -331,24 +369,56 @@ def render_bed(hearth_path: Path, overlay_path, duration_sec: float,
     return out_path
 
 
+# Sidechain-ducking parameters. The bed is the compressor's *main* input; the
+# speech+stings bus is the *sidechain key*. When Vandal speaks, the bed ducks by
+# roughly SIDECHAIN_DUCK_DB; in the silences it rises back to its resting level.
+# threshold/ratio are tuned for a *light* ~2 dB duck (the bed already sits ~22 dB
+# under speech, so this is a gentle secondary breath, not aggressive pumping).
+SIDECHAIN_THRESHOLD = 0.03   # speech level (linear) above which ducking engages
+SIDECHAIN_RATIO = 2.0        # gentle
+SIDECHAIN_ATTACK_MS = 15.0   # duck quickly when speech starts
+SIDECHAIN_RELEASE_MS = 400.0 # rise back smoothly in the gaps between phrases
+SIDECHAIN_KEY_GAIN = 4.0     # boost the key so quiet narration still triggers it
+
+
 def mix_top_with_beds(top_path: Path, bed_specs, out_path: Path) -> None:
     """bed_specs: list of (bed_path, delay_ms). Mixes top_path (the speech +
-    inline-music bus) with each bed at its start offset. Uses amix with
-    normalize=0 so the top layer's level isn't attenuated by the mix."""
+    inline-music bus) with each bed at its start offset.
+
+    Each bed is run through `sidechaincompress` keyed off a copy of the
+    speech+stings bus, so the bed ducks ~2 dB whenever Vandal is speaking and
+    rises back up in the silences. The un-ducked speech bus is then mixed on top
+    with amix normalize=0 so its own level is never attenuated by the mix."""
     if not bed_specs:
         shutil.copy2(top_path, out_path)
         return
+    n = len(bed_specs)
     inputs = ["-i", str(top_path)]
     for bed_path, _ in bed_specs:
         inputs.extend(["-i", str(bed_path)])
+
     filters = []
-    labels = ["[0:a]"]
+    # Split the speech bus into 1 (final mix) + n (one sidechain key per bed).
+    split_outs = "[spmix]" + "".join(f"[key{i}]" for i in range(1, n + 1))
+    filters.append(f"[0:a]asplit={n + 1}{split_outs}")
+
+    mix_labels = ["[spmix]"]
     for i, (_, delay_ms) in enumerate(bed_specs, start=1):
-        filters.append(f"[{i}:a]adelay={delay_ms}|{delay_ms}[b{i}]")
-        labels.append(f"[b{i}]")
-    n = len(bed_specs) + 1
+        # Position the bed at its start offset, then duck it against the speech.
+        filters.append(f"[{i}:a]adelay={delay_ms}|{delay_ms}[bd{i}]")
+        filters.append(
+            f"[key{i}]volume={SIDECHAIN_KEY_GAIN}[k{i}]"
+        )
+        filters.append(
+            f"[bd{i}][k{i}]sidechaincompress="
+            f"threshold={SIDECHAIN_THRESHOLD}:ratio={SIDECHAIN_RATIO}:"
+            f"attack={SIDECHAIN_ATTACK_MS}:release={SIDECHAIN_RELEASE_MS}:"
+            f"makeup=1:level_sc=1[ducked{i}]"
+        )
+        mix_labels.append(f"[ducked{i}]")
+
     filters.append(
-        f"{''.join(labels)}amix=inputs={n}:duration=first:"
+        f"{''.join(mix_labels)}amix=inputs={n + 1}:duration=first:"
         f"dropout_transition=0:normalize=0[out]"
     )
     cmd = [

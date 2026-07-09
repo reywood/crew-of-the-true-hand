@@ -16,17 +16,19 @@ The core loop — new session → notes / transcript → summary → images → 
 
 ## Audio & podcast pipeline
 
-### Sustained under-bed mixing (music/ambience under speech)
+### Sustained under-bed mixing (music/ambience under speech) — DONE
 
-Pipeline v2 handles discrete `[STING: …]` cues and one-off `[MUSIC: …]` cues (signature theme, minor swell, outro theme) — it splices those in as inline elements between speech chunks. What it does NOT do yet is **layer sustained beds under the narration itself**: the `[MUSIC: settles under, becomes bed]` cue that starts every episode, and the `[MUSIC: low ember bed; <flavor>]` cold-open cues, are silently skipped. The show currently doesn't have the hearth-crackle-under-Vandal atmosphere its whole storyteller conceit was built around.
+Pipeline v2 handled discrete `[STING: …]` cues and one-off `[MUSIC: …]` cues (signature theme, minor swell, outro theme) — splicing those in as inline elements between speech chunks — but did NOT layer sustained beds under the narration itself: the `[MUSIC: settles under, becomes bed]` cue and the `[MUSIC: low ember bed; <flavor>]` cold-open cues were silently skipped, so the show lacked its hearth-crackle-under-Vandal atmosphere.
 
-Wiring this needs sidechain-style ffmpeg mixing:
-1. Track the current bed state through the events list (idle → hearth on → hearth off).
-2. Render the speech-plus-stings track as one bus, then mix in `Fireplace.mp3` (looped to length) at ~ -22 dB during any "bed on" span.
-3. For cold-open ambience overlays (tavern hum, cave drip, distant bells, wind, rain, hell-fire), also layer the specific asset per the flavor label.
-4. Apply a light sidechain compressor keyed to speech so the bed ducks another ~2 dB when Vandal is speaking, then rises back up in the silences.
+Done in `scripts/generate-session-audio.py`:
+- **Bed spans**: bed cues open a span that runs until the next transition cue (`settles under` / `low ember bed` open; `signature theme` swaps to a Britons bed; `minor swell` / `outro theme` close). `render_bed()` loops `Fireplace.mp3` to the span length (cold opens also layer a per-flavor overlay via `resolve_bed_overlay` — tavern / drip / bell / wind / wheat / mist / rain / hell-fire) with fade in/out.
+- **Sidechain ducking**: `mix_top_with_beds()` splits the speech+stings bus with `asplit`, `adelay`s each bed to its start offset, ducks it through `sidechaincompress` keyed off a gain-boosted copy of the speech bus (`SIDECHAIN_*` constants: threshold 0.03, ratio 2, attack 15ms, release 400ms), then `amix …:normalize=0` mixes the un-ducked speech on top so the voice is never attenuated.
+- **Gain staging (the bit that made it actually audible)**: the level constants (`HEARTH_BED_DB` etc.) are **absolute dBFS targets**, not relative attenuations. `render_bed` measures each asset's own mean loudness (`_asset_mean_dbfs`, memoized via ffmpeg `volumedetect`) and normalizes it to the target — necessary because assets range from ~-15 dBFS (The Britons) to ~-47 dBFS (Wind through trees). Beds sit ~18 dB under the ~-22 dBFS voice. (The first cut used relative `volume=-22dB`, which put the already-quiet -42 dBFS fireplace at -64 dBFS — inaudible. Fixed.)
+- TTS chunk cache is untouched — music-only re-runs cost zero ElevenLabs credits. `--no-beds` disables the layer for A/B.
 
-Estimated effort: a solid afternoon of ffmpeg filtergraph work. Highest-remaining-impact change to the audio product now that Tier-1 discrete assets are in.
+Verified across all 11 episodes: a mid-hearth-span window has zero sub-(-50 dB) silences (the bed fills every speech gap), and phase-isolating the bed against the `--no-beds` render shows real bed energy (~-43 dBFS in the cold open) where before there was only codec-floor noise.
+
+Follow-on (not blocking): the seams between bed spans (cold-open→signature→hearth) leave ~0.3s dips at the fade boundaries — could cross-fade them. And `SIDECHAIN_*` / target levels are easy to retune if the bed wants to sit louder/quieter.
 
 ### Attributions in the podcast feed — DONE
 
