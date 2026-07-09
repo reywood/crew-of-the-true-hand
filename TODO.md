@@ -28,9 +28,11 @@ Wiring this needs sidechain-style ffmpeg mixing:
 
 Estimated effort: a solid afternoon of ffmpeg filtergraph work. Highest-remaining-impact change to the audio product now that Tier-1 discrete assets are in.
 
-### Attributions in the podcast feed
+### Attributions in the podcast feed — DONE
 
 Every episode of "Tales of the True Hand" now uses at least four Pixabay assets and one Kevin MacLeod track (The Britons, CC BY 4.0). Pixabay's license doesn't require attribution — but The Britons does, and any future CC-BY asset we add will too. Thread the attribution list from `summaries/audio/library/CREDITS.md` through `podcast_feed()` in `website/generate.py` so every episode's `<description>` / `<content:encoded>` carries the required credits automatically. Currently the attribution lives only in the repo's CREDITS.md, which listeners won't see.
+
+Done: `_parse_audio_credits()` / `_audio_credits_text()` in `website/generate.py` read `summaries/audio/library/CREDITS.md`, split assets by whether their license requires attribution (CC-BY: yes, verbatim wording; Pixabay: courtesy roll-up), and `podcast_feed()` appends the block to every episode's `<description>`, `<itunes:summary>`, and a new `<content:encoded>` HTML variant. Any future CC-BY asset added to CREDITS.md is picked up automatically.
 
 ### In-run TTS dedup
 
