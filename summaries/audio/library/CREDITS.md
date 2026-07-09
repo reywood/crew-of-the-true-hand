@@ -207,3 +207,20 @@ Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/
 ```
 
 Plain-text fallback: *Wheat in the wind ambience by freesound_community from Pixabay (https://pixabay.com).*
+
+---
+
+## Mist-damp wind.mp3
+
+- **Source**: Pixabay — uploader [`Aman Kumar` (`tanweraman`)](https://pixabay.com/users/tanweraman-29554143/), Pixabay sound ID 350417
+- **License**: Pixabay Content License — <https://pixabay.com/service/license-summary/>
+- **Duration**: 32.39 s (no trimming needed — no silence detected)
+- **Status**: Registered as the Tier-2 "wind — mist-wet" overlay for the 2026-05-12 cold open (`[MUSIC: low ember bed; a mist-damp hush, one far-off drunken voice]`). Filename is "desert wind" on Pixabay but the recording reads as a damp atmospheric wind — the auditioning was the important step. Long enough to loop under a cold-open beat.
+
+**Attribution** (voluntary per the Pixabay Content License):
+
+```html
+Sound Effect by <a href="https://pixabay.com/users/tanweraman-29554143/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=350417">Aman Kumar</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=350417">Pixabay</a>
+```
+
+Plain-text fallback: *Ambient wind by Aman Kumar from Pixabay (https://pixabay.com).*

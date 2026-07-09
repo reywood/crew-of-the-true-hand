@@ -226,10 +226,12 @@ BED_OVERLAY_ASSETS = {
     "bell tolling, faint":  ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 4.0),
     "bell tolling":         ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 2.0),
     "wheat":                ("Wind over wheat.mp3",                COLD_OPEN_OVERLAY_DB),
+    "mist":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
+    "damp":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
     "pine":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
     "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
-    # remaining wind flavor (mist-wet) and rain + wing-beats and hell-fire
-    # crackle: not yet in library. Cold-open bed falls back to hearth-only.
+    # rain (2026-02-10) and hell-fire crackle (2026-01-13): not yet in library.
+    # Cold-open bed falls back to hearth-only for those.
 }
 
 
