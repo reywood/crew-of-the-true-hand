@@ -40,9 +40,11 @@ Done: `_parse_audio_credits()` / `_audio_credits_text()` in `website/generate.py
 
 When the same spoken line appears twice in one script (e.g. `"You should have taken our offer."` in 2026-06-16, once in the cold open and once in Act Four), both hit the TTS API on first run because we only check the pre-run manifest for cache hits, not the in-progress one. Cheap fix in `scripts/generate-session-audio.py`: also consult `manifest_out["chunks"]` on cache miss before calling ElevenLabs. Small dollar impact per episode; still cleaner behavior.
 
-### Chapter markers (MP3 ID3 chapters)
+### Chapter markers (MP3 ID3 chapters) — DONE
 
 Podcast apps (Overcast, Apple, Pocket Casts) render ID3 chapter tags as tappable seek points. Add one chapter per `## ACT` heading in the script so listeners can skip to specific beats. Options: `mutagen` (Python) to write CTOC / CHAP frames directly, or `ffmpeg -f ffmetadata` to pass a metadata file at concat time.
+
+Done via the `ffmpeg -f ffmetadata` route (no new dependency) in `scripts/generate-session-audio.py`: `parse_script` emits zero-duration `("chapter", title)` events for each `## ` section heading via `_chapter_title()` — the cold open, every ACT, and the closing; it skips the H1 show title, the episode subtitle, and the short `[TITLE]` card, and unwraps bracketed headings (`## [ACT ONE — …]`) so both bracketed and unbracketed scripts work. The build loop records `cursor_ms` at each marker (which equals the final-mix timeline, since beds mix under with `duration=first`), and `embed_chapters()` remuxes `final.mp3` in place with `-map_chapters` (codec copy) to write ID3 CHAP/CTOC frames. Each chapter runs to the next chapter's start (last → file duration). All 11 episodes rebuilt (6–7 chapters each, zero TTS credits); frames survive the `shutil.copy2` into `site/audio/sessions/` and the feed enclosure.
 
 ### Richer episode descriptions in the feed
 

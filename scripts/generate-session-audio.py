@@ -29,6 +29,12 @@ Music / sting layering (v3):
     Disable with --no-beds; music-only re-runs still reuse the TTS chunk cache
     and cost zero ElevenLabs credits.
 
+Chapters:
+    Each ## section heading (cold open, every ACT, closing) becomes an ID3
+    chapter, embedded via ffmpeg -f ffmetadata after the final mix. Podcast apps
+    render these as tappable seek points. The H1 show title, the episode subtitle,
+    and the short [TITLE] card are not chapters.
+
 Requires:
     pip install elevenlabs
     ffmpeg on PATH
@@ -300,6 +306,40 @@ def probe_duration_ms(path: Path) -> int:
         return 0
 
 
+def _ffmeta_escape(value: str) -> str:
+    """Escape a value for an ffmetadata file: =, ;, #, \\ and newlines."""
+    for ch in ("\\", "=", ";", "#"):
+        value = value.replace(ch, "\\" + ch)
+    return value.replace("\n", " ").replace("\r", " ")
+
+
+def embed_chapters(final_path: Path, chapters, total_ms: int, tmp_dir: Path) -> None:
+    """Remux final_path in place, adding one ID3 chapter per entry in `chapters`
+    (list of {"title", "at_ms"}, in order). Each chapter runs from its own start
+    to the next chapter's start (last one to total_ms). ffmpeg writes these as
+    ID3v2 CHAP/CTOC frames, which podcast apps render as tappable seek points."""
+    lines = [";FFMETADATA1"]
+    for i, ch in enumerate(chapters):
+        start = max(0, ch["at_ms"])
+        end = chapters[i + 1]["at_ms"] if i + 1 < len(chapters) else total_ms
+        if end <= start:                   # guard against zero/negative spans
+            end = start + 1000
+        lines += ["[CHAPTER]", "TIMEBASE=1/1000",
+                  f"START={start}", f"END={end}",
+                  f"title={_ffmeta_escape(ch['title'])}"]
+    meta_path = tmp_dir / "chapters.ffmeta"
+    meta_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    out_path = tmp_dir / "final-chaptered.mp3"
+    subprocess.run(
+        ["ffmpeg", "-y", "-i", str(final_path), "-i", str(meta_path),
+         "-map_metadata", "0", "-map_chapters", "1",
+         "-codec", "copy", "-loglevel", "error", str(out_path)],
+        check=True,
+    )
+    shutil.move(str(out_path), str(final_path))
+
+
 _ASSET_MEAN_CACHE = {}
 
 
@@ -437,12 +477,43 @@ def mix_top_with_beds(top_path: Path, bed_specs, out_path: Path) -> None:
 # script parsing
 # --------------------------------------------------------------------------
 
+def _chapter_title(heading_line: str):
+    """Map a script section heading to a podcast chapter title, or None if the
+    heading isn't a chapter boundary. Chapters are the cold open, each ACT, and
+    the closing. Skips the H1 show title, the episode subtitle (## on line 2),
+    and the short [TITLE] card."""
+    m = re.match(r"^(#+)\s*(.*)$", heading_line.strip())
+    if not m or len(m.group(1)) != 2:      # only H2 (##) headings are sections
+        return None
+    text = m.group(2).strip()
+    # Some scripts wrap section headings in brackets — [ACT ONE — …],
+    # [COLD OPEN — …], [TITLE — 8s] — and some don't. Unwrap, then treat alike.
+    bracket = re.match(r"^\[(.+?)\]$", text)
+    if bracket:
+        text = bracket.group(1).strip()
+    keyword = re.split(r"\s*[—–-]\s*", text, maxsplit=1)[0].strip().upper()
+    if keyword == "COLD OPEN":
+        return "Cold Open"
+    if keyword == "CLOSING":
+        return "Closing"
+    if keyword == "TITLE":
+        return None                        # [TITLE] card is too short to chapter
+    if re.match(r"^ACT\b", text, re.IGNORECASE):
+        parts = re.split(r"\s*[—–]\s*", text, maxsplit=1)
+        label = parts[0].strip().title()   # "ACT ONE" -> "Act One"
+        if len(parts) == 2 and parts[1].strip():
+            return f"{label} — {parts[1].strip()}"
+        return label
+    return None                            # episode subtitle, etc.
+
+
 def parse_script(text: str):
     """Turn the storyteller script into a linear list of events:
         ("speak",  text, delivery_cue)
         ("sting",  cue_label)          — replaced with asset if resolvable
         ("music",  cue_label)          — same, for MUSIC cues
         ("silence", duration_ms)
+        ("chapter", title)             — zero-duration ID3 chapter marker
     """
     events = []
 
@@ -457,6 +528,9 @@ def parse_script(text: str):
         if not line:
             continue
         if line.startswith("#"):
+            title = _chapter_title(line)
+            if title:
+                events.append(("chapter", title))
             continue
         if set(line) == {"-"}:
             continue
@@ -709,6 +783,7 @@ def main():
         # pass 2 to find the sustained under-bed spans.
         top_layer = []  # list of dicts: {"path": Path, "dur_ms": int, "kind": str, "label": str}
         bed_markers = []  # list of dicts: {"at_ms": int, "kind": "start_hearth"|"start_cold_open"|"end", "label": str}
+        chapters = []  # list of dicts: {"title": str, "at_ms": int} — ID3 chapter marks
         cursor_ms = 0
         speech_idx = 0
 
@@ -756,6 +831,11 @@ def main():
                 top_layer.append({"path": chunk_path, "dur_ms": dur_ms, "kind": "speak"})
                 cursor_ms += dur_ms
                 speech_idx += 1
+
+            elif kind == "chapter":
+                # Zero-duration marker: record the current timeline position;
+                # embedded as an ID3 chapter after the final mix.
+                chapters.append({"title": ev[1], "at_ms": cursor_ms})
 
             elif kind == "silence":
                 dur = ev[1]
@@ -890,6 +970,12 @@ def main():
         else:
             print(f"No under-beds → {final_path.name}")
             shutil.copy2(top_path, final_path)
+
+        if chapters:
+            total_ms = probe_duration_ms(final_path)
+            embed_chapters(final_path, chapters, total_ms, tmp_dir)
+            print(f"  Embedded {len(chapters)} chapter marker(s): "
+                  f"{', '.join(c['title'] for c in chapters)}")
 
     size_kb = final_path.stat().st_size / 1024
     print(f"Wrote {final_path} ({size_kb:.0f} KB)")
