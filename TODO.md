@@ -76,9 +76,11 @@ The S3 static-hosting endpoint is HTTP-only. Nothing about the pipeline hard-req
 
 To fix: front the bucket with CloudFront + an ACM certificate on a domain you own, set the feed's `SITE_BASE_URL` env var at build time, regenerate, redeploy. Meaningful AWS setup (bucket policy, Route 53, ACM validation), not strictly required.
 
-### Redeploy ergonomics
+### Redeploy ergonomics — DONE
 
 `website/migrations/001-create-s3-bucket.sh` uses `set -euo pipefail` and aborts on the `create-bucket` call once the bucket exists — so it's provisioning-only, not a redeploy path. `CLAUDE.md § Deploy` documents the `aws s3 sync` one-liner, but a small `website/deploy.sh` that wraps that command (with the bucket name and `--delete` baked in) would be less error-prone than remembering it.
+
+Done: `website/bin/deploy.sh` wraps the sync with the bucket and `--delete` baked in, and parameterizes `BUCKET` / `SITE_DIR` via env vars. Run `./website/bin/deploy.sh` after regenerating the site; `CLAUDE.md § Deploy` now points at it.
 
 ## Deferred / not planned
 

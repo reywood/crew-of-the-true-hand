@@ -176,10 +176,12 @@ The generator wipes `website/site/` and rebuilds from scratch — never hand-edi
 
 ### 6. Deploy (when ready)
 
-For an existing bucket (which is the normal case now), just run the sync directly:
+For an existing bucket (which is the normal case now), just run the deploy script:
 
 ```bash
-aws s3 sync website/site/ s3://crew-of-the-true-hand/ --delete
+./website/bin/deploy.sh
 ```
 
-`./website/migrations/001-create-s3-bucket.sh` exists for the first-time provisioning path. Do NOT re-run the full script for redeploys — it uses `set -euo pipefail` and aborts on the `create-bucket` call ("BucketAlreadyOwnedByYou") before it ever reaches the sync step. The sync one-liner above is the only step you need. Only deploy when the user asks; do not deploy on every regeneration.
+It wraps `aws s3 sync website/site/ s3://crew-of-the-true-hand/ --delete` with the bucket name and `--delete` baked in (override via the `BUCKET` / `SITE_DIR` env vars). Running the bare `aws s3 sync` one-liner directly still works if you prefer.
+
+`./website/migrations/001-create-s3-bucket.sh` exists for the first-time provisioning path. Do NOT re-run the full script for redeploys — it uses `set -euo pipefail` and aborts on the `create-bucket` call ("BucketAlreadyOwnedByYou") before it ever reaches the sync step. The deploy script (or the bare sync) is the only step you need. Only deploy when the user asks; do not deploy on every regeneration.
