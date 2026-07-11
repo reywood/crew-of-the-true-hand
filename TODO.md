@@ -58,7 +58,7 @@ Done via the `ffmpeg -f ffmetadata` route (no new dependency) in `scripts/genera
 
 ### Nav-bar podcast link
 
-`sessions.html` has the Subscribe CTA and `index.html` now carries a "Listen: Tales of the True Hand" section (a `home-podcast` block in `index_page()` linking to `sessions.html` / `feed.xml`). The **nav bar** (`NAV` in `website/generate.py`) still doesn't mention the podcast — a small "Listen" entry there would surface it on every page, not just home and sessions.
+`sessions.html` has the Subscribe CTA (its link copies the feed URL to the clipboard with a paste-into-your-app popover). The home page deliberately carries no podcast language, and the **nav bar** (`NAV` in `website/generate.py`) doesn't mention the podcast either — so it's only discoverable from the sessions page. A small "Listen" entry in `NAV` would surface it on every page. (Note: an earlier `home-podcast` section on `index.html` was removed at the user's request.)
 
 ### Site search
 
