@@ -39,6 +39,7 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 - Transcripts are too large to read whole — use `Read` with `offset`/`limit` or `grep` for specific names/events rather than loading them in full.
 - After adding a new session note, transcript, NPC, location, or quest, re-run `python3 website/generate.py` so the site picks it up. The generator wipes `website/site/` and rebuilds from scratch — never hand-edit files under `website/site/`.
 - New NPCs and locations: add a single `.md` file with frontmatter (see `website/README.md` for the schema). Always include `aliases:` with every phrasing that should auto-link to that entity, including the canonical name.
+- Python environment: `website/generate.py` is **stdlib-only** — no install needed to build/deploy the site. The audio/image scripts under `scripts/` need third-party packages tracked in `requirements.txt` (`google-genai`, `elevenlabs`, `pillow`); set them up once with `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`. The `.venv/` is git-ignored; run those scripts via `.venv/bin/python`.
 
 ## Adding a new session
 
@@ -89,7 +90,7 @@ Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits
 
 The site generator picks up any files it finds in those paths and embeds them automatically — no `generate.py` change needed per session.
 
-Requires: `pip install google-genai` and a `GEMINI_API_KEY` (get one at https://aistudio.google.com/apikey — the free tier is plenty). The key can be either an exported env var or a `.env` file at the project root (`GEMINI_API_KEY=...`, one line). `.env` is git-ignored.
+Requires the Python deps from `requirements.txt` (`.venv/bin/pip install -r requirements.txt` — `google-genai` covers this step) and a `GEMINI_API_KEY` (get one at https://aistudio.google.com/apikey — the free tier is plenty). The key can be either an exported env var or a `.env` file at the project root (`GEMINI_API_KEY=...`, one line). `.env` is git-ignored.
 
 Skip this step if you don't want an image, or add it later. The session page renders fine either way.
 

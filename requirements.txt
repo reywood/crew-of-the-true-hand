@@ -1,0 +1,14 @@
+# Python dependencies for the audio/image generation scripts under scripts/.
+# The website generator (website/generate.py) is stdlib-only and needs none of these.
+#
+# Set up the project venv:
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r requirements.txt
+#
+# The known-good version is the floor; minor and patch (revision) updates are
+# allowed, capped below the next major to avoid breaking changes. Transitive
+# deps (httpx, pydantic, requests, websockets, …) are resolved automatically.
+
+google-genai>=1.47.0,<2.0.0   # Gemini image generation — generate-session-image.py, generate-podcast-cover.py
+elevenlabs>=2.56.0,<3.0.0     # ElevenLabs TTS — generate-session-audio.py
+pillow>=11.3.0,<12.0.0        # image normalization (PIL) — generate-podcast-cover.py
