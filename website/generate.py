@@ -584,6 +584,7 @@ def page(title, body, current_nav=None, breadcrumb=None):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)} — Crew of the True Hand</title>
 <link rel="stylesheet" href="static/style.css">
+<script defer src="static/podcast-subscribe.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -1517,9 +1518,10 @@ def session_list_page(sessions, locations, link_map):
 </li>""")
     body = ('<h1>Sessions</h1>\n'
             '<p class="subhead"><em>Newest to oldest. Click a date to read the full account.</em></p>\n'
-            '<p class="podcast-cta"><a href="feed.xml" class="podcast-link">'
+            '<p class="podcast-cta"><span class="copy-feed-wrap">'
+            f'<a href="feed.xml" class="podcast-link js-copy-feed" data-feed-url="{SITE_BASE_URL}/feed.xml">'
             '<span aria-hidden="true">&#9836;</span> Subscribe to the podcast'
-            '</a> <span class="podcast-cta-tail">— add <code>feed.xml</code> to your podcast app of choice.</span></p>\n'
+            '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it into your podcast app of choice.</span></p>\n'
             '<ol class="session-log">' + "".join(rows) + '</ol>')
     return page("Sessions", linkify_html(body, "sessions.html", link_map),
                 current_nav="sessions.html")

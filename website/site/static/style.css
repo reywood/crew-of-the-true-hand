@@ -863,6 +863,68 @@ span.session-chip-missing {
   border-radius: 3px;
 }
 
+/* Copy-feed popover (podcast subscribe control). */
+.copy-feed-wrap {
+  position: relative;
+  display: inline-block;
+}
+.copy-feed-popover {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: max-content;
+  max-width: min(22rem, 80vw);
+  padding: 0.7rem 0.85rem;
+  background: var(--parchment);
+  border: 1px solid var(--brass);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(42, 31, 18, 0.28);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+.copy-feed-popover.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+/* little pointer up toward the link */
+.copy-feed-popover::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 1.2rem;
+  border: 6px solid transparent;
+  border-bottom-color: var(--brass);
+}
+.copy-feed-head {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wood);
+}
+.copy-feed-url {
+  font-family: 'Cascadia Code', 'Menlo', monospace;
+  font-size: 0.78rem;
+  color: var(--ink);
+  word-break: break-all;
+  user-select: all;
+  background: rgba(193, 154, 74, 0.14);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+.copy-feed-hint {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
 .session-audio {
   margin: 1.2rem 0 1.6rem;
   padding: 0.9rem 1.1rem 1rem;
