@@ -55,7 +55,6 @@ ITEM_DIR = ROOT / "items"
 NOTES_DIR = ROOT / "session notes"
 TRANS_DIR = ROOT / "transcripts"
 SUMMARIES_DIR = ROOT / "summaries"
-AUDIO_SCRIPTS_DIR = SUMMARIES_DIR / "audio-scripts"
 AUDIO_LIBRARY_DIR = SUMMARIES_DIR / "audio" / "library"
 AUDIO_CREDITS_FILE = AUDIO_LIBRARY_DIR / "CREDITS.md"
 QUESTS_FILE = ROOT / "quests.md"
@@ -486,16 +485,17 @@ def load_sessions():
         for p in audio_dir.glob("*.mp3"):
             session_audio.setdefault(p.stem, p)
     # Audio-script subtitles (line 2 `## <subtitle>` in each script file) —
-    # used as the podcast episode title. Optional.
+    # used as the podcast episode title. The script lives in the per-session
+    # audio folder alongside final.mp3. Optional.
     audio_subtitles = {}
-    if AUDIO_SCRIPTS_DIR.exists():
-        for p in AUDIO_SCRIPTS_DIR.glob("*.md"):
+    if audio_dir.exists():
+        for p in audio_dir.glob("*/script.md"):
             try:
                 with open(p, encoding="utf-8") as fh:
                     fh.readline()  # skip the H1 line
                     line2 = fh.readline().strip()
                 if line2.startswith("## "):
-                    audio_subtitles[p.stem] = line2[3:].strip()
+                    audio_subtitles[p.parent.name] = line2[3:].strip()
             except OSError:
                 pass
     dates = sorted(set(notes) | set(transcripts) | set(summaries))

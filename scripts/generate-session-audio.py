@@ -2,12 +2,13 @@
 """
 Generate an audio recap for a session from a "Tales of the True Hand" script.
 
-Reads   summaries/audio-scripts/YYYY-MM-DD.md
-Writes  summaries/audio/YYYY-MM-DD/                         (artifact folder)
-          ├── script.md            frozen copy of the script
+Everything for a session lives together in summaries/audio/YYYY-MM-DD/:
+          ├── script.md            the storyteller script — single source of truth
           ├── manifest.json        voice, model, per-chunk hashes for cache
           ├── chunks/NNNN.mp3      persistent per-speech-line TTS output
           └── final.mp3            stitched output with music/stings layered
+
+Reads script.md from that folder; edit it and re-run to rebuild.
 
 Cache behavior:
     Each speech chunk's hash = sha256(voice_id + model_id + delivery_preset + text).
@@ -75,7 +76,6 @@ except ImportError:
     sys.exit(2)
 
 
-SCRIPTS_DIR = ROOT / "summaries" / "audio-scripts"
 AUDIO_DIR = ROOT / "summaries" / "audio"
 LIBRARY_DIR = AUDIO_DIR / "library"
 
@@ -721,16 +721,15 @@ def main():
 
     api_key = os.environ.get("ELEVENLABS_API_KEY")
 
-    script_path = SCRIPTS_DIR / f"{args.date}.md"
+    session_dir = AUDIO_DIR / args.date
+    script_path = session_dir / "script.md"
     if not script_path.exists():
         print(f"ERROR: script not found: {script_path}", file=sys.stderr)
         sys.exit(1)
 
-    session_dir = AUDIO_DIR / args.date
     chunks_dir = session_dir / "chunks"
     manifest_path = session_dir / "manifest.json"
     final_path = session_dir / "final.mp3"
-    frozen_script_path = session_dir / "script.md"
 
     if final_path.exists() and not args.force and not args.force_tts and not args.dry_run:
         print(f"{final_path} exists — use --force to rebuild.")
@@ -738,7 +737,6 @@ def main():
 
     session_dir.mkdir(parents=True, exist_ok=True)
     chunks_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(script_path, frozen_script_path)
 
     text = script_path.read_text(encoding="utf-8")
     events = parse_script(text)
