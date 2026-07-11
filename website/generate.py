@@ -18,6 +18,7 @@ Re-run after adding or editing source files:
 """
 
 import datetime as _dt
+import hashlib
 import html
 import re
 import shutil
@@ -29,6 +30,23 @@ ROOT = Path(__file__).resolve().parent.parent
 WEB = Path(__file__).resolve().parent
 SITE = WEB / "site"
 STATIC = WEB / "static"
+
+_STATIC_VER_CACHE = {}
+
+
+def static_url(name):
+    """Return static/<name> with a content-hash cache-buster (?v=…) so browsers
+    refetch the asset only when its bytes actually change. Falls back to the
+    bare path if the source file is missing."""
+    if name not in _STATIC_VER_CACHE:
+        src = STATIC / name
+        try:
+            digest = hashlib.sha256(src.read_bytes()).hexdigest()[:8]
+        except OSError:
+            digest = None
+        _STATIC_VER_CACHE[name] = digest
+    digest = _STATIC_VER_CACHE[name]
+    return f"static/{name}?v={digest}" if digest else f"static/{name}"
 
 CHAR_DIR = ROOT / "characters"
 NPC_DIR = ROOT / "npcs"
@@ -583,8 +601,8 @@ def page(title, body, current_nav=None, breadcrumb=None):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)} — Crew of the True Hand</title>
-<link rel="stylesheet" href="static/style.css">
-<script defer src="static/podcast-subscribe.js"></script>
+<link rel="stylesheet" href="{static_url('style.css')}">
+<script defer src="{static_url('podcast-subscribe.js')}"></script>
 </head>
 <body>
 <header class="site-header">
