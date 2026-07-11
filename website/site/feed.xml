@@ -15,7 +15,7 @@
     <itunes:name>Crew of the True Hand</itunes:name>
     <itunes:email>noreply@crew-of-the-true-hand.local</itunes:email>
   </itunes:owner>
-  <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/podcast-cover.jpg"/>
+  <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/static/podcast-cover.jpg"/>
   <itunes:category text="Leisure">
     <itunes:category text="Games"/>
   </itunes:category>

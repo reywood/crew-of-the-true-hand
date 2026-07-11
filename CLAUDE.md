@@ -23,7 +23,7 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
     - `final.mp3` (the stitched output, what the site plays), `manifest.json` (voice, model, per-chunk hashes for TTS cache invalidation), and `chunks/NNNN.mp3` (persistent per-speech-line TTS output — reused on re-runs so tweaking the script or music layering costs zero ElevenLabs credits unless the tweak actually changes a spoken line).
     - Site generator picks up `final.mp3` and normalizes it to `site/audio/sessions/YYYY-MM-DD.mp3` for the podcast feed and inline player, and reads `script.md`'s line-2 `## <subtitle>` for the episode title.
   - `summaries/audio/library/` — Third-party music / SFX assets referenced from scripts via `[MUSIC: ...]` and `[STING: ...]` cue lines. `CREDITS.md` in that directory MUST record every asset's source, license, and attribution wording BEFORE it can be used. `NEEDED.md` tracks what's still open on the shopping list. Assets currently in place cover all Tier-1 cue slots (signature theme, hearth bed, chime, bridge, low-chord, minor swell).
-  - `summaries/podcast-cover.jpg` — 1400×1400 JPEG podcast cover; regenerate with `scripts/generate-podcast-cover.py` (Gemini + Pillow). Site generator copies to `site/images/podcast-cover.jpg`; `feed.xml`'s `<itunes:image>` points there.
+  - `website/static/podcast-cover.jpg` — 1400×1400 JPEG podcast cover; regenerate with `scripts/generate-podcast-cover.py` (Gemini + Pillow). The static-asset glob copies it to `site/static/podcast-cover.jpg`; `feed.xml`'s `<itunes:image>` points there.
 - `npcs/` and `locations/` — One markdown file per entity, each with frontmatter (`name`, `aliases`, `type`, `location`, `first_seen`, etc.) and a short markdown body. These are the source of truth for everyone/everywhere the website knows about. NPCs may carry an `expertise: dragons, Draconic, ...` field — the site cross-references those tags against items' `expertise_needed:` to surface "Who could help" / "Could help with" blocks on each detail page.
 - `items/` — One markdown file per magical, mysterious, or narratively significant item the crew has acquired. Frontmatter: `name`, `aliases`, `type` (Magic item / Weapon / Focus / Book / Mystery / Trophy / Keepsake / Memento), `holder` (PC name or "Party"), `status` (Unresolved / Active / Consumed / Lost), `origin` (session date), and optional `expertise_needed:` tags. Everyday loot (coin, generic potions/scrolls, consumables) stays in the session's `carried:` list without getting its own file — see the criteria in the item-catalog thread.
 - `quests.md` — Single-file quest log; the website parses each `- **Name**` bullet under each `## section` as a quest. Section headings determine status (Main arc / Allies / Hotspots / Side leads / Personal / Completed).
@@ -143,7 +143,7 @@ Music/sting layering scope (v2): STING cues → the matching asset in the librar
 .venv/bin/python scripts/generate-podcast-cover.py --force
 ```
 
-Runs Gemini image + Pillow normalization to write `summaries/podcast-cover.jpg` as a 1400×1400 JPEG. Only needed if the show's cover art changes; a good cover survives many episodes.
+Runs Gemini image + Pillow normalization to write `website/static/podcast-cover.jpg` as a 1400×1400 JPEG. Only needed if the show's cover art changes; a good cover survives many episodes.
 
 ### 3. Add the session's location annotation
 

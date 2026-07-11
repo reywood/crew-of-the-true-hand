@@ -16,9 +16,9 @@ Usage:
     python3 scripts/generate-podcast-cover.py           # skip if exists
     python3 scripts/generate-podcast-cover.py --force   # overwrite
 
-Output: summaries/podcast-cover.jpg
-The website generator copies this into site/images/podcast-cover.jpg on the
-next build, where the feed.xml <itunes:image> element already points.
+Output: website/static/podcast-cover.jpg
+The website generator's static-asset glob copies this into site/static/ on the
+next build, where the feed.xml <itunes:image> element points.
 """
 
 import argparse
@@ -36,9 +36,8 @@ except ImportError:
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SUMMARIES_DIR = ROOT / "summaries"
 CHARACTERS_DIR = ROOT / "characters"
-OUTPUT = SUMMARIES_DIR / "podcast-cover.jpg"
+OUTPUT = ROOT / "website" / "static" / "podcast-cover.jpg"
 
 
 def load_dotenv(path: Path) -> None:
