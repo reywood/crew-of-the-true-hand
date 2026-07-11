@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
 Scan session summaries for entity mentions and write the discovered
-session dates into each NPC and location markdown file's frontmatter
+session dates into each NPC, location, and item markdown file's frontmatter
 as a `sessions:` field.
 
 Usage:
-    python3 scripts/update-entity-sessions.py            # update all NPCs + locations
+    python3 scripts/update-entity-sessions.py            # update all NPCs, locations, items
     python3 scripts/update-entity-sessions.py --dry-run  # print what would change
 
 Design:

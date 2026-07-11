@@ -101,7 +101,7 @@ python3 scripts/update-entity-sessions.py           # apply
 python3 scripts/update-entity-sessions.py --dry-run # preview
 ```
 
-Scans every session summary in `summaries/` and writes a `sessions: YYYY-MM-DD, YYYY-MM-DD, …` line into the frontmatter of each NPC and location markdown file — word-boundary, case-sensitive matches against the entity's `aliases:` list. The site generator reads that field and renders a *"Mentioned in sessions"* chip row at the top of each NPC/location detail page, with clickable jumps to the matching session pages. Quests get the same treatment automatically from the `(YYYY-MM-DD)` parentheticals already inside each bullet in `quests.md` — no per-quest field needed.
+Scans every session summary in `summaries/` and writes a `sessions: YYYY-MM-DD, YYYY-MM-DD, …` line into the frontmatter of each NPC, location, and item markdown file — word-boundary, case-sensitive matches against the entity's `aliases:` list. The site generator reads that field and renders a *"Mentioned in sessions"* chip row at the top of each NPC/location/item detail page, with clickable jumps to the matching session pages. Quests get the same treatment automatically from the `(YYYY-MM-DD)` parentheticals already inside each bullet in `quests.md` — no per-quest field needed.
 
 Re-run this whenever a summary is added, expanded, or an entity gets a new alias.
 
