@@ -9,7 +9,7 @@ Usage:
     python3 scripts/update-entity-sessions.py --dry-run  # print what would change
 
 Design:
-- Reads each session's summary at `summaries/YYYY-MM-DD.md`.
+- Reads each session's summary at `sessions/YYYY-MM-DD/summary.md`.
 - For each entity, matches against every alias in its `aliases:` field,
   word-boundary + case-sensitive (proper nouns work best that way).
 - Writes back a `sessions: 2025-09-23, 2025-11-12, ...` line into the
@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SUMMARIES_DIR = ROOT / "summaries"
+SESSIONS_DIR = ROOT / "sessions"
 NPC_DIR = ROOT / "npcs"
 LOC_DIR = ROOT / "locations"
 ITEM_DIR = ROOT / "items"
@@ -62,12 +62,14 @@ def parse_aliases_field(raw):
 
 
 def load_session_summaries():
-    """Return {date: full_summary_text} for every summary on disk."""
+    """Return {date: full_summary_text} for every summary on disk.
+
+    Summaries live at sessions/YYYY-MM-DD/summary.md."""
     out = {}
-    if not SUMMARIES_DIR.exists():
+    if not SESSIONS_DIR.exists():
         return out
-    for p in sorted(SUMMARIES_DIR.glob("*.md")):
-        out[p.stem] = p.read_text(encoding="utf-8")
+    for p in sorted(SESSIONS_DIR.glob("*/summary.md")):
+        out[p.parent.name] = p.read_text(encoding="utf-8")
     return out
 
 
@@ -170,7 +172,7 @@ def main():
 
     session_texts = load_session_summaries()
     if not session_texts:
-        print("ERROR: no summaries found under summaries/.", file=sys.stderr)
+        print("ERROR: no summaries found under sessions/*/summary.md.", file=sys.stderr)
         return 1
 
     print(f"Scanning {len(session_texts)} session summaries.\n")

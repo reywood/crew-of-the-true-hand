@@ -2,7 +2,7 @@
 """
 Generate an audio recap for a session from a "Tales of the True Hand" script.
 
-Everything for a session lives together in summaries/audio/YYYY-MM-DD/:
+Audio for a session lives together in sessions/YYYY-MM-DD/audio/:
           ├── script.md            the storyteller script — single source of truth
           ├── manifest.json        voice, model, per-chunk hashes for cache
           ├── chunks/NNNN.mp3      persistent per-speech-line TTS output
@@ -17,7 +17,7 @@ Cache behavior:
     chunk. Change --voice or --model to invalidate everything.
 
 Music / sting layering (v3):
-    STING cues → replaced by the matching asset in summaries/audio/library/.
+    STING cues → replaced by the matching asset in sessions/library/audio/.
     Discrete MUSIC cues (signature theme, minor swell, outro theme) → played
     inline at low mixed volume.
     Sustained under-beds (hearth ambience + cold-open flavor overlays) ARE now
@@ -76,8 +76,8 @@ except ImportError:
     sys.exit(2)
 
 
-AUDIO_DIR = ROOT / "summaries" / "audio"
-LIBRARY_DIR = AUDIO_DIR / "library"
+SESSIONS_DIR = ROOT / "sessions"
+LIBRARY_DIR = SESSIONS_DIR / "library" / "audio"
 
 DEFAULT_VOICE_ID = "tEo3d4j7gzVojBL5Z4Pt"  # Cormac (Irish Fantasy Storyteller)
 DEFAULT_MODEL_ID = "eleven_multilingual_v2"
@@ -721,7 +721,7 @@ def main():
 
     api_key = os.environ.get("ELEVENLABS_API_KEY")
 
-    session_dir = AUDIO_DIR / args.date
+    session_dir = SESSIONS_DIR / args.date / "audio"
     script_path = session_dir / "script.md"
     if not script_path.exists():
         print(f"ERROR: script not found: {script_path}", file=sys.stderr)

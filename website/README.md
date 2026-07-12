@@ -18,11 +18,11 @@ No dependencies — standard library only. Output goes to `website/site/`. Open 
 | `npcs/*.md` | NPC detail pages and the NPC index. |
 | `locations/*.md` | Location detail pages and the Locations index. |
 | `quests.md` | Quest detail pages (one per `- **Name**` bullet, grouped by section) and the Quest log. |
-| `summaries/*.md` | Detailed session recaps — **primary content** of each session page. Lead with an italic `*In brief: ...*` line, then `##` sections. |
-| `session notes/<pc>/*.md` | Original per-PC bullet notes (currently `session notes/fiz/`). Kept as a collapsible "Original session notes" block under the summary. |
-| `transcripts/*.txt` | Raw auto-transcribed audio. Kept as a collapsible "Raw transcript" block at the bottom. |
+| `sessions/YYYY-MM-DD/summary.md` | Detailed session recaps — **primary content** of each session page. Lead with an italic `*In brief: ...*` line, then `##` sections. |
+| `sessions/YYYY-MM-DD/player notes/<pc>.md` | Original per-PC bullet notes (currently `fiz.md`). Kept as a collapsible "Original session notes" block under the summary. |
+| `sessions/YYYY-MM-DD/transcript.txt` | Raw auto-transcribed audio. Kept as a collapsible "Raw transcript" block at the bottom. |
 
-To update the site after a new session, just drop the new files into `session notes/fiz/` (or the relevant PC's subfolder) and `transcripts/` and re-run the generator. Same for new NPCs / locations (add a `.md` file with frontmatter), or quest changes (edit `quests.md`).
+To update the site after a new session, just drop the new files into `sessions/YYYY-MM-DD/` (`summary.md`, `transcript.txt`, `player notes/fiz.md`) and re-run the generator. Same for new NPCs / locations (add a `.md` file with frontmatter), or quest changes (edit `quests.md`).
 
 ## Entity file format (NPCs and locations)
 

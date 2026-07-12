@@ -1,6 +1,6 @@
 # Audio library — sounds still needed
 
-Shopping list for the "Tales of the True Hand" audio pipeline. Compiled by scanning `[MUSIC: ...]` and `[STING: ...]` cue lines across every `summaries/audio/*/script.md`. Grouped by asset type and priority. See `CREDITS.md` for what's already registered.
+Shopping list for the "Tales of the True Hand" audio pipeline. Compiled by scanning `[MUSIC: ...]` and `[STING: ...]` cue lines across every `sessions/*/audio/script.md`. Grouped by asset type and priority. See `CREDITS.md` for what's already registered.
 
 Preferred sources: Pixabay (no attribution required — see Pixabay Content License), Freesound (attribution required per sound), Kevin MacLeod / incompetech.com (CC BY 4.0). Whenever a candidate is added to this directory, add its `CREDITS.md` entry **in the same commit**.
 

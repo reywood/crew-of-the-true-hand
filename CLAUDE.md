@@ -14,15 +14,18 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
   - **Toz** (Tozlo Greenbottle) — Lightfoot Halfling Storm Sorcerer, captain of the (wrecked) *True Hand*, adopted brother to Woz.
   - **Woz** (Enoril Wazek) — Half-Elf Nature Cleric of Eldath, raised in the wild, adopted by the Greenbottles.
   - Character files are structured as: header block (race/class/background/alignment/age) → `## Backstory` → `## Class Features` with per-feature stat blocks copied from sourcebook references (PHB / TCoE / SCAG with page numbers). Preserve this structure when editing.
-- `session notes/` — Per-PC subfolders of terse bullet-style recaps named `YYYY-MM-DD.md` for the real-world session date. Currently only `session notes/fiz/` exists (all notes so far are Fiz's); a new PC's notes would go in a sibling subfolder like `session notes/hal/`. The site generator globs `session notes/*/*.md`. Each file is a few lines to a couple dozen, often shorthand ("kill them", "up to level four"). **Written from Fiz's perspective** — first-person "I" / "me" refers to Fiz, so loot or interactions phrased that way belong to Fiz unless another PC is named. Fiz sometimes refers to himself in the third person when paired with another PC ("Toz and Fiz go in village", "Hal and Fiz talk to Naxine"), so third-person Fiz mentions are not a different narrator. Do not rewrite these into prose unless asked — the terseness is the style.
-- `transcripts/` — Raw auto-transcribed audio of sessions as `YYYY-MM-DD.txt`. These are large (80–120KB), unpunctuated walls of speech with no speaker tags, and contain a lot of table chatter, dice rolls, and mechanics talk mixed with in-character dialogue. **The session-notes date may not match the transcript date** (e.g. the 2025-12-17 notes summarize that session, but `transcripts/2025-12-17.txt` is the raw recording of that same evening). Use transcripts as source-of-truth when expanding or reconciling notes, but expect signal-to-noise issues.
-- `summaries/` — Generated detailed session recaps as `YYYY-MM-DD.md`. Each file leads with an italic `*In brief: ...*` line, then `##` sections, then `## What's next` / `## Loose ends`. These are derived from the corresponding session notes + transcript and are the **primary content of the session detail pages on the website**. Notes and transcripts stay around as collapsible reference material on the same page. When a new session is added, generate a new summary file (or hand-write one) so the website has something rich to render.
-  - `summaries/images/` — Gemini-generated hero + beat illustrations (see step 2.5).
-  - `summaries/audio/YYYY-MM-DD/` — Per-session audio folder (see step 2.8): the script AND its generated artifacts live together here. Contains:
-    - `script.md` — the "Tales of the True Hand" storyteller-voiced audio script (see step 2.7), the **single editable source of truth** for this session's audio. Uses format `# Tales of the True Hand — YYYY-MM-DD` / `## <subtitle>` / `[COLD OPEN]` / `[TITLE]` / `## ACT ONE/TWO/…` / `## CLOSING`, with every spoken line prefixed `VANDAL: *(delivery cue)* …`. The narrator is Vandal Lovelace; he only actually met the crew at 2026-06-16, so earlier sessions are framed as retelling. Signature open: *"Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand."* Signature close: *"I am Vandal Lovelace. This has been a Tale of the True Hand."*
+- `sessions/YYYY-MM-DD/` — **All files for one session live together in this folder**, keyed by the real-world session date. Contents (all optional except that at least one of summary/transcript/notes must exist to render a page):
+  - `summary.md` — Generated detailed session recap. Leads with an italic `*In brief: ...*` line, then `##` sections, then `## What's next` / `## Loose ends`. Derived from the notes + transcript and the **primary content of the session detail page on the website**. When a new session is added, generate this (or hand-write it) so the website has something rich to render.
+  - `transcript.txt` — Raw auto-transcribed audio. Large (80–120KB), unpunctuated walls of speech with no speaker tags, full of table chatter, dice rolls, and mechanics talk mixed with in-character dialogue. Use as source-of-truth when expanding or reconciling notes, but expect signal-to-noise issues. Kept as a collapsible block on the session page.
+  - `player notes/<pc>.md` — Terse bullet-style recaps, a few lines to a couple dozen, often shorthand ("kill them", "up to level four"). Currently only `fiz.md` exists (all notes so far are Fiz's); another PC's notes would go alongside as e.g. `hal.md`. **Fiz's are written from his perspective** — first-person "I" / "me" refers to Fiz, so loot or interactions phrased that way belong to Fiz unless another PC is named. Fiz sometimes refers to himself in the third person when paired with another PC ("Toz and Fiz go in village", "Hal and Fiz talk to Naxine"), so third-person Fiz mentions are not a different narrator. Do not rewrite these into prose unless asked — the terseness is the style. Kept as a collapsible block on the session page.
+  - `images/` — Gemini-generated illustrations (see step 2.5): `hero.jpg` is the 16:9 banner; every other file is a beat illustration named `<slugified-section-title>.jpg`. Site generator copies `hero.<ext>` → `site/images/sessions/YYYY-MM-DD.<ext>` and beats → `site/images/sessions/YYYY-MM-DD/<slug>.<ext>`.
+  - `audio/` — The "Tales of the True Hand" audio recap (see steps 2.7/2.8). The script AND its generated artifacts live together here:
+    - `script.md` — the storyteller-voiced audio script, the **single editable source of truth** for this session's audio. Uses format `# Tales of the True Hand — YYYY-MM-DD` / `## <subtitle>` / `[COLD OPEN]` / `[TITLE]` / `## ACT ONE/TWO/…` / `## CLOSING`, with every spoken line prefixed `VANDAL: *(delivery cue)* …`. The narrator is Vandal Lovelace; he only actually met the crew at 2026-06-16, so earlier sessions are framed as retelling. Signature open: *"Well met, friend. Draw close to the fire. I am Vandal Lovelace, and this is a Tale of the True Hand."* Signature close: *"I am Vandal Lovelace. This has been a Tale of the True Hand."*
     - `final.mp3` (the stitched output, what the site plays), `manifest.json` (voice, model, per-chunk hashes for TTS cache invalidation), and `chunks/NNNN.mp3` (persistent per-speech-line TTS output — reused on re-runs so tweaking the script or music layering costs zero ElevenLabs credits unless the tweak actually changes a spoken line).
-    - Site generator picks up `final.mp3` and normalizes it to `site/audio/sessions/YYYY-MM-DD.mp3` for the podcast feed and inline player, and reads `script.md`'s line-2 `## <subtitle>` for the episode title.
-  - `summaries/audio/library/` — Third-party music / SFX assets referenced from scripts via `[MUSIC: ...]` and `[STING: ...]` cue lines. `CREDITS.md` in that directory MUST record every asset's source, license, and attribution wording BEFORE it can be used. `NEEDED.md` tracks what's still open on the shopping list. Assets currently in place cover all Tier-1 cue slots (signature theme, hearth bed, chime, bridge, low-chord, minor swell).
+    - Site generator copies `final.mp3` → `site/audio/sessions/YYYY-MM-DD.mp3` for the podcast feed and inline player, and reads `script.md`'s line-2 `## <subtitle>` for the episode title.
+
+  Note: the notes/transcript/summary dates historically don't always match up neatly (e.g. `2025-12-17/transcript.txt` is the raw recording that `2025-12-17/summary.md` recaps) — now that they share a folder this is moot, but the transcript can still cover an evening whose beats span the notes.
+- `sessions/library/audio/` — Third-party music / SFX assets shared across every session, referenced from scripts via `[MUSIC: ...]` and `[STING: ...]` cue lines. `CREDITS.md` in that directory MUST record every asset's source, license, and attribution wording BEFORE it can be used. `NEEDED.md` tracks what's still open on the shopping list. Assets currently in place cover all Tier-1 cue slots (signature theme, hearth bed, chime, bridge, low-chord, minor swell).
   - `website/static/podcast-cover.jpg` — 1400×1400 JPEG podcast cover; regenerate with `scripts/generate-podcast-cover.py` (Gemini + Pillow). The static-asset glob copies it to `site/static/podcast-cover.jpg`; `feed.xml`'s `<itunes:image>` points there.
 - `npcs/` and `locations/` — One markdown file per entity, each with frontmatter (`name`, `aliases`, `type`, `location`, `first_seen`, etc.) and a short markdown body. These are the source of truth for everyone/everywhere the website knows about. NPCs may carry an `expertise: dragons, Draconic, ...` field — the site cross-references those tags against items' `expertise_needed:` to surface "Who could help" / "Could help with" blocks on each detail page.
 - `items/` — One markdown file per magical, mysterious, or narratively significant item the crew has acquired. Frontmatter: `name`, `aliases`, `type` (Magic item / Weapon / Focus / Book / Mystery / Trophy / Keepsake / Memento), `holder` (PC name or "Party"), `status` (Unresolved / Active / Consumed / Lost), `origin` (session date), and optional `expertise_needed:` tags. Everyday loot (coin, generic potions/scrolls, consumables) stays in the session's `carried:` list without getting its own file — see the criteria in the item-catalog thread.
@@ -47,15 +50,15 @@ When new session material arrives (notes from the player, a fresh transcript, or
 
 ### 1. Drop the raw sources
 
-Use the real-world date as `YYYY-MM-DD`:
-- `session notes/YYYY-MM-DD.md` if the player produced bullet notes (Fiz's POV). Optional.
-- `transcripts/YYYY-MM-DD.txt` if there is an audio transcript (Whisper-style, no speaker tags, ~80–120KB). Optional.
+Use the real-world date as `YYYY-MM-DD` and create the session folder `sessions/YYYY-MM-DD/`:
+- `sessions/YYYY-MM-DD/player notes/fiz.md` if the player produced bullet notes (Fiz's POV). Optional.
+- `sessions/YYYY-MM-DD/transcript.txt` if there is an audio transcript (Whisper-style, no speaker tags, ~80–120KB). Optional.
 
 At least one of the two must exist. If both are missing there is no session to render.
 
 ### 2. Generate the detailed summary
 
-Write `summaries/YYYY-MM-DD.md`. This file is the **primary content** of the session's detail page on the site and the source of the `*In brief: ...*` line that becomes the row blurb on `sessions.html`.
+Write `sessions/YYYY-MM-DD/summary.md`. This file is the **primary content** of the session's detail page on the site and the source of the `*In brief: ...*` line that becomes the row blurb on `sessions.html`.
 
 Required format:
 - Lead line: `*In brief: <one sentence>*` — this single sentence becomes the row blurb. Keep it under ~30 words and make it evocative, not generic.
@@ -85,8 +88,8 @@ python3 scripts/generate-session-image.py YYYY-MM-DD --beats   # beats only
 
 Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits (`characters/*.jpeg`) as reference and the session summary as the scene description.
 
-- **Hero**: `summaries/images/YYYY-MM-DD.jpg` (16:9 landscape banner shown above the summary).
-- **Beats**: one image per `##` section of the summary, saved to `summaries/images/YYYY-MM-DD/<slugified-section-title>.jpg` (3:2 inline illustrations floated alternately left/right within each section, matching the beat's title via slug lookup). Sections whose title is "What's next" / "Loose ends" / "Next steps" (or which contain only bullet lists) are skipped.
+- **Hero**: `sessions/YYYY-MM-DD/images/hero.jpg` (16:9 landscape banner shown above the summary).
+- **Beats**: one image per `##` section of the summary, saved to `sessions/YYYY-MM-DD/images/<slugified-section-title>.jpg` (3:2 inline illustrations floated alternately left/right within each section, matching the beat's title via slug lookup). Sections whose title is "What's next" / "Loose ends" / "Next steps" (or which contain only bullet lists) are skipped.
 
 The site generator picks up any files it finds in those paths and embeds them automatically — no `generate.py` change needed per session.
 
@@ -101,13 +104,13 @@ python3 scripts/update-entity-sessions.py           # apply
 python3 scripts/update-entity-sessions.py --dry-run # preview
 ```
 
-Scans every session summary in `summaries/` and writes a `sessions: YYYY-MM-DD, YYYY-MM-DD, …` line into the frontmatter of each NPC, location, and item markdown file — word-boundary, case-sensitive matches against the entity's `aliases:` list. The site generator reads that field and renders a *"Mentioned in sessions"* chip row at the top of each NPC/location/item detail page, with clickable jumps to the matching session pages. Quests get the same treatment automatically from the `(YYYY-MM-DD)` parentheticals already inside each bullet in `quests.md` — no per-quest field needed.
+Scans every session summary (`sessions/*/summary.md`) and writes a `sessions: YYYY-MM-DD, YYYY-MM-DD, …` line into the frontmatter of each NPC, location, and item markdown file — word-boundary, case-sensitive matches against the entity's `aliases:` list. The site generator reads that field and renders a *"Mentioned in sessions"* chip row at the top of each NPC/location/item detail page, with clickable jumps to the matching session pages. Quests get the same treatment automatically from the `(YYYY-MM-DD)` parentheticals already inside each bullet in `quests.md` — no per-quest field needed.
 
 Re-run this whenever a summary is added, expanded, or an entity gets a new alias.
 
 ### 2.7. Write an audio script (optional)
 
-Write `summaries/audio/YYYY-MM-DD/script.md` in the "Tales of the True Hand" storyteller register. Use `summaries/audio/2026-06-16/script.md` as the canonical template — copy its structure and delivery-cue vocabulary rather than inventing new ones. Key rules:
+Write `sessions/YYYY-MM-DD/audio/script.md` in the "Tales of the True Hand" storyteller register. Use `sessions/2026-06-16/audio/script.md` as the canonical template — copy its structure and delivery-cue vocabulary rather than inventing new ones. Key rules:
 - Line 1: `# Tales of the True Hand — YYYY-MM-DD` (the H1 is required and drives the podcast feed episode grouping).
 - Line 2: `## <subtitle>` — becomes the episode title in the podcast feed (e.g. `## The Cambion at the Gate`).
 - Sections: `[COLD OPEN — 25s]` / `[TITLE — 8s]` / `## ACT ONE …` (3–5 acts) / `[CLOSING — 30s]`.
@@ -124,7 +127,7 @@ For a batch of sessions, spawning parallel `general-purpose` Agents with the ref
 .venv/bin/python scripts/generate-session-audio.py YYYY-MM-DD --voice tEo3d4j7gzVojBL5Z4Pt --force
 ```
 
-Reads `summaries/audio/YYYY-MM-DD/script.md`, calls ElevenLabs TTS chunk-by-chunk with prosody-continuity via `previous_text` / `next_text`, layers in music/stings from `summaries/audio/library/` for `[MUSIC: ...]` and `[STING: ...]` cues, stitches with ffmpeg's concat filter, and writes into `summaries/audio/YYYY-MM-DD/`. The default voice ID above is Cormac ("Irish Fantasy Storyteller") — a professional voice, so it requires a **paid** ElevenLabs plan; the free tier can't use it via API. Needs `ELEVENLABS_API_KEY` in the same `.env` used by the image script (git-ignored). Watch the character budget: each script is 5–7k chars.
+Reads `sessions/YYYY-MM-DD/audio/script.md`, calls ElevenLabs TTS chunk-by-chunk with prosody-continuity via `previous_text` / `next_text`, layers in music/stings from `sessions/library/audio/` for `[MUSIC: ...]` and `[STING: ...]` cues, stitches with ffmpeg's concat filter, and writes into `sessions/YYYY-MM-DD/audio/`. The default voice ID above is Cormac ("Irish Fantasy Storyteller") — a professional voice, so it requires a **paid** ElevenLabs plan; the free tier can't use it via API. Needs `ELEVENLABS_API_KEY` in the same `.env` used by the image script (git-ignored). Watch the character budget: each script is 5–7k chars.
 
 **TTS caching**: each speech chunk's hash is `sha256(voice_id + model_id + delivery_preset + text)`. On re-run, chunks whose hash still matches the manifest are reused — no ElevenLabs call. Editing a single line in the script re-TTSes only that chunk. Change `--voice` or `--model` (or edit `DELIVERY_PRESETS` in the script) to invalidate everything; pass `--force-tts` to invalidate the cache explicitly. Music-only tweaks are free — re-runs after only music/library changes cost zero credits.
 

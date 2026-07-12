@@ -15,15 +15,15 @@ Usage:
     python3 scripts/generate-session-image.py 2026-06-16 --force  # overwrite
 
     # regenerate all sessions that don't yet have an image:
-    for d in summaries/*.md; do
-        date=$(basename "$d" .md)
+    for d in sessions/*/summary.md; do
+        date=$(basename "$(dirname "$d")")
         python3 scripts/generate-session-image.py "$date"
     done
 
-Output: summaries/images/YYYY-MM-DD.jpg
-The website generator (website/generate.py) automatically embeds any image
-it finds under summaries/images/ as a hero at the top of that session's
-detail page.
+Output: hero → sessions/YYYY-MM-DD/images/hero.jpg
+        beats → sessions/YYYY-MM-DD/images/<beat-slug>.jpg
+The website generator (website/generate.py) embeds hero.jpg as the banner at
+the top of that session's detail page and floats the beat images inline.
 """
 
 import argparse
@@ -41,8 +41,7 @@ except ImportError:
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SUMMARIES_DIR = ROOT / "summaries"
-IMAGES_DIR = SUMMARIES_DIR / "images"
+SESSIONS_DIR = ROOT / "sessions"
 CHARACTERS_DIR = ROOT / "characters"
 
 
@@ -178,7 +177,7 @@ BEAT_SKIP_TITLES = {
 
 
 def load_summary(date: str) -> str:
-    path = SUMMARIES_DIR / f"{date}.md"
+    path = SESSIONS_DIR / date / "summary.md"
     if not path.exists():
         print(f"ERROR: {path} does not exist.", file=sys.stderr)
         print("       Generate the summary first (see CLAUDE.md workflow).",
@@ -392,13 +391,14 @@ def main():
     do_beats = args.beats or not (args.hero or args.beats)
 
     summary = load_summary(args.date)
-    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+    img_dir = SESSIONS_DIR / args.date / "images"
+    img_dir.mkdir(parents=True, exist_ok=True)
 
     client = genai.Client(api_key=api_key)
     print(f"[{args.date}]")
 
     if do_hero:
-        hero_out = IMAGES_DIR / f"{args.date}.jpg"
+        hero_out = img_dir / "hero.jpg"
         try:
             _generate_one(client, args.model, args.hero_aspect,
                           build_contents(summary), hero_out,
@@ -411,9 +411,8 @@ def main():
         beats = extract_beats(summary)
         if not beats:
             print("  no beats found in summary.")
-        beats_dir = IMAGES_DIR / args.date
         for i, (title, slug, body) in enumerate(beats, 1):
-            beat_out = beats_dir / f"{slug}.jpg"
+            beat_out = img_dir / f"{slug}.jpg"
             try:
                 _generate_one(
                     client, args.model, args.beat_aspect,
