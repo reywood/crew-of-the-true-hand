@@ -5,8 +5,8 @@
      xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
   <title>Tales of the True Hand</title>
-  <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/sessions.html</link>
-  <atom:link href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/feed.xml" rel="self" type="application/rss+xml"/>
+  <link>https://crewofthetruehand.com/sessions.html</link>
+  <atom:link href="https://crewofthetruehand.com/feed.xml" rel="self" type="application/rss+xml"/>
   <language>en-us</language>
   <description>Weekly recaps of the Crew of the True Hand — a D&amp;D 5e campaign following Storm King&#x27;s Thunder — told by Vandal Lovelace, bard and hearth-storyteller.</description>
   <itunes:summary>Weekly recaps of the Crew of the True Hand — a D&amp;D 5e campaign following Storm King&#x27;s Thunder — told by Vandal Lovelace, bard and hearth-storyteller.</itunes:summary>
@@ -15,7 +15,7 @@
     <itunes:name>Crew of the True Hand</itunes:name>
     <itunes:email>noreply@crew-of-the-true-hand.local</itunes:email>
   </itunes:owner>
-  <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/static/podcast-cover.jpg"/>
+  <itunes:image href="https://crewofthetruehand.com/static/podcast-cover.jpg"/>
   <itunes:category text="Leisure">
     <itunes:category text="Games"/>
   </itunes:category>
@@ -24,8 +24,8 @@
   <lastBuildDate>Tue, 16 Jun 2026 12:00:00 +0000</lastBuildDate>
   <item>
     <title>2026-06-16 — Milk-White Eyes at the Deep Water Inn</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-06-16.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-06-16.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-06-16.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-06-16.mp3</guid>
     <pubDate>Tue, 16 Jun 2026 12:00:00 +0000</pubDate>
     <description>Making landfall in Waterdeep, the Crew found themselves front-page news, chased leads on Harshnag and the Oracle through a dragon-mad wizard and a bard by his statue, then broke up a mind-controlled bar brawl at the docks.
 
@@ -41,13 +41,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>10:46</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-06-16.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-06-16.mp3" length="10351316" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-06-16.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-06-16.mp3" length="10351316" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-06-02 — The Hunger of Queen Guh</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-06-02.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-06-02.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-06-02.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-06-02.mp3</guid>
     <pubDate>Tue, 02 Jun 2026 12:00:00 +0000</pubDate>
     <description>Golden Fields takes its second raid since the crew arrived, and an insight check reveals what the hill giants are actually after.
 
@@ -63,13 +63,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>07:57</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-06-02.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-06-02.mp3" length="7640335" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-06-02.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-06-02.mp3" length="7640335" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-05-12 — The Harvest Thieves</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-05-12.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-05-12.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-05-12.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-05-12.mp3</guid>
     <pubDate>Tue, 12 May 2026 12:00:00 +0000</pubDate>
     <description>A goblin-bugbear-ogre raid swept through Golden Fields at night, and the crew fought through two waves before the abbey bell rang to warn that giants were coming.
 
@@ -85,13 +85,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>08:24</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-05-12.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-05-12.mp3" length="8075031" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-05-12.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-05-12.mp3" length="8075031" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-03-08 — The Tree That Named a Giant</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-03-08.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-03-08.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-03-08.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-03-08.mp3</guid>
     <pubDate>Sun, 08 Mar 2026 12:00:00 +0000</pubDate>
     <description>Zephyros set the crew down at Golden Fields, where a yeti barkeep, an awakened tree, and a Waterdhavian noble pointed them toward dragons, the Spine of the World, and a giant named Harshnag.
 
@@ -107,13 +107,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>09:05</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-03-08.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-03-08.mp3" length="8731745" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-03-08.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-03-08.mp3" length="8731745" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-02-10 — Blood of the Giant</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-02-10.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-02-10.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-02-10.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-02-10.mp3</guid>
     <pubDate>Tue, 10 Feb 2026 12:00:00 +0000</pubDate>
     <description>Roused by Zephyros&#x27;s dire warning of giant gods and an imminent assault, the crew set the wizard&#x27;s tower down outside Goldenfields and weathered a brutal battle against a young blue dragon, a half-dragon rider, a kobold lackey, and three gargoyles — emerging bloodied but with a quest to the Eye of Annam and a haul of strange loot.
 
@@ -129,13 +129,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>10:04</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-02-10.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-02-10.mp3" length="9672163" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-02-10.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-02-10.mp3" length="9672163" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-01-27 — Stone Wings on an Ill Wind</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-01-27.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-01-27.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-01-27.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-01-27.mp3</guid>
     <pubDate>Tue, 27 Jan 2026 12:00:00 +0000</pubDate>
     <description>Aboard Zephyros&#x27;s flying tower bound for Goldenfields, the crew rifled through giant-sized bookshelves, won gifts of map, chalk, book, and bronze griffin, then fought off a gargoyle ambush riding in on an unnatural storm.
 
@@ -151,13 +151,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>08:50</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-01-27.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-01-27.mp3" length="8482137" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-01-27.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-01-27.mp3" length="8482137" type="audio/mpeg"/>
   </item>
   <item>
     <title>2026-01-13 — Destiny Comes to Nightstone</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2026-01-13.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-01-13.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2026-01-13.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2026-01-13.mp3</guid>
     <pubDate>Tue, 13 Jan 2026 12:00:00 +0000</pubDate>
     <description>The crew finally toppled Corvin&#x27;s takeover of Nightstone — only for Aganor&#x27;s vengeance to summon Destiny, a cambion of Asmodeus, forcing a fighting retreat before a cloud giant named Zephyros descended to recruit them to restore the Ordning.
 
@@ -173,13 +173,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>09:56</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2026-01-13.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2026-01-13.mp3" length="9543729" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2026-01-13.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2026-01-13.mp3" length="9543729" type="audio/mpeg"/>
   </item>
   <item>
     <title>2025-12-17 — Black Banners over Nightstone</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2025-12-17.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-12-17.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2025-12-17.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2025-12-17.mp3</guid>
     <pubDate>Wed, 17 Dec 2025 12:00:00 +0000</pubDate>
     <description>Back at Nightstone with black banners flying, the crew met the new claimant Corvin, learned the wider giant troubles, and split — Toz and Fiz brokered an oath with a tiefling cultist while Hal and Woz pulled a cursed sword from a sarcophagus in the crypt.
 
@@ -195,13 +195,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>09:23</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2025-12-17.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-12-17.mp3" length="9017618" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2025-12-17.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2025-12-17.mp3" length="9017618" type="audio/mpeg"/>
   </item>
   <item>
     <title>2025-12-07 — The Name in the Bottle</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2025-12-07.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-12-07.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2025-12-07.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2025-12-07.mp3</guid>
     <pubDate>Sun, 07 Dec 2025 12:00:00 +0000</pubDate>
     <description>A tense truce with the goblin boss got the children out alive, the crew wisely refused to trade blows with a black ooze roosting in a stalactite, and Molak gave up the genie bottle along with a name in Triboar — Derothra Shendrel — who&#x27;s said to know the wish-word.
 
@@ -217,13 +217,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>09:17</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2025-12-07.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-12-07.mp3" length="8928544" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2025-12-07.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2025-12-07.mp3" length="8928544" type="audio/mpeg"/>
   </item>
   <item>
     <title>2025-11-12 — The Stone the Giants Stole</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2025-11-12.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-11-12.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2025-11-12.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2025-11-12.mp3</guid>
     <pubDate>Wed, 12 Nov 2025 12:00:00 +0000</pubDate>
     <description>Nightstone&#x27;s fall came clear — cloud giants dropped rocks from the sky and stole the black stone — and the crew followed the trail into Ardeep to a goblin cave, where they met a druid of the Emerald Enclave and dropped a pair of ogres to free the villagers.
 
@@ -239,13 +239,13 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>10:48</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2025-11-12.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-11-12.mp3" length="10381845" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2025-11-12.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2025-11-12.mp3" length="10381845" type="audio/mpeg"/>
   </item>
   <item>
     <title>2025-09-23 — The Bell That Would Not Stop</title>
-    <link>http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/session-2025-09-23.html</link>
-    <guid isPermaLink="false">http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-09-23.mp3</guid>
+    <link>https://crewofthetruehand.com/session-2025-09-23.html</link>
+    <guid isPermaLink="false">https://crewofthetruehand.com/audio/sessions/2025-09-23.mp3</guid>
     <pubDate>Tue, 23 Sep 2025 12:00:00 +0000</pubDate>
     <description>The wrecked crew of the* True Hand *stagger inland to Nightstone, find it overrun by goblins and dire wolves, and end up defending the ruined village alongside a party of adventurers hunting a missing woman named Kella.
 
@@ -261,8 +261,8 @@ Additional sound effects &amp; ambience (Pixabay Content License, attribution no
     <itunes:duration>09:26</itunes:duration>
     <itunes:explicit>false</itunes:explicit>
     <itunes:episodeType>full</itunes:episodeType>
-    <itunes:image href="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/images/sessions/2025-09-23.jpg"/>
-    <enclosure url="http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com/audio/sessions/2025-09-23.mp3" length="9072805" type="audio/mpeg"/>
+    <itunes:image href="https://crewofthetruehand.com/images/sessions/2025-09-23.jpg"/>
+    <enclosure url="https://crewofthetruehand.com/audio/sessions/2025-09-23.mp3" length="9072805" type="audio/mpeg"/>
   </item>
 </channel>
 </rss>

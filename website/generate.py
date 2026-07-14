@@ -61,12 +61,12 @@ AUDIO_CREDITS_FILE = AUDIO_LIBRARY_DIR / "CREDITS.md"
 QUESTS_FILE = ROOT / "quests.md"
 
 # Public base URL for absolute links inside the podcast RSS feed.
-# The S3 site is served at http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com;
-# override at build-time with SITE_BASE_URL if the canonical domain changes.
+# The site is served at https://crewofthetruehand.com (CloudFront + ACM, fronting
+# the S3 bucket); override at build-time with SITE_BASE_URL if the domain changes.
 import os as _os
 SITE_BASE_URL = _os.environ.get(
     "SITE_BASE_URL",
-    "http://crew-of-the-true-hand.s3-website-us-east-1.amazonaws.com",
+    "https://crewofthetruehand.com",
 ).rstrip("/")
 
 
