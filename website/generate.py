@@ -20,6 +20,7 @@ Re-run after adding or editing source files:
 import datetime as _dt
 import hashlib
 import html
+import json
 import re
 import shutil
 import subprocess
@@ -612,11 +613,16 @@ def page(title, body, current_nav=None, breadcrumb=None):
 <title>{html.escape(title)} — Crew of the True Hand</title>
 <link rel="stylesheet" href="{static_url('style.css')}">
 <script defer src="{static_url('podcast-subscribe.js')}"></script>
+<script defer src="{static_url('search.js')}"></script>
 </head>
 <body>
 <header class="site-header">
   <div class="site-title"><a href="index.html"><span class="anchor">⚓</span> Crew of the <em>True Hand</em></a></div>
   {nav}
+  <div class="site-search-wrap">
+    <input type="search" id="site-search" placeholder="Search the archive…" autocomplete="off" aria-label="Search the archive">
+    <div id="search-results" class="search-results" hidden></div>
+  </div>
 </header>
 <main class="content">
 {bc}
@@ -926,14 +932,16 @@ def pc_list_page(pcs, link_map):
                 current_nav="characters.html")
 
 
-def detail_page_pc(pc, link_map):
+def detail_page_pc(pc, link_map, graph=None):
     rendered = md_to_html(pc.body)
     linked = linkify_html(rendered, pc.href, link_map)
     img = (f'<img class="portrait portrait-large" src="{pc.image}" alt="{html.escape(pc.name)}">'
            if pc.image else "")
+    connections_block = _render_connections(pc.href, graph)
     body = f"""<article class="detail">
   {img}
   <p class="muted">{html.escape(pc.summary)}</p>
+  {connections_block}
   <div class="detail-body">
   {linked}
   </div>
@@ -1260,7 +1268,8 @@ def _render_expertise_link_block(label, entries):
     )
 
 
-def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None):
+def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None,
+                        graph=None):
     rendered = md_to_html(e.body)
     linked = linkify_html(rendered, e.href, link_map)
     meta_rows = []
@@ -1299,11 +1308,14 @@ def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None)
     can_help_block = _render_expertise_link_block(
         "Could help with", e.meta.get("can_help_with") or [])
 
+    connections_block = _render_connections(e.href, graph)
+
     body = f"""<article class="detail">
   <h1>{html.escape(e.name)}</h1>
   {sessions_block}
   {helpers_block}
   {can_help_block}
+  {connections_block}
   {meta_block}
   <div class="detail-body">
   {linked}
@@ -1901,6 +1913,287 @@ def podcast_feed(sessions):
 
 
 # --------------------------------------------------------------------------
+# entity graph
+# --------------------------------------------------------------------------
+#
+# The archive is already a graph: entities are nodes and their frontmatter
+# fields (plus a few build-time joins) are the edges. Historically those edges
+# were computed in memory and thrown away — there was no persisted edge set and
+# no reverse index ("what links to X?"). build_graph() materializes both:
+#   - site/graph.json      — { nodes, edges } for tooling / reasoning
+#   - site/search-index.json (built in main from the same nodes)
+#   - the "Connections" backlink block rendered on detail pages
+#
+# The rel vocabulary is closed and small. Each edge is derived from data that
+# already exists — this is mostly serialization, not new computation:
+#
+#   appears_in       any  -> session   ('sessions:' field)
+#   located_in       npc  -> location  ('location:' via port_for normalization)
+#   within           loc  -> loc       ('region'/'location'/'near', if it resolves)
+#   held_by          item -> pc        ('holder:', "Party" skipped)
+#   acquired_in      item -> session   ('origin:')
+#   affiliated_with  npc  -> faction   ('affiliation:', synthetic faction node)
+#   can_help         npc  -> item      (expertise ∩ expertise_needed join)
+#   depends_on       quest-> quest     (QUEST_DEPENDENCIES)
+#   session_at       session-> loc     (SESSION_LOCATIONS)
+#   gave             npc  -> item      ('giver:' field on items)
+#   governs          npc  -> location  (loc 'ruler'/'patron'/'captain')
+
+def _clean_blurb(text, limit=200):
+    """A short plain-text blurb for a node: strip markdown emphasis/links/code."""
+    if not text:
+        return ""
+    s = text.strip().split("\n", 1)[0].strip()
+    s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)   # [txt](url) -> txt
+    s = re.sub(r"[*`_]", "", s)                        # emphasis / code marks
+    s = re.sub(r"\s+", " ", s).strip()
+    if len(s) > limit:
+        s = s[:limit].rsplit(" ", 1)[0] + "…"
+    return s
+
+
+def _first_scalar(v):
+    if isinstance(v, list):
+        return v[0] if v else ""
+    return v or ""
+
+
+def _as_list(v):
+    if not v:
+        return []
+    if isinstance(v, list):
+        return [str(x).strip() for x in v if str(x).strip()]
+    return [x.strip() for x in str(v).split(",") if x.strip()]
+
+
+class Graph:
+    """Materialized entity graph. Nodes/edges are JSON-serializable; the
+    adjacency dicts and faction index drive the Connections block."""
+    def __init__(self):
+        self.nodes = []                 # list of node dicts
+        self.edges = []                 # list of {source, target, rel}
+        self.node_by_id = {}            # id -> node dict
+        self.out_adj = {}               # id -> [(rel, target_id)]
+        self.in_adj = {}                # id -> [(rel, source_id)]
+        self.faction_members = {}       # faction_id -> [npc id, ...]
+
+    def _edge(self, src, tgt, rel):
+        if not src or not tgt or src == tgt:
+            return
+        self.edges.append({"source": src, "target": tgt, "rel": rel})
+        self.out_adj.setdefault(src, []).append((rel, tgt))
+        self.in_adj.setdefault(tgt, []).append((rel, src))
+
+    def as_dict(self):
+        return {"nodes": self.nodes, "edges": self.edges}
+
+
+def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup):
+    entities = pcs + npcs + locations + items + quests + sessions
+    g = Graph()
+
+    # id resolution: alias -> entity, first-wins (PCs first, matching the
+    # prose linker's precedence). Used to turn frontmatter name strings into
+    # node ids.
+    alias_lookup = {}
+    for e in entities:
+        for n in [e.name] + list(e.aliases or []):
+            key = n.strip().lower()
+            if key and key not in alias_lookup:
+                alias_lookup[key] = e
+
+    def resolve(name):
+        if not name:
+            return None
+        return alias_lookup.get(str(name).strip().lower())
+
+    loc_by_slug = {l.slug: l for l in locations}
+    location_names = [l.name for l in locations]
+
+    # --- nodes (one per real entity) ---
+    for e in entities:
+        node = {
+            "id": e.href,
+            "kind": e.kind,
+            "name": e.name,
+            "aliases": list(e.aliases or []),
+            "url": e.href,
+            "blurb": _clean_blurb(e.summary or e.body),
+        }
+        g.nodes.append(node)
+        g.node_by_id[e.href] = node
+
+    def faction_node(name):
+        """Get-or-create a synthetic faction node (no page). Returns its id."""
+        fid = "faction-" + slugify(name)
+        if fid not in g.node_by_id:
+            node = {"id": fid, "kind": "faction", "name": name,
+                    "aliases": [name], "url": "", "blurb": ""}
+            g.nodes.append(node)
+            g.node_by_id[fid] = node
+            g.faction_members[fid] = []
+        return fid
+
+    # --- edges ---
+    for e in entities:
+        # appears_in: entity -> session (materialized 'sessions:' field)
+        for d in _extract_session_dates(e.meta.get("sessions")):
+            s = session_lookup.get(d)
+            if s:
+                g._edge(e.href, s.href, "appears_in")
+
+    for npc in npcs:
+        # located_in: npc -> location (port_for normalizes the free-text field)
+        port = port_for(npc, location_names)
+        if port:
+            tgt = resolve(port)
+            if tgt and tgt.kind == "location":
+                g._edge(npc.href, tgt.href, "located_in")
+        # affiliated_with: npc -> faction (synthetic node)
+        for aff in _as_list(npc.meta.get("affiliation")):
+            fid = faction_node(aff)
+            g._edge(npc.href, fid, "affiliated_with")
+            g.faction_members[fid].append(npc.href)
+        # can_help: npc -> item (expertise join, already attached)
+        for item in npc.meta.get("can_help_with") or []:
+            g._edge(npc.href, item.href, "can_help")
+
+    for loc in locations:
+        # within: loc -> loc, only when the referenced place is a known location
+        for field in ("region", "location", "near"):
+            for ref in _as_list(loc.meta.get(field)):
+                tgt = resolve(ref)
+                if tgt and tgt.kind == "location":
+                    g._edge(loc.href, tgt.href, "within")
+        # governs: loc's ruler/patron/captain -> this location
+        for field in ("ruler", "patron", "captain"):
+            for ref in _as_list(loc.meta.get(field)):
+                who = resolve(ref)
+                if who and who.kind in ("npc", "pc"):
+                    g._edge(who.href, loc.href, "governs")
+
+    for item in items:
+        # held_by: item -> pc (skip "Party")
+        holder = _first_scalar(item.meta.get("holder"))
+        if holder and holder.strip().lower() != "party":
+            who = resolve(holder)
+            if who and who.kind == "pc":
+                g._edge(item.href, who.href, "held_by")
+        # acquired_in: item -> session (origin date)
+        origin = _first_scalar(item.meta.get("origin"))
+        s = session_lookup.get(str(origin).strip())
+        if s:
+            g._edge(item.href, s.href, "acquired_in")
+        # gave: giver npc -> item
+        giver = _first_scalar(item.meta.get("giver"))
+        who = resolve(giver)
+        if who and who.kind in ("npc", "pc"):
+            g._edge(who.href, item.href, "gave")
+
+    for q in quests:
+        # depends_on: quest -> quest (QUEST_DEPENDENCIES, already attached)
+        for tgt in q.meta.get("helps") or []:
+            g._edge(q.href, tgt.href, "depends_on")
+
+    for date, slugs in SESSION_LOCATIONS.items():
+        s = session_lookup.get(date)
+        if not s:
+            continue
+        for slug in slugs:
+            loc = loc_by_slug.get(slug)
+            if loc:
+                g._edge(s.href, loc.href, "session_at")
+
+    return g
+
+
+# What each relation is called on a page, and which side of the edge the
+# current page sits on. Only relations listed per-kind are rendered; the ones
+# rendered elsewhere (appears_in -> "Mentioned in sessions"; can_help -> the
+# expertise blocks) are deliberately omitted here to avoid duplication.
+CONNECTION_SPEC = {
+    "npc": [
+        ("out", "located_in", "Based at"),
+        ("out", "governs", "Governs"),
+        ("out", "gave", "Gifts given"),
+        ("faction", "affiliated_with", None),
+    ],
+    "location": [
+        ("out", "within", "Part of"),
+        ("in", "within", "Contains"),
+        ("in", "located_in", "Figures here"),
+        ("in", "governs", "Governed by"),
+    ],
+    # Items are omitted: their held_by / acquired_in / giver relations already
+    # show as frontmatter meta rows on the item page, so a Connections block
+    # would only duplicate them. The reverse of `gave` shows up usefully on the
+    # NPC side ("Gifts given") instead.
+    "pc": [
+        ("in", "held_by", "Carrying"),
+    ],
+}
+
+
+def _render_connections(href, graph):
+    """Render the 'Connections' backlink block for a detail page, if any."""
+    if not graph:
+        return ""
+    node = graph.node_by_id.get(href)
+    if not node:
+        return ""
+    spec = CONNECTION_SPEC.get(node["kind"])
+    if not spec:
+        return ""
+
+    def links_for(adj, rel):
+        seen, out = set(), []
+        for r, other_id in adj:
+            if r != rel or other_id in seen:
+                continue
+            seen.add(other_id)
+            other = graph.node_by_id.get(other_id)
+            if other and other["url"]:
+                out.append(
+                    f'<a href="{other["url"]}">{html.escape(other["name"])}</a>'
+                )
+        return out
+
+    rows = []
+    for direction, rel, label in spec:
+        if direction == "faction":
+            # For each faction this NPC serves, list fellow members.
+            for r, fid in graph.out_adj.get(href, []):
+                if r != rel:
+                    continue
+                fac = graph.node_by_id.get(fid)
+                members = [
+                    graph.node_by_id[m] for m in graph.faction_members.get(fid, [])
+                    if m != href and m in graph.node_by_id
+                ]
+                if not fac or not members:
+                    continue
+                mlinks = ", ".join(
+                    f'<a href="{m["url"]}">{html.escape(m["name"])}</a>'
+                    for m in members if m["url"]
+                )
+                if mlinks:
+                    rows.append((f'Also in {fac["name"]}', mlinks))
+            continue
+        adj = graph.out_adj.get(href, []) if direction == "out" else graph.in_adj.get(href, [])
+        links = links_for(adj, rel)
+        if links:
+            rows.append((label, ", ".join(links)))
+
+    if not rows:
+        return ""
+    row_html = "".join(
+        f'<div class="conn-row"><span class="conn-label">{html.escape(lbl)}:</span> {val}</div>'
+        for lbl, val in rows
+    )
+    return f'<aside class="connections">{row_html}</aside>'
+
+
+# --------------------------------------------------------------------------
 # main
 # --------------------------------------------------------------------------
 
@@ -1918,28 +2211,43 @@ def main():
     all_entities = pcs + npcs + locations + items + quests + sessions
     link_map = build_link_map(all_entities)
 
+    graph = build_graph(pcs, npcs, locations, items, quests, sessions,
+                        session_lookup)
+
     setup_output()
+
+    # Materialize the graph + a slim search index. graph.json is for tooling
+    # and reasoning; search-index.json powers the client-side site search.
+    write_page("graph.json", json.dumps(graph.as_dict(), indent=1,
+                                        ensure_ascii=False, sort_keys=True))
+    search_index = [
+        {"name": n["name"], "aliases": n["aliases"], "kind": n["kind"],
+         "url": n["url"], "blurb": n["blurb"]}
+        for n in graph.nodes if n["url"]
+    ]
+    write_page("search-index.json", json.dumps(search_index,
+                                               ensure_ascii=False, sort_keys=True))
 
     write_page("index.html", index_page(pcs, npcs, locations, quests, sessions))
 
     write_page("characters.html", pc_list_page(pcs, link_map))
     for pc in pcs:
-        write_page(pc.href, detail_page_pc(pc, link_map))
+        write_page(pc.href, detail_page_pc(pc, link_map, graph))
 
     write_page("npcs.html", npc_table_page(npcs, link_map))
     for e in npcs:
         write_page(e.href, detail_page_generic(
-            e, "npcs.html", "NPCs", link_map, session_lookup))
+            e, "npcs.html", "NPCs", link_map, session_lookup, graph))
 
     write_page("locations.html", locations_chart_page(locations, link_map))
     for e in locations:
         write_page(e.href, detail_page_generic(
-            e, "locations.html", "Locations", link_map, session_lookup))
+            e, "locations.html", "Locations", link_map, session_lookup, graph))
 
     write_page("items.html", item_list_page(items, link_map))
     for e in items:
         write_page(e.href, detail_page_generic(
-            e, "items.html", "Items", link_map, session_lookup))
+            e, "items.html", "Items", link_map, session_lookup, graph))
 
     write_page("quests.html", quest_list_page(quests, link_map))
     for q in quests:

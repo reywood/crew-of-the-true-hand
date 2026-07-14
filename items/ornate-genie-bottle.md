@@ -4,6 +4,7 @@ aliases: Ornate genie bottle, genie bottle, ornate bottle
 sessions: 2025-09-23, 2025-12-07, 2026-01-13
 type: Mystery
 holder: Party
+giver: Molak
 status: Unresolved
 origin: 2025-09-23
 expertise_needed: genies, Primordial

@@ -4,6 +4,7 @@ aliases: Bronze griffin figurine, griffin figurine, bronze griffin
 sessions: 2026-01-27
 type: Magic item
 holder: Woz
+giver: Zephyros
 status: Active
 origin: 2026-01-27
 ---

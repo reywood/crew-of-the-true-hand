@@ -4,6 +4,7 @@ aliases: Alchemy jug, alchemical jug
 sessions: 2026-06-16
 type: Magic item
 holder: Fiz
+giver: Garley Gond
 status: Active
 origin: 2026-06-16
 ---

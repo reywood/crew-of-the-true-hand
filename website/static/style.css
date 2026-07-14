@@ -69,7 +69,7 @@ body::before {
   border-bottom: 4px solid var(--brass);
   box-shadow: 0 4px 18px rgba(0,0,0,0.5);
   position: relative;
-  z-index: 1;
+  z-index: 100;
 }
 .site-title a {
   color: var(--parchment);
@@ -112,6 +112,85 @@ body::before {
 .site-nav a.active {
   background: rgba(193, 154, 74, 0.4);
   color: #fff;
+}
+
+/* ---------- site search ---------- */
+.site-search-wrap {
+  position: relative;
+  flex: 0 1 auto;
+}
+#site-search {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: var(--parchment);
+  border: 1px solid var(--brass);
+  border-radius: 999px;
+  padding: 0.38rem 0.95rem;
+  width: 12rem;
+  max-width: 40vw;
+  outline: none;
+  transition: box-shadow 0.15s, width 0.2s;
+}
+#site-search:focus {
+  box-shadow: 0 0 0 2px var(--brass-bright);
+  width: 15rem;
+}
+#site-search::placeholder { color: var(--rope-dark); }
+.search-results {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  width: 22rem;
+  max-width: 80vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: var(--parchment);
+  border: 1px solid var(--brass);
+  border-radius: 6px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+  z-index: 20;
+  padding: 0.35rem 0;
+}
+.search-group-label {
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  color: var(--wood);
+  padding: 0.4rem 0.9rem 0.15rem;
+  border-top: 1px solid var(--parchment-shadow);
+}
+.search-group-label:first-child { border-top: none; }
+.search-hit {
+  display: block;
+  padding: 0.35rem 0.9rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.search-hit:hover, .search-hit.active {
+  background: rgba(193, 154, 74, 0.22);
+}
+.search-hit-name {
+  display: block;
+  font-weight: 700;
+  color: var(--wood);
+  font-size: 0.92rem;
+}
+.search-hit-blurb {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search-empty {
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
 }
 
 /* ---------- content card ---------- */
@@ -747,6 +826,37 @@ a.card:hover {
   border-bottom: 1px dotted var(--rope);
 }
 .expertise-link a:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
+/* ---------- 'Connections' backlink block (graph reverse-index) ---------- */
+.connections {
+  margin: 0.5rem 0 0.8rem;
+  padding: 0.55rem 0.9rem;
+  background: rgba(193, 154, 74, 0.06);
+  border-left: 3px solid var(--rope);
+  border-radius: 0 3px 3px 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.connections .conn-row + .conn-row {
+  margin-top: 0.25rem;
+}
+.connections .conn-label {
+  font-family: 'Cinzel', serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  color: var(--wood);
+  letter-spacing: 0.05em;
+  margin-right: 0.3em;
+}
+.connections a {
+  color: var(--wood-light);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.connections a:hover {
   color: var(--brass);
   border-bottom-color: var(--brass);
 }

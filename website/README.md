@@ -41,6 +41,7 @@ Body text in markdown. Names of other entities are auto-linked to their detail p
 - `name` is the canonical display name.
 - `aliases` is a comma-separated list of all phrasings that should auto-link to this entity. Always include the canonical name (the generator adds it if missing).
 - Any other frontmatter key (`location`, `race`, `role`, etc.) is rendered as a meta row.
+- `giver:` (items only) — the NPC/PC who gave the item to the crew. Use only for genuine gifts, not looted gear. Drives the `gave` graph edge and the "Gifts given" block on that NPC's page.
 
 ## Cross-linking rules
 
@@ -48,6 +49,31 @@ Body text in markdown. Names of other entities are auto-linked to their detail p
 - The longest matching alias wins, with word-boundary checks (so "Hal" won't match "Halruaa" or "Halfling").
 - Only the first occurrence of each entity per page is linked, to keep things readable.
 - Self-links are suppressed.
+
+## Entity graph, Connections & search
+
+`build_graph()` (the "entity graph" section of `generate.py`) turns the whole archive into an explicit node/edge graph, derived from data already loaded — mostly serialization, not new computation. Two files are emitted into `site/`:
+
+- **`graph.json`** — `{ "nodes": [...], "edges": [...] }`. Nodes carry `{id, kind, name, aliases, url, blurb}` (one per entity; factions are synthetic nodes with an empty `url` and no page). Edges are `{source, target, rel}` over a small closed vocabulary. It's also a compact artifact to load when answering multi-hop questions.
+- **`search-index.json`** — the same nodes, slimmed to `{name, aliases, kind, url, blurb}` and filtered to real pages. Loaded by `static/search.js` for the header search box (hand-rolled token/prefix match, kind-grouped results, keyboard nav — no external library).
+
+Edge (`rel`) vocabulary and where each comes from:
+
+| `rel` | source → target | derived from |
+|---|---|---|
+| `appears_in` | any → session | `sessions:` field (materialized by `scripts/update-entity-sessions.py`) |
+| `located_in` | npc → location | `location:` (via `port_for` normalization) |
+| `within` | location → location | `region` / `location` / `near` (only when it resolves to a known location) |
+| `held_by` | item → pc | `holder:` ("Party" produces no edge) |
+| `acquired_in` | item → session | `origin:` |
+| `affiliated_with` | npc → faction | `affiliation:` (synthetic faction node) |
+| `can_help` | npc → item | expertise ∩ expertise_needed join |
+| `depends_on` | quest → quest | `QUEST_DEPENDENCIES` |
+| `session_at` | session → location | `SESSION_LOCATIONS` |
+| `gave` | npc → item | `giver:` field on items |
+| `governs` | npc → location | location's `ruler` / `patron` / `captain` |
+
+The **Connections** block (`_render_connections`) uses the reverse index to add cross-reference links on NPC, location, and PC detail pages (e.g. "Figures here", "Governed by", "Also in <faction>", "Gifts given", "Carrying"). Item pages are deliberately excluded — their relations already appear as frontmatter meta rows. To add a new relation kind: emit the edge in `build_graph()`, then list it (with a label and `in`/`out` direction) under the relevant kind in `CONNECTION_SPEC`.
 
 ## Theme
 

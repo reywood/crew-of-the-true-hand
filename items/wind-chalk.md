@@ -4,6 +4,7 @@ aliases: Wind-chalk, wind chalk
 sessions: 2026-01-27
 type: Magic item
 holder: Toz
+giver: Zephyros
 status: Active
 origin: 2026-01-27
 ---

@@ -4,6 +4,7 @@ aliases: Xolkin's gift, Zhentarim gift
 sessions: 2026-01-13
 type: Mystery
 holder: Party
+giver: Xolkin
 status: Unresolved
 origin: 2026-01-13
 expertise_needed: arcane identification, Zhentarim

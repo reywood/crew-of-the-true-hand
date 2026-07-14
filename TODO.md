@@ -34,10 +34,6 @@ When the same spoken line appears twice in one script (e.g. `"You should have ta
 
 `sessions.html` has the Subscribe CTA (its link copies the feed URL to the clipboard with a paste-into-your-app popover). The home page deliberately carries no podcast language, and the **nav bar** (`NAV` in `website/generate.py`) doesn't mention the podcast either — so it's only discoverable from the sessions page. A small "Listen" entry in `NAV` would surface it on every page. (Note: an earlier `home-podcast` section on `index.html` was removed at the user's request.)
 
-### Site search
-
-There's no way to search across NPCs / locations / sessions / items today — visitors have to browse category pages or use their browser's find-in-page. A tiny client-side search (Lunr.js, or an even lighter hand-rolled index over the entity JSON that `generate.py` already builds internally) would fit the site's static nature.
-
 ## Deferred / not planned
 
 - **Cross-episode voice consistency**: Cormac at low stability drifts a little episode-to-episode. Not worth the effort of higher-stability regens; the current variance sounds human.
@@ -45,6 +41,16 @@ There's no way to search across NPCs / locations / sessions / items today — vi
 - **Machine-authored session summaries or scripts without a human pass**: the summary and script quality both benefit meaningfully from review before generation; this is not a "run overnight" pipeline.
 
 ## Done
+
+### Entity graph, connections backlinks & site search
+
+The archive was already a graph (entities linked by frontmatter + prose), but `generate.py` computed those relationships in memory and threw them away — no persisted edge set, no reverse index, no search.
+
+Done in `website/generate.py` (new "entity graph" section) plus `website/static/search.js`:
+- **`build_graph()`** materializes a closed-vocabulary edge set (`appears_in`, `located_in`, `within`, `held_by`, `acquired_in`, `affiliated_with`, `can_help`, `depends_on`, `session_at`, `gave`, `governs`) with a reverse index. Factions become synthetic nodes (no page). Emits `site/graph.json` (`{nodes, edges}`) — also a loadable artifact for reasoning/tooling.
+- **Connections block** (`_render_connections`) renders reverse links on NPC / location / PC detail pages ("Figures here", "Governed by", "Also in <faction>", "Gifts given", "Carrying"). Items are intentionally excluded — their relations already show as frontmatter meta rows.
+- **Client-side search** — `site/search-index.json` (slim, derived from the graph nodes) + a hand-rolled vanilla-JS token/prefix matcher in the header (`search.js`, no CDN/Lunr), kind-grouped dropdown with keyboard nav.
+- **Frontmatter enrichment**: added `giver:` to the five items that were genuine gifts (alchemy jug ← Garley Gond, bronze griffin + wind-chalk ← Zephyros, Xolkin's gift ← Xolkin, genie bottle ← Molak); loot keeps no giver.
 
 ### HTTPS + custom domain
 
