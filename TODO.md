@@ -38,16 +38,6 @@ When the same spoken line appears twice in one script (e.g. `"You should have ta
 
 There's no way to search across NPCs / locations / sessions / items today — visitors have to browse category pages or use their browser's find-in-page. A tiny client-side search (Lunr.js, or an even lighter hand-rolled index over the entity JSON that `generate.py` already builds internally) would fit the site's static nature.
 
-## Distribution / infrastructure
-
-### Submit the podcast to directories
-
-The feed at `https://crewofthetruehand.com/feed.xml` works but isn't listed anywhere. If we want organic discovery / cross-device subscribing:
-
-- Apple Podcasts Connect: submit the feed. (Now HTTPS on a custom domain, so no HTTP-only warning.)
-- Spotify for Podcasters: submit the feed.
-- Overcast, Pocket Casts, Castro, Podcast Addict: automatic once Apple / Spotify accept it, or add manually.
-
 ## Deferred / not planned
 
 - **Cross-episode voice consistency**: Cormac at low stability drifts a little episode-to-episode. Not worth the effort of higher-stability regens; the current variance sounds human.
