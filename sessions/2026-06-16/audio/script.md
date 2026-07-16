@@ -33,9 +33,9 @@ VANDAL: *(warm, unfolding)* But the gate first. Picture it. Four road-weary trav
 
 VANDAL: *(amused)* They signed. He traded them a fresh copy for it — with a fine map of the city folded inside.
 
-VANDAL: *(shifting, quieter)* Just ahead of them, though, a very different welcome. A goliath and his wife, being turned away at that same gate. The guard had taken the great grey man for a giant — an easy fear, in days when true giants walk the North with murder in their hearts. The goliath, Cormeer by name, pleaded — in halting Common — that he was only a man with work waiting at the docks, under a ship-man called Brindle. Hold that name, friend. It comes back.
+VANDAL: *(shifting, quieter)* Just ahead of them, though, a very different welcome. A goliath and his wife, being turned away at that same gate. The guard had taken the great grey man for a giant — an easy fear, in days when true giants walk the North with murder in their hearts. The goliath — a traveller out of far Cormeer, though his own name he never gave — pleaded, in halting Common, that he was only a man with work waiting at the docks, under a ship-man called Brindle. Hold that name, friend. It comes back.
 
-VANDAL: *(warm)* And Fiz — small Fiz of Halruaa, no taller than the guard's belt — spoke up and vouched that a goliath is no more a giant than a gnome is a halfling. In went Cormeer and his wife, and the big man swore he would remember it. Mark that small kindness. In the great tales, small kindnesses become, in time, great things.
+VANDAL: *(warm)* And Fiz — small Fiz of Halruaa, no taller than the guard's belt — spoke up and vouched that a goliath is no more a giant than a gnome is a halfling. In went the goliath and his wife, and the big man swore he would remember it. Mark that small kindness. In the great tales, small kindnesses become, in time, great things.
 
 [STING: chime — 1s]
 

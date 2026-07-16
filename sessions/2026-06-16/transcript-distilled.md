@@ -33,7 +33,7 @@ This session: the crew leaves Golden Fields, arrives in Waterdeep, gathers drago
 - **Vandal Lovelace** — "Valmar / Vandalov Laysen." Bard, ex–Force Grey.
 - **Laeral Silverhand** — "Lionel / Laurel." Open Lord ("president / High Lord") of Waterdeep.
 - **Yackerty** — "Yacherty." Dwarf Harper merchant, Trades Ward.
-- **Cormeer** — the **goliath** at the gate (canonical NPC name *Cormeer*; audio also "Kermir/Coroner"). From the far-south nation heard as "Cormir" (Cormyr). Goliaths speak Giant.
+- **The goliath at the gate** — unnamed. **"Cormeer" is his homeland, not his name** (the far-south nation, heard as "Cormir / Kermir / Cormyr"); the crew never learned his personal name. Goliaths speak Giant.
 - **Brindle Stormtide** — "Brindle Storn-Tide." Halfling ship-seller.
 - **Ol' Rourke** — "Old Ork." The crew's old navigator.
 - **Garley Gond** — gnome artificer/statue-maker, North Ward.
@@ -65,10 +65,10 @@ This session: the crew leaves Golden Fields, arrives in Waterdeep, gathers drago
 - **Fiz** does the autograph swap and uses his **artificer feature to zap a magical message/picture onto the paper** (fades in ~3 days; concentration). The guard is delighted and waves them through. *(Fiz's notes confirm.)*
 - Every **Wazoo** carries a **map of Waterdeep**; the party uses it to orient (South Ward, Trades Ward, Dock/Sea Ward, City of the Dead, Castle Ward, North Ward).
 
-### The goliath at the gate (Cormeer)
+### The goliath at the gate (from Cormeer)
 
 - A guard berates a very tall (~8 ft) man — "you giant scum." **Fiz rolls History → nat 20** (the "Nat 20!" bleeds onto Toz's cluster, SPEAKER_03, but the check is Fiz's — matching his notes, "I mention he's not a giant"): the man is a **goliath** (distant giant-kin, some giant blood, not a giant), from the far-south nation heard as "Cormir" (Cormyr); he speaks Common haltingly, dialect Giant. **Woz** notes the party's languages ("common, elvish, giant, and yeti"). The goliath whispers he "knows a guy in the docks who'll vouch for me and he's got a job."
-- **Fiz then vouches, Persuasion → 18** (SPEAKER_02; "I just figured, with our recent encounter [as giant-killers]…") — so Fiz does both the History identification and the vouch. Guard relents: "because you're a hero I'll look the other way, but you're responsible." A companion (SPEAKER_00 bleed) needles the voucher ("sounds like you're the one who wants him in the city"). The dock job is with **Brindle** (name spelled out). Canonical goliath name: **Cormeer**.
+- **Fiz then vouches, Persuasion → 18** (SPEAKER_02; "I just figured, with our recent encounter [as giant-killers]…") — so Fiz does both the History identification and the vouch. Guard relents: "because you're a hero I'll look the other way, but you're responsible." A companion (SPEAKER_00 bleed) needles the voucher ("sounds like you're the one who wants him in the city"). The dock job is with **Brindle** (name spelled out). **The goliath's personal name is never given — "Cormeer" is his homeland, not his name.**
 - **Watch on every corner** — normal security, tighter in the wealthy wards, looser in the Dock Ward.
 
 ## The North Ward & Chazlauth's tower
@@ -130,7 +130,7 @@ This session: the crew leaves Golden Fields, arrives in Waterdeep, gathers drago
 
 - **Ol' Rourke** is on a table telling the ship's-attack tale — "two **stone giants** throwing stones… harpooned one in the chest, speared the other in the eye, then a boulder smashed the deck" — pausing for a drink.
 - He greets his old captain (**Toz**) and crew warmly. Since the wreck he does odd ship-runs and tells the tale for drinks (jokes he's a "bard," though "never went to bard college").
-- **Ship lead:** Rourke knows a fellow **selling a ship cheap** — "in good order," but "**other strings attached**." He'll introduce them to bargain directly. The seller is a halfling, **Brindle Stormtide** — well-connected, "gives and takes," "connected with the right people." The party clocks this as the **second time Brindle's name has come up** (goliath Cormeer's employer too) — suspicious given the goliath "isn't welcome in town."
+- **Ship lead:** Rourke knows a fellow **selling a ship cheap** — "in good order," but "**other strings attached**." He'll introduce them to bargain directly. The seller is a halfling, **Brindle Stormtide** — well-connected, "gives and takes," "connected with the right people." The party clocks this as the **second time Brindle's name has come up** (the gate-goliath's employer too) — suspicious given the goliath "isn't welcome in town."
 - Rourke would rejoin the crew ("how I long for Valkur's wind in my hair"). Asked whether **Valkur visits his dreams**, he says no — only on the rare full nights in the **seven or eight days** since he last saw them. The party works out the timeline: **not more than a ten-day** since the wreck, including the **three-day road** (a running "level 1→7 in ten days" joke).
 - **Rivers to Silverymoon (navigable by a medium ship if marked on the map):** the **Rauvin** ("Rakveen," R-A-C-V-I-N) connects to the **Dessarin** ("Deseran") up to Waterdeep; the Dessarin runs to **Mornbryn's Shield** ("Morbin Shield") then becomes the river to Silverymoon.
 
@@ -164,10 +164,10 @@ This session: the crew leaves Golden Fields, arrives in Waterdeep, gathers drago
 - **Vexalanthus** (copper dragon, High Road, human-disguised) — the safer first dragon to approach.
 - **Yackerty** — dwarf Harper, Trades Ward (Honorable Knight) — gate to the Harper **teleport network** to Silverymoon; must be won over.
 - **Harshnag** — last heading to **Silverymoon**; reachable via the Harper network; needed to find the **Oracle** (Spine of the World) → knowledge to defeat the giant lords and locate a **conch** (teleports to the Maelstrom; held by a giant).
-- **Brindle Stormtide** — dockside halfling ship-seller with a cheap ship ("strings attached"); intro via Ol' Rourke pending. Name surfaced twice (also goliath Cormeer's employer).
+- **Brindle Stormtide** — dockside halfling ship-seller with a cheap ship ("strings attached"); intro via Ol' Rourke pending. Name surfaced twice (also the gate-goliath's employer).
 - **Toz's haunting** — escalating water-dream (cold; a voice; a submerged presence; residue: barnacle, salt water, yellow liquid). He has sworn to **Valkur** and holds a holy book with a daily study/redemption mechanic. The tavern attacker spoke in the dream-voice ("we wish to claim what is ours") — linking the ambush to the haunting.
 - **Trophies/assets:** ~2-liter jar of **blue dragon blood** (scrying reagent via a powerful cleric), a **blue dragon tooth** (Chazlauth wants it), the half-dragon's **blood-well vial**, **two giant thumbs**, the **alchemy jug** (Fiz), a **bag of goodberries**, **4 potions of poison resistance**, Toz's **Valkur holy book**.
-- **Unresolved:** whether the instigator is dead or salvageable for questioning; the mind-controller's identity and its tie to the "presence in the water"; goliath **Cormeer** and his Brindle job; a possible **Laeral Silverhand** intro via Chazlauth.
+- **Unresolved:** whether the instigator is dead or salvageable for questioning; the mind-controller's identity and its tie to the "presence in the water"; the **goliath at the gate** (from Cormeer) and his Brindle job; a possible **Laeral Silverhand** intro via Chazlauth.
 
 ## Corrections vs. the prior (K=5) distillation
 

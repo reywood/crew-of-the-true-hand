@@ -17,7 +17,7 @@ Giants of every kind are on the move and attacking settlements across the North.
 - **Vexalanthus** — copper dragon, ally of the old Force Gray, flies up and down the High Road. (2026-06-16)
 - **Baros Ravenkind** in Silverymoon — can make a silver eagle animal messenger to contact **Zephyros** (the cloud giant with the flying castle). (2026-03-08)
 - **Vandal Lovelace** — bard, hangs around the Harshnag statue in Waterdeep. Already met; knows Ol' Rourke. (2026-06-16)
-- **Brindle** in Waterdeep — may be able to set the party up with a ship. The goliath Cormeer at the gate was also headed to work for him. (2026-06-16)
+- **Brindle** in Waterdeep — may be able to set the party up with a ship. The goliath at the gate — a traveler from Cormeer, name unknown — was also headed to work for him. (2026-06-16)
 - **Naxene** — Waterdeep noble, offered the party a guest house. Sees giant activity widely and is sympathetic. (2026-03-08, 2026-06-16)
 - **Lifferloss** in the awakened grove near Golden Fields — gateway to the Emerald Enclave. (2026-03-08)
 

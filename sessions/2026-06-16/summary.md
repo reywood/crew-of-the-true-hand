@@ -34,6 +34,6 @@ On the way to the docks Toz slipped into a timbered **Wave Hall of Valkur**, con
 - Track down **Yackerty** in the Trades Ward and win a Harper teleport to **Silverymoon**.
 - Find **Harshnag** and, through him, the **Oracle** — then a **giant's conch**.
 - Court a dragon ally: **Old Gnawbone** in Kryptgarden Forest, or the copper **Vexalanthus** on the High Road.
-- Talk to **Brindle Stormtide** about a new ship, and check on **Cormeer** the goliath.
+- Talk to **Brindle Stormtide** about a new ship, and check on the **goliath at the gate** (a traveler from Cormeer, name unknown).
 - Figure out who sent the white-eyed thralls, and what "offer" the voice in Toz's dreams keeps pressing.
 - Toz has Valkur's scripture to study; his water-dreams and the presence beneath the sea remain unresolved.

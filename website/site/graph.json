@@ -42,11 +42,6 @@
   },
   {
    "rel": "appears_in",
-   "source": "npc-cormeer.html",
-   "target": "session-2026-06-16.html"
-  },
-  {
-   "rel": "appears_in",
    "source": "npc-corvin.html",
    "target": "session-2025-12-17.html"
   },
@@ -83,6 +78,11 @@
   {
    "rel": "appears_in",
    "source": "npc-garley.html",
+   "target": "session-2026-06-16.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-goliath-of-cormeer.html",
    "target": "session-2026-06-16.html"
   },
   {
@@ -667,11 +667,6 @@
   },
   {
    "rel": "located_in",
-   "source": "npc-cormeer.html",
-   "target": "loc-waterdeep.html"
-  },
-  {
-   "rel": "located_in",
    "source": "npc-corvin.html",
    "target": "loc-nightstone.html"
   },
@@ -708,6 +703,11 @@
   {
    "rel": "located_in",
    "source": "npc-garley.html",
+   "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "located_in",
+   "source": "npc-goliath-of-cormeer.html",
    "target": "loc-waterdeep.html"
   },
   {
@@ -1262,16 +1262,6 @@
   },
   {
    "aliases": [
-    "Cormeer"
-   ],
-   "blurb": "A goliath at the Waterdeep gate, traveling with his wife.",
-   "id": "npc-cormeer.html",
-   "kind": "npc",
-   "name": "Cormeer",
-   "url": "npc-cormeer.html"
-  },
-  {
-   "aliases": [
     "Corvin"
    ],
    "blurb": "Claimant who took control of Nightstone after Lady Nandor's death in the cloud giant attack.",
@@ -1348,6 +1338,22 @@
    "kind": "npc",
    "name": "Garret \"Ox\" Dorn",
    "url": "npc-garret-ox-dorn.html"
+  },
+  {
+   "aliases": [
+    "Goliath of Cormeer",
+    "goliath of Cormeer",
+    "goliath from Cormeer",
+    "the goliath at the gate",
+    "goliath at the gate",
+    "gate goliath",
+    "Cormeer goliath"
+   ],
+   "blurb": "An unnamed goliath the crew met being turned away at Waterdeep's south gate, traveling with his wife.",
+   "id": "npc-goliath-of-cormeer.html",
+   "kind": "npc",
+   "name": "Goliath of Cormeer",
+   "url": "npc-goliath-of-cormeer.html"
   },
   {
    "aliases": [
