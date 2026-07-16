@@ -3,5 +3,9 @@
 **/.DS_Store
 
 .venv/
+.venv-whisply/
+sessions/**/recording.m4a
+sessions/**/whisply/
+logs/
 __pycache__/
 *.pyc

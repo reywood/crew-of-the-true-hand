@@ -1,7 +1,7 @@
 ---
 name: Golden Fields
 aliases: Golden Fields
-sessions: 2025-12-07, 2025-12-17, 2026-01-13, 2026-03-08, 2026-05-12, 2026-06-02
+sessions: 2025-12-07, 2025-12-17, 2026-01-13, 2026-03-08, 2026-05-12, 2026-06-02, 2026-06-16
 type: Town
 size: Roughly twice the size of Nightstone
 patron: Shontea

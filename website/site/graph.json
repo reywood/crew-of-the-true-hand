@@ -177,6 +177,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-molak.html",
+   "target": "session-2026-01-13.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-naxene.html",
    "target": "session-2026-03-08.html"
   },
@@ -359,6 +364,11 @@
    "rel": "appears_in",
    "source": "loc-golden-fields.html",
    "target": "session-2026-06-02.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "loc-golden-fields.html",
+   "target": "session-2026-06-16.html"
   },
   {
    "rel": "appears_in",
@@ -2400,7 +2410,7 @@
    "aliases": [
     "2026-06-16"
    ],
-   "blurb": "Making landfall in Waterdeep, the Crew found themselves front-page news, chased leads on Harshnag and the Oracle through a dragon-mad wizard and a bard by his statue, then broke up a mind-controlled…",
+   "blurb": "Making landfall in Waterdeep, the Crew found themselves front-page news, chased leads on Harshnag and the Oracle through a dragon-mad wizard and a bard by his statue, then broke a mind-controlled bar…",
    "id": "session-2026-06-16.html",
    "kind": "session",
    "name": "Session 2026-06-16",

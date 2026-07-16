@@ -1,0 +1,55 @@
+# Whisply post-correction glossary — Crew of the True Hand
+#
+# Fed to `whisply run --post_correction`. Two kinds of entries:
+#   - top-level `wrong: correct` pairs are SIMPLE corrections, applied as
+#     case-INSENSITIVE whole-word replacements  (\bwrong\b -> correct).
+#   - `patterns:` is a list of {pattern, replacement}; `pattern` is a regex
+#     wrapped as \b(?:pattern)\b, good for one-to-many phonetic variants.
+#
+# PRINCIPLE: only map tokens that are unambiguous in this campaign's context.
+# Bare real English words (e.g. "vex", "laurel") are deliberately NOT mapped
+# on their own — they're handled as multi-word phrases or via patterns to
+# avoid corrupting ordinary text. Extend this file as new mis-hearings show up.
+
+# --- High-confidence single-token mis-hearings (from observed transcripts) ---
+Maxine: Naxene
+Horsenegg: Harshnag
+Karshnag: Harshnag
+Yakerti: Yackerty
+Bexalanthus: Vexalanthus
+Vexilanthus: Vexalanthus   # large-v3-turbo variant (2026-06-16)
+Garly: Garley             # large-v3-turbo variant (2026-06-16)
+Chasloff: Chazlauth
+Yarghorn: Yarghorn        # placeholder: Chazlauth's father — spelling unconfirmed
+
+# --- Canonical place / faction spellings (guard against near-miss spellings) ---
+Kryptgarden: Kryptgarden
+Silverymoon: Silverymoon
+Waterdeep: Waterdeep
+
+patterns:
+  # Harshnag — frost giant hero ("harsh nag" heard as two words)
+  - pattern: "harsh\\s*nag"
+    replacement: "Harshnag"
+
+  # Laeral Silverhand — only correct when "Silverhand" follows, so a real
+  # "Laurel"/"Lionel" elsewhere is left alone.
+  - pattern: "(?:Laurel|Lionel|Larel)\\s+Silverhand"
+    replacement: "Laeral Silverhand"
+
+  # Old Gnawbone — green dragon. SPECULATIVE reconstructions from garbled
+  # audio ("Nava/Naba/Nabon/Nabu/Bobo"); review these hits after a run.
+  - pattern: "Old\\s+(?:Nava|Naba|Nabon|Nabu|Gnaw\\s*bone)"
+    replacement: "Old Gnawbone"
+
+  # Vexalanthus — copper dragon (extra phonetic variants beyond the simple map)
+  - pattern: "(?:Vex|Pex|Bex)[aiy]?lanthus"
+    replacement: "Vexalanthus"
+
+  # Ol' Rourke — the crew's old navigator (apostrophe/spacing drift)
+  - pattern: "Ol[e']?\\s+Rourke"
+    replacement: "Ol' Rourke"
+
+  # Garley Gond — artificer/statue-maker
+  - pattern: "Gar(?:ley|lee|lie)\\s+Gond"
+    replacement: "Garley Gond"

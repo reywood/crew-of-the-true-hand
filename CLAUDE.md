@@ -16,7 +16,10 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
   - Character files are structured as: header block (race/class/background/alignment/age) → `## Backstory` → `## Class Features` with per-feature stat blocks copied from sourcebook references (PHB / TCoE / SCAG with page numbers). Preserve this structure when editing.
 - `sessions/YYYY-MM-DD/` — **All files for one session live together in this folder**, keyed by the real-world session date. Contents (all optional except that at least one of summary/transcript/notes must exist to render a page):
   - `summary.md` — Generated detailed session recap. Leads with an italic `*In brief: ...*` line, then `##` sections, then `## What's next` / `## Loose ends`. Derived from the notes + transcript and the **primary content of the session detail page on the website**. When a new session is added, generate this (or hand-write it) so the website has something rich to render.
-  - `transcript.txt` — Raw auto-transcribed audio. Large (80–120KB), unpunctuated walls of speech with no speaker tags, full of table chatter, dice rolls, and mechanics talk mixed with in-character dialogue. Use as source-of-truth when expanding or reconciling notes, but expect signal-to-noise issues. Kept as a collapsible block on the session page.
+  - `recording.m4a` — Raw session audio (git-ignored; large, ~80–90MB for a 3-hour session). The source for transcription (step 1.5). Not needed if a `transcript.txt` is supplied directly.
+  - `transcript.txt` — The session transcript. New sessions are **diarized**: whisply output (step 1.5), one utterance per line as `[HH:MM:SS.mmm] [SPEAKER_0X] text`, proper nouns auto-corrected via `sessions/library/whisply-corrections.yaml`. Older sessions may still be the pre-diarization form (unpunctuated wall, no speaker tags). Machine-produced either way — expect signal-to-noise issues, and note that speaker tags **bleed badly in fast combat**. Kept as a collapsible block on the session page.
+  - `transcript-distilled.md` — A complete, fact-by-fact reconstruction of the session (every action, line of dialogue, item, roll) with a speaker→character key and per-PC attribution. Far more precise than `summary.md`; the source of truth for reconciling who-did-what. Its companion `transcript-distilled.factcheck.md` is the QA worksheet (the riskiest attributions paired with transcript evidence for manual review). See step 1.5. These are references, not website artifacts.
+  - `whisply/` — whisply's raw multi-format output (`recording/recording_en_annotated.txt`, `.json`, `.rttm`, `.html`); the annotated `.txt` is what gets promoted to `transcript.txt`.
   - `player notes/<pc>.md` — Terse bullet-style recaps, a few lines to a couple dozen, often shorthand ("kill them", "up to level four"). Currently only `fiz.md` exists (all notes so far are Fiz's); another PC's notes would go alongside as e.g. `hal.md`. **Fiz's are written from his perspective** — first-person "I" / "me" refers to Fiz, so loot or interactions phrased that way belong to Fiz unless another PC is named. Fiz sometimes refers to himself in the third person when paired with another PC ("Toz and Fiz go in village", "Hal and Fiz talk to Naxine"), so third-person Fiz mentions are not a different narrator. Do not rewrite these into prose unless asked — the terseness is the style. Kept as a collapsible block on the session page.
   - `images/` — Gemini-generated illustrations (see step 2.5): `hero.jpg` is the 16:9 banner; every other file is a beat illustration named `<slugified-section-title>.jpg`. Site generator copies `hero.<ext>` → `site/images/sessions/YYYY-MM-DD.<ext>` and beats → `site/images/sessions/YYYY-MM-DD/<slug>.<ext>`.
   - `audio/` — The "Tales of the True Hand" audio recap (see steps 2.7/2.8). The script AND its generated artifacts live together here:
@@ -52,9 +55,42 @@ When new session material arrives (notes from the player, a fresh transcript, or
 
 Use the real-world date as `YYYY-MM-DD` and create the session folder `sessions/YYYY-MM-DD/`:
 - `sessions/YYYY-MM-DD/player notes/fiz.md` if the player produced bullet notes (Fiz's POV). Optional.
-- `sessions/YYYY-MM-DD/transcript.txt` if there is an audio transcript (Whisper-style, no speaker tags, ~80–120KB). Optional.
+- `sessions/YYYY-MM-DD/recording.m4a` if there is raw session audio — the transcript is generated from it in step 1.5. Optional.
+- `sessions/YYYY-MM-DD/transcript.txt` if a transcript is supplied directly (skips step 1.5). Optional.
 
-At least one of the two must exist. If both are missing there is no session to render.
+At least one of {recording, transcript, notes} must exist. If all are missing there is no session to render.
+
+### 1.5. Transcribe, distill, and fact-check (when there's a recording)
+
+Turns `recording.m4a` into the diarized `transcript.txt` plus the `transcript-distilled.md` fact record. If a `transcript.txt` was supplied directly, skip to step 2.
+
+**Transcribe with whisply.** Use the existing venv `/Users/sean/whisply-env` (it has the `mlx-whisper` extra — a plain `pip install whisply` venv fails with "Missing dependencies for device 'mlx'"):
+
+```
+set -a && . ./.env && set +a          # loads HF_TOKEN
+/Users/sean/whisply-env/bin/whisply run \
+  -f sessions/YYYY-MM-DD/recording.m4a -o sessions/YYYY-MM-DD/whisply \
+  --device mlx --model large-v3-turbo --language en \
+  --annotate --num_speakers 8 --hf_token "$HF_TOKEN" \
+  --post_correction sessions/library/whisply-corrections.yaml --export all
+```
+
+- `--annotate` runs speaker **diarization** via gated pyannote models. It needs `HF_TOKEN` in `.env` with **gated-repo read access** (a classic Read token, or fine-grained with "Read access to public gated repos" ticked) AND you must click **Agree** on `pyannote/speaker-diarization-3.1` and `pyannote/segmentation-3.0`. Otherwise it 403s at the diarization stage — *after* the full transcription. Pre-flight with a quick `hf_hub_download(repo, 'config.yaml')` check before the ~13-min run.
+- `--num_speakers 8`, not 5. The table is 5 people (4 PCs + DM) on one shared mic; a diarization sweep showed the true count (5) merges overlapping players in combat, while **8 keeps all four PCs on distinct clusters**. It over-splits — each PC spans ~1–2 clusters and the DM dominates one — which the distillation re-merges by content.
+- `--post_correction sessions/library/whisply-corrections.yaml` auto-fixes mangled proper nouns (word-boundary, case-insensitive; `patterns:` for regex variants). Extend that file as new mis-hearings show up.
+
+Then **promote** the annotated output and clean up whisply's scratch file:
+
+```
+cp sessions/YYYY-MM-DD/whisply/recording/recording_en_annotated.txt sessions/YYYY-MM-DD/transcript.txt
+rm -f sessions/YYYY-MM-DD/recording_converted.wav   # ~350MB scratch whisply leaves behind
+```
+
+**Distill.** Spawn an Opus `general-purpose` Agent to write `sessions/YYYY-MM-DD/transcript-distilled.md` — a complete, chronological, fact-by-fact account (every action, line, item, roll) with per-PC attribution. Brief it with: the campaign context and the four PCs' **class-mechanic fingerprints** (Fiz = Artificer/Artillerist; Hal = Paladin, **Extra Attack + javelins**; Toz = Storm Sorcerer, **Tempestuous Magic / gust of wind / Shape Water / light crossbow**; Woz = Nature Cleric, **Spirit Guardians / Shillelagh / Dampen Elements / Healing Word**); the K=8 over-split note (build a **many-to-one cluster→character map** from content, DM dominant on one cluster + a bleed cluster, two PCs split across two clusters each); and the rule that **in combat the tags bleed badly — cross-check every attribution against class mechanics (Extra Attack, weapon type, spell list), which win over the raw tag.** Feed it `transcript.txt`, `player notes/fiz.md`, and (on a re-pass) the prior distilled file as an event-completeness reference.
+
+**Fact-check.** The distillation also emits `sessions/YYYY-MM-DD/transcript-distilled.factcheck.md` — the 12–15 riskiest "who did what" claims (combat/overlap first, then skill checks), each with its `[timestamp] [SPEAKER_0X]` transcript evidence and a blank ✔/✘ column. Hand it to the user; they mark ✘ on anything wrong; apply their corrections back into `transcript-distilled.md`. This systematically catches the mis-attributions diarization makes in fast combat (on 2026-06-16 the javelin, crossbow, and Shape Water calls were all initially wrong).
+
+Write the summary (step 2) **from** `transcript-distilled.md` when it exists — its attributions are the reconciled truth.
 
 ### 2. Generate the detailed summary
 
