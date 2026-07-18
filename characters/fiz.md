@@ -10,7 +10,7 @@ DnD Beyond character sheet: https://www.dndbeyond.com/characters/151123487
 
 ## Backstory
 
-From Halruaa, a technocracy. Fiz wanted to go explore the outside world, but that is frowned upon by his society. Fiz had an aunt that left Halruaa a long time ago to see the wonders of the world, and Fiz wants to follow in her footsteps. Fiz stole a flying ship, but it crashed just outside of Halruaa. He meets Woz and Toz and joins the crew of their ship as a way to see the world. 
+From Halruaa, a technocracy. Fiz wanted to go explore the outside world, but that is frowned upon by his society. Fiz had an aunt that left Halruaa a long time ago to see the wonders of the world, and Fiz wants to follow in her footsteps. Fiz stole a flying ship, but it crashed just outside of Halruaa. He meets Eno and Toz and joins the crew of their ship as a way to see the world. 
 
 ## Class Features
 

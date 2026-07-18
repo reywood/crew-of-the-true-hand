@@ -8,7 +8,7 @@ DnD Beyond character sheet: https://www.dndbeyond.com/characters/150818212
 
 ## Backstory
 
-From the Greenbottle family, a well-known family in Athkatla, the "city of coin." Brothers (by Adoption) with Woz. After serving on sailing vessels run by his family since he was a child, he finally became a captain when his family helped finance his first ship, "The True Hand," which came to an untimely end just 11 months after its maiden voyage. He uses wind and water sorcery to help guide the ships he serves on, spawning a breeze here and a wave there, and has begun to learn stronger magics through practice and interactions with other magic users on his travels. He was delighted that his brother Woz decided to join his crew after Woz spent a long time away.
+From the Greenbottle family, a well-known family in Athkatla, the "city of coin." Brothers (by Adoption) with Eno. After serving on sailing vessels run by his family since he was a child, he finally became a captain when his family helped finance his first ship, "The True Hand," which came to an untimely end just 11 months after its maiden voyage. He uses wind and water sorcery to help guide the ships he serves on, spawning a breeze here and a wave there, and has begun to learn stronger magics through practice and interactions with other magic users on his travels. He was delighted that his brother Eno decided to join his crew after Eno spent a long time away.
 
 ## Class Features
 

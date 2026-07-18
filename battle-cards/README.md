@@ -1,6 +1,6 @@
 # Battle Cards
 
-Printable single-page combat reference cards for each PC. One self-contained HTML file per character (`fiz.html`, eventually `hal.html`, `toz.html`, `woz.html`). The player prints their card and brings it to sessions.
+Printable single-page combat reference cards for each PC. One self-contained HTML file per character (`fiz.html`, eventually `hal.html`, `toz.html`, `eno.html`). The player prints their card and brings it to sessions.
 
 **Fiz's card is the working template.** Read `fiz.html` end-to-end before building another one — copy its structure verbatim, then swap in the new character's content and voice.
 
@@ -103,14 +103,14 @@ Lead with the character's **signature combat resource**, then group from most-us
 6. **Magic items / infusions** (anything attuned that affects combat).
 7. **Reactions** — pull all reactions into one section even if they appeared above. This is the "what can I do on someone else's turn" lookup.
 
-If a character doesn't have one of these (no spells, no magic items, etc.), skip that section. If they have something Fiz doesn't (Hal's Channel Divinity, Toz's Metamagic, Woz's Wild Shape if multiclassed), add a section in the appropriate position.
+If a character doesn't have one of these (no spells, no magic items, etc.), skip that section. If they have something Fiz doesn't (Hal's Channel Divinity, Toz's Metamagic, Eno's Wild Shape if multiclassed), add a section in the appropriate position.
 
 ## Character voices (for flavor lines)
 
 - **Fiz** — Clockwork brass tinker from Halruaa. Imagery: hand-pumped reservoirs, brass shavings, gauges, copper wire, mortar-round whistles, mechanical *clicks*, *fwip* and *fzzt* sounds, hand-built apparatus that turns spell components into mechanical action.
 - **Hal** — Variant Human Paladin, Oath of Vengeance, ex-Silver Marches militia. Imagery: shield-and-sword soldier discipline, weight of plate, a battered playing-card deck, an old officer's voice in his head, oaths spoken aloud, light from a holy symbol, the heft of a maul.
 - **Toz** — Lightfoot Halfling Storm Sorcerer, captain of the wrecked *True Hand*. Imagery: salt spray, sea-wind, cracks of static, distant thunder, lightning at the fingertips, the smell of ozone, a rope-coiled grip, half-sung sailor's chants. Toz has been having dreams of a malevolent ocean presence — that thread can color any spell about water.
-- **Woz** — Half-Elf Nature Cleric of Eldath, raised in the wild, adopted Greenbottle. Imagery: stillness, water that's never disturbed, leaf shadows, animal scents, bark and moss, the way old druids speak slowly, prayers murmured in elven, a quiet presence that animals trust.
+- **Eno** — Half-Elf Nature Cleric of Eldath, raised in the wild, adopted Greenbottle. Imagery: stillness, water that's never disturbed, leaf shadows, animal scents, bark and moss, the way old druids speak slowly, prayers murmured in elven, a quiet presence that animals trust.
 
 For ranged-attack spells (Fire Bolt, Eldritch Blast, etc.), the flavor should describe the *delivery* — what the projectile looks like, how it leaves the caster. For area saves (Thunderwave, Shatter), describe the wave or pulse. For buffs (Bless, Bardic Inspiration), describe the small physical sign that something has happened.
 

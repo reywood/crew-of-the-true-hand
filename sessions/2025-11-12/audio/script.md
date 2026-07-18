@@ -63,7 +63,7 @@ VANDAL: *(warm, unfolding)* The guards, to their credit, found their nerve when 
 
 VANDAL: *(hushed)* And kneeling on a mat before that cave — an elf. In meditation. Stones drifting in slow orbit about his shoulders, as though the ground beneath him had quietly forgotten which way was down. He was mid-ritual, and had been for some while — trying, and failing, to divine what lay inside the hill.
 
-VANDAL: *(measured)* The crew did not break the spell. Mark that, friend — how many would have? Instead, they joined it. Woz — Woz of the deep woods, cleric of Eldath, the goddess of still waters — lent his quiet to the elf's quiet, and the ritual that would not close, closed.
+VANDAL: *(measured)* The crew did not break the spell. Mark that, friend — how many would have? Instead, they joined it. Eno — Eno of the deep woods, cleric of Eldath, the goddess of still waters — lent his quiet to the elf's quiet, and the ritual that would not close, closed.
 
 VANDAL: *(unfolding, drawing close)* And together, they saw. All of Toril, pulling away beneath them, as if they had been snatched up into the sky. Then a plunge — down through tunnels, and tunnels beneath tunnels, faster than thought. And at the bottom of the plunge: a stalactite. A great stone tooth hanging in the dark, thrumming with an evil presence — and off it rolled a wave of fear and anguish, and the screams of every soul that thing had ever swallowed.
 
@@ -85,13 +85,13 @@ VANDAL: *(low)* One more thing the druid mentioned, almost in passing — a whit
 
 ## ACT FOUR — Drawing Thock from the mud
 
-VANDAL: *(quickening)* Fiz and Woz crept ahead to scout, and what they saw past the cave mouth they carried back out on held breath. A broad chamber. A mud pit at its centre, and in the mud pit an ogre, wallowing. Goblins perched along the stone shelves of the walls like carrion crows. And beyond a central pillar of rock — darkness, swallowing all the rest.
+VANDAL: *(quickening)* Fiz and Eno crept ahead to scout, and what they saw past the cave mouth they carried back out on held breath. A broad chamber. A mud pit at its centre, and in the mud pit an ogre, wallowing. Goblins perched along the stone shelves of the walls like carrion crows. And beyond a central pillar of rock — darkness, swallowing all the rest.
 
 VANDAL: *(sly, telling)* Now, four heroes and four borrowed soldiers do not storm a cave like that. They set a table for it. The soldiers went down into the treeline as hidden bait, crossbows ready. Fiz planted his Eldritch Cannon in the grass — the squat little Force Ballista, humming to itself. And then, friend, they shouted.
 
 VANDAL: *(theatrical)* Out came Thock. Alone. Club dragging, mud sliding off him in ropes, blinking into the daylight. And the crew and their hidden guards took the ogre apart in the clearing before he could raise that club a second time.
 
-VANDAL: *(dropping)* Then a second voice from the cave mouth — his mate, calling his name into the trees. She came on at a run. Woz's Sacred Flame fell on her like judgment. Thorns of Spike Growth erupted from the earth across her path. A Fire Bolt from Fiz caught her burning, and the Force Ballista's bolt struck her square and hurled her backward across the thorns. She went down before she ever came close enough to swing.
+VANDAL: *(dropping)* Then a second voice from the cave mouth — his mate, calling his name into the trees. She came on at a run. Eno's Sacred Flame fell on her like judgment. Thorns of Spike Growth erupted from the earth across her path. A Fire Bolt from Fiz caught her burning, and the Force Ballista's bolt struck her square and hurled her backward across the thorns. She went down before she ever came close enough to swing.
 
 VANDAL: *(quiet)* Two ogres dead in a green clearing. In the great tales, friend, it is always dragons. In most true ones, it is mud, and ogres, and someone clever enough to make the monster come to them.
 

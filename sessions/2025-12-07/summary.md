@@ -4,7 +4,7 @@ carried:
 - 12 gp plus loose silver and copper (from Boz Hark's stash)
 - Matched silver salt-and-pepper set
 - Woodcarving tools in a bloodied leather case
-- Wooden holy symbol of Silvanus, inlaid with gold (Woz)
+- Wooden holy symbol of Silvanus, inlaid with gold (Eno)
 - Spell scroll of Zone of Truth
 ---
 
@@ -12,7 +12,7 @@ carried:
 
 ## Deal with the boss
 
-Pushing deeper past the bat cave, the crew came face to face with the goblin cave's boss — a big goblin in a horned black hat, a captive woman under one hand and a javelin in the other, flanked by lesser goblins and a pack of dog-sized rats he called his "babies." He wanted three gold a head for the villagers. The crew's purses came nowhere near his asking price, so talk turned to trade. He had a problem down one of his tunnels — a "little slime" the lads were too spooked to face — and would let the whole group walk if the crew took care of it. Hal pushed for the women, children, and injured to go free first, and with a nudge of Woz's guidance the boss allowed the children to leave. A tiefling woman from among the captives, who plainly knew all the little ones, was chosen to lead them out. The rest of the villagers stayed under his thumb as collateral.
+Pushing deeper past the bat cave, the crew came face to face with the goblin cave's boss — a big goblin in a horned black hat, a captive woman under one hand and a javelin in the other, flanked by lesser goblins and a pack of dog-sized rats he called his "babies." He wanted three gold a head for the villagers. The crew's purses came nowhere near his asking price, so talk turned to trade. He had a problem down one of his tunnels — a "little slime" the lads were too spooked to face — and would let the whole group walk if the crew took care of it. Hal pushed for the women, children, and injured to go free first, and with a nudge of Eno's guidance the boss allowed the children to leave. A tiefling woman from among the captives, who plainly knew all the little ones, was chosen to lead them out. The rest of the villagers stayed under his thumb as collateral.
 
 ## Snigbat and the stalactite
 
@@ -20,11 +20,11 @@ One goblin was assigned to guide them to the trouble — Snigbat, a small, twitc
 
 ## Back to the boss
 
-That left the boss and his goblins waiting at the mouth. There would be no honoring the bargain now — the crew had not killed the slime, and word from Snigbat was he had never meant to let the villagers walk anyway. They rolled initiative and set to it. Woz used Channel Divinity (Charm Animals and Plants) to turn two of the giant rats friendly, cutting the boss's guard in half. The paladin, sorcerer, and artillerist worked through the goblins and their leader in a running fight, one guard and two villagers falling before the last of the goblins broke and scattered down the far tunnels. Snigbat, who had turned on his old master when the crew held the line, was still with them at the end and asked if he could tag along as a scout. The crew — after some ribbing about "Stingbat" — took him on.
+That left the boss and his goblins waiting at the mouth. There would be no honoring the bargain now — the crew had not killed the slime, and word from Snigbat was he had never meant to let the villagers walk anyway. They rolled initiative and set to it. Eno used Channel Divinity (Charm Animals and Plants) to turn two of the giant rats friendly, cutting the boss's guard in half. The paladin, sorcerer, and artillerist worked through the goblins and their leader in a running fight, one guard and two villagers falling before the last of the goblins broke and scattered down the far tunnels. Snigbat, who had turned on his old master when the crew held the line, was still with them at the end and asked if he could tag along as a scout. The crew — after some ribbing about "Stingbat" — took him on.
 
 ## Spoils and the name in Triboar
 
-With the goblins routed and the cave quiet, Woz sent the two charmed rats into the stalactite chamber to test it. They tore chunks out of the ooze before its acid ate them alive; melee, plainly, was no answer. The crew rolled the boulder off the boss's stash and turned up a modest haul — twelve gold, silver and copper, a matched silver salt-and-pepper set, a set of woodcarving tools in a bloodied leather case, a wooden holy symbol of Silvanus inlaid with gold that Woz took, and a spell scroll of Zone of Truth. In a quiet aside, they showed Molak the ornate bottle. The old innkeeper, his village lost and his adventuring days behind him, confessed he had meant to take it up himself. Instead he pressed it back on them and gave up the name he had been holding: **Derothra Shendrel**, leader of the village of **Triboar**, north up the road past Waterdeep. Speak the genie's true name, he said, and the bottle grants a wish. The crew settled into the cleared cave for a proper rest and hit level four.
+With the goblins routed and the cave quiet, Eno sent the two charmed rats into the stalactite chamber to test it. They tore chunks out of the ooze before its acid ate them alive; melee, plainly, was no answer. The crew rolled the boulder off the boss's stash and turned up a modest haul — twelve gold, silver and copper, a matched silver salt-and-pepper set, a set of woodcarving tools in a bloodied leather case, a wooden holy symbol of Silvanus inlaid with gold that Eno took, and a spell scroll of Zone of Truth. In a quiet aside, they showed Molak the ornate bottle. The old innkeeper, his village lost and his adventuring days behind him, confessed he had meant to take it up himself. Instead he pressed it back on them and gave up the name he had been holding: **Derothra Shendrel**, leader of the village of **Triboar**, north up the road past Waterdeep. Speak the genie's true name, he said, and the bottle grants a wish. The crew settled into the cleared cave for a proper rest and hit level four.
 
 ## What's next
 

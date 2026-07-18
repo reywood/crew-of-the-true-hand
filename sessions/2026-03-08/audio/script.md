@@ -43,7 +43,7 @@ VANDAL: *(softer)* At the heart of the town stood a wooden statue of the goddess
 
 VANDAL: *(amused, unfolding)* At the inn, the bar was tended by a yeti. I shall say that once more, plainly, and let it sit. The bar was tended by a yeti. Great white shag on him, a rag in one enormous paw, and a name — Miros.
 
-VANDAL: *(warm)* Now most travelers stop in the doorway at a sight like that. But Woz — the half-elf among them, cleric of Eldath, raised in the wild before ever the Greenbottles took him in — Woz walked up to the bar and greeted the creature in his own tongue. In Yeti. And Miros lit up like a hearth in midwinter. A free room appeared. Cups appeared. And with the cups came everything the gate-guards had not said.
+VANDAL: *(warm)* Now most travelers stop in the doorway at a sight like that. But Eno — the half-elf among them, cleric of Eldath, raised in the wild before ever the Greenbottles took him in — Eno walked up to the bar and greeted the creature in his own tongue. In Yeti. And Miros lit up like a hearth in midwinter. A free room appeared. Cups appeared. And with the cups came everything the gate-guards had not said.
 
 VANDAL: *(measured, telling)* Hill giants had been raiding the region for food. Two weeks past they had come in the dead of night — goblins and bugbears slipping over the walls to carry off grain, while the giants stood beyond bowshot and hurled stones at the ramparts. The captain of the guard, a half-orc named Strog Thunderblade, was reckoned lazy even by the charitable. The real authority sat with the Castellan, one Tarn. And Miros himself — mark this, friend — Miros was sworn to the Emerald Enclave. A yeti in a barkeep's apron, keeping the wild's watch over a town of wheat.
 
@@ -55,7 +55,7 @@ VANDAL: *(sly, amused)* A halfling bard named Orin held the corner that evening 
 
 ## ACT THREE — Ink on her fingers
 
-VANDAL: *(measured, unfolding)* At a corner table sat a woman alone over her notes. Plain clothes, finely cut. Ink stains on her fingers — a scholar's stains, not a farmer's. Miros leaned across the bar and offered Woz, in Yeti, an opinion of Waterdhavian nobility that I shall not translate by a fireside. But Hal and Fiz went over all the same.
+VANDAL: *(measured, unfolding)* At a corner table sat a woman alone over her notes. Plain clothes, finely cut. Ink stains on her fingers — a scholar's stains, not a farmer's. Miros leaned across the bar and offered Eno, in Yeti, an opinion of Waterdhavian nobility that I shall not translate by a fireside. But Hal and Fiz went over all the same.
 
 VANDAL: *(warm)* Naxene, by name. Of Waterdeep. Stand-offish at first — but Hal, earnest Hal, paladin of the Oath of Vengeance and once of the Silver Marches militia, has the plain soldiering manner that softens the wary. And soften she did. She had been crossing the North, she told them, tracking giant raids from town to town. And what she had found dismayed her. Not one raid. Not a dozen. A pattern — everywhere — and every kind of giant setting hand to it. The Ordning, friend. The old ranking of giantkind, broken, and all its pieces in motion at once.
 
@@ -69,7 +69,7 @@ VANDAL: *(leaning, telling)* Her own conviction, spoken quietly, was that the go
 
 VANDAL: *(wondering, drawing close)* And then — heeding Orin's directions rather more than his warning — the four walked south of town, past the abbey, and in among the awakened trees. And the eldest and wisest of them stirred, and looked down, and gave his name. Lifferloss.
 
-VANDAL: *(warm)* He looked longest at Woz. And then and there, the old tree invited the wild-raised cleric to join the Emerald Enclave — the same brotherhood as Miros behind his bar, the same as the elf druid Daniel Windraven, whose vine bracelet Fiz wears to this day. Woz has belonged to the wild since before he had words for it, friend. The Enclave was only asking him to make it official.
+VANDAL: *(warm)* He looked longest at Eno. And then and there, the old tree invited the wild-raised cleric to join the Emerald Enclave — the same brotherhood as Miros behind his bar, the same as the elf druid Daniel Windraven, whose vine bracelet Fiz wears to this day. Eno has belonged to the wild since before he had words for it, friend. The Enclave was only asking him to make it official.
 
 VANDAL: *(measured, telling)* Then the crew asked their question, and Lifferloss answered it fully. The Oracle dwells in the far cold north, at the Spine of the World — and they would not reach it alone. They would need Harshnag. A frost giant, friend — hear that rightly — a frost giant who turned his back on his own kind and swore himself to the defense of the small folk. He rode with Force Gray, the famous adventuring company of Waterdeep: Meloon Wardragon fought beside him, and Laeral Silverhand herself, who rules that city now, worked closely with the company in its day. Force Gray is disbanded, its members scattered. But a statue of Harshnag still stands in Waterdeep. And where a statue stands, someone remembers the man — or the giant.
 
@@ -85,7 +85,7 @@ VANDAL: *(reflective, unfolding)* Last of all they called upon the abbot — the
 
 VANDAL: *(quoted, dropping)* "All is well in hand."
 
-VANDAL: *(softer, telling)* The same words as the gate. And Woz — taking a cleric's quiet measure of the lazy captain, the fretful assistant, and the good gentle man who would not turn to look at the horizon — offered the only answer Eldath teaches for such a moment. He offered his back. To the harvest. To the work in front of him. Because you cannot make a town believe the giants are coming, friend. You can only be standing in it when they do.
+VANDAL: *(softer, telling)* The same words as the gate. And Eno — taking a cleric's quiet measure of the lazy captain, the fretful assistant, and the good gentle man who would not turn to look at the horizon — offered the only answer Eldath teaches for such a moment. He offered his back. To the harvest. To the work in front of him. Because you cannot make a town believe the giants are coming, friend. You can only be standing in it when they do.
 
 [MUSIC: minor swell — 4s]
 

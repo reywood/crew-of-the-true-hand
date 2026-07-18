@@ -938,7 +938,7 @@
   {
    "rel": "held_by",
    "source": "item-bronze-griffin-figurine.html",
-   "target": "pc-woz.html"
+   "target": "pc-eno.html"
   },
   {
    "rel": "acquired_in",
@@ -1003,7 +1003,7 @@
   {
    "rel": "held_by",
    "source": "item-holy-symbol-of-silvanus.html",
-   "target": "pc-woz.html"
+   "target": "pc-eno.html"
   },
   {
    "rel": "acquired_in",
@@ -1183,7 +1183,7 @@
     "Tozlo",
     "Tozlo Greenbottle"
    ],
-   "blurb": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; adopted brother to Woz.",
+   "blurb": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; adopted brother to Eno.",
    "id": "pc-toz.html",
    "kind": "pc",
    "name": "Toz",
@@ -1191,18 +1191,18 @@
   },
   {
    "aliases": [
-    "Woz",
     "Eno",
+    "Woz",
     "Eno Woz",
     "Enoril",
     "Enoril Wazek",
     "Wazek"
    ],
    "blurb": "Half-Elf Nature Cleric of Eldath. Raised in the wilds; adopted by the Greenbottles.",
-   "id": "pc-woz.html",
+   "id": "pc-eno.html",
    "kind": "pc",
-   "name": "Woz",
-   "url": "pc-woz.html"
+   "name": "Eno",
+   "url": "pc-eno.html"
   },
   {
    "aliases": [
@@ -1885,7 +1885,7 @@
     "griffin figurine",
     "bronze griffin"
    ],
-   "blurb": "A palm-sized bronze figurine of a griffin, gifted by Zephyros after Woz befriended his tower's flock.",
+   "blurb": "A palm-sized bronze figurine of a griffin, gifted by Zephyros after Eno befriended his tower's flock.",
    "id": "item-bronze-griffin-figurine.html",
    "kind": "item",
    "name": "Bronze griffin figurine",

@@ -1,4 +1,4 @@
-# Enoril Wazek aka Eno Woz or "Woz"
+# Enoril "Eno" Wazek (formerly "Woz")
 
 Gender: Male
 Race: Half elf

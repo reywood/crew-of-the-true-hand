@@ -81,8 +81,8 @@ PC_PORTRAITS = [
         "RED NECKERCHIEF. Casts wind and water magic.",
     ),
     (
-        "woz",
-        "Woz — a HALF-ELF nature cleric of Eldath. MALE (never draw as "
+        "eno",
+        "Eno — a HALF-ELF nature cleric of Eldath. MALE (never draw as "
         "feminine), mid-50s. Pointed elven ear-tips. HAIR: medium wavy "
         "MEDIUM BROWN. LIGHT SHORT STUBBLE (not a full beard). Dark green "
         "wool cloak; wooden staff; a broad-shouldered woodsman in monk's "
@@ -117,12 +117,12 @@ lightning webbing through cloud. A weathered wooden ship's wheel or the \
 splintered ribs of a shipwreck may appear as a background/framing element on \
 one side.
 
-CHARACTERS: The four portrait references (Fiz, Hal, Toz, Woz) are provided so \
+CHARACTERS: The four portrait references (Fiz, Hal, Toz, Eno) are provided so \
 you can tell them apart. All four should appear in the foreground silhouettes, \
 readable by outline: Hal tallest (bald, bearded, cloaked human); Fiz smallest \
 and gnomish with spiky pale hair and goggles; Toz halfling with tricorn hat; \
-Woz half-elf with hooded green cloak and staff. Read the identity anchors — \
-Fiz is NOT a dwarf, Woz is NOT feminine.
+Eno half-elf with hooded green cloak and staff. Read the identity anchors — \
+Fiz is NOT a dwarf, Eno is NOT feminine.
 
 TEXT: Include the title 'TALES OF THE TRUE HAND' rendered as prominent \
 illuminated-manuscript display lettering across the top or the upper third of \

@@ -4,7 +4,7 @@ carried:
 - Aganor's spellcasting focus — recovered from her house and returned to her.
 ---
 
-*In brief: Back at Nightstone with black banners flying, the crew met the new claimant Corvin, learned the wider giant troubles, and split — Toz and Fiz brokered an oath with a tiefling cultist while Hal and Woz pulled a cursed sword from a sarcophagus in the crypt.*
+*In brief: Back at Nightstone with black banners flying, the crew met the new claimant Corvin, learned the wider giant troubles, and split — Toz and Fiz brokered an oath with a tiefling cultist while Hal and Eno pulled a cursed sword from a sarcophagus in the crypt.*
 
 ## A Strange Deer and a Black-Bannered Village
 
@@ -24,9 +24,9 @@ Aganor, it turned out, had her own grievance: Corvin's people had seized her hou
 
 ## The Crypt Beneath the Wall
 
-While Toz and Fiz worked the village above, Hal and Woz pursued a different lead. A secret passage had been found from outside the walls into Nightstone's crypt — a way under the village that bypassed Corvin's guards entirely. The two slipped inside and threaded their way to a sarcophagus, which Hal pried open. Within lay a sword, finely made and clearly something more than steel. Hal took it up.
+While Toz and Fiz worked the village above, Hal and Eno pursued a different lead. A secret passage had been found from outside the walls into Nightstone's crypt — a way under the village that bypassed Corvin's guards entirely. The two slipped inside and threaded their way to a sarcophagus, which Hal pried open. Within lay a sword, finely made and clearly something more than steel. Hal took it up.
 
-The sword's previous owner objected. A ghost rose from the stone and set upon them, and Hal and Woz fought it down between them. When the ghost was gone and the dust settled, the sword was theirs — but the lingering chill of it told Hal what he already suspected. The blade was cursed.
+The sword's previous owner objected. A ghost rose from the stone and set upon them, and Hal and Eno fought it down between them. When the ghost was gone and the dust settled, the sword was theirs — but the lingering chill of it told Hal what he already suspected. The blade was cursed.
 
 ## What's Next
 

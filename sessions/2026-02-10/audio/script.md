@@ -51,7 +51,7 @@ VANDAL: *(measured)* Below stretched the rolling farmland of Golden Fields, the 
 
 VANDAL: *(unfolding)* Then Fiz — small Fiz of Halruaa, tinker and artificer — sent a charmed griffin up into the weather to scout. Back it came, bowing its beaked head. *Master. Three stone-like monsters with wings. A small flying dragon-ish thing. And one big blue lizard — with some sort of dragon man on his back.*
 
-VANDAL: *(dropping)* Three gargoyles. A winged kobold. A young blue dragon. And a half-dragon rider in a deep blue cloak. So the crew dug in — the giant's great desk overturned for a rampart, his levitating disc set as a wall, Hal on the upper floor, and Woz, quiet cleric of Eldath, laying Bless and Barkskin over his companions like a blessing before battle. And the doorway held its breath.
+VANDAL: *(dropping)* Three gargoyles. A winged kobold. A young blue dragon. And a half-dragon rider in a deep blue cloak. So the crew dug in — the giant's great desk overturned for a rampart, his levitating disc set as a wall, Hal on the upper floor, and Eno, quiet cleric of Eldath, laying Bless and Barkskin over his companions like a blessing before battle. And the doorway held its breath.
 
 [STING: chime — 1s]
 
@@ -75,7 +75,7 @@ VANDAL: *(taut)* The dragon answered with a line of lightning thick as a ship's 
 
 ## ACT FOUR — A bloody trade in the rain
 
-VANDAL: *(unfolding, quickening)* And then, friend, the long grind of it. Zephyros conjured an air elemental — a living whirlwind, set spinning at the dragon's flank. Woz's Guiding Bolts came one after another, painting the beast in radiant light. Toz laid Ray of Frost across the winged kobold. And Hal — oath-sworn Hal, in full plate — took a running start and leapt nine feet straight up into the storm, Hunter's Mark burning on the beast, and drove his blade into the dragon's eye. Twice he struck. The dragon did not fall.
+VANDAL: *(unfolding, quickening)* And then, friend, the long grind of it. Zephyros conjured an air elemental — a living whirlwind, set spinning at the dragon's flank. Eno's Guiding Bolts came one after another, painting the beast in radiant light. Toz laid Ray of Frost across the winged kobold. And Hal — oath-sworn Hal, in full plate — took a running start and leapt nine feet straight up into the storm, Hunter's Mark burning on the beast, and drove his blade into the dragon's eye. Twice he struck. The dragon did not fall.
 
 VANDAL: *(dropping, taut)* What fell was Hal. The breath weapon came again — a river of lightning down the line — and the paladin dropped where he stood, a griffin dead beside him, Toz scorched and reeling. Hal lay dying in the mud while gargoyles raked at Fiz, and the dragon, nine parts dead itself, clawed skyward to flee.
 
@@ -83,7 +83,7 @@ VANDAL: *(urgent)* It did not get far. Fiz burned it with Scorching Ray as it ro
 
 VANDAL: *(amused, softer)* The kobold bolted for the clouds with its master's satchel. A griffin ran it down sixty feet up and brought the bag home like a good hound. And the last gargoyle — well. Zephyros cast Mass Suggestion upon it, and said, with a giant's weary courtesy: *please leave my tower.* And it did.
 
-VANDAL: *(warm)* Woz knelt in the rain and spoke a Healing Word, and Hal opened his eyes to the grey sky. Bloodied, friend. Two griffins the poorer. But alive — every one.
+VANDAL: *(warm)* Eno knelt in the rain and spoke a Healing Word, and Hal opened his eyes to the grey sky. Bloodied, friend. Two griffins the poorer. But alive — every one.
 
 [STING: bridge — 2s]
 

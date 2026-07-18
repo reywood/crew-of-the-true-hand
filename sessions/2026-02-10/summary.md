@@ -20,7 +20,7 @@ After a long rest piloted through favorable winds, Toz dreamed again of the glas
 
 ## Down to the Ground at Goldenfields
 
-A magical storm boiled on the horizon — bluish-mauve, lightning-laced, perhaps an hour and a half out. Below stretched the rolling farmland of Goldenfields, the walled town visible in the distance. Reasoning that a thousand-foot drop made the tower a murder box, the crew had Zephyros sink the spire down to a rocky outcropping near a small wooded grove. A wagon on the road wheeled around and fled at the sight of them. Fiz sent a charmed griffin ahead on reconnaissance; it returned reporting three stone-winged gargoyles, a small flying lizard, and a great blue dragon ridden by a "dragon man." The crew dug in behind Zephyros's overturned desk and his levitating disc, Hal taking the upper floor and the others holding the doorway with Woz's Bless and Barkskin layered over everyone.
+A magical storm boiled on the horizon — bluish-mauve, lightning-laced, perhaps an hour and a half out. Below stretched the rolling farmland of Goldenfields, the walled town visible in the distance. Reasoning that a thousand-foot drop made the tower a murder box, the crew had Zephyros sink the spire down to a rocky outcropping near a small wooded grove. A wagon on the road wheeled around and fled at the sight of them. Fiz sent a charmed griffin ahead on reconnaissance; it returned reporting three stone-winged gargoyles, a small flying lizard, and a great blue dragon ridden by a "dragon man." The crew dug in behind Zephyros's overturned desk and his levitating disc, Hal taking the upper floor and the others holding the doorway with Eno's Bless and Barkskin layered over everyone.
 
 ## The Blue Dragon and His Rider
 
@@ -28,7 +28,7 @@ The dragon landed with a thud and demanded the giant's blood. Fiz tried to parle
 
 ## A Bloody Trade in the Rain
 
-The fight ground on through Zephyros's air elemental whirlwind, repeated Guiding Bolts from Woz, Toz's Ray of Frost on the kobold, and a leaping sword-strike from Hal — who jumped nine feet to plunge his blade into the dragon's eye. The dragon's recharged breath weapon dropped Hal unconscious and killed a griffin, and Hal began rolling death saves while gargoyles raked at Fiz. Fiz's Scorching Ray and a flurry of Zephyros's magic missiles brought the dragon crashing down, dead — the kobold fled with its bag of loot but was run down by one of Zephyros's griffins, which brought the bag home. Zephyros's Mass Suggestion politely shooed the last gargoyle out of his tower. Woz roused Hal with healing word, and the crew picked through the corpses in the rain.
+The fight ground on through Zephyros's air elemental whirlwind, repeated Guiding Bolts from Eno, Toz's Ray of Frost on the kobold, and a leaping sword-strike from Hal — who jumped nine feet to plunge his blade into the dragon's eye. The dragon's recharged breath weapon dropped Hal unconscious and killed a griffin, and Hal began rolling death saves while gargoyles raked at Fiz. Fiz's Scorching Ray and a flurry of Zephyros's magic missiles brought the dragon crashing down, dead — the kobold fled with its bag of loot but was run down by one of Zephyros's griffins, which brought the bag home. Zephyros's Mass Suggestion politely shooed the last gargoyle out of his tower. Eno roused Hal with healing word, and the crew picked through the corpses in the rain.
 
 ## The Spoils
 

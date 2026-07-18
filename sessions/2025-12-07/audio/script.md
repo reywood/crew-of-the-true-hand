@@ -33,7 +33,7 @@ VANDAL: *(warm, unfolding)* Picture it. Past the bat-cave, deeper than the crew 
 
 VANDAL: *(measured)* Three gold pieces a head, he said, for the villagers of Nightstone. And the crew's purses, laid end to end, would not have bought back a single child. So the talk turned, as it must, to trade. There was a trouble down one of his tunnels, said the goblin. A little slime. His lads were too spooked to face it. Deal with that, and every soul walks free.
 
-VANDAL: *(warm)* Now, Hal Stormguard — paladin of the Oath of Vengeance, and a man who knows what a hostage is worth to the one holding her — Hal pressed hard: the women, the children, and the wounded go out first, or there is no deal at all. And beneath the haggling, quiet as a stream under ice, Woz laid a Guidance on the words — for a cleric of Eldath knows how to gentle a hard room.
+VANDAL: *(warm)* Now, Hal Stormguard — paladin of the Oath of Vengeance, and a man who knows what a hostage is worth to the one holding her — Hal pressed hard: the women, the children, and the wounded go out first, or there is no deal at all. And beneath the haggling, quiet as a stream under ice, Eno laid a Guidance on the words — for a cleric of Eldath knows how to gentle a hard room.
 
 VANDAL: *(gently)* The goblin gave an inch. The children could go. A tiefling woman was chosen from among the captives to lead them out — a woman who, I am told, knew every one of those little ones by name. The rest of the villagers stayed behind, collateral under a horned black hat.
 
@@ -63,7 +63,7 @@ VANDAL: *(cold, measured)* At the mouth of the tunnel, Boz Hark was waiting. And
 
 VANDAL: *(plain)* So it came to steel.
 
-VANDAL: *(rising)* Woz raised his holy symbol and called down his Channel Divinity — Charm Animals and Plants — and two of the great rats, the boss's own beloved babies, turned gentle as lambs and stepped out of the fight. Half the goblin's guard, gone in a breath. Hal waded in with the long reach of his halberd. Toz — small Toz Greenbottle, with the storm always a half-step behind his shoulder — loosed a Thunderwave up at the ledge where the boss stood, and the air itself cracked like a ship's mast going over. And Fiz worked from the back, Fire Bolt after Fire Bolt streaking down the cavern.
+VANDAL: *(rising)* Eno raised his holy symbol and called down his Channel Divinity — Charm Animals and Plants — and two of the great rats, the boss's own beloved babies, turned gentle as lambs and stepped out of the fight. Half the goblin's guard, gone in a breath. Hal waded in with the long reach of his halberd. Toz — small Toz Greenbottle, with the storm always a half-step behind his shoulder — loosed a Thunderwave up at the ledge where the boss stood, and the air itself cracked like a ship's mast going over. And Fiz worked from the back, Fire Bolt after Fire Bolt streaking down the cavern.
 
 VANDAL: *(steadier)* Goblins fell. The horned hat rolled in the dirt. But no fight in a cave full of hostages ends clean, friend — one of the Nightstone guards fell in that melee, and two of the villagers with him, before the last of the goblins broke and scattered down the far tunnels into the dark.
 
@@ -75,9 +75,9 @@ VANDAL: *(warm, amused)* And Snigbat — Snigbat, who had turned on his old mast
 
 ## ACT FOUR — The name at the bottom of the bottle
 
-VANDAL: *(measured, telling)* With the cave quiet, Woz tried one last measure against the thing in the stalactite chamber. He sent the two charmed rats in to test it. They tore chunks from the ooze, brave little wretches — and its acid ate them alive for their trouble. Tooth and claw, plainly, are no answer to it. Mark that, friend. The ooze still hangs. The vision is not yet closed.
+VANDAL: *(measured, telling)* With the cave quiet, Eno tried one last measure against the thing in the stalactite chamber. He sent the two charmed rats in to test it. They tore chunks from the ooze, brave little wretches — and its acid ate them alive for their trouble. Tooth and claw, plainly, are no answer to it. Mark that, friend. The ooze still hangs. The vision is not yet closed.
 
-VANDAL: *(warm)* Then they rolled the boulder off Boz Hark's stash. A modest haul, by the measure of the tales. Twelve gold pieces, with loose silver and copper beneath. A matched silver salt-and-pepper set, of all things. Woodcarving tools in a leather case still dark with old blood — and no one asked whose. A spell scroll of Zone of Truth — mark that one too; truth is a heavy stone to carry into a room. And a wooden holy symbol of Silvanus, inlaid with gold. Woz took that one for himself — and why not? Eldath keeps the still waters and Silvanus keeps the wild wood; the two old powers have shared a border since before there were names for either.
+VANDAL: *(warm)* Then they rolled the boulder off Boz Hark's stash. A modest haul, by the measure of the tales. Twelve gold pieces, with loose silver and copper beneath. A matched silver salt-and-pepper set, of all things. Woodcarving tools in a leather case still dark with old blood — and no one asked whose. A spell scroll of Zone of Truth — mark that one too; truth is a heavy stone to carry into a room. And a wooden holy symbol of Silvanus, inlaid with gold. Eno took that one for himself — and why not? Eldath keeps the still waters and Silvanus keeps the wild wood; the two old powers have shared a border since before there were names for either.
 
 VANDAL: *(softer, drawing close)* And then, in a quiet aside, they brought out the ornate bottle — the one salvaged from the wreck of the *True Hand* itself — and showed it to old Molak. Molak, the innkeeper of a village that is no village now. His adventuring days are behind him, and he confessed, with the smallest of smiles, that he had once meant to take the bottle up himself. To have the wish. Instead, he pressed it back into their hands. And he gave up, at last, the name he had been holding all this while.
 

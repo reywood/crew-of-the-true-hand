@@ -361,12 +361,12 @@ PC_DEFS = {
         "name": "Toz",
         "full_name": "Tozlo \"Toz\" Greenbottle",
         "aliases": ["Toz", "Tozlo", "Tozlo Greenbottle"],
-        "summary": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; adopted brother to Woz.",
+        "summary": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; adopted brother to Eno.",
     },
-    "woz": {
-        "name": "Woz",
+    "eno": {
+        "name": "Eno",
         "full_name": "Enoril \"Eno\" Wazek",
-        "aliases": ["Woz", "Eno", "Eno Woz", "Enoril", "Enoril Wazek", "Wazek"],
+        "aliases": ["Eno", "Woz", "Eno Woz", "Enoril", "Enoril Wazek", "Wazek"],
         "summary": "Half-Elf Nature Cleric of Eldath. Raised in the wilds; adopted by the Greenbottles.",
     },
 }
@@ -716,7 +716,7 @@ QUEST_IMPACT_SCORE = {
 # Quest dependency graph. Key = source quest name; value = list of quest names
 # it helps achieve. Both directions (forward "helps" and backward "supported by")
 # are computed from this single table so we only encode each edge once.
-# The Personal section (Fiz/Toz/Woz) is not surfaced as quests, so no edges
+# The Personal section (Fiz/Toz/Eno) is not surfaced as quests, so no edges
 # should reference those; keep dependencies within the surfaced quest set.
 QUEST_DEPENDENCIES = {
     "Find Harshnag":                      ["Reach the Oracle"],

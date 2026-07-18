@@ -29,7 +29,7 @@ VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am V
 
 VANDAL: *(warm, unfolding)* Now, I was not there for this one, friend. This account I have gathered since, from those who lived it, and set in its proper order. Trust it all the same — a bard's stitching holds.
 
-VANDAL: *(measured, telling)* Picture it. A grey morning on the Sword Coast. Timbers strewn along the sand like a giant's cast bones. Four of the ship's crew still drawing breath — Ol' Rourke the navigator, Fish Hook Finn the deckhand, Liera of the Pearl Isles who kept the galley, and Garret "Ox" Dorn. And with them, four more, who did not yet know what they were about to become. Fiz of Halruaa, a rock gnome tinker with a wand that barks fire. Hal Stormguard, a paladin out of the Silver Marches, sworn to the Oath of Vengeance. Toz Greenbottle, halfling, captain of the ship now lying in pieces behind him. And Woz — Toz's adopted brother — a half-elven cleric of Eldath, the goddess of quiet waters. There was little quiet in the water that night.
+VANDAL: *(measured, telling)* Picture it. A grey morning on the Sword Coast. Timbers strewn along the sand like a giant's cast bones. Four of the ship's crew still drawing breath — Ol' Rourke the navigator, Fish Hook Finn the deckhand, Liera of the Pearl Isles who kept the galley, and Garret "Ox" Dorn. And with them, four more, who did not yet know what they were about to become. Fiz of Halruaa, a rock gnome tinker with a wand that barks fire. Hal Stormguard, a paladin out of the Silver Marches, sworn to the Oath of Vengeance. Toz Greenbottle, halfling, captain of the ship now lying in pieces behind him. And Eno — Toz's adopted brother — a half-elven cleric of Eldath, the goddess of quiet waters. There was little quiet in the water that night.
 
 VANDAL: *(leaning in)* From the wreck they saved one thing worth more than their lives, though they did not know it yet. A bottle. Old past reckoning, and written upon in Primordial. Toz speaks that tongue, friend — a storm sorcerer hears it in his blood — and he turned the bottle in his hands and read the words aloud.
 
@@ -67,13 +67,13 @@ VANDAL: *(dry)* Neither goblin left the tower.
 
 ## ACT THREE — The warg on the drawbridge
 
-VANDAL: *(taut)* Then came the leaving, and the leaving nearly ended everything. Woz called up a Fog Cloud — a grey mercy of Eldath, rolled across the courtyard to blind the beasts. It bought them heartbeats, no more. One warg caught a scent at the drawbridge, and charged.
+VANDAL: *(taut)* Then came the leaving, and the leaving nearly ended everything. Eno called up a Fog Cloud — a grey mercy of Eldath, rolled across the courtyard to blind the beasts. It bought them heartbeats, no more. One warg caught a scent at the drawbridge, and charged.
 
-VANDAL: *(grave)* Friend, I will tell it plain, as it was told to me. Woz went down on the timbers of that bridge. The cleric of the goddess of peace, bleeding out in the first hour of the tale, with a monster standing over him fit to finish it.
+VANDAL: *(grave)* Friend, I will tell it plain, as it was told to me. Eno went down on the timbers of that bridge. The cleric of the goddess of peace, bleeding out in the first hour of the tale, with a monster standing over him fit to finish it.
 
 VANDAL: *(conspiratorial)* And in that panic, hands went to the bottle. *Should we open it?* someone said. *It seems we have no other choice.* Speak the unknown name. Unmake the chains. Loose whatever slept inside, blind, and hope it was kindly. That is how close it came.
 
-VANDAL: *(quickening)* But Toz — quick Toz, with his brother dying on the planks — sent his Mage Hand to the tower winch instead, and cranked the drawbridge up mid-fight. The bridge groaned skyward with the warg still on it, stranded on the tilting timber. And Hal Stormguard, in his armour, threw himself into the moat and swam. He reached the rising bridge where Woz hung dangling from its edge, laid one hand upon him — and the paladin's gift did the rest. Lay on Hands, friend. The oldest magic the Oath carries: a touch, and the dying breathe.
+VANDAL: *(quickening)* But Toz — quick Toz, with his brother dying on the planks — sent his Mage Hand to the tower winch instead, and cranked the drawbridge up mid-fight. The bridge groaned skyward with the warg still on it, stranded on the tilting timber. And Hal Stormguard, in his armour, threw himself into the moat and swam. He reached the rising bridge where Eno hung dangling from its edge, laid one hand upon him — and the paladin's gift did the rest. Lay on Hands, friend. The oldest magic the Oath carries: a touch, and the dying breathe.
 
 VANDAL: *(softer)* The warg toppled dead down the ramp. The bridge slammed home behind them. And on the far side of the wall, four strangers sat in the mud and learned what they now owed one another.
 

@@ -40,7 +40,7 @@ Giants of every kind are on the move and attacking settlements across the North.
 ## Personal / character
 
 - **Fiz** — wants to follow in his aunt's footsteps and see the world outside Halruaa. Carries a vine bracelet from **Daniel Windraven** (Ardeep elf druid) as a symbol of friendship, tied to the Emerald Enclave network. (2025-11-12)
-- **Woz** — Lifferloss invited him to join the Emerald Enclave. (2026-03-08)
+- **Eno** — Lifferloss invited him to join the Emerald Enclave. (2026-03-08)
 - **Toz** — lost his first ship (*The True Hand*) eleven months in; Brindle lead may be the next ship.
 
 ## Completed

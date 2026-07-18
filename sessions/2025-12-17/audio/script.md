@@ -29,11 +29,11 @@ VANDAL: *(bright, storyteller)* Well met, friend. Draw close to the fire. I am V
 
 VANDAL: *(warm, unfolding)* Picture the morning. Outside the goblin cave, two dozen rescued villagers waited at the cave mouth, hungry as only the newly freed can be. So the four went foraging in the wood to fill those mouths. And there, between one tree and the next, stood a deer. A great one — taller at the shoulder than any deer has a right to be. And its antlers, friend, were of gold.
 
-VANDAL: *(measured)* It locked eyes with Woz and stood ready to bolt. Now, Woz was raised in the wild, a cleric of Eldath, goddess of still waters — and if any of the four was going to speak first, it was he. He whispered a Speak with Animals, and said, gently as a man greets a shrine, hello.
+VANDAL: *(measured)* It locked eyes with Eno and stood ready to bolt. Now, Eno was raised in the wild, a cleric of Eldath, goddess of still waters — and if any of the four was going to speak first, it was he. He whispered a Speak with Animals, and said, gently as a man greets a shrine, hello.
 
 VANDAL: *(quoted, quiet)* "Why have you come to this place?"
 
-VANDAL: *(telling)* That is what the deer asked him. And Woz told it the truth — hungry people, an evil in the cave behind them, food wanted for the saving of a village. The deer said nothing more. It turned, walked, paused, and looked back — the way a guide does. And it led them to an orchard of great old trees hung with apples the size of two fists together, food enough for every waiting mouth. Then it ran, and was gone.
+VANDAL: *(telling)* That is what the deer asked him. And Eno told it the truth — hungry people, an evil in the cave behind them, food wanted for the saving of a village. The deer said nothing more. It turned, walked, paused, and looked back — the way a guide does. And it led them to an orchard of great old trees hung with apples the size of two fists together, food enough for every waiting mouth. Then it ran, and was gone.
 
 VANDAL: *(wondering)* Only a deer, friend. Save that it was not. Mark it. In the great tales, the quiet omens are the ones you remember.
 
@@ -75,7 +75,7 @@ VANDAL: *(quieter)* The focus went back into Aganor's hands. A debt owed now, fr
 
 ## ACT FOUR — The Crypt Beneath the Wall
 
-VANDAL: *(dropping into serious)* And while the village swore above, Hal and Woz went underneath it. For there was a secret way into Nightstone — a well outside the walls, and at the bottom of the well, a passage no guard of Corvin's had ever stood watch over.
+VANDAL: *(dropping into serious)* And while the village swore above, Hal and Eno went underneath it. For there was a secret way into Nightstone — a well outside the walls, and at the bottom of the well, a passage no guard of Corvin's had ever stood watch over.
 
 VANDAL: *(hushed, drawing close)* Down the ladder they went, torch in hand, the webs growing thicker with every rung — until a giant spider reared up out of the dark, its head the size of a man's. The paladin and the cleric put it down between them and pressed on, into a small stone mausoleum. One room. One sarcophagus, carved with the likeness of a sword, holding some long-dead lord of Nightstone. And the way onward into the crypt proper — sealed by a great slab of stone.
 
@@ -85,7 +85,7 @@ VANDAL: *(quieter)* Within lay a body gone mostly to bone. And in its fingers, a
 
 VANDAL: *(cold)* A ghost rose out of the corpse, and it was angry.
 
-VANDAL: *(quickening)* Woz tried words first — we come to save your town, he said, we mean no plunder. The dead do not bargain. So the cleric raised his holy symbol and called his Channel Divinity down the narrow room — Turn Undead, the still-water light of Eldath — and the ghost recoiled from it, wailing, and fled back into its own bones.
+VANDAL: *(quickening)* Eno tried words first — we come to save your town, he said, we mean no plunder. The dead do not bargain. So the cleric raised his holy symbol and called his Channel Divinity down the narrow room — Turn Undead, the still-water light of Eldath — and the ghost recoiled from it, wailing, and fled back into its own bones.
 
 VANDAL: *(taut)* But a ghost turned is not a ghost destroyed. They had minutes, no more. Hal took the sword from the dead man's fingers, and the two of them threw themselves at the slab — while on the far side Toz and Fiz heaved on the crowbar, and Toz, bless him, slipped and broke his nose on the stone for his trouble. Then the slab ground open, and the crew stood reunited, bloodied nose and all, before the dead lord could rise again.
 

@@ -6,9 +6,9 @@ When picking something up, note enough context that the reader can start work wi
 
 ## Content
 
-### Battle cards for Hal, Toz, Woz
+### Battle cards for Hal, Toz, Eno
 
-`battle-cards/fiz.html` exists as the working template. Hal, Toz, and Woz still need their own single-page combat reference cards. See `battle-cards/README.md` for the layout model, dice notation, chip taxonomy, and the step-by-step recipe. Copy `fiz.html` and swap content; each card is self-contained (inline CSS, inline SVG dice, no external assets) so they can be printed or opened offline at the table.
+`battle-cards/fiz.html` exists as the working template. Hal, Toz, and Eno still need their own single-page combat reference cards. See `battle-cards/README.md` for the layout model, dice notation, chip taxonomy, and the step-by-step recipe. Copy `fiz.html` and swap content; each card is self-contained (inline CSS, inline SVG dice, no external assets) so they can be printed or opened offline at the table.
 
 ### Continued session cadence
 

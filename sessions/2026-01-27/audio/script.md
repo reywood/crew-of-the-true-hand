@@ -49,7 +49,7 @@ VANDAL: *(warm)* And he unrolled, besides, a map of all Faerûn, sized for a sma
 
 VANDAL: *(telling)* Fiz, meanwhile, had turned up a slim volume in the stacks — *Giant Runes of the Realms*, by one Volotham Gedarm. Zephyros offered a trade: the book, for a story of far Halruaa. And Fiz — I do love this — refused the bargain, and then told the tale anyway, free, as one host's gift to another. The giant let him keep the book. And within the hour it paid for itself: ten minutes of study, and the tinker stood before that great floating sphere and named the rune upon it. The sky rune. The very word that steers the castle.
 
-VANDAL: *(reflective)* And out on the entry ledge, where the wind cuts sharp, Woz kept his own kind of company. He sat with one of the griffins, hour upon hour. Fed it ogre thumbs from his pack — gulped down gratefully, I'm told. Traded it a hunter's story. And the beast leaned into him, as beasts will lean into a cleric of Eldath, who carries the patience of still water. Zephyros watched it all from his desk. And when Woz came in from the cold, there in the giant's palm lay a small bronze figurine of a griffin. Speak the word, once in five days, and a friendly griffin comes.
+VANDAL: *(reflective)* And out on the entry ledge, where the wind cuts sharp, Eno kept his own kind of company. He sat with one of the griffins, hour upon hour. Fed it ogre thumbs from his pack — gulped down gratefully, I'm told. Traded it a hunter's story. And the beast leaned into him, as beasts will lean into a cleric of Eldath, who carries the patience of still water. Zephyros watched it all from his desk. And when Eno came in from the cold, there in the giant's palm lay a small bronze figurine of a griffin. Speak the word, once in five days, and a friendly griffin comes.
 
 VANDAL: *(quiet, amused)* Four heroes. Four gifts. And a giant well pleased with his passengers.
 
@@ -77,7 +77,7 @@ VANDAL: *(urgent)* But hear how the crew answered. Fiz's little Eldritch Cannon 
 
 VANDAL: *(leaning, wondering)* And the water sank into the cloud floor. And the clouds — remember, the clouds drink magic — the clouds answered. They turned black. They became a storm bank in miniature, arcing lightning into every gargoyle that lingered within it. The tower itself, friend, took the storm sorcerer's side.
 
-VANDAL: *(measured)* Woz set a Spiritual Weapon swinging in the air and hurled a Guiding Bolt that lit the runt up like a beacon, patching the line when the claws came thick, closing it again when they thinned. And Hal waded in with his halberd, Shield of Faith shimmering about him — and for the first time in all these tales, a second stroke followed the first, for the crew had crossed into their fifth season of skill upon the road. When stone teeth found the gaps in his plate, he laid his own hands upon the wounds and stood back up.
+VANDAL: *(measured)* Eno set a Spiritual Weapon swinging in the air and hurled a Guiding Bolt that lit the runt up like a beacon, patching the line when the claws came thick, closing it again when they thinned. And Hal waded in with his halberd, Shield of Faith shimmering about him — and for the first time in all these tales, a second stroke followed the first, for the crew had crossed into their fifth season of skill upon the road. When stone teeth found the gaps in his plate, he laid his own hands upon the wounds and stood back up.
 
 VANDAL: *(steadier)* They put the swarm down. All five. Bloodied, dented, and breathing.
 

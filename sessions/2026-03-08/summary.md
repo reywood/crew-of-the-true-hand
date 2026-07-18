@@ -1,7 +1,7 @@
 ---
 carried:
 - Naxene's letter to Chazlauth in Waterdeep — an introduction from the noble
-- Emerald Enclave invitation (Woz — from Lifferloss)
+- Emerald Enclave invitation (Eno — from Lifferloss)
 - Contact chain to Zephyros — Baros Ravenkind in Silverymoon can craft a silver-eagle animal messenger
 ---
 
@@ -15,7 +15,7 @@ Golden Fields proved to be a Shontean farming town roughly twice the size of Nig
 
 ## The Inn and Its Yeti
 
-At the inn the bar was tended by a yeti named **Miros**. Woz, raised wild and fluent in stranger tongues than most, addressed him in his own language, and the great furred creature became an instant friend — a free room appeared, and with it the local gossip. Hill giants had been raiding the region for food, Miros said, and he himself was a member of the Emerald Enclave. The captain of the guard, a half-orc called **Strog Thunderblade**, was reckoned lazy; the real authority sat with the Castellan, **Tarn**. A couple of weeks back the giants had come in the middle of the night — bugbears and goblins slipping the walls to make off with grain while the giants hurled stones from outside.
+At the inn the bar was tended by a yeti named **Miros**. Eno, raised wild and fluent in stranger tongues than most, addressed him in his own language, and the great furred creature became an instant friend — a free room appeared, and with it the local gossip. Hill giants had been raiding the region for food, Miros said, and he himself was a member of the Emerald Enclave. The captain of the guard, a half-orc called **Strog Thunderblade**, was reckoned lazy; the real authority sat with the Castellan, **Tarn**. A couple of weeks back the giants had come in the middle of the night — bugbears and goblins slipping the walls to make off with grain while the giants hurled stones from outside.
 
 A halfling bard named **Orin** warned the crew off a particular stand of trees outside town: awakened decades ago by a passing druid, and best left undisturbed. He also noted a woman newly arrived in town who had taken up work as a shepherd — a small thing, but worth filing away.
 
@@ -25,11 +25,11 @@ At a corner table sat a woman with ink-stained fingers, plainly a noble of Water
 
 ## The Awakened Grove
 
-Heeding Orin's directions rather than his warning, the crew sought out the awakened grove and found **Lifferloss** — a tree woken in the long-gone druid's wake. Lifferloss invited Woz to join the Emerald Enclave, then turned to the question the crew had been carrying since Nightstone: the Oracle. The Oracle, Lifferloss said, could be reached from the Spine of the World, but only with the aid of a giant named **Harshnag**. Harshnag had once ridden with Force Gray, an adventuring company of Waterdeep now disbanded; a statue of him still stood in the city, and other former members might yet be found there.
+Heeding Orin's directions rather than his warning, the crew sought out the awakened grove and found **Lifferloss** — a tree woken in the long-gone druid's wake. Lifferloss invited Eno to join the Emerald Enclave, then turned to the question the crew had been carrying since Nightstone: the Oracle. The Oracle, Lifferloss said, could be reached from the Spine of the World, but only with the aid of a giant named **Harshnag**. Harshnag had once ridden with Force Gray, an adventuring company of Waterdeep now disbanded; a statue of him still stood in the city, and other former members might yet be found there.
 
 ## The Abbot
 
-Last, they called on the abbot — robes dusty from walking his fields, a follower of Shontea like the rest of his flock. His assistant fretted that the town's guard was not equal to the giant threat, but the abbot himself believed all was well in hand. Woz, taking a cleric's measure of the situation, offered to lend his back to the harvest.
+Last, they called on the abbot — robes dusty from walking his fields, a follower of Shontea like the rest of his flock. His assistant fretted that the town's guard was not equal to the giant threat, but the abbot himself believed all was well in hand. Eno, taking a cleric's measure of the situation, offered to lend his back to the harvest.
 
 ## What's Next
 

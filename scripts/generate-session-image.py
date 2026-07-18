@@ -111,8 +111,8 @@ PC_PORTRAITS = [
         "fingertips. Pirate-captain aesthetic.",
     ),
     (
-        "woz",
-        "Woz — a HALF-ELF nature cleric of Eldath (goddess of still "
+        "eno",
+        "Eno — a HALF-ELF nature cleric of Eldath (goddess of still "
         "waters). MALE, mid-50s, wild-raised. Pointed elven ear-tips "
         "clearly visible. HAIR: medium-length wavy MEDIUM BROWN hair. "
         "FACE: LIGHT SHORT STUBBLE (not a full beard, not clean-shaven — "
@@ -147,10 +147,10 @@ evocative moment — the pivotal beat of the scene, not an action-pose lineup \
 of every character present.
 
 CHARACTERS:
-The four portrait references (Fiz, Hal, Toz, Woz) are provided so you can \
+The four portrait references (Fiz, Hal, Toz, Eno) are provided so you can \
 tell the PCs apart. Include ONLY the PCs actually named in the pivotal moment \
 below. Read each identity anchor carefully — the model has a habit of drifting \
-Fiz into a dwarf or bald tinker and drifting Woz feminine. Both are wrong. \
+Fiz into a dwarf or bald tinker and drifting Eno feminine. Both are wrong. \
 Preserve race, size, sex, and costume from the identity anchors. Do NOT \
 label them, do NOT add speech bubbles, do NOT add any text, letters, numbers, \
 or captions anywhere in the image."""
