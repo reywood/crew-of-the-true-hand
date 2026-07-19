@@ -11,7 +11,7 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 - `characters/` — One markdown file per PC plus a portrait `.jpeg`. The party is four PCs:
   - **Fiz** (Hisfiz Spinfizzler) — Rock Gnome Artificer/Artillerist, from Halruaa, stole a flying ship.
   - **Hal** (Hal Stormguard) — Variant Human Paladin, Oath of Vengeance, ex-Silver Marches militia.
-  - **Toz** (Tozlo Greenbottle) — Lightfoot Halfling Storm Sorcerer, captain of the (wrecked) *True Hand*, adopted brother to Eno.
+  - **Toz** (Tozlo Greenbottle) — Lightfoot Halfling Storm Sorcerer, captain of the (wrecked) *True Hand*; his family adopted Eno as a brother.
   - **Eno** (Enoril Wazek) — Half-Elf Nature Cleric of Eldath, raised in the wild, adopted by the Greenbottles.
   - Character files are structured as: header block (race/class/background/alignment/age) → `## Backstory` → `## Class Features` with per-feature stat blocks copied from sourcebook references (PHB / TCoE / SCAG with page numbers). Preserve this structure when editing.
 - `sessions/YYYY-MM-DD/` — **All files for one session live together in this folder**, keyed by the real-world session date. Contents (all optional except that at least one of summary/transcript/notes must exist to render a page):

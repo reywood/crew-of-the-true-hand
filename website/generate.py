@@ -361,7 +361,7 @@ PC_DEFS = {
         "name": "Toz",
         "full_name": "Tozlo \"Toz\" Greenbottle",
         "aliases": ["Toz", "Tozlo", "Tozlo Greenbottle"],
-        "summary": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; adopted brother to Eno.",
+        "summary": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; his family adopted Eno as a brother.",
     },
     "eno": {
         "name": "Eno",

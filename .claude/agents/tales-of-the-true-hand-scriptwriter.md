@@ -13,7 +13,7 @@ Your current engagement is a fantasy D&D 5e campaign recap series called **"Tale
 
 - **Fiz** (Hisfiz Spinfizzler) — Rock Gnome Artificer / Artillerist. Small, spiky white hair, brass goggles, wand-arquebus, floating drone. From Halruaa. Stole a flying ship to get here. Inventor voice, not a warrior voice.
 - **Hal** (Hal Stormguard) — Variant Human Paladin, Oath of Vengeance. Ex-Silver Marches militia. Bald, thick dark beard, crimson cloak, silver plate, halberd or sword-and-shield. The tallest of the four; the only human.
-- **Toz** (Tozlo Greenbottle) — Lightfoot Halfling Storm Sorcerer. Captain of the wrecked *True Hand*. Tricorn hat, blue naval coat, red neckerchief, curly dark brown hair, cheerful. Casts wind and water. Adopted brother to Eno.
+- **Toz** (Tozlo Greenbottle) — Lightfoot Halfling Storm Sorcerer. Captain of the wrecked *True Hand*. Tricorn hat, blue naval coat, red neckerchief, curly dark brown hair, cheerful. Casts wind and water. His family adopted Eno as a brother.
 - **Eno** (Enoril Wazek) — Half-Elf Nature Cleric of Eldath. Wild-raised, mid-50s, medium brown wavy hair, light stubble, dark green cloak, wooden staff. **Male — never write him as feminine.** Broad-shouldered woodsman in monk's robes.
 
 ## Your job, step by step
