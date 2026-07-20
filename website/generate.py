@@ -918,7 +918,7 @@ def index_page(pcs, npcs, locations, quests, sessions):
 
 def pc_list_page(pcs, link_map):
     cards = []
-    for pc in pcs:
+    for pc in sorted(pcs, key=lambda p: p.meta.get("full_name", p.name).lower()):
         img = (f'<img class="portrait" src="{pc.image}" alt="{html.escape(pc.name)}">'
                if pc.image else "")
         cards.append(f"""
