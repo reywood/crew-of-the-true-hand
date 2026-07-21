@@ -1672,4 +1672,87 @@ a.chart-port-name:hover {
   .map-pin-region .map-pin-label { font-size: 0.62rem; letter-spacing: 0.12em; }
   .map-pin-dot { width: 7px; height: 7px; }
   .location-list { columns: 1; }
+  .prep-block { padding: 1rem 1.1rem 1.2rem; }
 }
+
+/* ---------- prep hub (next.html) + open threads (threads.html) ---------- */
+.hero-cta {
+  margin: 0.9rem auto 0;
+  font-size: 1.02rem;
+}
+.hero-cta a {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  color: var(--wood);
+  border-bottom: 1px dotted var(--rope);
+  text-decoration: none;
+}
+.hero-cta a:hover { color: var(--status-active-main); border-bottom-color: var(--brass); }
+
+.prep-block {
+  margin: 1.4rem 0;
+  padding: 1.1rem 1.4rem 1.3rem;
+  background: rgba(193, 154, 74, 0.08);
+  border: 1px solid var(--parchment-shadow);
+  border-left: 4px solid var(--brass);
+  border-radius: 0 4px 4px 0;
+}
+.prep-block > h2 {
+  margin-top: 0;
+  border-bottom: none;
+  font-size: 1.35rem;
+}
+.prep-block > h2 a { color: inherit; text-decoration: none; }
+.prep-block > h2 a:hover { color: var(--status-active-main); }
+
+.prep-loc {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  color: var(--wood);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--rope);
+}
+.prep-loc:hover { color: var(--status-active-main); border-bottom-color: var(--brass); }
+.prep-where { font-size: 1.05rem; margin: 0.2rem 0 0.5rem; }
+.prep-inbrief {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0.3rem 0;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--parchment-shadow);
+}
+.prep-audio { margin: 0.4rem 0 0; }
+.prep-objective {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  margin: 0.2rem 0 0.9rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px dotted var(--parchment-shadow);
+}
+
+.prep-leads, .prep-questions, .prep-threads {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+.prep-leads li, .prep-questions li, .prep-threads li {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+.prep-leads a, .threads-head + .prep-threads a { text-decoration: none; }
+.prep-leads a:first-child { font-weight: 600; }
+
+.threads-head {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin: 0.7rem 0 0.1rem;
+  border: none;
+}
+
+.prep-crew-card { padding: 1rem 1.1rem; }
+.prep-crew-card .portrait { max-width: 96px; margin-bottom: 0.4rem; }
+.prep-crew-card h3 { margin: 0.2rem 0; font-size: 1.05rem; }
+.prep-crew-card a { text-decoration: none; color: var(--ink); }
+.prep-holdings { margin: 0.4rem 0 0; font-size: 0.92rem; line-height: 1.5; }
+.prep-holdings a { text-decoration: none; }
