@@ -1828,7 +1828,7 @@ def _inject_beat_images(summary_html: str, date: str, beat_images: dict) -> str:
     return pattern.sub(replace, summary_html)
 
 
-def detail_page_session(s, link_map):
+def detail_page_session(s, link_map, prev=None, nxt=None):
     summary_md = s.meta.get("summary_md", "")
     summary_html = (md_to_html(summary_md) if summary_md
                     else "<p><em>No summary available for this session.</em></p>")
@@ -1904,8 +1904,44 @@ def detail_page_session(s, link_map):
   {ts_section}
 </article>"""
     body = linkify_html(body, s.href, link_map)
+    # Prev/next chronological navigation. `sessions` is ordered oldest→newest,
+    # so `prev` is the earlier session and `nxt` the later one. Built outside
+    # linkify so the neighbour dates don't get turned into entity self-links.
+    body += _session_pager(prev, nxt)
     bc = f'<a href="sessions.html">Sessions</a> &rsaquo; {html.escape(s.name)}'
     return page(s.name, body, current_nav="sessions.html", breadcrumb=bc)
+
+
+def _session_pager(prev, nxt):
+    """Bottom-of-page 'Previous / Next session' navigation for a detail page.
+
+    Always renders both slots so the flex row keeps Previous left and Next
+    right even when one end is missing (an empty span holds the slot).
+    """
+    if prev is None and nxt is None:
+        return ""
+
+    def slot(entity, direction, label):
+        if entity is None:
+            return '<span class="session-pager-link empty" aria-hidden="true"></span>'
+        rel = "prev" if direction == "prev" else "next"
+        arrow = "‹" if direction == "prev" else "›"
+        pieces = [
+            f'<span class="session-pager-dir">{arrow}&nbsp;{label}</span>',
+            f'<span class="session-pager-title">{html.escape(entity.name)}</span>',
+        ]
+        if entity.summary:
+            pieces.append(
+                f'<span class="session-pager-brief">{html.escape(entity.summary)}</span>')
+        return (f'<a class="session-pager-link {direction}" '
+                f'href="{entity.href}" rel="{rel}">' + "".join(pieces) + '</a>')
+
+    return (
+        '\n<nav class="session-pager" aria-label="Session navigation">\n'
+        f'  {slot(prev, "prev", "Previous session")}\n'
+        f'  {slot(nxt, "next", "Next session")}\n'
+        '</nav>\n'
+    )
 
 
 # --------------------------------------------------------------------------
@@ -2510,8 +2546,12 @@ def main():
         write_page(q.href, detail_page_quest(q, link_map, session_lookup))
 
     write_page("sessions.html", session_list_page(sessions, locations, link_map))
-    for s in sessions:
-        write_page(s.href, detail_page_session(s, link_map))
+    # `sessions` is ordered oldest→newest; give each detail page its
+    # chronological neighbours for the prev/next pager.
+    for i, s in enumerate(sessions):
+        prev = sessions[i - 1] if i > 0 else None
+        nxt = sessions[i + 1] if i < len(sessions) - 1 else None
+        write_page(s.href, detail_page_session(s, link_map, prev, nxt))
 
     write_page("feed.xml", podcast_feed(sessions))
     n_episodes = sum(1 for s in sessions if s.meta.get("has_audio"))
