@@ -43,6 +43,12 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 SESSIONS_DIR = ROOT / "sessions"
 CHARACTERS_DIR = ROOT / "characters"
+# Style-locked per-PC reference plates (see generate-character-references.py).
+# Fed alongside the raw portraits as character-consistency anchors.
+REFERENCES_DIR = CHARACTERS_DIR / "references"
+# Max reference plates per PC to feed. 4 PCs x (this + 1 portrait) must stay
+# under Gemini's 14-image reference limit; 2 -> 12 images, safe.
+MAX_REFS_PER_PC = 2
 
 
 def load_dotenv(path: Path) -> None:
@@ -236,27 +242,160 @@ def extract_pivotal_moment(summary: str) -> str:
     return ""
 
 
-def _portrait_parts() -> list:
-    """The shared PC-portrait block appended to every generation."""
+# Prepended before the reference images so the model treats them as IDENTITY
+# anchors, not stamps to paste. Without this, Gemini copies a plate's pose,
+# framing, and empty background straight into the scene (observed on Toz/Eno).
+REFERENCE_USAGE = (
+    "HOW TO USE THE CHARACTER REFERENCE IMAGES BELOW — read carefully. They "
+    "exist ONLY to keep each character's IDENTITY consistent between "
+    "illustrations: their face, hair, skin and colouring, costume, and gear, "
+    "and their body proportions. They are NOT poses to reproduce. Do NOT copy "
+    "any reference's pose, gesture, hand position, camera angle, cropping, or "
+    "its plain empty background. RE-DRAW every character from scratch in a "
+    "NEW pose and action that fits THIS scene and the specific moment "
+    "described below — turned, leaning, crouching, fighting, reacting as the "
+    "moment demands — fully sharing space and interacting with the other "
+    "characters, the terrain, the props, and the lighting. Treat each "
+    "reference like a turnaround sheet an illustrator glances at for likeness "
+    "and then sets aside to draw a brand-new picture. A character whose pose "
+    "matches its reference plate is WRONG."
+)
+
+
+# Lean cast lines: NAME + signature gear + role/size only. Deliberately carry
+# NO physical-feature prose (hair colour, facial hair, build) — those cues
+# (esp. "HAIR: WHITE") were driving drift like Fiz's phantom beard, and the
+# reference plates carry appearance far better than words. Gear and role are
+# kept because the plates don't reliably reproduce props, and roll-call needs
+# them. Opt-in via --lean; on weak models it let identity drift (Hal lost his
+# baldness), so the DEFAULT uses the full PC_PORTRAITS feature anchors.
+LEAN_CAST = {
+    "fiz": (
+        "Fiz — a small rock gnome artificer/artillerist (an inventor, not a "
+        "warrior). Signature gear: brass tinker's goggles pushed up on his "
+        "forehead; a brass wand-arquebus (a stubby wand-sized cannon) that "
+        "glows faint blue; a small floating brass drone-cannon hovering near "
+        "him; dark leather-and-brass armour and a potion-vial belt."
+    ),
+    "hal": (
+        "Hal — a human paladin, the tallest of the four and the only human. "
+        "Signature gear: dull silver-grey plate armour and a deep crimson RED "
+        "CLOAK; fights with a sword and shield or a maul."
+    ),
+    "toz": (
+        "Toz — a small halfling storm-sorcerer and ship's captain. Signature "
+        "gear: a dark blue naval TRICORN HAT and matching blue captain's coat "
+        "with a red neckerchief; conjures a swirling grey whirlwind and "
+        "streams of blue water at his fingertips."
+    ),
+    "eno": (
+        "Eno — a half-elf nature cleric. Signature gear: a dark green hooded "
+        "cloak, a wooden staff, and a wooden holy symbol shaped like a calm "
+        "pond."
+    ),
+}
+
+# Forces party completeness — the drop-a-random-PC failure of images-only.
+CAST_ROLLCALL = (
+    "CAST ROLL-CALL: the four player characters are Fiz, Hal, Toz, and Eno. "
+    "This party travels together — assume ALL FOUR are present in the scene "
+    "and MUST be depicted, each with their signature gear listed above, "
+    "UNLESS the summary below clearly says one of them is absent. Never omit "
+    "a party member; never invent an extra player character."
+)
+
+
+def _portrait_parts(refs_only: bool = False, full_text: bool = False) -> list:
+    """The shared PC-reference block appended to every generation.
+
+    Three modes (the reference plates are fed in all three):
+
+    - full_text=True (the DEFAULT, via --model's 3.x tier): plates + portrait
+      + the full PC_PORTRAITS feature anchor + roll-call. Best identity and
+      completeness; the 3.x models follow it without the drift that plagued
+      gemini-2.5-flash-image.
+    - lean (full_text=False, --lean): plates + portrait + a lean cast line
+      (name, gear, role — NO feature prose) + roll-call. Experimental; on weak
+      models it let identity drift (Hal losing his baldness).
+    - refs_only=True: plates + a bare name label only — no cast text, no
+      photo. Purest images-only control; can drop PCs (no roll-call).
+
+    Image count stays within Gemini's 14-reference cap: 4 PCs x
+    (MAX_REFS_PER_PC + 1 portrait)."""
     parts = []
+    any_refs = any(REFERENCES_DIR.glob("*-ref-*.jpg"))
+    if any_refs:
+        parts.append(REFERENCE_USAGE)
     for slug, description in PC_PORTRAITS:
-        portrait = CHARACTERS_DIR / f"{slug}.jpeg"
-        if not portrait.exists():
-            print(f"WARN: portrait missing at {portrait}", file=sys.stderr)
-            continue
-        parts.append(
-            types.Part.from_bytes(
-                data=portrait.read_bytes(), mime_type="image/jpeg"
+        refs = sorted(REFERENCES_DIR.glob(f"{slug}-ref-*.jpg"))[:MAX_REFS_PER_PC]
+        for ref in refs:
+            parts.append(
+                types.Part.from_bytes(
+                    data=ref.read_bytes(), mime_type="image/jpeg"
+                )
             )
-        )
-        parts.append(f"Reference portrait ({slug}): {description}")
+
+        if refs_only:
+            # Images-only mode: plates + a bare NAME label (no cast text, no
+            # photo) so the model can still map images -> the PCs named in the
+            # summary without any prose that could bias features.
+            if refs:
+                parts.append(
+                    f"The {len(refs)} image(s) immediately above are the "
+                    f"identity reference plates for the player character named "
+                    f"{slug}. If {slug} is in this scene, keep their identity "
+                    f"(face, hair, colouring, costume, gear) matching these "
+                    f"plates — but draw them in a FRESH pose and action for "
+                    f"the scene; do not copy the plate's pose or background.")
+            else:
+                print(f"WARN: no references for {slug} (refs-only)",
+                      file=sys.stderr)
+            continue
+
+        portrait = CHARACTERS_DIR / f"{slug}.jpeg"
+        has_portrait = portrait.exists()
+        if has_portrait:
+            parts.append(
+                types.Part.from_bytes(
+                    data=portrait.read_bytes(), mime_type="image/jpeg"
+                )
+            )
+        if not refs and not has_portrait:
+            print(f"WARN: no references or portrait for {slug}", file=sys.stderr)
+            continue
+
+        # Text for this PC: lean cast line by default, full anchor with
+        # --full-text. Both keep identity to the plates but re-pose freshly.
+        cast_text = (description if full_text
+                     else LEAN_CAST.get(slug, description))
+        anchor_label = ("Identity anchor" if full_text else "Character")
+        if refs:
+            parts.append(
+                f"The image(s) immediately above are the identity reference "
+                f"plates for {slug}, drawn in the target art style. Keep this "
+                f"character's identity — face, hair, facial hair, build, "
+                f"colouring, costume and gear — matching these plates, but "
+                f"pose and place them FRESHLY for this scene (do not copy the "
+                f"plate's pose, framing, or background)"
+                + (", using the photo portrait after them only for likeness. "
+                   if has_portrait else ". ")
+                + f"{anchor_label} ({slug}): {cast_text}"
+            )
+        else:
+            parts.append(f"{anchor_label} ({slug}): {cast_text}")
+
+    # Roll-call keeps the party complete (lean/full modes only; refs_only is
+    # left as a pure control with no cast text).
+    if not refs_only:
+        parts.append(CAST_ROLLCALL)
     return parts
 
 
-def build_contents(summary: str) -> list:
+def build_contents(summary: str, refs_only: bool = False,
+                   full_text: bool = False) -> list:
     """Multimodal input for the HERO image (session-level banner).
     Portraits + style + pivotal moment + full summary."""
-    contents = _portrait_parts()
+    contents = _portrait_parts(refs_only, full_text)
     contents.append(STYLE_INSTRUCTIONS)
 
     pivotal = extract_pivotal_moment(summary)
@@ -278,10 +417,12 @@ def build_contents(summary: str) -> list:
     return contents
 
 
-def build_beat_contents(title: str, body: str, summary: str) -> list:
+def build_beat_contents(title: str, body: str, summary: str,
+                        refs_only: bool = False,
+                        full_text: bool = False) -> list:
     """Multimodal input for a BEAT image (one story beat within a session).
     Portraits + style + this beat only, with a smaller-scale directive."""
-    contents = _portrait_parts()
+    contents = _portrait_parts(refs_only, full_text)
     contents.append(STYLE_INSTRUCTIONS)
     contents.append(
         "This is a SMALLER inline illustration for one beat within a session "
@@ -358,8 +499,10 @@ def main():
         help="Overwrite existing images for this date.",
     )
     parser.add_argument(
-        "--model", default="gemini-2.5-flash-image",
-        help="Gemini image model id (default: gemini-2.5-flash-image).",
+        "--model", default="gemini-3.1-flash-image",
+        help="Gemini image model id (default: gemini-3.1-flash-image). "
+             "The 3.x tier follows the reference plates far better than "
+             "gemini-2.5-flash-image, which drifted features and dropped PCs.",
     )
     parser.add_argument(
         "--hero", action="store_true",
@@ -377,7 +520,22 @@ def main():
         "--beat-aspect", default="3:2",
         help='Beat image aspect ratio (default: 3:2, more intimate).',
     )
+    parser.add_argument(
+        "--refs-only", action="store_true",
+        help="Feed ONLY the character reference plates (no cast text, no raw "
+             "portraits). Purest images-only control; may drop PCs.",
+    )
+    parser.add_argument(
+        "--lean", action="store_true",
+        help="Use lean cast text (name + gear only, no feature prose) instead "
+             "of the default full feature anchors. Experimental — on weaker "
+             "models it let identity drift (e.g. Hal losing his baldness).",
+    )
     args = parser.parse_args()
+    if args.refs_only and args.lean:
+        print("ERROR: --refs-only and --lean are mutually exclusive.",
+              file=sys.stderr)
+        return 2
 
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -401,8 +559,9 @@ def main():
         hero_out = img_dir / "hero.jpg"
         try:
             _generate_one(client, args.model, args.hero_aspect,
-                          build_contents(summary), hero_out,
-                          "hero", args.force)
+                          build_contents(summary, args.refs_only,
+                                         full_text=not args.lean),
+                          hero_out, "hero", args.force)
         except RuntimeError as e:
             print(f"ERROR generating hero: {e}", file=sys.stderr)
             return 1
@@ -416,7 +575,8 @@ def main():
             try:
                 _generate_one(
                     client, args.model, args.beat_aspect,
-                    build_beat_contents(title, body, summary),
+                    build_beat_contents(title, body, summary, args.refs_only,
+                                        full_text=not args.lean),
                     beat_out, f"beat {i}/{len(beats)}: {title}", args.force,
                 )
             except RuntimeError as e:
