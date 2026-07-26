@@ -1,7 +1,7 @@
 ---
 name: Xolkin
 aliases: Xolkin
-sessions: 2025-11-12, 2025-12-17, 2026-01-13
+sessions: 2025-11-12, 2025-12-17, 2026-01-13, 2026-05-12
 type: Conditional ally
 location: Nightstone
 affiliation: Zhentarim

@@ -277,6 +277,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-xolkin.html",
+   "target": "session-2026-05-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-yackerty.html",
    "target": "session-2026-06-16.html"
   },
@@ -299,6 +304,11 @@
    "rel": "appears_in",
    "source": "npc-zephyros.html",
    "target": "session-2026-03-08.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-zi-liang.html",
+   "target": "session-2026-06-02.html"
   },
   {
    "rel": "appears_in",
@@ -864,6 +874,16 @@
    "rel": "can_help",
    "source": "npc-yackerty.html",
    "target": "item-draconic-notes.html"
+  },
+  {
+   "rel": "located_in",
+   "source": "npc-zi-liang.html",
+   "target": "loc-golden-fields.html"
+  },
+  {
+   "rel": "affiliated_with",
+   "source": "npc-zi-liang.html",
+   "target": "faction-church-of-chauntea"
   },
   {
    "rel": "within",
@@ -1618,6 +1638,16 @@
    "kind": "npc",
    "name": "Zephyros",
    "url": "npc-zephyros.html"
+  },
+  {
+   "aliases": [
+    "Zi Liang"
+   ],
+   "blurb": "An acolyte of Chauntea serving the abbey at Golden Fields, the great granary-town of the North.",
+   "id": "npc-zi-liang.html",
+   "kind": "npc",
+   "name": "Zi Liang",
+   "url": "npc-zi-liang.html"
   },
   {
    "aliases": [
@@ -2431,7 +2461,7 @@
    "aliases": [
     "2026-06-02"
    ],
-   "blurb": "Golden Fields takes its second raid since the crew arrived, and an insight check reveals what the hill giants are actually after.",
+   "blurb": "The giants come to Golden Fields at last — the crew steals across the fields haystack to haystack to bring down two hill giants, and a butcher's knife reveals what the raids were always for.",
    "id": "session-2026-06-02.html",
    "kind": "session",
    "name": "Session 2026-06-02",
@@ -2505,6 +2535,16 @@
    "id": "faction-harpers",
    "kind": "faction",
    "name": "Harpers",
+   "url": ""
+  },
+  {
+   "aliases": [
+    "Church of Chauntea"
+   ],
+   "blurb": "",
+   "id": "faction-church-of-chauntea",
+   "kind": "faction",
+   "name": "Church of Chauntea",
    "url": ""
   }
  ]
