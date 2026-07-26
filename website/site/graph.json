@@ -227,6 +227,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-shalvis.html",
+   "target": "session-2026-05-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-snigbat.html",
    "target": "session-2025-12-07.html"
   },
@@ -324,11 +329,6 @@
    "rel": "appears_in",
    "source": "loc-darkhope.html",
    "target": "session-2025-11-12.html"
-  },
-  {
-   "rel": "appears_in",
-   "source": "loc-darkhope.html",
-   "target": "session-2026-05-12.html"
   },
   {
    "rel": "appears_in",
@@ -494,6 +494,11 @@
    "rel": "appears_in",
    "source": "loc-waterdeep.html",
    "target": "session-2026-03-08.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "loc-waterdeep.html",
+   "target": "session-2026-05-12.html"
   },
   {
    "rel": "appears_in",
@@ -794,6 +799,16 @@
    "rel": "located_in",
    "source": "npc-orin.html",
    "target": "loc-golden-fields.html"
+  },
+  {
+   "rel": "located_in",
+   "source": "npc-shalvis.html",
+   "target": "loc-golden-fields.html"
+  },
+  {
+   "rel": "affiliated_with",
+   "source": "npc-shalvis.html",
+   "target": "faction-zhentarim"
   },
   {
    "rel": "located_in",
@@ -1500,6 +1515,16 @@
    "kind": "npc",
    "name": "Queen Guh",
    "url": "npc-queen-guh.html"
+  },
+  {
+   "aliases": [
+    "Shalvis"
+   ],
+   "blurb": "A quiet Zhentarim agent the crew found sharing a room at Miros' inn in Golden Fields — sleeping beside Kella, the estranged bounty the party has crossed trails with before.",
+   "id": "npc-shalvis.html",
+   "kind": "npc",
+   "name": "Shalvis",
+   "url": "npc-shalvis.html"
   },
   {
    "aliases": [
@@ -2396,7 +2421,7 @@
    "aliases": [
     "2026-05-12"
    ],
-   "blurb": "A goblin-bugbear-ogre raid swept through Golden Fields at night, and the crew fought through two waves before the abbey bell rang to warn that giants were coming.",
+   "blurb": "A goblin-bugbear-ogre raid struck Golden Fields in the night mist, and the crew fought through two waves — inn-yard, then burning grove — before the abbey bell tolled to warn that giants were coming.",
    "id": "session-2026-05-12.html",
    "kind": "session",
    "name": "Session 2026-05-12",
