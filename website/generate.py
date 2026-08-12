@@ -50,6 +50,7 @@ def static_url(name):
     return f"static/{name}?v={digest}" if digest else f"static/{name}"
 
 CHAR_DIR = ROOT / "characters"
+BATTLE_CARD_DIR = ROOT / "battle-cards"
 NPC_DIR = ROOT / "npcs"
 LOC_DIR = ROOT / "locations"
 ITEM_DIR = ROOT / "items"
@@ -380,11 +381,13 @@ def load_pcs():
         body = read(md_path) if md_path.exists() else ""
         img_path = CHAR_DIR / f"{slug}.jpeg"
         image = f"images/characters/{slug}.jpeg" if img_path.exists() else None
+        battle_card = (f"battle-cards/{slug}.html"
+                       if (BATTLE_CARD_DIR / f"{slug}.html").exists() else None)
         entities.append(Entity(
             kind="pc", slug=slug, name=defn["name"],
             aliases=defn["aliases"], body=body, image=image,
             summary=defn["summary"],
-            meta={"full_name": defn["full_name"]},
+            meta={"full_name": defn["full_name"], "battle_card": battle_card},
         ))
     return entities
 
@@ -693,6 +696,13 @@ def setup_output():
     if CHAR_DIR.exists():
         for img in CHAR_DIR.glob("*.jpeg"):
             shutil.copy2(img, img_dir / img.name)
+    # Battle cards (battle-cards/<slug>.html) are self-contained printable pages;
+    # copy them verbatim to site/battle-cards/ and link them from each PC page.
+    if BATTLE_CARD_DIR.exists():
+        card_dst = SITE / "battle-cards"
+        card_dst.mkdir(parents=True, exist_ok=True)
+        for card in BATTLE_CARD_DIR.glob("*.html"):
+            shutil.copy2(card, card_dst / card.name)
     # Podcast cover (website/static/podcast-cover.jpg) is copied to site/static/
     # by the static-asset glob above, alongside style.css / podcast-subscribe.js.
     # Per-session audio + images live under sessions/YYYY-MM-DD/. Copy them into
@@ -1187,9 +1197,14 @@ def detail_page_pc(pc, link_map, graph=None):
     img = (f'<img class="portrait portrait-large" src="{pc.image}" alt="{html.escape(pc.name)}">'
            if pc.image else "")
     connections_block = _render_connections(pc.href, graph)
+    battle_card = pc.meta.get("battle_card")
+    card_link = (f'<p class="battle-card-link"><a href="{battle_card}">'
+                 f'&#9876;&#65039; {html.escape(pc.name)}&rsquo;s battle card</a></p>'
+                 if battle_card else "")
     body = f"""<article class="detail">
   {img}
   <p class="muted">{html.escape(pc.summary)}</p>
+  {card_link}
   {connections_block}
   <div class="detail-body">
   {linked}
