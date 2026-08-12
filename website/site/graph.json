@@ -508,11 +508,6 @@
   {
    "rel": "appears_in",
    "source": "loc-waterdeep.html",
-   "target": "session-2026-05-12.html"
-  },
-  {
-   "rel": "appears_in",
-   "source": "loc-waterdeep.html",
    "target": "session-2026-06-16.html"
   },
   {
@@ -1540,7 +1535,7 @@
    "aliases": [
     "Shalvis"
    ],
-   "blurb": "A quiet Zhentarim agent the crew found sharing a room at Miros' inn in Golden Fields — sleeping beside Kella, the estranged bounty the party has crossed trails with before.",
+   "blurb": "Status — Deceased (Zhentarim agent). Killed 2026-05-12 at the burning grove in the Golden Fields town center, dropped by a bugbear's morningstar crit and lost on failed death saves in the street.",
    "id": "npc-shalvis.html",
    "kind": "npc",
    "name": "Shalvis",
@@ -2451,7 +2446,7 @@
    "aliases": [
     "2026-05-12"
    ],
-   "blurb": "A goblin-bugbear-ogre raid struck Golden Fields in the night mist, and the crew fought through two waves — inn-yard, then burning grove — before the abbey bell tolled to warn that giants were coming.",
+   "blurb": "Goblins, bugbears, and ogres raided Golden Fields at dawn; the crew won two brutal waves and lost Shalvis, only for the town bells to ring the giants inbound.",
    "id": "session-2026-05-12.html",
    "kind": "session",
    "name": "Session 2026-05-12",

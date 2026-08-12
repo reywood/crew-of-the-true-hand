@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fact-check review — 2026-05-12</title>
+<style>
+  :root {
+    --bg:#faf8f4; --fg:#1e1b16; --muted:#6b6459; --line:#e0d8ca;
+    --card:#fff; --accent:#8a5a2b; --accent-fg:#fff;
+    --ok:#1f7a3f; --no:#b3261e; --ts:#8a5a2b; --ts-bg:#f0e7d8; --code:#514a3e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#17140f; --fg:#ece6da; --muted:#9c9384; --line:#332d24;
+      --card:#211d16; --accent:#d59a5c; --accent-fg:#17140f;
+      --ok:#5fce87; --no:#f2867d; --ts:#e0b07a; --ts-bg:#2a2318; --code:#c9c0af;
+    }
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--bg); color:var(--fg);
+    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 20px 80px; }
+  header.player {
+    position:sticky; top:0; z-index:10; background:var(--bg);
+    border-bottom:1px solid var(--line); padding:14px 0 12px; margin-bottom:8px;
+  }
+  header.player .inner { max-width:1040px; margin:0 auto; padding:0 20px;
+    display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  audio { flex:1 1 320px; min-width:280px; height:38px; }
+  .now { font-variant-numeric:tabular-nums; color:var(--muted); font-size:13px;
+    white-space:nowrap; }
+  .now b { color:var(--accent); }
+  .warn { display:none; width:100%; margin-top:8px; padding:8px 12px;
+    background:var(--ts-bg); border:1px solid var(--line); border-radius:8px;
+    color:var(--no); font-size:13px; }
+  h1 { font-size:22px; margin:18px 0 4px; }
+  h3 { font-size:16px; margin:26px 0 6px; }
+  p { color:var(--fg); }
+  table { width:100%; border-collapse:collapse; margin:14px 0; font-size:14px; }
+  th, td { text-align:left; vertical-align:top; padding:9px 10px;
+    border-bottom:1px solid var(--line); }
+  th { font-size:12px; text-transform:uppercase; letter-spacing:.04em;
+    color:var(--muted); }
+  tbody tr:not(.note-row):hover {
+    background:color-mix(in srgb, var(--card) 60%, transparent); }
+  tr.playing { background:var(--ts-bg) !important;
+    outline:2px solid var(--accent); outline-offset:-2px; }
+  code { font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:var(--code); word-break:break-word; }
+  a.ts { display:inline-block; cursor:pointer; color:var(--ts);
+    background:var(--ts-bg); border:1px solid var(--line); border-radius:5px;
+    padding:0 4px; margin:1px 0; font:12px/1.5 ui-monospace,Menlo,monospace;
+    text-decoration:none; }
+  a.ts:hover { background:var(--accent); color:var(--accent-fg);
+    border-color:var(--accent); }
+  a.ts::before { content:"\25B6\FE0E"; font-size:9px; margin-right:3px;
+    opacity:.75; }
+  td.verdict { text-align:center; white-space:nowrap; }
+  button.mark { cursor:pointer; min-width:40px; font-size:16px; line-height:1;
+    padding:6px 8px; border-radius:7px; border:1px solid var(--line);
+    background:var(--card); color:var(--muted); }
+  button.mark[data-state="\2714"] { color:var(--ok);
+    border-color:var(--ok); font-weight:700; }
+  button.mark[data-state="\2718"] { color:var(--no);
+    border-color:var(--no); font-weight:700; }
+  button.notebtn { cursor:pointer; margin-left:5px; font-size:13px;
+    padding:5px 7px; border-radius:6px; border:1px solid var(--line);
+    background:var(--card); color:var(--muted); }
+  button.notebtn.has-note { color:var(--accent); border-color:var(--accent); }
+  tr.note-row { display:none; }
+  tr.note-row.open { display:table-row; }
+  tr.note-row td { padding-top:0; border-bottom:1px solid var(--line); }
+  textarea.corr { width:100%; min-height:54px; resize:vertical;
+    font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--card); color:var(--fg); border:1px solid var(--accent);
+    border-radius:8px; padding:8px; }
+  .tools { display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    margin:6px 0 2px; position:sticky; top:64px; }
+  .tools button { cursor:pointer; padding:7px 12px; border-radius:8px;
+    border:1px solid var(--line); background:var(--card); color:var(--fg);
+    font-size:13px; }
+  .tools button.primary { background:var(--accent); color:var(--accent-fg);
+    border-color:var(--accent); }
+  .tally { color:var(--muted); font-size:13px; }
+  .tally b.ok { color:var(--ok); } .tally b.no { color:var(--no); }
+  #copyOut { width:100%; margin-top:10px; height:150px; display:none;
+    font:13px/1.5 ui-monospace,Menlo,monospace; background:var(--card);
+    color:var(--fg); border:1px solid var(--line); border-radius:8px;
+    padding:8px; }
+  .hint { color:var(--muted); font-size:12.5px; margin:2px 0 0; }
+</style>
+</head>
+<body>
+<header class="player">
+  <div class="inner">
+    <audio id="player" controls preload="metadata" src="recording.m4a"></audio>
+    <span class="now">Playing from <b id="nowAt">—</b></span>
+    <div class="warn" id="warn">Couldn't load <code>recording.m4a</code>.
+      Open this page from inside the session folder
+      (<code>sessions/2026-05-12/</code>) so the recording sits beside it.</div>
+  </div>
+</header>
+<div class="wrap">
+  <h1>Fact-check review — 2026-05-12</h1>
+  <p class="hint">Click any <a class="ts" data-t="0" role="button"
+    tabindex="0">[timestamp]</a> to hear that line. Click the ✔/✘ cell to cycle
+    unset → ✔ → ✘— marking ✘ opens a correction box (or hit ✎ on any row). Then
+    <b>Copy results</b> to paste your verdicts + corrections back. Everything is
+    saved in this browser.</p>
+  <div class="tools">
+    <button class="primary" id="copyBtn">Copy results</button>
+    <button id="clearBtn">Clear all</button>
+    <span class="tally" id="tally"></span>
+  </div>
+  <textarea id="copyOut" readonly></textarea>
+<h1>2026-05-12 — Fact-check worksheet</h1>
+<p>The riskiest &quot;who did what&quot; attributions from the FULL recording, combat/overlap first, then skill checks. Diarization tags bleed badly in both fights, so each claim is disambiguated by class mechanic. Mark ✘ on anything wrong; corrections get applied back into <code>transcript-distilled.md</code>. Prioritizes NEW material (Combat 2 resolution + finale) and the three player-verified known-goods where THIS pass&#x27;s tag disagrees with the mechanic.</p>
+<table>
+<thead><tr><th>#</th><th>Claim</th><th>Transcript evidence</th><th>✔ / ✘</th></tr></thead>
+<tbody>
+<tr data-row="1">
+<td>1</td>
+<td><strong>Fiz</strong> cast <strong>Bless</strong> on Hal, Toz, Eno — NOT himself (Fiz is the only PC unblessed all session).</td>
+<td><code><a class="ts" data-t="2808" role="button" tabindex="0" title="Play from 00:46:48">[00:46:48]</a>[SPEAKER_01]</code> &quot;I bless the three members of my party&quot;; <code><a class="ts" data-t="3216" role="button" tabindex="0" title="Play from 00:53:36">[00:53:36]</a>[SPEAKER_00]</code> &quot;I cast Bless and she cast Major&quot;; <code><a class="ts" data-t="10918" role="button" tabindex="0" title="Play from 03:01:58">[03:01:58]</a>[SPEAKER_01]</code>/<code><a class="ts" data-t="10944" role="button" tabindex="0" title="Play from 03:02:24">[03:02:24]</a>[SPEAKER_06]</code> &quot;you&#x27;re not blessed… the only one that&#x27;s not blessed.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="1"><td colspan="4"><textarea class="corr" placeholder="Correction for row 1 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="2">
+<td>2</td>
+<td><strong>Eno</strong> drank the <strong>Potion of Heroism</strong> for <strong>+10 temp HP</strong> (bonus action).</td>
+<td><code><a class="ts" data-t="4192" role="button" tabindex="0" title="Play from 01:09:52">[01:09:52]</a>[SPEAKER_02]</code> &quot;I have 16 hit points now, I can use it&quot;; <code><a class="ts" data-t="4514" role="button" tabindex="0" title="Play from 01:15:14">[01:15:14]</a>[SPEAKER_02]</code> &quot;the potion of heroism… it would be 10 at the top.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="2"><td colspan="4"><textarea class="corr" placeholder="Correction for row 2 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="3">
+<td>3</td>
+<td><strong>Toz</strong> cast <strong>Thunderwave</strong> late in Combat 2 (worried about hitting allies). Tag bled to the DM cluster.</td>
+<td><code><a class="ts" data-t="10537" role="button" tabindex="0" title="Play from 02:55:37">[02:55:37]</a>[SPEAKER_01]</code> &quot;Thunder Wave. Actually I&#x27;m going to do that&quot;; <code><a class="ts" data-t="10559" role="button" tabindex="0" title="Play from 02:55:59">[02:55:59]</a>[SPEAKER_01]</code> &quot;I&#x27;m going to cast Thunder Wave. You&#x27;re going to hit me.&quot; (Sorcerer spell → Toz.)</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="3"><td colspan="4"><textarea class="corr" placeholder="Correction for row 3 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="4">
+<td>4</td>
+<td><strong>Toz</strong> cast <strong>Ray of Frost</strong> late (blessed, killed a goblin).</td>
+<td><code><a class="ts" data-t="10849" role="button" tabindex="0" title="Play from 03:00:49">[03:00:49]</a>[SPEAKER_03]</code> &quot;cast a ray of frost just at the nearest goblin&quot;; <code><a class="ts" data-t="13048" role="button" tabindex="0" title="Play from 03:37:28">[03:37:28]</a>[SPEAKER_01]</code> &quot;Ray of Frost… 13 total… is dead.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="4"><td colspan="4"><textarea class="corr" placeholder="Correction for row 4 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="5">
+<td>5</td>
+<td><strong>Toz</strong> ran <strong>Lifferloss</strong> the treant and did the <strong>grapple-and-throw</strong> — grabbed a bugbear and hurled it (3d6 to both).</td>
+<td><code><a class="ts" data-t="10727" role="button" tabindex="0" title="Play from 02:58:47">[02:58:47]</a>[SPEAKER_03]</code> &quot;have Lipperless grapple and grab one of the bugbears and throw it at another creature&quot;; <code><a class="ts" data-t="12953" role="button" tabindex="0" title="Play from 03:35:53">[03:35:53]</a>[SPEAKER_03]</code> &quot;grabs this dude and hurls him at that dude… 3d6 to both… 19 to both.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="5"><td colspan="4"><textarea class="corr" placeholder="Correction for row 5 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="6">
+<td>6</td>
+<td><strong>Toz&#x27;s</strong> Combat-1 <strong>Tidal Wave</strong> (30×10) killed ~6 goblins + a bugbear.</td>
+<td><code><a class="ts" data-t="3581" role="button" tabindex="0" title="Play from 00:59:41">[00:59:41]</a>[SPEAKER_01]</code> &quot;30 by 10 rectangle&quot;; <code><a class="ts" data-t="3644" role="button" tabindex="0" title="Play from 01:00:44">[01:00:44]</a>[SPEAKER_01]</code> &quot;6 goblins plus that bugbear with a tidal wave&quot;; <code><a class="ts" data-t="3793" role="button" tabindex="0" title="Play from 01:03:13">[01:03:13]</a>[SPEAKER_01]</code> &quot;all the goblins that had died… 25… this guy who was already damaged, died.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="6"><td colspan="4"><textarea class="corr" placeholder="Correction for row 6 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="7">
+<td>7</td>
+<td><strong>Toz</strong> cast <strong>Lightning Bolt</strong> (8d6 line) — killed goblins + hit an ogre; <strong>Heart of the Storm</strong> + <strong>Tempestuous flight</strong>.</td>
+<td><code><a class="ts" data-t="5443" role="button" tabindex="0" title="Play from 01:30:43">[01:30:43]</a>[SPEAKER_03]</code> &quot;cast lightning bolt in a line… I hit these four&quot;; <code><a class="ts" data-t="5556" role="button" tabindex="0" title="Play from 01:32:36">[01:32:36]</a>[SPEAKER_03]</code> &quot;Heart of the Storm… takes six damage… I can fly 10 feet from my position afterwards.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="7"><td colspan="4"><textarea class="corr" placeholder="Correction for row 7 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="8">
+<td>8</td>
+<td><strong>Hal</strong> cast <strong>level-2 Cure Wounds</strong> on <strong>Eno</strong> (10 healing → Eno to 16).</td>
+<td><code><a class="ts" data-t="4045" role="button" tabindex="0" title="Play from 01:07:25">[01:07:25]</a>[SPEAKER_00]</code> &quot;I come next to Eno and I cast the level 2 cure wounds… 2d8 plus 2… 10 healing. You&#x27;re now at the 16.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="8"><td colspan="4"><textarea class="corr" placeholder="Correction for row 8 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="9">
+<td>9</td>
+<td><strong>Hal</strong> ran <strong>Shalvis</strong> (crossbow) AND threw <strong>javelins</strong> (&quot;1d8+4 twice&quot;); Shalvis is his NPC.</td>
+<td><code><a class="ts" data-t="3999" role="button" tabindex="0" title="Play from 01:06:39">[01:06:39]</a>[SPEAKER_05]</code> &quot;Shalvis comes… he has a crossbow&quot;; <code><a class="ts" data-t="10312" role="button" tabindex="0" title="Play from 02:51:52">[02:51:52]</a>[SPEAKER_05]</code> &quot;1d8 plus 4 twice… we got 7&quot;; <code><a class="ts" data-t="2864" role="button" tabindex="0" title="Play from 00:47:44">[00:47:44]</a>[SPEAKER_05]</code> throws javelins.</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="9"><td colspan="4"><textarea class="corr" placeholder="Correction for row 9 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="10">
+<td>10</td>
+<td><strong>Fiz</strong> deployed the <strong>Eldritch Cannon (ballista)</strong> and cast <strong>Scorching Ray</strong> + <strong>Force Ballista</strong> (tag = DM cluster).</td>
+<td><code><a class="ts" data-t="4843" role="button" tabindex="0" title="Play from 01:20:43">[01:20:43]</a>[SPEAKER_01]</code> &quot;deploy my fourth ballista. My eldritch cannon is out of my back&quot;; <code><a class="ts" data-t="4977" role="button" tabindex="0" title="Play from 01:22:57">[01:22:57]</a>[SPEAKER_01]</code> &quot;cast Scorching Ray&quot;; <code><a class="ts" data-t="5093" role="button" tabindex="0" title="Play from 01:24:53">[01:24:53]</a>[SPEAKER_01]</code> &quot;Force Ballista 22 to hit.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="10"><td colspan="4"><textarea class="corr" placeholder="Correction for row 10 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="11">
+<td>11</td>
+<td><strong>Fiz</strong> used his <strong>infused armor</strong> reaction — expended a charge to resist forced movement from the horse/cart.</td>
+<td><code><a class="ts" data-t="11009" role="button" tabindex="0" title="Play from 03:03:29">[03:03:29]</a>[SPEAKER_01]</code> &quot;my armor glues… I expend a charge, because it&#x27;s infused… to not be [moved]… it is a reaction. Finally came in handy.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="11"><td colspan="4"><textarea class="corr" placeholder="Correction for row 11 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="12">
+<td>12</td>
+<td><strong>Eno</strong> cast <strong>Spiritual Weapon</strong> (bonus action, persists) and used <strong>Channel Divinity: Turn Undead</strong> in Combat 2.</td>
+<td><code><a class="ts" data-t="9953" role="button" tabindex="0" title="Play from 02:45:53">[02:45:53]</a>[SPEAKER_01]</code> &quot;cast Spiritual Weapon&quot;; <code><a class="ts" data-t="10032" role="button" tabindex="0" title="Play from 02:47:12">[02:47:12]</a>[SPEAKER_02]</code> &quot;1d8 plus your spellcasting modifier… wisdom&quot;; <code><a class="ts" data-t="12642" role="button" tabindex="0" title="Play from 03:30:42">[03:30:42]</a>[SPEAKER_01]</code>/<code><a class="ts" data-t="12648" role="button" tabindex="0" title="Play from 03:30:48">[03:30:48]</a>[SPEAKER_04]</code> Turn Undead &quot;makes him run away… didn&#x27;t you use that once? Yeah.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="12"><td colspan="4"><textarea class="corr" placeholder="Correction for row 12 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="13">
+<td>13</td>
+<td><strong>Miros</strong> dropped to 0 (a morning-star bugbear) and <strong>Shalvis</strong> dropped to 0 (failed 2 death saves); both revived — Shalvis via the party <strong>Potion of Healing (2d4+2)</strong>, both stabilized by <strong>Eno</strong> at the end.</td>
+<td><code><a class="ts" data-t="9833" role="button" tabindex="0" title="Play from 02:43:53">[02:43:53]</a>–<a class="ts" data-t="9896" role="button" tabindex="0" title="Play from 02:44:56">[02:44:56]</a>[SPEAKER_01]</code> Miros &quot;down… dead? / he&#x27;s down&quot;; <code><a class="ts" data-t="11536" role="button" tabindex="0" title="Play from 03:12:16">[03:12:16]</a>[SPEAKER_05]</code> &quot;lay hands on Shalvis&quot;; <code>[02:12:...]</code>→<code>[03:15][SPEAKER_05]</code> &quot;use that potion on Shalvis&quot;; <code><a class="ts" data-t="13268" role="button" tabindex="0" title="Play from 03:41:08">[03:41:08]</a>[SPEAKER_01]</code> &quot;I was going to stabilize them… you got three rounds… he wakes up.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="13"><td colspan="4"><textarea class="corr" placeholder="Correction for row 13 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="14">
+<td>14</td>
+<td><strong>Finale:</strong> braziers on the towers lit, monsters flee to a point along the wall, a <strong>guard shouts &quot;Giants are coming! Long rest!&quot;</strong></td>
+<td><code><a class="ts" data-t="13268" role="button" tabindex="0" title="Play from 03:41:08">[03:41:08]</a>[SPEAKER_01]</code> &quot;the torches around the braziers on the towers all become lit… monsters all start to flee towards a certain point along the wall&quot;; <code><a class="ts" data-t="13364" role="button" tabindex="0" title="Play from 03:42:44">[03:42:44]</a>[SPEAKER_07]</code> &quot;Giants are coming in! Long rest! Hope you didn&#x27;t use all your spell slots in the first [wave]!&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="14"><td colspan="4"><textarea class="corr" placeholder="Correction for row 14 — what is wrong and what it should say"></textarea></td></tr>
+<tr data-row="15">
+<td>15</td>
+<td><strong>Eno</strong> cast <strong>Spike Growth</strong> in Combat 1 and held concentration through ~18 javelin damage (two Con checks).</td>
+<td><code><a class="ts" data-t="2418" role="button" tabindex="0" title="Play from 00:40:18">[00:40:18]</a>[SPEAKER_02]</code> &quot;I want to do spike growth&quot;; <code><a class="ts" data-t="3036" role="button" tabindex="0" title="Play from 00:50:36">[00:50:36]</a>–<a class="ts" data-t="3123" role="button" tabindex="0" title="Play from 00:52:03">[00:52:03]</a>[SPEAKER_01]</code> &quot;18 piercing damage… roll two concentration checks&quot;; <code><a class="ts" data-t="3065" role="button" tabindex="0" title="Play from 00:51:05">[00:51:05]</a>[SPEAKER_02]</code> &quot;16.&quot;</td>
+<td class="verdict"><button class="mark" data-state="">—</button><button class="notebtn" title="Add correction / note" aria-label="Add correction or note">✎</button></td>
+</tr>
+<tr class="note-row" data-row="15"><td colspan="4"><textarea class="corr" placeholder="Correction for row 15 — what is wrong and what it should say"></textarea></td></tr>
+</tbody></table>
+<h3>Lower-confidence items flagged for review</h3>
+<ul>
+<li><strong>Suggestion on an ogre</strong> (Combat 1): the crew debated &quot;the spell ends when the subject finishes what it was asked to do / breaks if you or your companions damage it&quot; (<code><a class="ts" data-t="6331" role="button" tabindex="0" title="Play from 01:45:31">[01:45:31]</a></code>–<code><a class="ts" data-t="6360" role="button" tabindex="0" title="Play from 01:46:00">[01:46:00]</a></code>). Read as <strong>Naxene&#x27;s Suggestion</strong> (run by Fiz), but could be misremembered rules chatter about the spike-growth ogre. <strong>Medium confidence.</strong></li>
+<li>Downed-NPC names are garbled (&quot;Sheamus,&quot; &quot;Marocino,&quot; &quot;Shallots/Shalvis,&quot; &quot;Euros/Miros&quot;) — I&#x27;ve mapped them to <strong>Miros</strong> and <strong>Shalvis</strong>; verify none is a third distinct NPC.</li>
+<li>Whether a <strong>formal long rest</strong> was actually role-played: the session ends on the guard&#x27;s &quot;Long rest!&quot; call + table chatter. The rest is <strong>signposted, not depicted on-screen.</strong></li>
+<li><strong>SPEAKER_06</strong> is treated as table chatter / Fiz-secondary, not a distinct character — lowest-confidence cluster call.</li>
+</ul>
+</div>
+<script>
+  const DATE = "2026-05-12";
+  const player = document.getElementById('player');
+  const nowAt = document.getElementById('nowAt');
+  const KEY = r => `fc:${DATE}:${r}`;
+  const NKEY = r => `fcnote:${DATE}:${r}`;
+
+  function fmt(t) {
+    t = Math.max(0, Math.floor(t));
+    const h = Math.floor(t/3600), m = Math.floor((t%3600)/60), s = t%60;
+    const p = n => String(n).padStart(2,'0');
+    return `${p(h)}:${p(m)}:${p(s)}`;
+  }
+
+  // Seek + play from a timestamp.
+  function seek(sec, row) {
+    const go = () => { try { player.currentTime = sec; } catch(e){}
+      player.play().catch(()=>{}); };
+    if (player.readyState >= 1) go();
+    else { player.load();
+      player.addEventListener('loadedmetadata', go, {once:true}); }
+    nowAt.textContent = fmt(sec);
+    document.querySelectorAll('tr.playing').forEach(r=>r.classList.remove('playing'));
+    if (row) row.classList.add('playing');
+  }
+  document.querySelectorAll('a.ts').forEach(a => {
+    const act = e => { e.preventDefault();
+      seek(+a.dataset.t, a.closest('tr')); };
+    a.addEventListener('click', act);
+    a.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') act(e); });
+  });
+  player.addEventListener('timeupdate', () => {
+    if (!player.paused) nowAt.textContent = fmt(player.currentTime);
+  });
+  document.getElementById('warn').style.display='none';
+  player.addEventListener('error', () =>
+    document.getElementById('warn').style.display='block');
+
+  // Correction box per row (persisted); note-row is the sibling after each row.
+  function noteRowFor(el) {
+    let r = el.closest('tr'); let sib = r.nextElementSibling;
+    return (sib && sib.classList.contains('note-row')) ? sib : null;
+  }
+  function refreshNoteBtn(mainRow) {
+    const nr = mainRow.nextElementSibling;
+    if (!nr || !nr.classList.contains('note-row')) return;
+    const ta = nr.querySelector('textarea.corr');
+    const btn = mainRow.querySelector('button.notebtn');
+    if (btn) btn.classList.toggle('has-note', !!(ta && ta.value.trim()));
+  }
+  document.querySelectorAll('tr.note-row').forEach(nr => {
+    const row = nr.dataset.row;
+    const ta = nr.querySelector('textarea.corr');
+    const saved = localStorage.getItem(NKEY(row));
+    if (saved) { ta.value = saved; nr.classList.add('open'); }
+    ta.addEventListener('input', () => {
+      if (ta.value.trim()) localStorage.setItem(NKEY(row), ta.value);
+      else localStorage.removeItem(NKEY(row));
+      refreshNoteBtn(nr.previousElementSibling);
+    });
+  });
+  document.querySelectorAll('button.notebtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nr = noteRowFor(btn);
+      if (!nr) return;
+      nr.classList.toggle('open');
+      if (nr.classList.contains('open')) nr.querySelector('textarea').focus();
+    });
+  });
+
+  // Verdict toggles (persisted). Marking ✘ opens the correction box.
+  const STATES = ['', '\u2714', '\u2718'];
+  const marks = document.querySelectorAll('button.mark');
+  function apply(btn, state) {
+    btn.dataset.state = state; btn.textContent = state || '—';
+    const row = btn.closest('tr').dataset.row;
+    if (state) localStorage.setItem(KEY(row), state);
+    else localStorage.removeItem(KEY(row));
+  }
+  marks.forEach(btn => {
+    const mainRow = btn.closest('tr');
+    const row = mainRow.dataset.row;
+    const saved = localStorage.getItem(KEY(row));
+    if (saved) apply(btn, saved);
+    refreshNoteBtn(mainRow);
+    btn.addEventListener('click', () => {
+      const next = STATES[(STATES.indexOf(btn.dataset.state)+1) % STATES.length];
+      apply(btn, next);
+      if (next === '\u2718') {
+        const nr = noteRowFor(btn);
+        if (nr) { nr.classList.add('open'); nr.querySelector('textarea').focus(); }
+      }
+      tally();
+    });
+  });
+  function tally() {
+    let ok=0, no=0;
+    marks.forEach(b => { if(b.dataset.state==='\u2714') ok++;
+      else if(b.dataset.state==='\u2718') no++; });
+    document.getElementById('tally').innerHTML =
+      `<b class="ok">${ok} ✔</b> · <b class="no">${no} ✘</b> · `+
+      `${marks.length-ok-no} unmarked`;
+  }
+  tally();
+
+  function noteFor(row) {
+    const v = localStorage.getItem(NKEY(row));
+    return v ? v.trim() : '';
+  }
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const wrong=[], right=[], other=[];
+    marks.forEach(b => {
+      const row = b.closest('tr').dataset.row;
+      const st = b.dataset.state, note = noteFor(row);
+      if (st === '\u2718') wrong.push({row, note});
+      else if (st === '\u2714') { right.push(row); if(note) other.push({row, note}); }
+      else if (note) other.push({row, note});
+    });
+    const L = [`Fact-check ${DATE}`, ''];
+    L.push('WRONG (✘) — corrections:');
+    if (wrong.length) wrong.forEach(w =>
+      L.push(`  Row ${w.row}: ${w.note || '(no correction text entered)'}`));
+    else L.push('  none');
+    L.push('', `VERIFIED (✔): ${right.join(', ') || 'none'}`);
+    if (other.length) {
+      L.push('', 'OTHER NOTES:');
+      other.forEach(o => L.push(`  Row ${o.row}: ${o.note}`));
+    }
+    const txt = L.join('\n');
+    const out = document.getElementById('copyOut');
+    out.style.display='block'; out.value=txt; out.focus(); out.select();
+    navigator.clipboard && navigator.clipboard.writeText(txt).catch(()=>{});
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if(!confirm('Clear all verdicts and corrections on this page?')) return;
+    marks.forEach(b => apply(b, ''));
+    document.querySelectorAll('tr.note-row').forEach(nr => {
+      const ta = nr.querySelector('textarea.corr');
+      ta.value=''; localStorage.removeItem(NKEY(nr.dataset.row));
+      nr.classList.remove('open');
+      refreshNoteBtn(nr.previousElementSibling);
+    });
+    tally();
+    document.getElementById('copyOut').style.display='none';
+  });
+</script>
+</body>
+</html>
