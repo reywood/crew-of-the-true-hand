@@ -45,7 +45,7 @@ VANDAL: *(wondering)* Only a deer, friend. Save that it was not. Mark it. In the
 
 VANDAL: *(shifting)* And then the walls, and the black banners, and at the gate a face they knew — Merrick, the guard, delivering the news plain as a man delivers bad weather.
 
-VANDAL: *(measured, telling)* Lady Nandor was dead — crushed in the cloud giant raid, the very raid these four had answered. And into the empty chair had stepped a man named Corvin. Royal blood, said Merrick. All buttoned up. All legal. He had named himself High Steward of Nightstone, and no one in the village had the standing to say otherwise. The four could enter — once they surrendered their weapons at the gate. And the goblin, of course, could not come in at all. Poor Snigbat, newest scout of the crew, left kicking stones outside the wall.
+VANDAL: *(measured, telling)* Lady Nandar was dead — crushed in the cloud giant raid, the very raid these four had answered. And into the empty chair had stepped a man named Corvin. Royal blood, said Merrick. All buttoned up. All legal. He had named himself High Steward of Nightstone, and no one in the village had the standing to say otherwise. The four could enter — once they surrendered their weapons at the gate. And the goblin, of course, could not come in at all. Poor Snigbat, newest scout of the crew, left kicking stones outside the wall.
 
 VANDAL: *(dry)* Daphne — the lady-in-waiting they had themselves pulled out of that goblin cave — confirmed it with a mouth drawn tight as a purse-string. By the laws of Waterdeep, she said, Corvin was within his rights. Cold comfort, the way she said it.
 

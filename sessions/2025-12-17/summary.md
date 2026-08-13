@@ -12,7 +12,7 @@ The morning began outside the goblin cave where the crew had been camped, foragi
 
 ## Corvin's Claim
 
-At the gate they were met by Merrick, a familiar guard, who laid out the new state of affairs. With Lady Nandor dead in the cloud giant raid, a man named Corvin had stepped into the vacancy. He carried royal blood, Merrick said, and the claim was no mere usurpation. Daphne, Nandor's lady-in-waiting, confirmed it with a tight mouth — Corvin was, technically, within his rights. Her expression suggested she found the technicality cold comfort.
+At the gate they were met by Merrick, a familiar guard, who laid out the new state of affairs. With Lady Nandar dead in the cloud giant raid, a man named Corvin had stepped into the vacancy. He carried royal blood, Merrick said, and the claim was no mere usurpation. Daphne, Nandar's lady-in-waiting, confirmed it with a tight mouth — Corvin was, technically, within his rights. Her expression suggested she found the technicality cold comfort.
 
 The crew were granted an audience. Corvin proved less interested in Nightstone's grievances than in the broader catastrophe sweeping the North: frost giants were menacing Bryn Shandar far to the north, and fire giants were digging strange holes around Triboar and the Golden Fields. The giant troubles were not isolated to one ruined village. They were everywhere.
 

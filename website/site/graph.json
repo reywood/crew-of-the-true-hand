@@ -117,12 +117,12 @@
   },
   {
    "rel": "appears_in",
-   "source": "npc-lady-nandor.html",
+   "source": "npc-lady-nandar.html",
    "target": "session-2025-11-12.html"
   },
   {
    "rel": "appears_in",
-   "source": "npc-lady-nandor.html",
+   "source": "npc-lady-nandar.html",
    "target": "session-2025-12-17.html"
   },
   {
@@ -737,7 +737,7 @@
   },
   {
    "rel": "located_in",
-   "source": "npc-lady-nandor.html",
+   "source": "npc-lady-nandar.html",
    "target": "loc-nightstone.html"
   },
   {
@@ -1294,7 +1294,7 @@
    "aliases": [
     "Corvin"
    ],
-   "blurb": "Claimant who took control of Nightstone after Lady Nandor's death in the cloud giant attack.",
+   "blurb": "Claimant who took control of Nightstone after Lady Nandar's death in the cloud giant attack.",
    "id": "npc-corvin.html",
    "kind": "npc",
    "name": "Corvin",
@@ -1407,14 +1407,14 @@
   },
   {
    "aliases": [
-    "Lady Nandor",
-    "Nandor"
+    "Lady Nandar",
+    "Nandar"
    ],
    "blurb": "The lady of Nightstone, killed when a cloud giant's stone crushed her during the raid that took the village's namesake nightstone.",
-   "id": "npc-lady-nandor.html",
+   "id": "npc-lady-nandar.html",
    "kind": "npc",
-   "name": "Lady Nandor",
-   "url": "npc-lady-nandor.html"
+   "name": "Lady Nandar",
+   "url": "npc-lady-nandar.html"
   },
   {
    "aliases": [

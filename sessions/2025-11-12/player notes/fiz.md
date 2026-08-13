@@ -12,7 +12,7 @@ While leaving to deliver djinn bottle, see soldiers trying to get out of keep, t
 
 Go talk to guards, cloud giants dropped rocks on village and took night stone (big black stone)
 
-Lady Nandor is dead, crushed by stone
+Lady Nandar is dead, crushed by stone
 
 Kella’s dad is famous, lives in Darkar, Teldor is grandfather
 

@@ -47,7 +47,7 @@ VANDAL: *(amused)* The moment they clocked the party, they scuttled back inside 
 
 VANDAL: *(grave)* Cloud giants. Down out of the sky. Boulders, dropped from the clouds the way a cruel child drops stones into a pond. And when the dust settled and the screaming stopped, the great black nightstone — the sacred stone in the town square, the very stone that gave the village its name — was gone. Lifted up. Carried off into the sky.
 
-VANDAL: *(dropping, softer)* And Lady Nandor, the keeper of that keep — Lady Nandor lay dead in the rubble, crushed beneath one of the falling stones. Her lady-in-waiting carried off with the other captives. Count it, friend: giants, then goblins, then orcs, then Xolkin's bandits on top. Nightstone sacked three times over — and the surviving guards had no stomach left for holding it.
+VANDAL: *(dropping, softer)* And Lady Nandar, the keeper of that keep — Lady Nandar lay dead in the rubble, crushed beneath one of the falling stones. Her lady-in-waiting carried off with the other captives. Count it, friend: giants, then goblins, then orcs, then Xolkin's bandits on top. Nightstone sacked three times over — and the surviving guards had no stomach left for holding it.
 
 VANDAL: *(wondering, aside)* Why would cloud giants — the loftiest of all giantkind — stoop to smashing a village for one black stone? There is a word that answers it. The word is Ordning. But that word belongs to a later tale, and I'll not rob it tonight.
 
@@ -107,7 +107,7 @@ VANDAL: *(warm)* She was persuaded — firmly, mind you, but no rougher than tha
 
 VANDAL: *(drawing close)* And there they found them at last. The stolen folk of Nightstone, ringed around the lip of a deep pit that dropped away into a lower chamber, the chirping of bats rising out of that dark like a small dry rain. The crew brought them out — every one of them — up out of the hill and into the light.
 
-VANDAL: *(softer)* One of the villagers knew the soldiers by name. And she asked, as they walked, after Lady Nandor.
+VANDAL: *(softer)* One of the villagers knew the soldiers by name. And she asked, as they walked, after Lady Nandar.
 
 VANDAL: *(grave, softer)* The news, friend, broke poorly. It always does.
 

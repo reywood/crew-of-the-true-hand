@@ -1,6 +1,6 @@
 ---
-name: Lady Nandor
-aliases: Lady Nandor, Nandor
+name: Lady Nandar
+aliases: Lady Nandar, Nandar
 sessions: 2025-11-12, 2025-12-17
 type: Deceased
 location: Nightstone
