@@ -1,7 +1,7 @@
 ---
 name: Chazlauth
 aliases: Chazlauth, Chaz
-sessions: 2026-02-10, 2026-03-08, 2026-06-16
+sessions: 2026-02-10, 2026-03-08, 2026-06-16, 2026-08-12
 type: Ally
 location: Waterdeep
 first_seen: 2026-06-16

@@ -1766,6 +1766,7 @@ SESSION_LOCATIONS = {
     "2026-05-12": ["golden-fields"],
     "2026-06-02": ["golden-fields"],
     "2026-06-16": ["waterdeep"],
+    "2026-08-12": ["waterdeep", "deep-water-inn", "the-plinth"],
 }
 
 

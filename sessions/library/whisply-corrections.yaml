@@ -54,3 +54,8 @@ patterns:
   # Garley Gond — artificer/statue-maker
   - pattern: "Gar(?:ley|lee|lie)\\s+Gond"
     replacement: "Garley Gond"
+
+  # Kuyrl Stonepalm — the goliath from Cormeer. Surname only when split into two
+  # words; "Kuyrl" alone is left unmapped until real mis-hearings show up.
+  - pattern: "Stone\\s*palm"
+    replacement: "Stonepalm"

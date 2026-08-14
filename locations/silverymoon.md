@@ -1,7 +1,7 @@
 ---
 name: Silverymoon
 aliases: Silverymoon, Silvery Moon
-sessions: 2026-03-08, 2026-06-16
+sessions: 2026-03-08, 2026-06-16, 2026-08-12
 type: City
 region: Silver Marches
 ---

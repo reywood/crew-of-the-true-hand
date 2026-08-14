@@ -1,6 +1,7 @@
 ---
 name: Deep Water Inn
 aliases: Deep Water Inn
+sessions: 2026-08-12
 type: Tavern
 location: Waterdeep (docks)
 ---

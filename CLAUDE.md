@@ -93,7 +93,11 @@ rm -f sessions/YYYY-MM-DD/recording_converted.wav   # ~350MB scratch whisply lea
 
 Write the summary (step 2) **from** `transcript-distilled.md` when it exists — its attributions are the reconciled truth.
 
+> **STOP — the fact-check is a hard gate.** Do **not** write `summary.md` (step 2), and do **not** generate the audio script or audio (steps 2.7/2.8), until the user has returned the marked-up worksheet and their corrections have been applied to `transcript-distilled.md`. Hand over the worksheet and wait, even if the user is away and the pipeline stalls. The point of the worksheet is that the summary is built on *verified* attributions; writing it first means every downstream artifact — summary, entity files, quests, campaign-state, the audio script, and the TTS — inherits whatever the diarization got wrong, and each one has to be chased down and corrected separately. Steps that do **not** depend on attribution (adding NPC/location/item files for entities that plainly exist, the `SESSION_LOCATIONS` entry) are fine to do while waiting.
+
 ### 2. Generate the detailed summary
+
+**Prerequisite:** if the session has a transcript, the fact-check worksheet from step 1.5 must be **returned by the user and applied** first. See the gate note at the end of step 1.5.
 
 Write `sessions/YYYY-MM-DD/summary.md`. This file is the **primary content** of the session's detail page on the site and the source of the `*In brief: ...*` line that becomes the row blurb on `sessions.html`.
 
@@ -147,13 +151,15 @@ Re-run this whenever a summary is added, expanded, or an entity gets a new alias
 
 ### 2.7. Write an audio script (optional)
 
+**Prerequisite:** the fact-check gate from step 1.5 applies here too — a script written on unverified attributions bakes the errors into TTS audio, and fixing them later means re-voicing chunks.
+
 Write `sessions/YYYY-MM-DD/audio/script.md` in the "Tales of the True Hand" storyteller register. Use `sessions/2026-06-16/audio/script.md` as the canonical template — copy its structure and delivery-cue vocabulary rather than inventing new ones. Key rules:
 - Line 1: `# Tales of the True Hand — YYYY-MM-DD` (the H1 is required and drives the podcast feed episode grouping).
 - Line 2: `## <subtitle>` — becomes the episode title in the podcast feed (e.g. `## The Cambion at the Gate`).
 - Sections: `[COLD OPEN — 25s]` / `[TITLE — 8s]` / `## ACT ONE …` (3–5 acts) / `[CLOSING — 30s]`.
 - Every spoken line begins `VANDAL: *(delivery cue)* …`. Draw cues from the vocabulary in existing scripts: `hushed, urgent, cold, chilling, quoted, bright, theatrical, storyteller, signature, warm, amused, sly, dropping, quickening, dropping into serious, softer, closing, telling, personal, unfolding, leaning, taut, murmured, drawing close, wondering, reflective, measured, grave`. The audio generator maps these to ElevenLabs stability / style presets.
 - Include `[MUSIC: …]` and `[STING: …]` cue lines between sections. These are ignored by the TTS layer but keep the script readable.
-- Target ~5,000–7,500 characters of Vandal spoken text (~6–7 minutes at TTS pace).
+- Target ~12,500–13,500 characters of Vandal spoken text — about **15 minutes** of finished audio, the current max target. Measured calibration across every episode to date is a steady **~888 characters per finished minute** (music/sting padding included), so chars ÷ 888 ≈ runtime in minutes. Count spoken text only: `[MUSIC]` / `[STING]` cue lines and `*(delivery cues)*` don't count.
 - Vandal was only present at the 2026-06-16 session. For every other date frame it as retelling — *"an account I have since gathered"* — not personal witness.
 
 For a batch of sessions, spawning parallel `general-purpose` Agents with the reference script and the summary path is the proven pattern.

@@ -1,7 +1,7 @@
 ---
 name: Zephyros
 aliases: Zephyros
-sessions: 2026-01-13, 2026-01-27, 2026-02-10, 2026-03-08
+sessions: 2026-01-13, 2026-01-27, 2026-02-10, 2026-03-08, 2026-08-12
 type: Ally
 location: Flying castle
 race: Cloud giant

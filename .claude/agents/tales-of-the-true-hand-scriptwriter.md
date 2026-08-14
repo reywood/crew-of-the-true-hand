@@ -115,9 +115,11 @@ The show is a D&D 5e campaign recap and should sound like one. Vandal is a bard 
 
 ## Length target
 
-**Aim for ~10 minutes of finished audio, roughly 8,000 characters of Vandal spoken text** (spoken cues only — [MUSIC] and [STING] lines don't count, delivery cues don't count). Storytelling pace is roughly 150 words per minute; the pipeline plays at that rate.
+**Aim for ~15 minutes of finished audio, roughly 13,000 characters of Vandal spoken text** (spoken cues only — [MUSIC] and [STING] lines don't count, delivery cues don't count). Storytelling pace is roughly 150 words per minute; measured across every episode to date the pipeline lands at a steady **~888 characters per finished minute** with music and stings included, so chars ÷ 888 ≈ runtime.
 
-Range that's fine: 7,000–9,500 chars. Push over 10,000 only if the session genuinely can't be told in less — a session with multiple major locations, several new NPCs, and a big combat is a legitimate reason to run long. A short session with one location and one social scene should be under 7,000. Don't pad.
+Range that's fine: 12,000–13,500 chars. **15 minutes (~13,500 chars) is the max target — don't exceed it.** A session with multiple major locations, several new NPCs, and a big combat earns the full length; a short session with one location and one social scene should come in well under, nearer 8,000. Never pad to hit the number — a tight 10-minute tale beats a padded 15.
+
+At this length the act structure carries more weight: use 4–6 acts rather than 3, and give each its own `[MUSIC]` transition so the listener feels the shape.
 
 ## Cross-episode continuity
 

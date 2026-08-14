@@ -1,7 +1,7 @@
 ---
 name: Bag of Holding
 aliases: Bag of Holding, kobold's satchel
-sessions: 2026-02-10
+sessions: 2026-02-10, 2026-08-12
 type: Magic item
 holder: Party
 status: Active

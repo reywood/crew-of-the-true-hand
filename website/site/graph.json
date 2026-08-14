@@ -27,6 +27,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-brindle.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-chazlauth.html",
    "target": "session-2026-02-10.html"
   },
@@ -39,6 +44,11 @@
    "rel": "appears_in",
    "source": "npc-chazlauth.html",
    "target": "session-2026-06-16.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-chazlauth.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -72,17 +82,17 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-emmert-dorrow.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-fish-hook-finn.html",
    "target": "session-2025-09-23.html"
   },
   {
    "rel": "appears_in",
    "source": "npc-garley.html",
-   "target": "session-2026-06-16.html"
-  },
-  {
-   "rel": "appears_in",
-   "source": "npc-goliath-of-cormeer.html",
    "target": "session-2026-06-16.html"
   },
   {
@@ -94,6 +104,11 @@
    "rel": "appears_in",
    "source": "npc-harshnag.html",
    "target": "session-2026-06-16.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-harshnag.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -117,6 +132,21 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-klauth.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-kuyrl-stonepalm.html",
+   "target": "session-2026-06-16.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-kuyrl-stonepalm.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-lady-nandar.html",
    "target": "session-2025-11-12.html"
   },
@@ -124,6 +154,11 @@
    "rel": "appears_in",
    "source": "npc-lady-nandar.html",
    "target": "session-2025-12-17.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-lady-nandar.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -252,6 +287,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-umberlee.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-vandal-lovelace.html",
    "target": "session-2026-06-16.html"
   },
@@ -287,6 +327,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "npc-yackerty.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "npc-zephyros.html",
    "target": "session-2026-01-13.html"
   },
@@ -304,6 +349,11 @@
    "rel": "appears_in",
    "source": "npc-zephyros.html",
    "target": "session-2026-03-08.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "npc-zephyros.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -339,6 +389,11 @@
    "rel": "appears_in",
    "source": "loc-darkhope.html",
    "target": "session-2025-11-12.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "loc-deep-water-inn.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -427,6 +482,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "loc-nightstone.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "loc-pearl-isles.html",
    "target": "session-2025-09-23.html"
   },
@@ -442,8 +502,18 @@
   },
   {
    "rel": "appears_in",
+   "source": "loc-silverymoon.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "loc-spine-of-the-world.html",
    "target": "session-2026-03-08.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "loc-the-plinth.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -512,6 +582,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "loc-waterdeep.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "item-alchemy-jug.html",
    "target": "session-2026-06-16.html"
   },
@@ -519,6 +594,11 @@
    "rel": "appears_in",
    "source": "item-bag-of-holding.html",
    "target": "session-2026-02-10.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "item-bag-of-holding.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -547,6 +627,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "item-blue-steel-thieves-tools.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "item-bronze-griffin-figurine.html",
    "target": "session-2026-01-27.html"
   },
@@ -562,6 +647,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "item-cursed-crypt-sword.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "item-dagger-of-venom.html",
    "target": "session-2026-02-10.html"
   },
@@ -569,6 +659,11 @@
    "rel": "appears_in",
    "source": "item-draconic-notes.html",
    "target": "session-2026-02-10.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "item-draconic-notes.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -592,6 +687,11 @@
   },
   {
    "rel": "appears_in",
+   "source": "item-immovable-rod.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "appears_in",
    "source": "item-ornate-genie-bottle.html",
    "target": "session-2025-09-23.html"
   },
@@ -604,6 +704,11 @@
    "rel": "appears_in",
    "source": "item-ornate-genie-bottle.html",
    "target": "session-2026-01-13.html"
+  },
+  {
+   "rel": "appears_in",
+   "source": "item-umberlee-eye-coin.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "appears_in",
@@ -712,13 +817,28 @@
   },
   {
    "rel": "located_in",
+   "source": "npc-emmert-dorrow.html",
+   "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "located_in",
    "source": "npc-garley.html",
    "target": "loc-waterdeep.html"
   },
   {
    "rel": "located_in",
-   "source": "npc-goliath-of-cormeer.html",
+   "source": "npc-grey-priestess-of-kelemvor.html",
    "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "can_help",
+   "source": "npc-grey-priestess-of-kelemvor.html",
+   "target": "item-cursed-crypt-sword.html"
+  },
+  {
+   "rel": "can_help",
+   "source": "npc-grey-priestess-of-kelemvor.html",
+   "target": "item-umberlee-eye-coin.html"
   },
   {
    "rel": "affiliated_with",
@@ -736,6 +856,26 @@
    "target": "faction-zhentarim-estranged"
   },
   {
+   "rel": "can_help",
+   "source": "npc-klauth.html",
+   "target": "item-blue-dragon-sigil-ring.html"
+  },
+  {
+   "rel": "can_help",
+   "source": "npc-klauth.html",
+   "target": "item-blue-steel-thieves-tools.html"
+  },
+  {
+   "rel": "can_help",
+   "source": "npc-klauth.html",
+   "target": "item-draconic-notes.html"
+  },
+  {
+   "rel": "located_in",
+   "source": "npc-kuyrl-stonepalm.html",
+   "target": "loc-waterdeep.html"
+  },
+  {
    "rel": "located_in",
    "source": "npc-lady-nandar.html",
    "target": "loc-nightstone.html"
@@ -743,6 +883,11 @@
   {
    "rel": "located_in",
    "source": "npc-laeral-silverhand.html",
+   "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "located_in",
+   "source": "npc-larry.html",
    "target": "loc-waterdeep.html"
   },
   {
@@ -807,6 +952,16 @@
   },
   {
    "rel": "located_in",
+   "source": "npc-priestess-of-umberlee.html",
+   "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "can_help",
+   "source": "npc-priestess-of-umberlee.html",
+   "target": "item-umberlee-eye-coin.html"
+  },
+  {
+   "rel": "located_in",
    "source": "npc-shalvis.html",
    "target": "loc-golden-fields.html"
   },
@@ -829,6 +984,11 @@
    "rel": "located_in",
    "source": "npc-thock.html",
    "target": "loc-nightstone.html"
+  },
+  {
+   "rel": "can_help",
+   "source": "npc-umberlee.html",
+   "target": "item-umberlee-eye-coin.html"
   },
   {
    "rel": "located_in",
@@ -889,6 +1049,11 @@
    "rel": "within",
    "source": "loc-silverymoon.html",
    "target": "loc-silver-marches.html"
+  },
+  {
+   "rel": "within",
+   "source": "loc-the-plinth.html",
+   "target": "loc-waterdeep.html"
   },
   {
    "rel": "governs",
@@ -1042,6 +1207,16 @@
   },
   {
    "rel": "acquired_in",
+   "source": "item-immovable-rod.html",
+   "target": "session-2026-08-12.html"
+  },
+  {
+   "rel": "gave",
+   "source": "npc-chazlauth.html",
+   "target": "item-immovable-rod.html"
+  },
+  {
+   "rel": "acquired_in",
    "source": "item-ornate-genie-bottle.html",
    "target": "session-2025-09-23.html"
   },
@@ -1049,6 +1224,11 @@
    "rel": "gave",
    "source": "npc-molak.html",
    "target": "item-ornate-genie-bottle.html"
+  },
+  {
+   "rel": "acquired_in",
+   "source": "item-umberlee-eye-coin.html",
+   "target": "session-2026-08-12.html"
   },
   {
    "rel": "held_by",
@@ -1179,6 +1359,21 @@
    "rel": "session_at",
    "source": "session-2026-06-16.html",
    "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "session_at",
+   "source": "session-2026-08-12.html",
+   "target": "loc-waterdeep.html"
+  },
+  {
+   "rel": "session_at",
+   "source": "session-2026-08-12.html",
+   "target": "loc-deep-water-inn.html"
+  },
+  {
+   "rel": "session_at",
+   "source": "session-2026-08-12.html",
+   "target": "loc-the-plinth.html"
   }
  ],
  "nodes": [
@@ -1273,7 +1468,7 @@
     "Brindle",
     "Stormtide"
    ],
-   "blurb": "A halfling ship-seller who works the Waterdeep docks.",
+   "blurb": "A halfling ship-seller and dock master in Waterdeep.",
    "id": "npc-brindle.html",
    "kind": "npc",
    "name": "Brindle Stormtide",
@@ -1335,6 +1530,18 @@
   },
   {
    "aliases": [
+    "Emmert Dorrow",
+    "Emmert",
+    "Dorrow"
+   ],
+   "blurb": "An ordinary Waterdeep dockhand — gray, stubbled, in worn working clothes — who was the source of the mind-control that turned a room full of patrons white-eyed at the Deep Water Inn.",
+   "id": "npc-emmert-dorrow.html",
+   "kind": "npc",
+   "name": "Emmert Dorrow",
+   "url": "npc-emmert-dorrow.html"
+  },
+  {
+   "aliases": [
     "Fish Hook Finn",
     "Finn"
    ],
@@ -1371,19 +1578,18 @@
   },
   {
    "aliases": [
-    "Goliath of Cormeer",
-    "goliath of Cormeer",
-    "goliath from Cormeer",
-    "the goliath at the gate",
-    "goliath at the gate",
-    "gate goliath",
-    "Cormeer goliath"
+    "Grey priestess of Kelemvor",
+    "grey priestess",
+    "gray priestess",
+    "priestess of Kelemvor",
+    "death priest",
+    "the grey tent priestess"
    ],
-   "blurb": "An unnamed goliath the crew met being turned away at Waterdeep's south gate, traveling with his wife.",
-   "id": "npc-goliath-of-cormeer.html",
+   "blurb": "The keeper of the grey tent at the back of the Plinth — everything about her and it grey: tent, rug, robes, hair.",
+   "id": "npc-grey-priestess-of-kelemvor.html",
    "kind": "npc",
-   "name": "Goliath of Cormeer",
-   "url": "npc-goliath-of-cormeer.html"
+   "name": "Grey priestess of Kelemvor",
+   "url": "npc-grey-priestess-of-kelemvor.html"
   },
   {
    "aliases": [
@@ -1407,6 +1613,38 @@
   },
   {
    "aliases": [
+    "Klauth",
+    "Old Wyrm of the North",
+    "the Old Wyrm",
+    "Wyrm of the North"
+   ],
+   "blurb": "An ancient red dragon, one of the oldest alive, living somewhere in the north — Chazlauth does not know precisely where.",
+   "id": "npc-klauth.html",
+   "kind": "npc",
+   "name": "Klauth",
+   "url": "npc-klauth.html"
+  },
+  {
+   "aliases": [
+    "Kuyrl Stonepalm",
+    "Kuyrl",
+    "Stonepalm",
+    "Goliath of Cormeer",
+    "goliath of Cormeer",
+    "goliath from Cormeer",
+    "the goliath at the gate",
+    "goliath at the gate",
+    "gate goliath",
+    "Cormeer goliath"
+   ],
+   "blurb": "A goliath the crew first met being turned away at Waterdeep's south gate, traveling with his wife.",
+   "id": "npc-kuyrl-stonepalm.html",
+   "kind": "npc",
+   "name": "Kuyrl Stonepalm",
+   "url": "npc-kuyrl-stonepalm.html"
+  },
+  {
+   "aliases": [
     "Lady Nandar",
     "Nandar"
    ],
@@ -1427,6 +1665,16 @@
    "kind": "npc",
    "name": "Laeral Silverhand",
    "url": "npc-laeral-silverhand.html"
+  },
+  {
+   "aliases": [
+    "Larry"
+   ],
+   "blurb": "Brindle's translator on the Waterdeep docks: lanky, silver ponytail, eye patch, quiet and unassuming.",
+   "id": "npc-larry.html",
+   "kind": "npc",
+   "name": "Larry",
+   "url": "npc-larry.html"
   },
   {
    "aliases": [
@@ -1522,6 +1770,19 @@
   },
   {
    "aliases": [
+    "Priestess of Umberlee",
+    "Umberlee priestess",
+    "the Umberlee priestess",
+    "priestess at the Umberlee shrine"
+   ],
+   "blurb": "A short human woman with long grey wavy hair and robes to the floor, keeping Umberlee's shrine among the tents of the Plinth.",
+   "id": "npc-priestess-of-umberlee.html",
+   "kind": "npc",
+   "name": "Priestess of Umberlee",
+   "url": "npc-priestess-of-umberlee.html"
+  },
+  {
+   "aliases": [
     "Queen Guh",
     "Guh"
    ],
@@ -1582,6 +1843,19 @@
    "kind": "npc",
    "name": "Thock",
    "url": "npc-thock.html"
+  },
+  {
+   "aliases": [
+    "Umberlee",
+    "The Bitch Queen",
+    "Queen of the Deeps",
+    "the sea bitch"
+   ],
+   "blurb": "Goddess of the sea — ferocious, fierce, and by her own priestess's account both a terror and a protector: \"Umberlee does love and watch over all of her children on the vast ocean and beyond.\" She is…",
+   "id": "npc-umberlee.html",
+   "kind": "npc",
+   "name": "Umberlee",
+   "url": "npc-umberlee.html"
   },
   {
    "aliases": [
@@ -1796,6 +2070,19 @@
    "kind": "location",
    "name": "Spine of the World",
    "url": "loc-spine-of-the-world.html"
+  },
+  {
+   "aliases": [
+    "The Plinth",
+    "Plinth",
+    "the gray shrine",
+    "the grey tent"
+   ],
+   "blurb": "An offshoot of the marketplace in Waterdeep's Sea Ward: rows and rows of tents, each devoted to a god with no permanent stone temple in the city.",
+   "id": "loc-the-plinth.html",
+   "kind": "location",
+   "name": "The Plinth",
+   "url": "loc-the-plinth.html"
   },
   {
    "aliases": [
@@ -2025,6 +2312,17 @@
   },
   {
    "aliases": [
+    "Immovable rod",
+    "the immovable rod"
+   ],
+   "blurb": "A bar of metal that fixes rigidly in place in mid-air at the press of a button, and releases at another press.",
+   "id": "item-immovable-rod.html",
+   "kind": "item",
+   "name": "Immovable rod",
+   "url": "item-immovable-rod.html"
+  },
+  {
+   "aliases": [
     "Ornate genie bottle",
     "genie bottle",
     "ornate bottle"
@@ -2034,6 +2332,21 @@
    "kind": "item",
    "name": "Ornate genie bottle",
    "url": "item-ornate-genie-bottle.html"
+  },
+  {
+   "aliases": [
+    "Umberlee eye-coin",
+    "eye-coin",
+    "eye coin",
+    "the coin with an eye",
+    "Umberlee coin",
+    "corroded coin"
+   ],
+   "blurb": "A coin taken from Emmert Dorrow's body at the Deep Water Inn, folded inside a leather pouch in a pocket separate from his purse.",
+   "id": "item-umberlee-eye-coin.html",
+   "kind": "item",
+   "name": "Umberlee eye-coin",
+   "url": "item-umberlee-eye-coin.html"
   },
   {
    "aliases": [
@@ -2091,6 +2404,16 @@
    "kind": "quest",
    "name": "Reach the Oracle",
    "url": "quest-reach-the-oracle.html"
+  },
+  {
+   "aliases": [
+    "Copy Kuyrl's map to the Oracle"
+   ],
+   "blurb": "Kuyrl keeps a map in his ledger booklet.",
+   "id": "quest-copy-kuyrls-map-to-the-oracle.html",
+   "kind": "quest",
+   "name": "Copy Kuyrl's map to the Oracle",
+   "url": "quest-copy-kuyrls-map-to-the-oracle.html"
   },
   {
    "aliases": [
@@ -2164,13 +2487,23 @@
   },
   {
    "aliases": [
-    "Brindle"
+    "Free Kuyrl Stonepalm"
    ],
-   "blurb": "in Waterdeep — may be able to set the party up with a ship.",
-   "id": "quest-brindle.html",
+   "blurb": "The goliath from the gate is in engineered debt bondage to Brindle — 80 gold owed, another 80 added yearly because Brindle charges him room and board.",
+   "id": "quest-free-kuyrl-stonepalm.html",
    "kind": "quest",
-   "name": "Brindle",
-   "url": "quest-brindle.html"
+   "name": "Free Kuyrl Stonepalm",
+   "url": "quest-free-kuyrl-stonepalm.html"
+  },
+  {
+   "aliases": [
+    "Klauth"
+   ],
+   "blurb": ", the \"Old Wyrm of the North\" — ancient red dragon somewhere in the north, known to deal with small folk.",
+   "id": "quest-klauth.html",
+   "kind": "quest",
+   "name": "Klauth",
+   "url": "quest-klauth.html"
   },
   {
    "aliases": [
@@ -2236,11 +2569,41 @@
    "aliases": [
     "Mind-control attack at the Deep Water Inn"
    ],
-   "blurb": "Patrons' eyes turned white and attacked; instigator said \"we're going to take back what's theirs.\" Killed him, others snapped out of it.",
+   "blurb": "Patrons' eyes turned white and attacked; the instigator was an ordinary dockhand, Emmert Dorrow, and seawater washed out of his body when he died.",
    "id": "quest-mind-control-attack-at-the-deep-water-inn.html",
    "kind": "quest",
    "name": "Mind-control attack at the Deep Water Inn",
    "url": "quest-mind-control-attack-at-the-deep-water-inn.html"
+  },
+  {
+   "aliases": [
+    "\"The deep speaker.\""
+   ],
+   "blurb": "The Cult of the Dragon's standing orders instruct their agents: \"do not impede the designs of the deep speaker.\" Unexplained, and sitting squarely alongside the ocean dreams, the eye-coin, and the…",
+   "id": "quest-the-deep-speaker.html",
+   "kind": "quest",
+   "name": "\"The deep speaker.\"",
+   "url": "quest-the-deep-speaker.html"
+  },
+  {
+   "aliases": [
+    "The barnacled robed figure"
+   ],
+   "blurb": "Ambushed the crew in fog on the docks with entranced workers and octopuses; was shocked that a magical blade could hurt it.",
+   "id": "quest-the-barnacled-robed-figure.html",
+   "kind": "quest",
+   "name": "The barnacled robed figure",
+   "url": "quest-the-barnacled-robed-figure.html"
+  },
+  {
+   "aliases": [
+    "A dead innocent"
+   ],
+   "blurb": "An entranced dock worker was killed by the crew's thunderwave during the fog ambush, in a city whose watch already tried to detain them once that day.",
+   "id": "quest-a-dead-innocent.html",
+   "kind": "quest",
+   "name": "A dead innocent",
+   "url": "quest-a-dead-innocent.html"
   },
   {
    "aliases": [
@@ -2471,6 +2834,16 @@
    "kind": "session",
    "name": "Session 2026-06-16",
    "url": "session-2026-06-16.html"
+  },
+  {
+   "aliases": [
+    "2026-08-12"
+   ],
+   "blurb": "A dead dockhand, a coin that only touches the drowned, and a goliath whose debt was never meant to be paid.",
+   "id": "session-2026-08-12.html",
+   "kind": "session",
+   "name": "Session 2026-08-12",
+   "url": "session-2026-08-12.html"
   },
   {
    "aliases": [
