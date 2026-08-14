@@ -626,15 +626,82 @@ def render_nav(current=None):
     return '<nav class="site-nav">' + "".join(items) + "</nav>"
 
 
-def page(title, body, current_nav=None, breadcrumb=None):
+SITE_NAME = "Crew of the True Hand"
+DEFAULT_SHARE_IMAGE = "static/podcast-cover.jpg"
+DEFAULT_SHARE_DESC = (
+    "A D&D 5e campaign archive: session recaps, the crew, the folk they've met, "
+    "the places they've been, and the threads still hanging."
+)
+
+
+def share_text(raw, limit=280):
+    """Flatten markdown/HTML to a single plain line for a link preview.
+
+    Discord, Slack and iMessage show roughly 2–4 lines of description, so this
+    strips markup, collapses whitespace, and truncates on a word boundary.
+    """
+    if not raw:
+        return ""
+    txt = re.sub(r"<[^>]+>", "", str(raw))            # tags
+    txt = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", txt)     # images
+    txt = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", txt)  # links → text
+    txt = re.sub(r"[*_`#>]+", "", txt)                 # emphasis / headings
+    txt = html.unescape(txt)
+    txt = re.sub(r"\s+", " ", txt).strip()
+    if len(txt) > limit:
+        txt = txt[:limit].rsplit(" ", 1)[0].rstrip(",.;:—- ") + "…"
+    return txt
+
+
+def _abs_url(path):
+    return f"{SITE_BASE_URL}/{path.lstrip('/')}" if path else ""
+
+
+def share_meta(title, description, image, canonical, og_type, audio=None):
+    """Open Graph + Twitter Card tags, so links unfurl in Discord/Slack/iMessage."""
+    desc = share_text(description) or DEFAULT_SHARE_DESC
+    img = _abs_url(image or DEFAULT_SHARE_IMAGE)
+    # No site-name suffix here: og:site_name is rendered on its own line above
+    # the title in Discord/Slack, so repeating it just eats the title's width.
+    full_title = title
+    t = [
+        f'<meta name="description" content="{html.escape(desc)}">',
+        f'<meta property="og:site_name" content="{html.escape(SITE_NAME)}">',
+        f'<meta property="og:type" content="{og_type}">',
+        f'<meta property="og:title" content="{html.escape(full_title)}">',
+        f'<meta property="og:description" content="{html.escape(desc)}">',
+        f'<meta property="og:image" content="{html.escape(img)}">',
+        f'<meta name="twitter:card" content="summary_large_image">',
+        f'<meta name="twitter:title" content="{html.escape(full_title)}">',
+        f'<meta name="twitter:description" content="{html.escape(desc)}">',
+        f'<meta name="twitter:image" content="{html.escape(img)}">',
+        # Discord tints the left edge of the embed with this.
+        f'<meta name="theme-color" content="#c19a4a">',
+    ]
+    if canonical:
+        t.insert(1, f'<link rel="canonical" href="{html.escape(_abs_url(canonical))}">')
+        t.insert(2, f'<meta property="og:url" content="{html.escape(_abs_url(canonical))}">')
+    if audio:
+        t.append(f'<meta property="og:audio" content="{html.escape(_abs_url(audio))}">')
+        t.append(f'<meta property="og:audio:type" content="audio/mpeg">')
+    return "\n".join(t)
+
+
+def page(title, body, current_nav=None, breadcrumb=None,
+         description=None, image=None, canonical=None,
+         og_type="website", audio=None, share_title=None):
     nav = render_nav(current_nav)
     bc = f'<div class="breadcrumb">{breadcrumb}</div>' if breadcrumb else ""
+    meta = share_meta(share_title or title, description, image,
+                      canonical, og_type, audio)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)} — Crew of the True Hand</title>
+{meta}
+<link rel="alternate" type="application/rss+xml" title="Tales of the True Hand" href="feed.xml">
 <link rel="stylesheet" href="{static_url('style.css')}">
 <script defer src="{static_url('podcast-subscribe.js')}"></script>
 <script defer src="{static_url('search.js')}"></script>
@@ -946,7 +1013,13 @@ def index_page(pcs, npcs, locations, quests, sessions):
 </div>
 </section>
 """
-    return page("Home", cards, current_nav="index.html")
+    return page("Home", cards, current_nav="index.html",
+                share_title=SITE_NAME,
+                description=(
+                    "The player-side archive of a Storm King's Thunder campaign — "
+                    "session recaps and a narrated audio retelling, the crew, the folk "
+                    "they've met, and every thread still hanging."),
+                canonical="index.html")
 
 
 # --------------------------------------------------------------------------
@@ -1145,7 +1218,12 @@ def prep_page(pcs, npcs, locations, items, quests, sessions, state,
 
     body = "\n".join(parts)
     return page("Prep — Where We Left Off",
-                linkify_html(body, "next.html", link_map), current_nav="next.html")
+                linkify_html(body, "next.html", link_map), current_nav="next.html",
+                description=(
+                    "Where the crew stands right now: the current objective, the open "
+                    "questions, the top quests, and who's nearby — everything you need "
+                    "to pick the story back up."),
+                canonical="next.html")
 
 
 def threads_page(sessions, session_lookup, link_map):
@@ -1172,7 +1250,9 @@ def threads_page(sessions, session_lookup, link_map):
         parts.append('<p class="muted">No open threads recorded yet.</p>')
     body = "\n".join(parts)
     return page("Open Threads", linkify_html(body, "threads.html", link_map),
-                current_nav="next.html")
+                current_nav="next.html",
+                description="Every loose end the archive knows about, harvested from each session's what's-next and loose-ends notes.",
+                canonical="threads.html")
 
 
 def pc_list_page(pcs, link_map):
@@ -1188,7 +1268,9 @@ def pc_list_page(pcs, link_map):
 </a>""")
     body = "<h1>The Crew</h1>\n<section class='grid grid-2'>" + "".join(cards) + "</section>"
     return page("The Crew", linkify_html(body, "characters.html", link_map),
-                current_nav="characters.html")
+                current_nav="characters.html",
+                description='Four adventurers out of a wrecked ship: Fiz the artificer, Hal the paladin, Toz the storm sorcerer, and Eno the nature cleric.',
+                canonical="characters.html")
 
 
 def detail_page_pc(pc, link_map, graph=None):
@@ -1211,7 +1293,9 @@ def detail_page_pc(pc, link_map, graph=None):
   </div>
 </article>"""
     bc = f'<a href="characters.html">Characters</a> &rsaquo; {html.escape(pc.name)}'
-    return page(pc.name, body, current_nav="characters.html", breadcrumb=bc)
+    return page(pc.name, body, current_nav="characters.html", breadcrumb=bc,
+                description=pc.summary, image=pc.image,
+                canonical=pc.href, og_type="profile")
 
 
 def list_page_generic(title, current, items, link_map, kind):
@@ -1322,7 +1406,9 @@ def locations_chart_page(locations, link_map):
 
     body = "\n".join(chunks)
     return page("Locations", linkify_html(body, "locations.html", link_map),
-                current_nav="locations.html")
+                current_nav="locations.html",
+                description='Everywhere the crew has been or heard of, from Nightstone to Waterdeep to the Spine of the World.',
+                canonical="locations.html")
 
 
 def _location_strip_qualifier(loc):
@@ -1398,7 +1484,9 @@ def npc_table_page(npcs, link_map):
         '</div>'
     )
     return page("NPCs", linkify_html(body, "npcs.html", link_map),
-                current_nav="npcs.html")
+                current_nav="npcs.html",
+                description="Everyone the crew has met, been threatened by, or been sent to find — allies, antagonists, dragons and gods.",
+                canonical="npcs.html")
 
 
 def _npc_card(npc, show_last_seen):
@@ -1586,7 +1674,9 @@ def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None,
   </div>
 </article>"""
     bc = f'<a href="{list_href}">{html.escape(list_label)}</a> &rsaquo; {html.escape(e.name)}'
-    return page(e.name, body, current_nav=list_href, breadcrumb=bc)
+    return page(e.name, body, current_nav=list_href, breadcrumb=bc,
+                description=e.summary or e.body, image=e.image,
+                canonical=e.href, og_type="article")
 
 
 ITEM_STATUS_ORDER = ["Unresolved", "Active", "Consumed", "Lost", "Sold"]
@@ -1645,7 +1735,9 @@ def item_list_page(items, link_map):
 
     body = "\n".join(chunks)
     return page("Items", linkify_html(body, "items.html", link_map),
-                current_nav="items.html")
+                current_nav="items.html",
+                description='The magical, mysterious and merely sentimental things the crew is carrying — and who might be able to explain them.',
+                canonical="items.html")
 
 
 def quest_list_page(quests, link_map):
@@ -1700,7 +1792,9 @@ def quest_list_page(quests, link_map):
         chunks.append("</ul>")
     body = "\n".join(chunks)
     return page("Quests", linkify_html(body, "quests.html", link_map),
-                current_nav="quests.html")
+                current_nav="quests.html",
+                description='Every thread the crew is pulling: the main arc, allies to recruit, giant hotspots, and the leads still dangling.',
+                canonical="quests.html")
 
 
 def _render_dep_line(label, arrow_class, deps):
@@ -1750,7 +1844,9 @@ def detail_page_quest(q, link_map, session_lookup=None):
   </div>
 </article>"""
     bc = f'<a href="quests.html">Quests</a> &rsaquo; {html.escape(q.name)}'
-    return page(q.name, body, current_nav="quests.html", breadcrumb=bc)
+    return page(q.name, body, current_nav="quests.html", breadcrumb=bc,
+                description=q.summary or q.body,
+                canonical=q.href, og_type="article")
 
 
 SESSION_LOCATIONS = {
@@ -1808,7 +1904,9 @@ def session_list_page(sessions, locations, link_map):
             '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it into your podcast app of choice.</span></p>\n'
             '<ol class="session-log">' + "".join(rows) + '</ol>')
     return page("Sessions", linkify_html(body, "sessions.html", link_map),
-                current_nav="sessions.html")
+                current_nav="sessions.html",
+                description='Every session of the campaign, newest first — each with a recap, illustrations, a narrated audio retelling, and the original notes and transcript.',
+                canonical="sessions.html")
 
 
 def _inject_beat_images(summary_html: str, date: str, beat_images: dict) -> str:
@@ -1925,7 +2023,15 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
     # linkify so the neighbour dates don't get turned into entity self-links.
     body += _session_pager(prev, nxt)
     bc = f'<a href="sessions.html">Sessions</a> &rsaquo; {html.escape(s.name)}'
-    return page(s.name, body, current_nav="sessions.html", breadcrumb=bc)
+    img_name = s.meta.get("image_name") or ""
+    audio_name = s.meta.get("audio_name") or ""
+    subtitle = s.meta.get("audio_subtitle") or ""
+    share_title = f"{s.name} — {subtitle}" if subtitle else s.name
+    return page(share_title, body, current_nav="sessions.html", breadcrumb=bc,
+                description=s.summary,
+                image=f"images/sessions/{img_name}" if img_name else None,
+                canonical=s.href, og_type="article",
+                audio=f"audio/sessions/{audio_name}" if audio_name else None)
 
 
 def _session_pager(prev, nxt):
