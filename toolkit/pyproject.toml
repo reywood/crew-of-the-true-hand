@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "truehand"
+version = "0.1.0"
+description = "Tooling for the Crew of the True Hand campaign archive"
+requires-python = ">=3.11"
+
+# Typer is the ONLY hard dependency. The site build must work in a venv with
+# nothing else installed, so every media dependency below is an extra that is
+# imported lazily (see truehand/adapters/_optional.py).
+dependencies = ["typer>=0.12,<1"]
+
+# Version floors are the known-good release; caps sit below the next major to
+# avoid breaking changes. Carried over from the retired requirements.txt.
+[project.optional-dependencies]
+image = [
+  "google-genai>=1.47.0,<2.0.0",  # Gemini image generation
+  "pillow>=11.3.0,<12.0.0",       # cover normalization (PIL)
+]
+audio = [
+  "elevenlabs>=2.56.0,<3.0.0",    # ElevenLabs TTS
+]
+media = ["truehand[image]", "truehand[audio]"]
+dev = ["pytest>=8", "ruff>=0.6"]
+all = ["truehand[media]", "truehand[dev]"]
+
+[project.scripts]
+truehand = "truehand.cli.app:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+truehand = ["data/*.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]

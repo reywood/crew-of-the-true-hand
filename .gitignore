@@ -9,3 +9,7 @@ sessions/**/whisply/
 logs/
 __pycache__/
 *.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+toolkit/build/
