@@ -62,10 +62,16 @@ def resolve_paths(ctx: typer.Context) -> Paths:
     return ctx.obj
 
 
-from .entities import entities_app  # imported here: they need `app` to exist first
+from .cover import cover_app  # imported here: they need `app` to exist first
+from .entities import entities_app
+from .refs import refs_app
+from .session import session_app
 from .site import site_app
 
 app.add_typer(site_app, name="site")
+app.add_typer(session_app, name="session")
+app.add_typer(refs_app, name="refs")
+app.add_typer(cover_app, name="cover")
 app.add_typer(entities_app, name="entities")
 
 

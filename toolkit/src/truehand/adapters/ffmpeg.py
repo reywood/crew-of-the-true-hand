@@ -286,3 +286,20 @@ def concat_mp3s(chunk_paths, output_path: Path) -> None:
            "-loglevel", "error",
            str(output_path)]
     subprocess.run(cmd, check=True)
+
+
+def render_segment(source: Path, out_path: Path, *, start_offset: float,
+                   segment: float, afilters: tuple[str, ...]) -> Path:
+    """Cut `segment` seconds from `source` at `start_offset` through `afilters`."""
+    subprocess.run([
+        "ffmpeg", "-y",
+        "-ss", str(start_offset),
+        "-t", str(segment),
+        "-i", str(source),
+        "-af", ",".join(afilters),
+        "-ac", "1", "-ar", "44100",
+        "-c:a", "libmp3lame", "-b:a", "128k",
+        "-loglevel", "error",
+        str(out_path),
+    ], check=True)
+    return out_path
