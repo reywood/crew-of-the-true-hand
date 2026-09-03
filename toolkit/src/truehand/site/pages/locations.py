@@ -3,43 +3,16 @@
 import html
 import re
 
+from ... import data as _data
 from ..layout import page
 from ..linkify import linkify_html
 
-LOCATION_MAP_DATA = {
-    # On-chart pins: x%, y% of the map image (faerun.png, 1573×1000).
-    # Coords are the brass dot position. Region labels (no dot) are centered on
-    # the coord. Most positions come from faerun.csv (pixel coords ÷ map size).
-    #
-    "waterdeep":           {"x": 34.9, "y": 78.3, "dir": "w"},
-    "nightstone":          {"x": 43.3, "y": 79.3, "dir": "se"},
-    "ardeep-forest":       {"x": 42.8, "y": 76.6, "dir": "nw"},  # west of dot to clear Nightstone
-    "golden-fields":       {"x": 44.3, "y": 71.8, "dir": "ne"},  # north of dot to clear Ardeep
-    "triboar":             {"x": 42.2, "y": 43.8},
-    "kryptgarden-forest":  {"x": 36.7, "y": 58.1},
-    "silverymoon":         {"x": 58.4, "y": 27.0},
-    "silver-marches":      {"x": 71.8, "y": 15.9},  # region label
-    "spine-of-the-world":  {"x": 38.8, "y": 9.3},   # region label across top
-    "bryn-shandar":        {"x": 19.5, "y": 11.1, "dir": "se"},  # "Bryn Shander" in CSV
-    # Not on the canon map — campaign-specific wreck site, placed offshore in
-    # the Sea of Swords, west of Nightstone. Label hangs further west into
-    # the open sea.
-    "the-true-hand":       {"x": 38.0, "y": 83.0, "dir": "w"},
-    #
-    # Off-chart cartouches (south of frame, mythic, or fictional):
-    "athkatla":            {"cartouche": "Far South"},
-    "halruaa":             {"cartouche": "Far South"},
-    "eye-of-annam":        {"cartouche": "Beyond the Charts"},
-    "pearl-isles":         {"cartouche": "Beyond the Charts"},
-    "darkar":              {"cartouche": "Whereabouts Unknown"},
-    "darkhope":            {"cartouche": "Whereabouts Unknown"},
-}
-
-
-CARTOUCHE_ORDER = ["Far South", "Beyond the Charts", "Whereabouts Unknown"]
-
-
-MAP_IMAGE = '<img class="map-image" src="static/faerun.png" alt="A map of the Sword Coast" loading="lazy">'
+#: The sea-chart. Edited in truehand/data/map.toml, not here.
+_MAP = _data.load("map")
+LOCATION_MAP_DATA = _MAP["locations"]
+CARTOUCHE_ORDER = _MAP["cartouche_order"]
+MAP_IMAGE = (f'<img class="map-image" src="{_MAP["map_image_src"]}"'
+             f' alt="{_MAP["map_image_alt"]}" loading="lazy">')
 
 
 def locations_chart_page(locations, link_map):

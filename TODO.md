@@ -47,14 +47,6 @@ excluding the current page's own aliases is what lets a shorter alias match
 inside the same span, so the alternation genuinely differs per page. The safe
 win is an `lru_cache`d compile keyed on `current_href`.
 
-### Campaign data still lives in source
-
-`SESSION_LOCATIONS` (`core/loaders.py`) and `LOCATION_MAP_DATA`
-(`site/pages/locations.py`) are campaign data that CLAUDE.md instructs authors
-to hand-edit inside Python files. Moving them to `toolkit/src/truehand/data/*.toml`
-read via stdlib `tomllib` needs no new dependency and would let the docs point
-at a data file instead of a source file.
-
 ## Audio & podcast pipeline
 
 ### In-run TTS dedup

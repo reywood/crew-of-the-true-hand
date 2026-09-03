@@ -5,6 +5,7 @@ archive in tests rather than the real one."""
 
 import re
 
+from .. import data as _data
 from .entity import Entity
 from .frontmatter import parse_frontmatter
 from .text import read, slugify
@@ -311,18 +312,6 @@ def load_sessions(paths):
     return out
 
 
-SESSION_LOCATIONS = {
-    # session date -> list of location slugs (in order of importance to the session)
-    "2025-09-23": ["nightstone"],
-    "2025-11-12": ["nightstone", "ardeep-forest"],
-    "2025-12-07": ["ardeep-forest"],
-    "2025-12-17": ["nightstone"],
-    "2026-01-13": ["nightstone"],
-    "2026-01-27": [],  # in transit aboard Zephyros's flying castle
-    "2026-02-10": ["golden-fields"],
-    "2026-03-08": ["golden-fields"],
-    "2026-05-12": ["golden-fields"],
-    "2026-06-02": ["golden-fields"],
-    "2026-06-16": ["waterdeep"],
-    "2026-08-12": ["waterdeep", "deep-water-inn", "the-plinth"],
-}
+#: Which locations each session took place in, most important first.
+#: Edited in truehand/data/session_locations.toml, not here.
+SESSION_LOCATIONS = _data.load("session_locations")["sessions"]

@@ -202,14 +202,13 @@ Runs Gemini image + Pillow normalization to write `website/static/podcast-cover.
 
 ### 3. Add the session's location annotation
 
-Open `toolkit/src/truehand/core/loaders.py` and find `SESSION_LOCATIONS`. Add an entry mapping the new date to a list of location slugs in order of importance:
+Add an entry to `toolkit/src/truehand/data/session_locations.toml` mapping the new date to a list of location slugs in order of importance:
 
-```python
-SESSION_LOCATIONS = {
-    ...
-    "YYYY-MM-DD": ["golden-fields"],          # or ["nightstone", "ardeep-forest"]
-    ...
-}
+```toml
+[sessions]
+...
+"YYYY-MM-DD" = ["golden-fields"]          # or ["nightstone", "ardeep-forest"]
+...
 ```
 
 - Use the location's slug (matches the filename in `locations/` minus `.md`).
@@ -220,7 +219,7 @@ SESSION_LOCATIONS = {
 
 Pass through the summary one more time and check:
 - **New NPCs introduced?** Add `npcs/<slug>.md` files. Include `aliases:` covering every phrasing that should auto-link (including the canonical name).
-- **New locations visited or named?** Add `locations/<slug>.md` files. If the location should appear on the chart on `locations.html`, also add a `"<slug>": {"x": ..., "y": ...}` entry to `LOCATION_MAP_DATA` in `toolkit/src/truehand/site/pages/locations.py`.
+- **New locations visited or named?** Add `locations/<slug>.md` files. If the location should appear on the chart on `locations.html`, also add a `"<slug>" = { x = ..., y = ... }` entry to the `[locations]` table in `toolkit/src/truehand/data/map.toml`.
 - **New leads, completed objectives, or quest status changes?** Edit `quests.md`. The website parses each `- **Name**` bullet under each `## section`; section headings determine status.
 - **Arc moved forward?** Update `campaign-state.md` — refresh `objective:` and `open_questions:` to match where the crew now stands (and set `current_location:` only to override the auto-derived location, e.g. mid-journey). This keeps the `next.html` prep hub current. The new session's `## What's next` / `## Loose ends` bullets flow into `threads.html` automatically.
 
