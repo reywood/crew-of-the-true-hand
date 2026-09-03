@@ -42,3 +42,10 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 src = ["src"]
+
+# site/build.py arrives as a verbatim move of the old website/generate.py and
+# carries its pre-existing style nits. They are quarantined rather than fixed
+# in the move commit, so that diff stays provably content-free; they clear as
+# the file is split into site/pages/*.
+[tool.ruff.lint.per-file-ignores]
+"src/truehand/site/build.py" = ["PIE810", "SIM102", "F541", "ISC004", "UP017"]

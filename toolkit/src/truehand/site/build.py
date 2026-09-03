@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Static site generator for the Crew of the True Hand campaign site.
 
@@ -14,25 +13,49 @@ Writes generated HTML to website/site/. Cross-links names mentioned in any
 rendered body to their detail page.
 
 Re-run after adding or editing source files:
-    python3 website/generate.py
+    truehand site build
 """
 
 import datetime as _dt
 import hashlib
 import html
 import json
+import os
 import re
 import shutil
 import subprocess
 from email.utils import format_datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-WEB = Path(__file__).resolve().parent
-SITE = WEB / "site"
-STATIC = WEB / "static"
+# ---------------------------------------------------------------------------
+# Module configuration.
+#
+# The page builders below are called from ~15 places and only ever need two
+# facts about the environment: where the static assets live (for the cache
+# buster) and what the public base URL is (for absolute links in the feed).
+# Threading a Paths object through every builder to carry those two values
+# would bloat this module for no gain, so configure() sets them once and
+# build_site() is the only caller. This is a deliberate exception to the
+# "inject Paths" rule the loaders follow — the loaders hold the logic worth
+# testing against a fixture archive; these two are ambient presentation config.
+# ---------------------------------------------------------------------------
 
+DEFAULT_BASE_URL = os.environ.get(
+    "_BASE_URL",
+    "https://crewofthetruehand.com",
+).rstrip("/")
+
+_STATIC_DIR = None
+_BASE_URL = DEFAULT_BASE_URL
 _STATIC_VER_CACHE = {}
+
+
+def configure(static_dir, base_url):
+    """Set the ambient presentation config. Called once by build_site()."""
+    global _STATIC_DIR, _BASE_URL
+    _STATIC_DIR = static_dir
+    _BASE_URL = base_url
+    _STATIC_VER_CACHE.clear()
 
 
 def static_url(name):
@@ -40,7 +63,7 @@ def static_url(name):
     refetch the asset only when its bytes actually change. Falls back to the
     bare path if the source file is missing."""
     if name not in _STATIC_VER_CACHE:
-        src = STATIC / name
+        src = _STATIC_DIR / name
         try:
             digest = hashlib.sha256(src.read_bytes()).hexdigest()[:8]
         except OSError:
@@ -49,28 +72,10 @@ def static_url(name):
     digest = _STATIC_VER_CACHE[name]
     return f"static/{name}?v={digest}" if digest else f"static/{name}"
 
-CHAR_DIR = ROOT / "characters"
-BATTLE_CARD_DIR = ROOT / "battle-cards"
-NPC_DIR = ROOT / "npcs"
-LOC_DIR = ROOT / "locations"
-ITEM_DIR = ROOT / "items"
-# All per-session files live under sessions/YYYY-MM-DD/ (summary.md, transcript.txt,
-# player notes/<pc>.md, audio/, images/); the shared music/SFX library is under
-# sessions/library/audio/.
-SESSIONS_DIR = ROOT / "sessions"
-AUDIO_LIBRARY_DIR = SESSIONS_DIR / "library" / "audio"
-AUDIO_CREDITS_FILE = AUDIO_LIBRARY_DIR / "CREDITS.md"
-QUESTS_FILE = ROOT / "quests.md"
-CAMPAIGN_STATE_FILE = ROOT / "campaign-state.md"
-
-# Public base URL for absolute links inside the podcast RSS feed.
-# The site is served at https://crewofthetruehand.com (CloudFront + ACM, fronting
-# the S3 bucket); override at build-time with SITE_BASE_URL if the domain changes.
-import os as _os
-SITE_BASE_URL = _os.environ.get(
-    "SITE_BASE_URL",
-    "https://crewofthetruehand.com",
-).rstrip("/")
+# All content paths now come from the Paths object (truehand/paths.py); the
+# per-session layout it describes is sessions/YYYY-MM-DD/ holding summary.md,
+# transcript.txt, player notes/<pc>.md, audio/ and images/, with the shared
+# music/SFX library under sessions/library/audio/.
 
 
 # --------------------------------------------------------------------------
@@ -374,15 +379,15 @@ PC_DEFS = {
 }
 
 
-def load_pcs():
+def load_pcs(paths):
     entities = []
     for slug, defn in PC_DEFS.items():
-        md_path = CHAR_DIR / f"{slug}.md"
+        md_path = paths.characters / f"{slug}.md"
         body = read(md_path) if md_path.exists() else ""
-        img_path = CHAR_DIR / f"{slug}.jpeg"
+        img_path = paths.characters / f"{slug}.jpeg"
         image = f"images/characters/{slug}.jpeg" if img_path.exists() else None
         battle_card = (f"battle-cards/{slug}.html"
-                       if (BATTLE_CARD_DIR / f"{slug}.html").exists() else None)
+                       if (paths.battle_cards / f"{slug}.html").exists() else None)
         entities.append(Entity(
             kind="pc", slug=slug, name=defn["name"],
             aliases=defn["aliases"], body=body, image=image,
@@ -432,10 +437,10 @@ QUEST_SECTION_STATUS = {
 }
 
 
-def load_quests():
-    if not QUESTS_FILE.exists():
+def load_quests(paths):
+    if not paths.quests_file.exists():
         return []
-    text = QUESTS_FILE.read_text(encoding="utf-8")
+    text = paths.quests_file.read_text(encoding="utf-8")
     out = []
     section = None
     for raw in text.split("\n"):
@@ -464,15 +469,15 @@ def load_quests():
     return out
 
 
-def load_campaign_state():
+def load_campaign_state(paths):
     """Small hand-maintained record of the party's current objective and the
     open questions worth investigating — the one bit of 'where are we / what's
     the goal' data the archive doesn't otherwise capture. Current *location* is
     derived from SESSION_LOCATIONS unless the file overrides it. Returns
     {'objective': str, 'open_questions': [str], 'current_location': str|None}."""
-    if not CAMPAIGN_STATE_FILE.exists():
+    if not paths.campaign_state_file.exists():
         return {"objective": "", "open_questions": [], "current_location": None}
-    fm, _ = parse_frontmatter(CAMPAIGN_STATE_FILE.read_text(encoding="utf-8"))
+    fm, _ = parse_frontmatter(paths.campaign_state_file.read_text(encoding="utf-8"))
     oq = fm.get("open_questions") or []
     if isinstance(oq, str):
         oq = [oq]
@@ -483,15 +488,15 @@ def load_campaign_state():
     }
 
 
-def load_sessions():
+def load_sessions(paths):
     # Everything for a session lives under sessions/YYYY-MM-DD/:
     #   summary.md, transcript.txt, player notes/<pc>.md,
     #   audio/{script.md, final.mp3, ...}, images/{hero.*, <beat-slug>.*}
     notes, transcripts, summaries = {}, {}, {}
     session_images, session_audio, audio_subtitles = {}, {}, {}
     beat_images_by_date = {}
-    if SESSIONS_DIR.exists():
-        for sdir in SESSIONS_DIR.iterdir():
+    if paths.sessions.exists():
+        for sdir in paths.sessions.iterdir():
             if not sdir.is_dir() or sdir.name == "library":
                 continue
             date = sdir.name
@@ -654,7 +659,7 @@ def share_text(raw, limit=280):
 
 
 def _abs_url(path):
-    return f"{SITE_BASE_URL}/{path.lstrip('/')}" if path else ""
+    return f"{_BASE_URL}/{path.lstrip('/')}" if path else ""
 
 
 def share_meta(title, description, image, canonical, og_type, audio=None):
@@ -746,29 +751,29 @@ def chunk_transcript(text):
 # page builders
 # --------------------------------------------------------------------------
 
-def write_page(filename, content):
-    (SITE / filename).write_text(content, encoding="utf-8")
+def write_page(out_dir, filename, content):
+    (out_dir / filename).write_text(content, encoding="utf-8")
 
 
-def setup_output():
-    if SITE.exists():
-        shutil.rmtree(SITE)
-    SITE.mkdir(parents=True)
-    (SITE / "static").mkdir()
-    if STATIC.exists():
-        for f in STATIC.glob("*"):
-            shutil.copy2(f, SITE / "static" / f.name)
-    img_dir = SITE / "images" / "characters"
+def setup_output(paths, out_dir):
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True)
+    (out_dir / "static").mkdir()
+    if paths.static.exists():
+        for f in paths.static.glob("*"):
+            shutil.copy2(f, out_dir / "static" / f.name)
+    img_dir = out_dir / "images" / "characters"
     img_dir.mkdir(parents=True, exist_ok=True)
-    if CHAR_DIR.exists():
-        for img in CHAR_DIR.glob("*.jpeg"):
+    if paths.characters.exists():
+        for img in paths.characters.glob("*.jpeg"):
             shutil.copy2(img, img_dir / img.name)
     # Battle cards (battle-cards/<slug>.html) are self-contained printable pages;
     # copy them verbatim to site/battle-cards/ and link them from each PC page.
-    if BATTLE_CARD_DIR.exists():
-        card_dst = SITE / "battle-cards"
+    if paths.battle_cards.exists():
+        card_dst = out_dir / "battle-cards"
         card_dst.mkdir(parents=True, exist_ok=True)
-        for card in BATTLE_CARD_DIR.glob("*.html"):
+        for card in paths.battle_cards.glob("*.html"):
             shutil.copy2(card, card_dst / card.name)
     # Podcast cover (website/static/podcast-cover.jpg) is copied to site/static/
     # by the static-asset glob above, alongside style.css / podcast-subscribe.js.
@@ -776,12 +781,12 @@ def setup_output():
     # the stable site URL layout: final.mp3 → site/audio/sessions/DATE.mp3,
     # hero.<ext> → site/images/sessions/DATE.<ext>, and each beat image →
     # site/images/sessions/DATE/<beat-slug>.<ext>.
-    audio_dst = SITE / "audio" / "sessions"
+    audio_dst = out_dir / "audio" / "sessions"
     audio_dst.mkdir(parents=True, exist_ok=True)
-    session_img_dir = SITE / "images" / "sessions"
+    session_img_dir = out_dir / "images" / "sessions"
     session_img_dir.mkdir(parents=True, exist_ok=True)
-    if SESSIONS_DIR.exists():
-        for sdir in SESSIONS_DIR.iterdir():
+    if paths.sessions.exists():
+        for sdir in paths.sessions.iterdir():
             if not sdir.is_dir() or sdir.name == "library":
                 continue
             date = sdir.name
@@ -1899,7 +1904,7 @@ def session_list_page(sessions, locations, link_map):
     body = ('<h1>Sessions</h1>\n'
             '<p class="subhead"><em>Newest to oldest. Click a date to read the full account.</em></p>\n'
             '<p class="podcast-cta"><span class="copy-feed-wrap">'
-            f'<a href="feed.xml" class="podcast-link js-copy-feed" data-feed-url="{SITE_BASE_URL}/feed.xml">'
+            f'<a href="feed.xml" class="podcast-link js-copy-feed" data-feed-url="{_BASE_URL}/feed.xml">'
             '<span aria-hidden="true">&#9836;</span> Subscribe to the podcast'
             '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it into your podcast app of choice.</span></p>\n'
             '<ol class="session-log">' + "".join(rows) + '</ol>')
@@ -2107,7 +2112,7 @@ def _extract_in_brief(summary_md):
 _AUDIO_CREDITS_CACHE = None
 
 
-def _parse_audio_credits():
+def _parse_audio_credits(paths):
     """Parse sessions/library/audio/CREDITS.md into a list of asset dicts.
 
     Each asset is a ``## <name>`` section carrying a ``**License**:`` line.
@@ -2125,7 +2130,7 @@ def _parse_audio_credits():
 
     result = {"required": [], "voluntary": []}
     try:
-        text = AUDIO_CREDITS_FILE.read_text(encoding="utf-8")
+        text = paths.audio_credits.read_text(encoding="utf-8")
     except OSError:
         _AUDIO_CREDITS_CACHE = result
         return result
@@ -2177,14 +2182,14 @@ def _parse_audio_credits():
     return result
 
 
-def _audio_credits_text():
+def _audio_credits_text(paths):
     """Human-readable attribution block appended to every podcast episode.
 
     CC-BY (and similar) assets carry their license-mandated attribution wording;
     Pixabay assets get a single courtesy roll-up line (attribution not required).
     Returns a plain-text string (no trailing newline) or "" if nothing to credit.
     """
-    credits = _parse_audio_credits()
+    credits = _parse_audio_credits(paths)
     lines = []
     if credits["required"] or credits["voluntary"]:
         lines.append("Music & SFX credits:")
@@ -2197,14 +2202,14 @@ def _audio_credits_text():
     return "\n".join(lines)
 
 
-def podcast_feed(sessions):
+def podcast_feed(paths, sessions, probe):
     channel_title = "Tales of the True Hand"
     channel_desc = ("Weekly recaps of the Crew of the True Hand — a D&D 5e "
                     "campaign following Storm King's Thunder — told by "
                     "Vandal Lovelace, bard and hearth-storyteller.")
-    channel_link = f"{SITE_BASE_URL}/sessions.html"
-    feed_url = f"{SITE_BASE_URL}/feed.xml"
-    cover_url = f"{SITE_BASE_URL}/static/podcast-cover.jpg"
+    channel_link = f"{_BASE_URL}/sessions.html"
+    feed_url = f"{_BASE_URL}/feed.xml"
+    cover_url = f"{_BASE_URL}/static/podcast-cover.jpg"
 
     with_audio = [s for s in sessions if s.meta.get("has_audio")]
     with_audio.sort(key=lambda x: x.meta.get("date", x.slug), reverse=True)
@@ -2212,8 +2217,8 @@ def podcast_feed(sessions):
     # License-mandated + courtesy attribution for the shared audio library.
     # The music/SFX library is common to every episode, so the same credit
     # block is carried on every item's <description>/<content:encoded>.
-    credits_text = _audio_credits_text()
-    credits = _parse_audio_credits()
+    credits_text = _audio_credits_text(paths)
+    credits = _parse_audio_credits(paths)
 
     items_xml = []
     latest_pub = None
@@ -2225,7 +2230,7 @@ def podcast_feed(sessions):
             size = audio_path.stat().st_size if audio_path else 0
         except OSError:
             size = 0
-        duration = _mp3_duration_seconds(audio_path) if audio_path else 0
+        duration = int(probe(audio_path)) if audio_path else 0
 
         subtitle = s.meta.get("audio_subtitle") or ""
         ep_title = f"{date} — {subtitle}" if subtitle else f"{date}"
@@ -2264,15 +2269,15 @@ def podcast_feed(sessions):
         if latest_pub is None or pub_dt > latest_pub:
             latest_pub = pub_dt
 
-        episode_page = f"{SITE_BASE_URL}/{s.href}"
-        enclosure_url = f"{SITE_BASE_URL}/audio/sessions/{audio_name}"
+        episode_page = f"{_BASE_URL}/{s.href}"
+        enclosure_url = f"{_BASE_URL}/audio/sessions/{audio_name}"
         guid = enclosure_url
 
         item_image = ""
         if s.meta.get("has_image"):
             img_name = s.meta.get("image_name") or f"{date}.jpg"
             item_image = (
-                f'    <itunes:image href="{SITE_BASE_URL}/images/sessions/{html.escape(img_name)}"/>\n'
+                f'    <itunes:image href="{_BASE_URL}/images/sessions/{html.escape(img_name)}"/>\n'
             )
 
         items_xml.append(f"""  <item>
@@ -2603,18 +2608,30 @@ def _render_connections(href, graph):
 
 
 # --------------------------------------------------------------------------
-# main
+# build entry point
 # --------------------------------------------------------------------------
 
-def main():
-    pcs = load_pcs()
-    npcs = load_dir_entities("npc", NPC_DIR)
-    locations = load_dir_entities("location", LOC_DIR)
-    items = load_dir_entities("item", ITEM_DIR)
-    quests = load_quests()
+def build_site(paths, *, base_url=None, out_dir=None, probe=None):
+    """Render the whole site into *out_dir*.
+
+    ``probe`` is the MP3 duration function used for the podcast feed's
+    <itunes:duration>. It is injected because it is the only nondeterminism in
+    the build (it shells out to ffprobe), which lets the golden test run
+    hermetically with frozen durations.
+    """
+    base_url = (base_url or DEFAULT_BASE_URL).rstrip("/")
+    out_dir = out_dir or paths.site
+    probe = probe or _mp3_duration_seconds
+    configure(paths.static, base_url)
+
+    pcs = load_pcs(paths)
+    npcs = load_dir_entities("npc", paths.npcs)
+    locations = load_dir_entities("location", paths.locations)
+    items = load_dir_entities("item", paths.items)
+    quests = load_quests(paths)
     _attach_quest_deps(quests)
     _attach_item_expertise(items, npcs)
-    sessions = load_sessions()
+    sessions = load_sessions(paths)
     session_lookup = {s.slug: s for s in sessions}
 
     all_entities = pcs + npcs + locations + items + quests + sessions
@@ -2623,67 +2640,71 @@ def main():
     graph = build_graph(pcs, npcs, locations, items, quests, sessions,
                         session_lookup)
 
-    setup_output()
+    setup_output(paths, out_dir)
+
+    def write(filename, content):
+        write_page(out_dir, filename, content)
 
     # Materialize the graph + a slim search index. graph.json is for tooling
     # and reasoning; search-index.json powers the client-side site search.
-    write_page("graph.json", json.dumps(graph.as_dict(), indent=1,
-                                        ensure_ascii=False, sort_keys=True))
+    write("graph.json", json.dumps(graph.as_dict(), indent=1,
+                                   ensure_ascii=False, sort_keys=True))
     search_index = [
         {"name": n["name"], "aliases": n["aliases"], "kind": n["kind"],
          "url": n["url"], "blurb": n["blurb"]}
         for n in graph.nodes if n["url"]
     ]
-    write_page("search-index.json", json.dumps(search_index,
-                                               ensure_ascii=False, sort_keys=True))
+    write("search-index.json", json.dumps(search_index,
+                                          ensure_ascii=False, sort_keys=True))
 
-    write_page("index.html", index_page(pcs, npcs, locations, quests, sessions))
+    write("index.html", index_page(pcs, npcs, locations, quests, sessions))
 
-    state = load_campaign_state()
-    write_page("next.html", prep_page(pcs, npcs, locations, items, quests,
-                                       sessions, state, session_lookup, link_map))
-    write_page("threads.html", threads_page(sessions, session_lookup, link_map))
+    state = load_campaign_state(paths)
+    write("next.html", prep_page(pcs, npcs, locations, items, quests,
+                                  sessions, state, session_lookup, link_map))
+    write("threads.html", threads_page(sessions, session_lookup, link_map))
 
-    write_page("characters.html", pc_list_page(pcs, link_map))
+    write("characters.html", pc_list_page(pcs, link_map))
     for pc in pcs:
-        write_page(pc.href, detail_page_pc(pc, link_map, graph))
+        write(pc.href, detail_page_pc(pc, link_map, graph))
 
-    write_page("npcs.html", npc_table_page(npcs, link_map))
+    write("npcs.html", npc_table_page(npcs, link_map))
     for e in npcs:
-        write_page(e.href, detail_page_generic(
+        write(e.href, detail_page_generic(
             e, "npcs.html", "NPCs", link_map, session_lookup, graph))
 
-    write_page("locations.html", locations_chart_page(locations, link_map))
+    write("locations.html", locations_chart_page(locations, link_map))
     for e in locations:
-        write_page(e.href, detail_page_generic(
+        write(e.href, detail_page_generic(
             e, "locations.html", "Locations", link_map, session_lookup, graph))
 
-    write_page("items.html", item_list_page(items, link_map))
+    write("items.html", item_list_page(items, link_map))
     for e in items:
-        write_page(e.href, detail_page_generic(
+        write(e.href, detail_page_generic(
             e, "items.html", "Items", link_map, session_lookup, graph))
 
-    write_page("quests.html", quest_list_page(quests, link_map))
+    write("quests.html", quest_list_page(quests, link_map))
     for q in quests:
-        write_page(q.href, detail_page_quest(q, link_map, session_lookup))
+        write(q.href, detail_page_quest(q, link_map, session_lookup))
 
-    write_page("sessions.html", session_list_page(sessions, locations, link_map))
+    write("sessions.html", session_list_page(sessions, locations, link_map))
     # `sessions` is ordered oldest→newest; give each detail page its
     # chronological neighbours for the prev/next pager.
     for i, s in enumerate(sessions):
         prev = sessions[i - 1] if i > 0 else None
         nxt = sessions[i + 1] if i < len(sessions) - 1 else None
-        write_page(s.href, detail_page_session(s, link_map, prev, nxt))
+        write(s.href, detail_page_session(s, link_map, prev, nxt))
 
-    write_page("feed.xml", podcast_feed(sessions))
+    write("feed.xml", podcast_feed(paths, sessions, probe))
     n_episodes = sum(1 for s in sessions if s.meta.get("has_audio"))
-    print(f"  Podcast feed: /feed.xml with {n_episodes} episodes")
 
     total = 9 + len(pcs) + len(npcs) + len(locations) + len(items) + len(quests) + len(sessions)
-    print(f"Generated {total} pages into {SITE}")
-    print(f"  PCs: {len(pcs)}, NPCs: {len(npcs)}, Locations: {len(locations)},"
-          f" Items: {len(items)}, Quests: {len(quests)}, Sessions: {len(sessions)}")
-
-
-if __name__ == "__main__":
-    main()
+    return {
+        "out_dir": out_dir,
+        "total": total,
+        "episodes": n_episodes,
+        "counts": {
+            "pcs": len(pcs), "npcs": len(npcs), "locations": len(locations),
+            "items": len(items), "quests": len(quests), "sessions": len(sessions),
+        },
+    }

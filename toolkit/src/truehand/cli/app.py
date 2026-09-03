@@ -62,6 +62,11 @@ def resolve_paths(ctx: typer.Context) -> Paths:
     return ctx.obj
 
 
+from .site import site_app  # imported here: it needs `app` to exist first
+
+app.add_typer(site_app, name="site")
+
+
 def run() -> None:
     """Console-script wrapper: map our exceptions onto exit codes."""
     try:
