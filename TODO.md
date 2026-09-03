@@ -14,25 +14,66 @@ When picking something up, note enough context that the reader can start work wi
 
 The core loop — new session → notes / transcript → summary → images → audio → site regen → deploy — is documented in `CLAUDE.md § Adding a new session`. Not a discrete task; just don't let the backlog build. Sessions live under `sessions/YYYY-MM-DD/` (summary, transcript, player notes, audio, images).
 
+## Toolkit / known bugs
+
+### campaign-state.md's `objective:` never reaches the site
+
+`next.html` renders no `prep-objective` element at all — the single most
+deliberately hand-maintained line in `campaign-state.md` is silently dropped.
+Cause: the frontmatter dialect comma-splits values, so the prose objective
+parses as a 6-element list, and `load_campaign_state()` in
+`toolkit/src/truehand/core/loaders.py` guards with `isinstance(..., str)` and
+falls back to `""`. Pre-dates the toolkit migration.
+
+Fix options: rejoin a list value with `", "` in the loader, or exempt
+`objective` from comma-splitting. Either changes site output, so it wants a
+reviewed `git diff website/site`. Pinned by a strict `xfail` in
+`toolkit/tests/test_frontmatter.py`.
+
+### `no-link` protection breaks on nested tags
+
+`linkify_html` (`toolkit/src/truehand/site/linkify.py`) tracks `no-link` spans
+with a depth counter that any nested `</em>` / `</strong>` decrements, so the
+rest of the span gets auto-linked anyway. It also matches the class by
+substring, so `class="no-link extra"` is not recognised at all. Currently
+harmless — the only two usages put `no-link` last with no nested tags — but
+the next usage that does either silently loses its exclusion.
+
+### `linkify_html` recompiles its alias regex per page
+
+The alias alternation (several hundred entries) is rebuilt and recompiled once
+per rendered page, ~150 times a build. Cannot be reduced to one shared pattern:
+excluding the current page's own aliases is what lets a shorter alias match
+inside the same span, so the alternation genuinely differs per page. The safe
+win is an `lru_cache`d compile keyed on `current_href`.
+
+### Campaign data still lives in source
+
+`SESSION_LOCATIONS` (`core/loaders.py`) and `LOCATION_MAP_DATA`
+(`site/pages/locations.py`) are campaign data that CLAUDE.md instructs authors
+to hand-edit inside Python files. Moving them to `toolkit/src/truehand/data/*.toml`
+read via stdlib `tomllib` needs no new dependency and would let the docs point
+at a data file instead of a source file.
+
 ## Audio & podcast pipeline
 
 ### In-run TTS dedup
 
-When the same spoken line appears twice in one script (e.g. `"You should have taken our offer."` in 2026-06-16, once in the cold open and once in Act Four), both hit the TTS API on first run because we only check the pre-run manifest for cache hits, not the in-progress one. Cheap fix in `scripts/generate-session-audio.py`: also consult `manifest_out["chunks"]` on cache miss before calling ElevenLabs. Small dollar impact per episode; still cleaner behavior.
+When the same spoken line appears twice in one script (e.g. `"You should have taken our offer."` in 2026-06-16, once in the cold open and once in Act Four), both hit the TTS API on first run because we only check the pre-run manifest for cache hits, not the in-progress one. Cheap fix in `toolkit/src/truehand/pipelines/session_audio.py`: also consult `manifest_out["chunks"]` on cache miss before calling ElevenLabs. Small dollar impact per episode; still cleaner behavior.
 
 ### Richer episode descriptions in the feed
 
-`podcast_feed()` in `website/generate.py` currently uses the `*In brief:*` one-liner as `<description>` and `<itunes:summary>`. Podcast apps happily render a longer HTML block in `<content:encoded>` — good candidate content: the summary's `## ` section headings as a bulleted show-notes list, plus a link back to the session detail page.
+`podcast_feed()` in `toolkit/src/truehand/site/feed.py` currently uses the `*In brief:*` one-liner as `<description>` and `<itunes:summary>`. Podcast apps happily render a longer HTML block in `<content:encoded>` — good candidate content: the summary's `## ` section headings as a bulleted show-notes list, plus a link back to the session detail page.
 
 ### Resumable audio generation
 
-`scripts/generate-session-audio.py` aborts on ElevenLabs errors mid-batch (quota hit, network blip) and doesn't preserve the successfully-rendered chunks. Cheap wins: cache each chunk on disk keyed by `(voice, model, text)`, and on next run reuse anything that's already there before re-hitting the API.
+`truehand session audio` aborts on ElevenLabs errors mid-batch (quota hit, network blip) and doesn't preserve the successfully-rendered chunks. Cheap wins: cache each chunk on disk keyed by `(voice, model, text)`, and on next run reuse anything that's already there before re-hitting the API.
 
 ## Website features
 
 ### Nav-bar podcast link
 
-`sessions.html` has the Subscribe CTA (its link copies the feed URL to the clipboard with a paste-into-your-app popover). The home page deliberately carries no podcast language, and the **nav bar** (`NAV` in `website/generate.py`) doesn't mention the podcast either — so it's only discoverable from the sessions page. A small "Listen" entry in `NAV` would surface it on every page. (Note: an earlier `home-podcast` section on `index.html` was removed at the user's request.)
+`sessions.html` has the Subscribe CTA (its link copies the feed URL to the clipboard with a paste-into-your-app popover). The home page deliberately carries no podcast language, and the **nav bar** (`NAV` in `toolkit/src/truehand/site/layout.py`) doesn't mention the podcast either — so it's only discoverable from the sessions page. A small "Listen" entry in `NAV` would surface it on every page. (Note: an earlier `home-podcast` section on `index.html` was removed at the user's request.)
 
 ## Deferred / not planned
 
@@ -74,7 +115,7 @@ Follow-on (not blocking): the seams between bed spans (cold-open→signature→h
 
 ### Attributions in the podcast feed
 
-Every episode of "Tales of the True Hand" now uses at least four Pixabay assets and one Kevin MacLeod track (The Britons, CC BY 4.0). Pixabay's license doesn't require attribution — but The Britons does, and any future CC-BY asset we add will too. Thread the attribution list from `sessions/library/audio/CREDITS.md` through `podcast_feed()` in `website/generate.py` so every episode's `<description>` / `<content:encoded>` carries the required credits automatically. Currently the attribution lives only in the repo's CREDITS.md, which listeners won't see.
+Every episode of "Tales of the True Hand" now uses at least four Pixabay assets and one Kevin MacLeod track (The Britons, CC BY 4.0). Pixabay's license doesn't require attribution — but The Britons does, and any future CC-BY asset we add will too. Thread the attribution list from `sessions/library/audio/CREDITS.md` through `podcast_feed()` in `toolkit/src/truehand/site/feed.py` so every episode's `<description>` / `<content:encoded>` carries the required credits automatically. Currently the attribution lives only in the repo's CREDITS.md, which listeners won't see.
 
 Done: `_parse_audio_credits()` / `_audio_credits_text()` in `website/generate.py` read `sessions/library/audio/CREDITS.md`, split assets by whether their license requires attribution (CC-BY: yes, verbatim wording; Pixabay: courtesy roll-up), and `podcast_feed()` appends the block to every episode's `<description>`, `<itunes:summary>`, and a new `<content:encoded>` HTML variant. Any future CC-BY asset added to CREDITS.md is picked up automatically.
 
