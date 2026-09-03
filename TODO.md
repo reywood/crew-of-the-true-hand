@@ -30,15 +30,6 @@ Fix options: rejoin a list value with `", "` in the loader, or exempt
 reviewed `git diff website/site`. Pinned by a strict `xfail` in
 `toolkit/tests/test_frontmatter.py`.
 
-### `no-link` protection breaks on nested tags
-
-`linkify_html` (`toolkit/src/truehand/site/linkify.py`) tracks `no-link` spans
-with a depth counter that any nested `</em>` / `</strong>` decrements, so the
-rest of the span gets auto-linked anyway. It also matches the class by
-substring, so `class="no-link extra"` is not recognised at all. Currently
-harmless — the only two usages put `no-link` last with no nested tags — but
-the next usage that does either silently loses its exclusion.
-
 ### `linkify_html` recompiles its alias regex per page
 
 The alias alternation (several hundred entries) is rebuilt and recompiled once
