@@ -43,9 +43,11 @@ testpaths = ["tests"]
 line-length = 100
 src = ["src"]
 
-# site/build.py arrives as a verbatim move of the old website/generate.py and
-# carries its pre-existing style nits. They are quarantined rather than fixed
-# in the move commit, so that diff stays provably content-free; they clear as
-# the file is split into site/pages/*.
+# These three bodies moved verbatim out of the old website/generate.py and
+# carry its pre-existing style nits. Quarantined rather than rewritten during
+# the migration, so every diff stays provably output-neutral; they get fixed
+# with the other behavior changes once the golden test is established.
 [tool.ruff.lint.per-file-ignores]
-"src/truehand/site/build.py" = ["PIE810", "SIM102", "F541", "ISC004", "UP017"]
+"src/truehand/core/loaders.py" = ["SIM102"]
+"src/truehand/site/linkify.py" = ["PIE810"]
+"src/truehand/site/pages/quests.py" = ["ISC004"]
