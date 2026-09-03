@@ -30,14 +30,6 @@ Fix options: rejoin a list value with `", "` in the loader, or exempt
 reviewed `git diff website/site`. Pinned by a strict `xfail` in
 `toolkit/tests/test_frontmatter.py`.
 
-### `linkify_html` recompiles its alias regex per page
-
-The alias alternation (several hundred entries) is rebuilt and recompiled once
-per rendered page, ~150 times a build. Cannot be reduced to one shared pattern:
-excluding the current page's own aliases is what lets a shorter alias match
-inside the same span, so the alternation genuinely differs per page. The safe
-win is an `lru_cache`d compile keyed on `current_href`.
-
 ## Audio & podcast pipeline
 
 ### In-run TTS dedup
