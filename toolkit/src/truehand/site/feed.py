@@ -3,27 +3,10 @@
 import datetime as _dt
 import html
 import re
-import subprocess
 from email.utils import format_datetime
 
 from ..core.text import _extract_in_brief, _hms
 from .layout import base_url
-
-
-def _mp3_duration_seconds(path):
-    """Best-effort MP3 duration via ffprobe. Returns int seconds, or 0."""
-    try:
-        out = subprocess.run(
-            ["ffprobe", "-v", "error",
-             "-show_entries", "format=duration",
-             "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
-            capture_output=True, text=True, timeout=15, check=True,
-        ).stdout.strip()
-        return int(float(out))
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired,
-            FileNotFoundError, ValueError):
-        return 0
-
 
 # Cache for the parsed audio-library credits so we only read CREDITS.md once.
 _AUDIO_CREDITS_CACHE = None

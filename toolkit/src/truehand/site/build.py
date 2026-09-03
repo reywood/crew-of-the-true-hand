@@ -2,6 +2,7 @@
 
 import json
 
+from ..adapters.ffmpeg import probe_duration_seconds
 from ..core.entity import build_link_map
 from ..core.graph import build_graph
 from ..core.loaders import (
@@ -12,7 +13,7 @@ from ..core.loaders import (
     load_sessions,
 )
 from .assets import setup_output, write_page
-from .feed import _mp3_duration_seconds, podcast_feed
+from .feed import podcast_feed
 from .layout import DEFAULT_BASE_URL, configure
 from .pages.detail import detail_page_generic
 from .pages.index import _attach_item_expertise, _attach_quest_deps, index_page
@@ -35,7 +36,7 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
     """
     base_url = (base_url or DEFAULT_BASE_URL).rstrip("/")
     out_dir = out_dir or paths.site
-    probe = probe or _mp3_duration_seconds
+    probe = probe or probe_duration_seconds
     configure(paths.static, base_url)
 
     pcs = load_pcs(paths)

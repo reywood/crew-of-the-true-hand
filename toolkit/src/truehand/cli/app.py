@@ -62,9 +62,11 @@ def resolve_paths(ctx: typer.Context) -> Paths:
     return ctx.obj
 
 
-from .site import site_app  # imported here: it needs `app` to exist first
+from .entities import entities_app  # imported here: they need `app` to exist first
+from .site import site_app
 
 app.add_typer(site_app, name="site")
+app.add_typer(entities_app, name="entities")
 
 
 def run() -> None:
