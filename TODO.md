@@ -14,22 +14,6 @@ When picking something up, note enough context that the reader can start work wi
 
 The core loop — new session → notes / transcript → summary → images → audio → site regen → deploy — is documented in `CLAUDE.md § Adding a new session`. Not a discrete task; just don't let the backlog build. Sessions live under `sessions/YYYY-MM-DD/` (summary, transcript, player notes, audio, images).
 
-## Toolkit / known bugs
-
-### campaign-state.md's `objective:` never reaches the site
-
-`next.html` renders no `prep-objective` element at all — the single most
-deliberately hand-maintained line in `campaign-state.md` is silently dropped.
-Cause: the frontmatter dialect comma-splits values, so the prose objective
-parses as a 6-element list, and `load_campaign_state()` in
-`toolkit/src/truehand/core/loaders.py` guards with `isinstance(..., str)` and
-falls back to `""`. Pre-dates the toolkit migration.
-
-Fix options: rejoin a list value with `", "` in the loader, or exempt
-`objective` from comma-splitting. Either changes site output, so it wants a
-reviewed `git diff website/site`. Pinned by a strict `xfail` in
-`toolkit/tests/test_frontmatter.py`.
-
 ## Audio & podcast pipeline
 
 ### In-run TTS dedup

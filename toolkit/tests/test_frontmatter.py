@@ -116,14 +116,24 @@ def test_campaign_state_parses(paths):
     assert len(fm["open_questions"]) > 1
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "Known bug, pre-dates the package migration: campaign-state.md's hand-"
-    "maintained objective never reaches the site. The dialect comma-splits "
-    "prose into a list, and load_campaign_state() accepts only a str, so it "
-    "falls back to '' and next.html renders no prep-objective at all. "
-    "Fixing it changes site output, so it is sequenced after the golden test."
-))
 def test_campaign_objective_reaches_the_prep_page(paths):
+    """Regression: the objective is prose, so the comma-splitting dialect
+    returns it as a list; load_campaign_state used to accept only a str and
+    silently fall back to "", so next.html rendered no objective at all."""
     from truehand.core.loaders import load_campaign_state
-    assert load_campaign_state(paths)["objective"], \
-        "objective is empty despite being set in campaign-state.md"
+    objective = load_campaign_state(paths)["objective"]
+    assert objective, "objective is empty despite being set in campaign-state.md"
+    assert ", " in objective, "prose should be rejoined, not left as fragments"
+
+
+def test_a_prose_objective_round_trips_through_the_dialect():
+    from truehand.core.loaders import _rejoin_prose
+    source = "Get the map, then run the route: Yackerty first, a portal after."
+    fm, _ = parse_frontmatter(f"---\nobjective: {source}\n---\n")
+    assert _rejoin_prose(fm["objective"]) == source
+
+
+def test_rejoin_prose_leaves_a_plain_string_alone():
+    from truehand.core.loaders import _rejoin_prose
+    assert _rejoin_prose("  no commas here  ") == "no commas here"
+    assert _rejoin_prose(None) == ""

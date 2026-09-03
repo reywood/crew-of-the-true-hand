@@ -174,6 +174,21 @@ def load_quests(paths):
     return out
 
 
+def _rejoin_prose(value):
+    """Frontmatter value that is meant to read as one sentence, not a list.
+
+    The dialect splits any comma-bearing value into a list, which is right for
+    aliases and expertise tags but wrong for prose. campaign-state.md's
+    objective is a paragraph, so it arrived as a list of fragments and the
+    previous str-only guard silently discarded it — next.html rendered no
+    objective at all. Rejoining with ", " reconstructs the source line exactly,
+    since the parser split on "," and stripped each segment.
+    """
+    if isinstance(value, list):
+        return ", ".join(v.strip() for v in value if str(v).strip())
+    return (value or "").strip()
+
+
 def load_campaign_state(paths):
     """Small hand-maintained record of the party's current objective and the
     open questions worth investigating — the one bit of 'where are we / what's
@@ -187,7 +202,7 @@ def load_campaign_state(paths):
     if isinstance(oq, str):
         oq = [oq]
     return {
-        "objective": (fm.get("objective") or "").strip() if isinstance(fm.get("objective"), str) else "",
+        "objective": _rejoin_prose(fm.get("objective")),
         "open_questions": oq,
         "current_location": (fm.get("current_location") or None),
     }
