@@ -5,10 +5,10 @@ A static site for the *Crew of the True Hand* campaign — nautical-themed, rege
 ## Regenerating
 
 ```
-python3 website/generate.py
+truehand site build
 ```
 
-No dependencies — standard library only. Output goes to `website/site/`. Open `website/site/index.html` in a browser.
+Built by the `truehand` CLI in `toolkit/` (see the repo README / CLAUDE.md for setup).
 
 ## Where pages come from
 
@@ -61,7 +61,7 @@ Edge (`rel`) vocabulary and where each comes from:
 
 | `rel` | source → target | derived from |
 |---|---|---|
-| `appears_in` | any → session | `sessions:` field (materialized by `scripts/update-entity-sessions.py`) |
+| `appears_in` | any → session | `sessions:` field (materialized by `truehand entities sync`) |
 | `located_in` | npc → location | `location:` (via `port_for` normalization) |
 | `within` | location → location | `region` / `location` / `near` (only when it resolves to a known location) |
 | `held_by` | item → pc | `holder:` ("Party" produces no edge) |

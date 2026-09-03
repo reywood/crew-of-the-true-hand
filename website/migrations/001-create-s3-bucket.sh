@@ -9,7 +9,7 @@
 #
 # Prerequisites:
 #   - aws CLI installed and configured (`aws configure`)
-#   - python3 website/generate.py has been run so website/site/ is up to date
+#   - truehand site build has been run so website/site/ is up to date
 #
 # To deploy updates after the first run, just re-run step 5 (the `aws s3 sync`).
 #
@@ -72,7 +72,7 @@ aws s3 website "s3://${BUCKET}/" \
 # ---- 5. upload the generated site -----------------------------------------
 echo "==> 5/5 Syncing ${SITE_DIR} to s3://${BUCKET}/"
 if [ ! -d "${SITE_DIR}" ]; then
-  echo "ERROR: ${SITE_DIR} does not exist. Run 'python3 website/generate.py' first." >&2
+  echo "ERROR: ${SITE_DIR} does not exist. Run 'truehand site build' first." >&2
   exit 1
 fi
 aws s3 sync "${SITE_DIR}" "s3://${BUCKET}/" --delete

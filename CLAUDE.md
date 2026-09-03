@@ -29,13 +29,14 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 
   Note: the notes/transcript/summary dates historically don't always match up neatly (e.g. `2025-12-17/transcript.txt` is the raw recording that `2025-12-17/summary.md` recaps) — now that they share a folder this is moot, but the transcript can still cover an evening whose beats span the notes.
 - `sessions/library/audio/` — Third-party music / SFX assets shared across every session, referenced from scripts via `[MUSIC: ...]` and `[STING: ...]` cue lines. `CREDITS.md` in that directory MUST record every asset's source, license, and attribution wording BEFORE it can be used. `NEEDED.md` tracks what's still open on the shopping list. Assets currently in place cover all Tier-1 cue slots (signature theme, hearth bed, chime, bridge, low-chord, minor swell).
-  - `website/static/podcast-cover.jpg` — 1400×1400 JPEG podcast cover; regenerate with `scripts/generate-podcast-cover.py` (Gemini + Pillow). The static-asset glob copies it to `site/static/podcast-cover.jpg`; `feed.xml`'s `<itunes:image>` points there.
+  - `website/static/podcast-cover.jpg` — 1400×1400 JPEG podcast cover; regenerate with `truehand cover build` (Gemini + Pillow). The static-asset glob copies it to `site/static/podcast-cover.jpg`; `feed.xml`'s `<itunes:image>` points there.
 - `npcs/` and `locations/` — One markdown file per entity, each with frontmatter (`name`, `aliases`, `type`, `location`, `first_seen`, etc.) and a short markdown body. These are the source of truth for everyone/everywhere the website knows about. NPCs may carry an `expertise: dragons, Draconic, ...` field — the site cross-references those tags against items' `expertise_needed:` to surface "Who could help" / "Could help with" blocks on each detail page.
 - `items/` — One markdown file per magical, mysterious, or narratively significant item the crew has acquired. Frontmatter: `name`, `aliases`, `type` (Magic item / Weapon / Focus / Book / Mystery / Trophy / Keepsake / Memento), `holder` (PC name or "Party"), `status` (Unresolved / Active / Consumed / Lost), `origin` (session date), and optional `expertise_needed:` tags. Everyday loot (coin, generic potions/scrolls, consumables) stays in the session's `carried:` list without getting its own file — see the criteria in the item-catalog thread.
 - `quests.md` — Single-file quest log; the website parses each `- **Name**` bullet under each `## section` as a quest. Section headings determine status (Main arc / Allies / Hotspots / Side leads / Personal / Completed).
 - `campaign-state.md` — Tiny hand-maintained record of the party's **current objective** and **open questions**, in YAML frontmatter (`objective:`, `open_questions:` list, optional `current_location:` slug override). It's the one bit of "where are we / what's the goal right now" the archive doesn't otherwise capture; it drives the **prep hub** (`next.html`, "Where We Left Off") and its companion **open-threads board** (`threads.html`). Current *location* is auto-derived from the most recent session's `SESSION_LOCATIONS` entry unless `current_location:` overrides it. The prep hub composes existing data (top quests, the latest recap's In-brief, each session's harvested `## What's next`/`## Loose ends` bullets, item→expert leads, NPCs at the current location, crew holdings) — no per-session generator changes needed.
-- `website/` — Static site generator (`generate.py`, stdlib only) plus theme CSS. Run `python3 website/generate.py` to regenerate `website/site/` after any source change. See `website/README.md` for the full file format and cross-linking rules.
+- `website/` — The site's theme CSS, static assets, and the generated `site/` output. The generator itself lives in `toolkit/` (`truehand.site`); run `truehand site build` to regenerate `website/site/` after any source change. See `website/README.md` for the full file format and cross-linking rules.
 - `battle-cards/` — Printable single-page combat reference HTML cards, one per PC (`fiz.html` exists; `hal.html`, `toz.html`, `eno.html` to come). Self-contained: inline CSS, inline SVG dice, no external assets. See `battle-cards/README.md` for the layout model, dice notation, chip taxonomy, character voices, and the step-by-step recipe for building a new one. Use `fiz.html` as the working template — copy it, then swap content.
+- `toolkit/` — The `truehand` CLI: one installable Python package holding the site generator (`truehand.site`), the media pipelines (`truehand.pipelines`), the shared archive model (`truehand.core`), and the tests. See `toolkit/README.md`.
 - `TODO.md` — Running list of open work across the whole archive (site, content, audio pipeline, distribution, infrastructure). Read this before proposing new features so you don't duplicate what's already scoped out; add new items here rather than sprinkling `TODO:` comments across code.
 
 ## Working in this repo
@@ -44,9 +45,16 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 - Keep proper-noun spellings consistent across files; the notes are inconsistent in places (e.g. "Nighstone" vs "Nightstone", "Halrua" vs "Halruaa") — don't silently "correct" a name without checking how it's spelled elsewhere first, because some are typos and some are deliberate.
 - Class-feature blocks in character files quote sourcebook page numbers (e.g. `(TCoE, pg. 13)`); preserve these citations when editing.
 - Transcripts are too large to read whole — use `Read` with `offset`/`limit` or `grep` for specific names/events rather than loading them in full.
-- After adding a new session note, transcript, NPC, location, or quest, re-run `python3 website/generate.py` so the site picks it up. The generator wipes `website/site/` and rebuilds from scratch — never hand-edit files under `website/site/`.
+- After adding a new session note, transcript, NPC, location, or quest, re-run `truehand site build` so the site picks it up. The generator wipes `website/site/` and rebuilds from scratch — never hand-edit files under `website/site/`.
 - New NPCs and locations: add a single `.md` file with frontmatter (see `website/README.md` for the schema). Always include `aliases:` with every phrasing that should auto-link to that entity, including the canonical name.
-- Python environment: `website/generate.py` is **stdlib-only** — no install needed to build/deploy the site. The audio/image scripts under `scripts/` need third-party packages tracked in `requirements.txt` (`google-genai`, `elevenlabs`, `pillow`); set them up once with `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`. The `.venv/` is git-ignored; run those scripts via `.venv/bin/python`.
+- Python environment: all tooling is one installable package in `toolkit/`, exposed as the **`truehand`** command. Set it up once:
+
+  ```bash
+  python3 -m venv .venv                      # Python 3.11+
+  .venv/bin/pip install -e './toolkit[all]'
+  ```
+
+  It is installed in **editable mode**, so edits under `toolkit/src/truehand/` take effect immediately with no reinstall. The `.venv/` is git-ignored. Typer is the only hard dependency; `google-genai`, `pillow` and `elevenlabs` are extras (`[image]`, `[audio]`, `[media]`) imported lazily — `truehand site build` works without them. Run `.venv/bin/truehand …`, or just `truehand …` with the venv on your PATH.
 
 ## Adding a new session
 
@@ -122,9 +130,9 @@ When uncertain, consider spawning a parallel `general-purpose` Agent per transcr
 ### 2.5. Generate a hero image (optional)
 
 ```
-python3 scripts/generate-session-image.py YYYY-MM-DD           # hero + all beats
-python3 scripts/generate-session-image.py YYYY-MM-DD --hero    # hero only
-python3 scripts/generate-session-image.py YYYY-MM-DD --beats   # beats only
+truehand session image YYYY-MM-DD           # hero + all beats
+truehand session image YYYY-MM-DD --hero    # hero only
+truehand session image YYYY-MM-DD --beats   # beats only
 ```
 
 Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits (`characters/*.jpeg`) as reference and the session summary as the scene description.
@@ -134,15 +142,15 @@ Calls Google's Gemini 2.5 Flash Image ("Nano Banana") with all four PC portraits
 
 The site generator picks up any files it finds in those paths and embeds them automatically — no `generate.py` change needed per session.
 
-Requires the Python deps from `requirements.txt` (`.venv/bin/pip install -r requirements.txt` — `google-genai` covers this step) and a `GEMINI_API_KEY` (get one at https://aistudio.google.com/apikey — the free tier is plenty). The key can be either an exported env var or a `.env` file at the project root (`GEMINI_API_KEY=...`, one line). `.env` is git-ignored.
+Requires the `[image]` extra (`.venv/bin/pip install -e './toolkit[image]'`) and a `GEMINI_API_KEY` (get one at https://aistudio.google.com/apikey — the free tier is plenty). The key can be either an exported env var or a `.env` file at the project root (`GEMINI_API_KEY=...`, one line). `.env` is git-ignored.
 
 Skip this step if you don't want an image, or add it later. The session page renders fine either way.
 
 ### 2.6. Refresh entity session mentions
 
 ```
-python3 scripts/update-entity-sessions.py           # apply
-python3 scripts/update-entity-sessions.py --dry-run # preview
+truehand entities sync             # apply
+truehand entities sync --dry-run   # preview
 ```
 
 Scans every session summary (`sessions/*/summary.md`) and writes a `sessions: YYYY-MM-DD, YYYY-MM-DD, …` line into the frontmatter of each NPC, location, and item markdown file — word-boundary, case-sensitive matches against the entity's `aliases:` list. The site generator reads that field and renders a *"Mentioned in sessions"* chip row at the top of each NPC/location/item detail page, with clickable jumps to the matching session pages. Quests get the same treatment automatically from the `(YYYY-MM-DD)` parentheticals already inside each bullet in `quests.md` — no per-quest field needed.
@@ -167,7 +175,7 @@ For a batch of sessions, spawning parallel `general-purpose` Agents with the ref
 ### 2.8. Generate the session audio (optional)
 
 ```
-.venv/bin/python scripts/generate-session-audio.py YYYY-MM-DD --voice tEo3d4j7gzVojBL5Z4Pt --force
+truehand session audio YYYY-MM-DD --voice tEo3d4j7gzVojBL5Z4Pt --force
 ```
 
 Reads `sessions/YYYY-MM-DD/audio/script.md`, calls ElevenLabs TTS chunk-by-chunk with prosody-continuity via `previous_text` / `next_text`, layers in music/stings from `sessions/library/audio/` for `[MUSIC: ...]` and `[STING: ...]` cues, stitches with ffmpeg's concat filter, and writes into `sessions/YYYY-MM-DD/audio/`. The default voice ID above is Cormac ("Irish Fantasy Storyteller") — a professional voice, so it requires a **paid** ElevenLabs plan; the free tier can't use it via API. Needs `ELEVENLABS_API_KEY` in the same `.env` used by the image script (git-ignored). Watch the character budget: each script is 5–7k chars.
@@ -187,14 +195,14 @@ Music/sting layering scope (v2): STING cues → the matching asset in the librar
 ### 2.9. Regenerate the podcast cover (rare)
 
 ```
-.venv/bin/python scripts/generate-podcast-cover.py --force
+truehand cover build --force
 ```
 
 Runs Gemini image + Pillow normalization to write `website/static/podcast-cover.jpg` as a 1400×1400 JPEG. Only needed if the show's cover art changes; a good cover survives many episodes.
 
 ### 3. Add the session's location annotation
 
-Open `website/generate.py` and find `SESSION_LOCATIONS` (near `session_list_page`). Add an entry mapping the new date to a list of location slugs in order of importance:
+Open `toolkit/src/truehand/core/loaders.py` and find `SESSION_LOCATIONS`. Add an entry mapping the new date to a list of location slugs in order of importance:
 
 ```python
 SESSION_LOCATIONS = {
@@ -212,14 +220,14 @@ SESSION_LOCATIONS = {
 
 Pass through the summary one more time and check:
 - **New NPCs introduced?** Add `npcs/<slug>.md` files. Include `aliases:` covering every phrasing that should auto-link (including the canonical name).
-- **New locations visited or named?** Add `locations/<slug>.md` files. If the location should appear on the chart on `locations.html`, also add a `"<slug>": {"x": ..., "y": ...}` entry to `LOCATION_MAP_DATA` in `website/generate.py`.
+- **New locations visited or named?** Add `locations/<slug>.md` files. If the location should appear on the chart on `locations.html`, also add a `"<slug>": {"x": ..., "y": ...}` entry to `LOCATION_MAP_DATA` in `toolkit/src/truehand/site/pages/locations.py`.
 - **New leads, completed objectives, or quest status changes?** Edit `quests.md`. The website parses each `- **Name**` bullet under each `## section`; section headings determine status.
 - **Arc moved forward?** Update `campaign-state.md` — refresh `objective:` and `open_questions:` to match where the crew now stands (and set `current_location:` only to override the auto-derived location, e.g. mid-journey). This keeps the `next.html` prep hub current. The new session's `## What's next` / `## Loose ends` bullets flow into `threads.html` automatically.
 
 ### 5. Regenerate the site
 
 ```bash
-python3 website/generate.py
+truehand site build
 ```
 
 The generator wipes `website/site/` and rebuilds from scratch — never hand-edit files under `website/site/`. Verify by opening `website/site/sessions.html` in a browser: the new row should appear at the top (newest first) with the right date, the right location chips, and the `*In brief:*` line as the row blurb. The new session's detail page (`session-YYYY-MM-DD.html`) should render the full summary with the original notes and raw transcript available as collapsible blocks below.
