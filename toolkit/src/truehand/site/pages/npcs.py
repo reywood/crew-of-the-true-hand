@@ -5,25 +5,22 @@ import html
 from ...core.loaders import chip_for, port_for
 from ..layout import page
 from ..linkify import linkify_html
-from .locations import _affiliations, _location_strip_qualifier
+from .locations import _location_strip_qualifier
 
 
 def npc_table_page(npcs, link_map):
     blocks = []
     for npc in sorted(npcs, key=lambda n: n.name.lower()):
-        chip = chip_for(npc.meta.get("type", ""))
+        chip = chip_for(npc.meta["type"].one())
         chip_html = '<span class="muted">—</span>'
         if chip:
             label, cls = chip
             chip_html = (
                 f'<span class="standing-chip {cls}">{html.escape(label)}</span>'
             )
-        loc = npc.meta.get("location", "")
-        if isinstance(loc, list):
-            loc = ", ".join(loc)
-        loc = (loc or "").strip()
+        loc = npc.meta["location"].prose()
         met = _location_strip_qualifier(loc)
-        affiliations = _affiliations(npc.meta)
+        affiliations = npc.meta["affiliation"].many()
         aff_html = (
             html.escape(", ".join(affiliations))
             if affiliations
@@ -71,17 +68,14 @@ def npc_table_page(npcs, link_map):
 
 
 def _npc_card(npc, show_last_seen):
-    chip = chip_for(npc.meta.get("type", ""))
+    chip = chip_for(npc.meta["type"].one())
     chip_html = ""
     if chip:
         label, cls = chip
         chip_html = f'<span class="standing-chip {cls}">{html.escape(label)}</span>'
     last_seen_html = ""
     if show_last_seen:
-        loc = npc.meta.get("location", "")
-        if isinstance(loc, list):
-            loc = ", ".join(loc)
-        loc = loc.strip() if loc else "—"
+        loc = npc.meta["location"].prose() or "—"
         last_seen_html = f'<p class="last-seen">Last seen: {html.escape(loc)}</p>'
     summary = html.escape(npc.summary or "")
     return (
@@ -114,10 +108,7 @@ def npc_chart_page(npcs, locations, link_map):
     ]
     for port_name, entries in ordered:
         port = loc_by_name[port_name]
-        port_type = port.meta.get("type", "")
-        if isinstance(port_type, list):
-            port_type = port_type[0] if port_type else ""
-        port_type = (port_type or "").strip().lower()
+        port_type = port.meta["type"].one().lower()
         count = len(entries)
         souls = "soul" if count == 1 else "souls"
         gloss = " · ".join(p for p in [port_type, f"{count} {souls}"] if p)

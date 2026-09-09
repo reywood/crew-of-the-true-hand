@@ -1,0 +1,17 @@
+# Quest dependency graph. Key = source quest name; value = the quests it helps
+# achieve. Both directions (forward "helps" and backward "supported by") are
+# derived from this single table, so each edge is encoded once.
+#
+# Names must match the `- **Name**` bullets in quests.md exactly; a name that
+# does not resolve is reported as a build warning rather than dropped silently.
+# The Personal section (Fiz / Toz / Eno) is not surfaced as quests, so no edge
+# should reference those — keep dependencies inside the surfaced quest set.
+
+[helps]
+"Find Harshnag" = ["Reach the Oracle"]
+"Get to Silverymoon via the Harpers" = ["Find Harshnag"]
+"Visit the Eye of Annam" = ["Reach the Oracle"]
+"Old Gnawbone" = ["Reach the Oracle"]
+"Vexalanthus" = ["Reach the Oracle"]
+"Vandal Lovelace" = ["Find Harshnag"]
+"Naxene" = ["Find Harshnag"]

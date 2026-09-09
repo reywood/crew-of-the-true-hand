@@ -7,7 +7,7 @@ def write_page(out_dir, filename, content):
     (out_dir / filename).write_text(content, encoding="utf-8")
 
 
-def setup_output(paths, out_dir):
+def setup_output(paths, out_dir, sessions):
     if out_dir.exists():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
@@ -29,29 +29,32 @@ def setup_output(paths, out_dir):
             shutil.copy2(card, card_dst / card.name)
     # Podcast cover (website/static/podcast-cover.jpg) is copied to site/static/
     # by the static-asset glob above, alongside style.css / podcast-subscribe.js.
-    # Per-session audio + images live under sessions/YYYY-MM-DD/. Copy them into
-    # the stable site URL layout: final.mp3 → site/audio/sessions/DATE.mp3,
-    # hero.<ext> → site/images/sessions/DATE.<ext>, and each beat image →
-    # site/images/sessions/DATE/<beat-slug>.<ext>.
+    _stage_session_media(sessions, out_dir)
+
+
+def _stage_session_media(sessions, out_dir):
+    """Publish each session's media into the stable site URL layout.
+
+    Which files exist and what they are called on the site is the Session
+    aggregate's business — this only copies what it reports. It used to walk
+    sessions/ a second time and re-apply the same four discovery rules that
+    load_sessions had just applied ("skip library", "hero is the banner",
+    "everything else is a beat", the extension whitelist), so adding an image
+    format meant finding both copies.
+    """
     audio_dst = out_dir / "audio" / "sessions"
     audio_dst.mkdir(parents=True, exist_ok=True)
-    session_img_dir = out_dir / "images" / "sessions"
-    session_img_dir.mkdir(parents=True, exist_ok=True)
-    if paths.sessions.exists():
-        for sdir in paths.sessions.iterdir():
-            if not sdir.is_dir() or sdir.name == "library":
-                continue
-            date = sdir.name
-            final = sdir / "audio" / "final.mp3"
-            if final.exists():
-                shutil.copy2(final, audio_dst / f"{date}.mp3")
-            img_src = sdir / "images"
-            if img_src.exists():
-                for ext in ("*.jpg", "*.jpeg", "*.png", "*.webp"):
-                    for img in img_src.glob(ext):
-                        if img.stem == "hero":
-                            shutil.copy2(img, session_img_dir / f"{date}{img.suffix}")
-                        else:
-                            beats_dst = session_img_dir / date
-                            beats_dst.mkdir(parents=True, exist_ok=True)
-                            shutil.copy2(img, beats_dst / img.name)
+    image_dst = out_dir / "images" / "sessions"
+    image_dst.mkdir(parents=True, exist_ok=True)
+
+    for session in sessions:
+        art = session.artifacts
+        if art.audio:
+            shutil.copy2(art.audio, audio_dst / session.audio_name)
+        if art.hero:
+            shutil.copy2(art.hero, image_dst / session.hero_name)
+        if art.beats:
+            beats_dst = image_dst / session.date
+            beats_dst.mkdir(parents=True, exist_ok=True)
+            for path in art.beats.values():
+                shutil.copy2(path, beats_dst / path.name)

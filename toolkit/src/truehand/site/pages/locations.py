@@ -65,7 +65,7 @@ def locations_chart_page(locations, link_map):
     chunks.append('<h2>All Locations</h2>')
     chunks.append('<ul class="location-list">')
     for loc in sorted(locations, key=lambda l: l.name.lower()):
-        loc_type = loc.meta.get("type", "")
+        loc_type = loc.meta["type"].one()
         if isinstance(loc_type, list):
             loc_type = loc_type[0] if loc_type else ""
         type_html = (f'<span class="loc-type">{html.escape(loc_type)}</span>'
@@ -89,11 +89,3 @@ def _location_strip_qualifier(loc):
         return ""
     return re.sub(r"\s*\([^)]*\)\s*", "", loc).strip()
 
-
-def _affiliations(meta):
-    aff = meta.get("affiliation", "")
-    if isinstance(aff, list):
-        return [a for a in aff if a]
-    if isinstance(aff, str) and aff.strip():
-        return [a.strip() for a in aff.split(",") if a.strip()]
-    return []

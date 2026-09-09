@@ -32,10 +32,10 @@ and `sessions/` together.
 
 | Package | Holds |
 |---|---|
-| `core/` | The archive model: frontmatter, markdown, entities, loaders, graph. Pure, stdlib, no HTML and no network. |
+| `core/` | The archive model: the frontmatter dialect and its `Field`/`Frontmatter` reader, markdown, `Entity`, the `Session` aggregate, `SessionSummary`, `QuestStatus`, derived `Relations`, loaders, graph. Pure, stdlib, no HTML and no network. |
 | `content/` | Prompt prose — PC identity anchors and art direction. |
 | `adapters/` | Everything external: Gemini, ElevenLabs, ffmpeg, Pillow. |
-| `site/` | HTML and RSS rendering. Depends on `core`; never the reverse. |
+| `site/` | HTML and RSS rendering. Depends on `core`; never the reverse — `core` takes what it needs (`Relations`, `Session`) as arguments rather than reading fields the site layer wrote. |
 | `pipelines/` | Orchestration — `core` + `content` + `adapters`, no CLI concerns. |
 | `cli/` | Typer only. Parses flags, builds `Paths`, calls a pipeline. |
 
@@ -65,3 +65,11 @@ Two are load-bearing:
 
 `test_frontmatter.py` pins the archive's frontmatter dialect, which resembles
 YAML but is not — see its `TestThisIsNotYaml`.
+
+The model tests each pin one invariant that used to be spread across modules
+and could drift silently: `test_relations.py` (derived joins are built in
+`core` and passed in, so no consumer depends on call order), `test_summary.py`
+(one parser and one set of heading rules for `summary.md`, aligned with the
+`<h2>`s the renderer emits), `test_quest_status.py` (renaming a status label
+moves nothing), and `test_session.py` (a session's invariant, and its published
+filenames derived rather than stored).

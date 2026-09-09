@@ -5,7 +5,7 @@ import html
 import re
 from email.utils import format_datetime
 
-from ..core.text import _extract_in_brief, _hms
+from ..core.text import _hms
 from .layout import base_url
 
 # Cache for the parsed audio-library credits so we only read CREDITS.md once.
@@ -111,8 +111,8 @@ def podcast_feed(paths, sessions, probe):
     feed_url = f"{base_url()}/feed.xml"
     cover_url = f"{base_url()}/static/podcast-cover.jpg"
 
-    with_audio = [s for s in sessions if s.meta.get("has_audio")]
-    with_audio.sort(key=lambda x: x.meta.get("date", x.slug), reverse=True)
+    with_audio = [s for s in sessions if s.has_audio]
+    with_audio.sort(key=lambda x: x.date, reverse=True)
 
     # License-mandated + courtesy attribution for the shared audio library.
     # The music/SFX library is common to every episode, so the same credit
@@ -123,19 +123,19 @@ def podcast_feed(paths, sessions, probe):
     items_xml = []
     latest_pub = None
     for s in with_audio:
-        date = s.meta.get("date", s.slug)
-        audio_name = s.meta.get("audio_name") or f"{date}.mp3"
-        audio_path = s.meta.get("audio_src")
+        date = s.date
+        audio_name = s.audio_name
+        audio_path = s.artifacts.audio
         try:
             size = audio_path.stat().st_size if audio_path else 0
         except OSError:
             size = 0
         duration = int(probe(audio_path)) if audio_path else 0
 
-        subtitle = s.meta.get("audio_subtitle") or ""
+        subtitle = s.artifacts.audio_subtitle
         ep_title = f"{date} — {subtitle}" if subtitle else f"{date}"
-        in_brief = _extract_in_brief(s.meta.get("summary_md", ""))
-        ep_blurb = in_brief or (s.summary or "")
+        in_brief = s.summary.in_brief
+        ep_blurb = in_brief or s.blurb
         # Plain-text description carries the blurb + the credits block.
         ep_desc = ep_blurb
         if credits_text:
@@ -174,10 +174,10 @@ def podcast_feed(paths, sessions, probe):
         guid = enclosure_url
 
         item_image = ""
-        if s.meta.get("has_image"):
-            img_name = s.meta.get("image_name") or f"{date}.jpg"
+        if s.has_hero:
             item_image = (
-                f'    <itunes:image href="{base_url()}/images/sessions/{html.escape(img_name)}"/>\n'
+                f'    <itunes:image href="{base_url()}/images/sessions/'
+                f'{html.escape(s.hero_name)}"/>\n'
             )
 
         items_xml.append(f"""  <item>

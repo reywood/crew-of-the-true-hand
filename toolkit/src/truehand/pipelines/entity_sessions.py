@@ -7,8 +7,8 @@ the "Mentioned in sessions" chip row.
 Was scripts/update-entity-sessions.py, which carried its own cut-down copy of
 parse_frontmatter that understood neither YAML-style bullet lists nor the
 comma-splitting its own docstring claimed. It now uses the canonical parser in
-core/frontmatter.py, which makes the previously dead ``isinstance(..., list)``
-branch below actually reachable.
+core/frontmatter.py, and reads its values through Field rather than carrying a
+fourth copy of the str-or-list coercion.
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from ..core.frontmatter import parse_frontmatter
+from ..core.frontmatter import Field, parse_frontmatter
 
 #: Change tags, in the order they are reported.
 TAGS = ("added", "updated", "removed", "unchanged")
@@ -38,19 +38,6 @@ class SyncResult:
     @property
     def total(self) -> int:
         return sum(self.counts.values())
-
-
-def parse_aliases_field(raw) -> list[str]:
-    """Normalize an ``aliases:`` value to a list.
-
-    The canonical parser returns a list when the value is comma-separated or a
-    bullet list, and a plain string otherwise.
-    """
-    if not raw:
-        return []
-    if isinstance(raw, list):
-        return [a.strip() for a in raw if str(a).strip()]
-    return [a.strip() for a in str(raw).split(",") if a.strip()]
 
 
 def load_session_summaries(paths) -> dict[str, str]:
@@ -126,7 +113,7 @@ def sync_directory(directory: Path, session_texts: dict[str, str],
     result = SyncResult(directory=directory)
     for entity_path in sorted(directory.glob("*.md")):
         fm, _ = parse_frontmatter(entity_path.read_text(encoding="utf-8"))
-        aliases = parse_aliases_field(fm.get("aliases", ""))
+        aliases = Field(fm.get("aliases")).many()
         if not aliases:
             # Nothing declared: fall back to the filename so the entity is at
             # least checked against something.

@@ -127,13 +127,77 @@ def test_campaign_objective_reaches_the_prep_page(paths):
 
 
 def test_a_prose_objective_round_trips_through_the_dialect():
-    from truehand.core.loaders import _rejoin_prose
+    from truehand.core.frontmatter import Field
     source = "Get the map, then run the route: Yackerty first, a portal after."
     fm, _ = parse_frontmatter(f"---\nobjective: {source}\n---\n")
-    assert _rejoin_prose(fm["objective"]) == source
+    assert Field(fm["objective"]).prose() == source
 
 
-def test_rejoin_prose_leaves_a_plain_string_alone():
-    from truehand.core.loaders import _rejoin_prose
-    assert _rejoin_prose("  no commas here  ") == "no commas here"
-    assert _rejoin_prose(None) == ""
+def test_prose_leaves_a_plain_string_alone():
+    from truehand.core.frontmatter import Field
+    assert Field("  no commas here  ").prose() == "no commas here"
+    assert Field(None).prose() == ""
+
+
+class TestFieldResolvesTheDialectsAmbiguity:
+    """The dialect's str-vs-list split used to be hand-coerced at twenty call
+    sites through seven near-duplicate helpers — npcs.py alone did it three
+    times, three different ways. A Field is asked what shape you want."""
+
+    def test_one_takes_the_first_of_a_list(self):
+        from truehand.core.frontmatter import Field
+        assert Field(["Waterdeep", "Dock Ward"]).one() == "Waterdeep"
+
+    def test_one_keeps_a_scalar_whole(self):
+        from truehand.core.frontmatter import Field
+        assert Field("Waterdeep (last known)").one() == "Waterdeep (last known)"
+
+    def test_prose_rejoins_what_the_dialect_split(self):
+        from truehand.core.frontmatter import Field
+        assert Field(["Waterdeep", "Dock Ward"]).prose() == "Waterdeep, Dock Ward"
+
+    def test_many_splits_a_scalar_that_reached_us_unparsed(self):
+        from truehand.core.frontmatter import Field
+        assert Field("A, B").many() == ["A", "B"]
+
+    def test_tags_lowercase_for_matching(self):
+        from truehand.core.frontmatter import Field
+        assert Field([" Draconic ", "Dragons"]).tags() == ["draconic", "dragons"]
+
+    def test_an_empty_field_answers_every_question_safely(self):
+        from truehand.core.frontmatter import Field
+        empty = Field(None)
+        assert empty.one() == "" and empty.many() == []
+        assert empty.prose() == "" and empty.tags() == []
+        assert not empty
+
+    def test_one_falls_back_to_its_default(self):
+        from truehand.core.frontmatter import Field
+        assert Field(None).one("Active") == "Active"
+
+
+class TestFrontmatterLookupIsTotal:
+    def test_a_missing_key_is_an_empty_field_not_a_keyerror(self):
+        from truehand.core.frontmatter import Frontmatter
+        assert Frontmatter({"name": "X"})["location"].one() == ""
+
+    def test_iteration_keeps_file_order(self):
+        from truehand.core.frontmatter import Frontmatter
+        fm = Frontmatter({"name": "X", "type": "NPC", "location": "Waterdeep"})
+        assert list(fm) == ["name", "type", "location"]
+
+    def test_values_arrive_as_fields(self):
+        from truehand.core.frontmatter import Field, Frontmatter
+        assert all(isinstance(f, Field) for f in Frontmatter({"a": 1, "b": [2]}).values())
+
+    def test_entity_wraps_a_plain_dict_so_readers_never_see_raw_values(self):
+        from truehand.core.entity import Entity
+        from truehand.core.frontmatter import Frontmatter
+        e = Entity("npc", "x", "X", meta={"location": "Waterdeep, Dock Ward"})
+        assert isinstance(e.meta, Frontmatter)
+        assert e.meta["location"].prose() == "Waterdeep, Dock Ward"
+        assert e.meta["nothing"].one() == ""
+
+    def test_entity_without_meta_still_answers(self):
+        from truehand.core.entity import Entity
+        assert Entity("npc", "x", "X").meta["anything"].many() == []

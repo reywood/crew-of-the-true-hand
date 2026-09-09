@@ -3,7 +3,6 @@
 import html
 
 from ...core.markdown import md_to_html
-from ...core.text import _extract_session_dates
 from ..layout import page
 from ..linkify import linkify_html
 
@@ -46,25 +45,23 @@ def _render_expertise_link_block(label, entries):
 
 
 def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None,
-                        graph=None):
+                        graph=None, relations=None):
     rendered = md_to_html(e.body)
     linked = linkify_html(rendered, e.href, link_map)
     meta_rows = []
     # 'sessions' is rendered separately as the mentioned-in block, so skip it
-    # here to avoid showing it twice. Same for the computed cross-reference
-    # lists (helpers / can_help_with) — they get their own rendering below.
-    skip = {"name", "aliases", "summary", "transcript", "has_notes",
-            "has_transcript", "date", "status_class", "section", "sessions",
-            "helpers", "can_help_with"}
-    for k, v in e.meta.items():
-        if k in skip:
+    # here to avoid showing it twice. The rest are the frontmatter fields
+    # this page renders itself. Sessions and quests have their own detail
+    # pages, so their computed meta never reaches here.
+    skip = {"name", "aliases", "summary", "sessions"}
+    for key, field in e.meta.items():
+        if key in skip:
             continue
-        if isinstance(v, list):
-            v = ", ".join(v)
-        if not v:
+        value = field.prose()
+        if not value:
             continue
-        label = k.replace("_", " ").title()
-        val_html = linkify_html(html.escape(v), e.href, link_map)
+        label = key.replace("_", " ").title()
+        val_html = linkify_html(html.escape(value), e.href, link_map)
         meta_rows.append(
             f'<div class="meta-row"><span class="meta-label">{html.escape(label)}:</span> '
             f'<span class="meta-value">{val_html}</span></div>'
@@ -73,17 +70,15 @@ def detail_page_generic(e, list_href, list_label, link_map, session_lookup=None,
                   if meta_rows else "")
 
     sessions_block = _render_mentioned_in(
-        _extract_session_dates(e.meta.get("sessions")),
-        session_lookup or {},
-    )
+        e.meta["sessions"].many(), session_lookup or {})
 
-    # Cross-reference by expertise (populated by _attach_item_expertise):
+    # Cross-reference by expertise (see core.relations):
     #   items get "Who could help" (NPCs with matching expertise)
     #   NPCs get "Could help with" (items whose expertise_needed matches)
     helpers_block = _render_expertise_link_block(
-        "Who could help", e.meta.get("helpers") or [])
+        "Who could help", relations.helpers_for(e) if relations else [])
     can_help_block = _render_expertise_link_block(
-        "Could help with", e.meta.get("can_help_with") or [])
+        "Could help with", relations.can_help_with_for(e) if relations else [])
 
     connections_block = _render_connections(e.href, graph)
 

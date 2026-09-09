@@ -4,10 +4,14 @@ Every loader takes a Paths first argument so it can be aimed at a fixture
 archive in tests rather than the real one."""
 
 import re
+from pathlib import Path
 
 from .. import data as _data
 from .entity import Entity
-from .frontmatter import parse_frontmatter
+from .frontmatter import Field, Frontmatter, parse_frontmatter
+from .quest_status import for_section
+from .session import IMAGE_SUFFIXES, Session, SessionArtifacts
+from .summary import SessionSummary
 from .text import read, slugify
 
 STANDING_MAP = {
@@ -31,19 +35,13 @@ PROVISIONAL = ("last known", "origin", "sought", "unknown", "wandering")
 
 
 def chip_for(type_str):
-    if not type_str:
-        return None
-    if isinstance(type_str, list):
-        type_str = type_str[0] if type_str else ""
-    return STANDING_MAP.get(type_str.strip())
+    """Standing chip for an NPC's `type:`. Takes the resolved scalar."""
+    return STANDING_MAP.get(type_str.strip()) if type_str else None
 
 
 def port_for(npc, location_names):
     """Return canonical port name for grouping, or None for Adrift."""
-    loc = npc.meta.get("location", "")
-    if isinstance(loc, list):
-        loc = loc[0] if loc else ""
-    loc = loc.strip()
+    loc = npc.meta["location"].one()
     if not loc:
         return None
     if any(p in loc.lower() for p in PROVISIONAL):
@@ -97,7 +95,8 @@ def load_pcs(paths):
             kind="pc", slug=slug, name=defn["name"],
             aliases=defn["aliases"], body=body, image=image,
             summary=defn["summary"],
-            meta={"full_name": defn["full_name"], "battle_card": battle_card},
+            meta=Frontmatter({"full_name": defn["full_name"],
+                              "battle_card": battle_card}),
         ))
     return entities
 
@@ -109,37 +108,21 @@ def load_dir_entities(kind, directory):
     for path in sorted(directory.glob("*.md")):
         text = read(path)
         fm, body = parse_frontmatter(text)
-        name = fm.get("name") or path.stem.replace("-", " ").title()
-        aliases_field = fm.get("aliases", "")
-        if isinstance(aliases_field, list):
-            aliases = aliases_field
-        elif isinstance(aliases_field, str) and aliases_field:
-            aliases = [aliases_field]
-        else:
-            aliases = []
+        meta = Frontmatter(fm)
+        name = meta["name"].one() or path.stem.replace("-", " ").title()
+        aliases = meta["aliases"].many()
         if name not in aliases:
             aliases = [name] + aliases
-        summary = fm.get("summary") or ""
+        summary = meta["summary"].prose()
         if not summary and body.strip():
             first = next((ln.strip() for ln in body.split("\n") if ln.strip()), "")
             first = re.split(r"(?<=[.!?])\s", first, maxsplit=1)[0]
             summary = first
         out.append(Entity(
             kind=kind, slug=slugify(path.stem), name=name,
-            aliases=aliases, body=body, meta=fm, summary=summary,
+            aliases=aliases, body=body, meta=meta, summary=summary,
         ))
     return out
-
-
-QUEST_SECTION_STATUS = {
-    "Main arc — the giant ordning": ("Active — main arc", "active-main"),
-    "Allies to recruit / leads to chase": ("Active — lead", "active"),
-    "Giant hotspots (intel from Corvin / Chazlauth / Lifferloss)":
-        ("Active — region", "active"),
-    "Side leads / unresolved": ("Unresolved", "unresolved"),
-    "Personal / character": ("Personal", "personal"),
-    "Completed": ("Completed", "completed"),
-}
 
 
 def load_quests(paths):
@@ -157,36 +140,21 @@ def load_quests(paths):
         m = re.match(r"^- \*\*(.+?)\*\*\.?\s*[—–-]?\s*(.*)$", line)
         if not m or not section:
             continue
+        # The Personal section is the crew's own business, not a tracked
+        # objective; this is the single place that decides it isn't surfaced.
         if section.lower().startswith("personal"):
             continue
         name = m.group(1).strip().rstrip(".")
         desc = m.group(2).strip()
-        status_label, status_class = QUEST_SECTION_STATUS.get(
-            section, (section, "active"))
         first_sentence = re.split(r"(?<=[.!?])\s", desc, maxsplit=1)[0]
         out.append(Entity(
             kind="quest", slug=slugify(name), name=name,
             aliases=[name], body=desc,
-            meta={"section": section, "status_class": status_class},
-            status=status_label,
+            meta=Frontmatter({"section": section}),
+            status=for_section(section),
             summary=first_sentence,
         ))
     return out
-
-
-def _rejoin_prose(value):
-    """Frontmatter value that is meant to read as one sentence, not a list.
-
-    The dialect splits any comma-bearing value into a list, which is right for
-    aliases and expertise tags but wrong for prose. campaign-state.md's
-    objective is a paragraph, so it arrived as a list of fragments and the
-    previous str-only guard silently discarded it — next.html rendered no
-    objective at all. Rejoining with ", " reconstructs the source line exactly,
-    since the parser split on "," and stripped each segment.
-    """
-    if isinstance(value, list):
-        return ", ".join(v.strip() for v in value if str(v).strip())
-    return (value or "").strip()
 
 
 def load_campaign_state(paths):
@@ -198,131 +166,108 @@ def load_campaign_state(paths):
     if not paths.campaign_state_file.exists():
         return {"objective": "", "open_questions": [], "current_location": None}
     fm, _ = parse_frontmatter(paths.campaign_state_file.read_text(encoding="utf-8"))
-    oq = fm.get("open_questions") or []
-    if isinstance(oq, str):
-        oq = [oq]
+    fm = Frontmatter(fm)
     return {
-        "objective": _rejoin_prose(fm.get("objective")),
-        "open_questions": oq,
-        "current_location": (fm.get("current_location") or None),
+        # The objective is a sentence, so it must be rejoined: the dialect
+        # split it on its own commas into a list of fragments.
+        "objective": fm["objective"].prose(),
+        "open_questions": fm["open_questions"].many(),
+        "current_location": fm["current_location"].one() or None,
     }
 
 
-def load_sessions(paths):
-    # Everything for a session lives under sessions/YYYY-MM-DD/:
-    #   summary.md, transcript.txt, player notes/<pc>.md,
-    #   audio/{script.md, final.mp3, ...}, images/{hero.*, <beat-slug>.*}
-    notes, transcripts, summaries = {}, {}, {}
-    session_images, session_audio, audio_subtitles = {}, {}, {}
-    beat_images_by_date = {}
-    if paths.sessions.exists():
-        for sdir in paths.sessions.iterdir():
-            if not sdir.is_dir() or sdir.name == "library":
+def _read_audio_subtitle(script: Path) -> str:
+    """Line 2 of an audio script (`## <subtitle>`) — the podcast episode title."""
+    try:
+        with open(script, encoding="utf-8") as fh:
+            fh.readline()  # the "# Tales of the True Hand — DATE" H1
+            line2 = fh.readline().strip()
+    except OSError:
+        return ""
+    return line2[3:].strip() if line2.startswith("## ") else ""
+
+
+def _load_artifacts(sdir: Path) -> SessionArtifacts:
+    """Discover what the media pipelines left in one session folder.
+
+    These four rules — hero.* is the banner, every other image is a beat keyed
+    by its summary-beat slug, audio/final.mp3 is the recap, its script's line 2
+    is the episode title — are stated here and nowhere else. The site's asset
+    staging copies from the result rather than walking the tree again.
+    """
+    hero, beats = None, {}
+    img_dir = sdir / "images"
+    if img_dir.exists():
+        for path in sorted(img_dir.iterdir()):
+            if path.suffix.lower() not in IMAGE_SUFFIXES:
                 continue
-            date = sdir.name
-            # Player notes (Fiz's POV) — prefer fiz.md, else the first note file.
-            pn_dir = sdir / "player notes"
-            if pn_dir.exists():
-                note_file = pn_dir / "fiz.md"
-                if not note_file.exists():
-                    candidates = sorted(pn_dir.glob("*.md"))
-                    note_file = candidates[0] if candidates else None
-                if note_file and note_file.exists():
-                    notes[date] = note_file
-            if (sdir / "transcript.txt").exists():
-                transcripts[date] = sdir / "transcript.txt"
-            if (sdir / "summary.md").exists():
-                summaries[date] = sdir / "summary.md"
-            # Images: hero.* is the banner; every other image is a beat keyed by slug.
-            img_dir = sdir / "images"
-            if img_dir.exists():
-                beats = {}
-                for ext in ("*.jpg", "*.jpeg", "*.png", "*.webp"):
-                    for p in img_dir.glob(ext):
-                        if p.stem == "hero":
-                            session_images[date] = p
-                        else:
-                            beats[p.stem] = p
-                if beats:
-                    beat_images_by_date[date] = beats
-            # Audio: final.mp3 plays on the site; script.md line-2 subtitle is the
-            # podcast episode title.
-            audio_dir = sdir / "audio"
-            if audio_dir.exists():
-                if (audio_dir / "final.mp3").exists():
-                    session_audio[date] = audio_dir / "final.mp3"
-                script = audio_dir / "script.md"
-                if script.exists():
-                    try:
-                        with open(script, encoding="utf-8") as fh:
-                            fh.readline()  # skip the H1 line
-                            line2 = fh.readline().strip()
-                        if line2.startswith("## "):
-                            audio_subtitles[date] = line2[3:].strip()
-                    except OSError:
-                        pass
-    dates = sorted(set(notes) | set(transcripts) | set(summaries))
+            if path.stem == "hero":
+                hero = path
+            else:
+                beats[path.stem] = path
+
+    audio_dir = sdir / "audio"
+    final = audio_dir / "final.mp3"
+    script = audio_dir / "script.md"
+    return SessionArtifacts(
+        hero=hero,
+        beats=beats,
+        audio=final if final.exists() else None,
+        audio_subtitle=_read_audio_subtitle(script) if script.exists() else "",
+    )
+
+
+def _player_notes_file(sdir: Path):
+    """Fiz's POV notes if present, else whichever PC's notes exist."""
+    pn_dir = sdir / "player notes"
+    if not pn_dir.exists():
+        return None
+    fiz = pn_dir / "fiz.md"
+    if fiz.exists():
+        return fiz
+    candidates = sorted(pn_dir.glob("*.md"))
+    return candidates[0] if candidates else None
+
+
+def load_sessions(paths):
+    """Every session in the archive, oldest first.
+
+    A folder under sessions/ that holds none of notes, transcript or summary is
+    not a session and is skipped — the Session aggregate refuses to exist
+    without one of them.
+    """
+    if not paths.sessions.exists():
+        return []
+
     out = []
-    for date in dates:
-        note_text = read(notes[date]) if date in notes else ""
-        transcript_text = read(transcripts[date]) if date in transcripts else ""
-        summary_text = read(summaries[date]) if date in summaries else ""
-        # A summary may lead with a `---` YAML frontmatter block (currently
-        # used to declare a `carried:` list of items acquired that session).
-        # Split it off so the rendered body doesn't show the raw block.
-        summary_fm, summary_body = parse_frontmatter(summary_text) if summary_text else ({}, "")
-        summary_text_render = summary_body if summary_fm else summary_text
-        carried = summary_fm.get("carried") if summary_fm else None
-        if isinstance(carried, str):
-            carried = [carried]
-        carried = carried or []
-        image_path = session_images.get(date)
-        audio_path = session_audio.get(date)
-        # Per-section beat images: sessions/<date>/images/<beat-slug>.jpg
-        beat_images = beat_images_by_date.get(date, {})
-        # Card-summary one-liner: prefer the summary's "*In brief: ...*" line,
-        # then fall back to the notes' first line.
-        card_summary = ""
-        if summary_text_render:
-            for ln in summary_text_render.split("\n"):
-                s = ln.strip()
-                if s.startswith("*In brief:") and s.endswith("*"):
-                    card_summary = s[len("*In brief:"):-1].strip()
-                    break
-                if s and not s.startswith("#"):
-                    card_summary = s.lstrip("*").rstrip("*").strip()
-                    break
-        if not card_summary and note_text:
-            for ln in note_text.split("\n"):
-                if ln.strip():
-                    card_summary = ln.strip()
-                    break
-        if not card_summary:
-            card_summary = ("Transcript only — no written notes." if transcript_text
-                            else "No content.")
-        out.append(Entity(
-            kind="session", slug=date, name=f"Session {date}",
-            aliases=[date], body=note_text,
-            meta={"transcript": transcript_text, "date": date,
-                  "summary_md": summary_text_render,
-                  "image_src": image_path,
-                  # Site URL stays date-based even though the source is hero.<ext>.
-                  "image_name": f"{date}{image_path.suffix}" if image_path else "",
-                  "beat_images": beat_images,
-                  "carried": carried,
-                  "has_notes": bool(note_text),
-                  "has_transcript": bool(transcript_text),
-                  "has_summary": bool(summary_text),
-                  "has_image": bool(image_path),
-                  "audio_src": audio_path,
-                  # audio_name is what the site URL points at; setup_output
-                  # copies sessions/YYYY-MM-DD/audio/final.mp3 into
-                  # site/audio/sessions/YYYY-MM-DD.mp3, so this is always
-                  # date-based regardless of on-disk layout.
-                  "audio_name": f"{date}.mp3" if audio_path else "",
-                  "has_audio": bool(audio_path),
-                  "audio_subtitle": audio_subtitles.get(date, "")},
-            summary=card_summary,
+    for sdir in sorted(paths.sessions.iterdir()):
+        if not sdir.is_dir() or sdir.name == "library":
+            continue
+
+        notes_file = _player_notes_file(sdir)
+        transcript_file = sdir / "transcript.txt"
+        summary_file = sdir / "summary.md"
+
+        notes = read(notes_file) if notes_file else ""
+        transcript = read(transcript_file) if transcript_file.exists() else ""
+        summary_text = read(summary_file) if summary_file.exists() else ""
+        if not (notes or transcript or summary_text):
+            continue
+
+        # A summary may lead with a `---` frontmatter block (currently used to
+        # declare a `carried:` list of items acquired that session). Split it
+        # off so the rendered body doesn't show the raw block.
+        summary_fm, summary_body = (parse_frontmatter(summary_text)
+                                    if summary_text else ({}, ""))
+        carried = Field(summary_fm.get("carried")).many()
+
+        out.append(Session(
+            date=sdir.name,
+            notes=notes,
+            transcript=transcript,
+            summary=SessionSummary.parse(summary_body if summary_fm else summary_text),
+            carried=tuple(carried),
+            artifacts=_load_artifacts(sdir),
         ))
     return out
 

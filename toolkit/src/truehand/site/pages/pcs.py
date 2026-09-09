@@ -10,13 +10,13 @@ from .detail import _render_connections
 
 def pc_list_page(pcs, link_map):
     cards = []
-    for pc in sorted(pcs, key=lambda p: p.meta.get("full_name", p.name).lower()):
+    for pc in sorted(pcs, key=lambda p: p.meta["full_name"].one(p.name).lower()):
         img = (f'<img class="portrait" src="{pc.image}" alt="{html.escape(pc.name)}">'
                if pc.image else "")
         cards.append(f"""
 <a class="card pc-card" href="{pc.href}">
   {img}
-  <h3>{html.escape(pc.meta.get("full_name", pc.name))}</h3>
+  <h3>{html.escape(pc.meta["full_name"].one(pc.name))}</h3>
   <p>{html.escape(pc.summary)}</p>
 </a>""")
     body = "<h1>The Crew</h1>\n<section class='grid grid-2'>" + "".join(cards) + "</section>"
@@ -32,7 +32,7 @@ def detail_page_pc(pc, link_map, graph=None):
     img = (f'<img class="portrait portrait-large" src="{pc.image}" alt="{html.escape(pc.name)}">'
            if pc.image else "")
     connections_block = _render_connections(pc.href, graph)
-    battle_card = pc.meta.get("battle_card")
+    battle_card = pc.meta["battle_card"].one()
     card_link = (f'<p class="battle-card-link"><a href="{battle_card}">'
                  f'&#9876;&#65039; {html.escape(pc.name)}&rsquo;s battle card</a></p>'
                  if battle_card else "")

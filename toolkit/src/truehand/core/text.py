@@ -49,29 +49,8 @@ def chunk_transcript(text):
     return out
 
 
-def _normalize_tag_list(value):
-    """Coerce a frontmatter field (string, list, or None) to a lowercased,
-    stripped list of tag strings."""
-    if not value:
-        return []
-    if isinstance(value, str):
-        parts = [p.strip() for p in value.split(",")]
-    else:
-        parts = [str(p).strip() for p in value]
-    return [p.lower() for p in parts if p]
-
-
 def _norm_heading(h):
     return h.strip().rstrip(":").replace("’", "'").lower()
-
-
-def _extract_session_dates(value):
-    """Normalize a frontmatter sessions field into a list of YYYY-MM-DD."""
-    if not value:
-        return []
-    if isinstance(value, list):
-        return [str(v).strip() for v in value if str(v).strip()]
-    return [s.strip() for s in str(value).split(",") if s.strip()]
 
 
 def _hms(seconds):
@@ -82,14 +61,6 @@ def _hms(seconds):
     if h:
         return f"{h}:{m:02d}:{s:02d}"
     return f"{m:02d}:{s:02d}"
-
-
-def _extract_in_brief(summary_md):
-    for ln in (summary_md or "").split("\n"):
-        s = ln.strip()
-        if s.startswith("*In brief:") and s.endswith("*"):
-            return s[len("*In brief:"):-1].strip()
-    return ""
 
 
 def _clean_blurb(text, limit=200):

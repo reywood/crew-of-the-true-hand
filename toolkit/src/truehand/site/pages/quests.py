@@ -9,26 +9,23 @@ from ..linkify import linkify_html
 from .detail import _render_mentioned_in
 
 
-def quest_list_page(quests, link_map):
-    order = ["Active — main arc", "Active — lead", "Active — region",
-             "Unresolved", "Completed"]
+def quest_list_page(quests, link_map, relations):
     grouped = {}
     for q in quests:
         grouped.setdefault(q.status, []).append(q)
     chunks = ["<h1>Quest Log</h1>",
               '<p class="subhead"><em>See also <a href="next.html">Prep — Where We Left Off</a> '
               'and the <a href="threads.html">Open Threads</a> board.</em></p>']
-    for status in order:
-        items = grouped.get(status, [])
-        if not items:
-            continue
-        status_class = items[0].meta.get("status_class", "active")
+    for status in sorted(grouped, key=lambda s: s.display_order):
+        items = grouped[status]
         chunks.append(
-            f'<h2 class="status-heading"><span class="status-chip status-{status_class}">{html.escape(status)}</span></h2>')
+            f'<h2 class="status-heading">'
+            f'<span class="status-chip status-{status.css_class}">'
+            f'{html.escape(status.label)}</span></h2>')
         chunks.append("<ul class='quest-list'>")
         for q in items:
-            helps = q.meta.get("helps") or []
-            supported_by = q.meta.get("supported_by") or []
+            helps = relations.helps_for(q)
+            supported_by = relations.supported_by_for(q)
             dep_lines = []
             if helps:
                 links = " · ".join(
@@ -83,14 +80,14 @@ def _render_dep_line(label, arrow_class, deps):
     )
 
 
-def detail_page_quest(q, link_map, session_lookup=None):
+def detail_page_quest(q, link_map, session_lookup=None, relations=None):
     rendered = md_to_html(q.body)
     linked = linkify_html(rendered, q.href, link_map)
-    status_class = q.meta.get("status_class", "active")
-    chip = f'<span class="status-chip status-{status_class}">{html.escape(q.status or "")}</span>'
+    chip = (f'<span class="status-chip status-{q.status.css_class}">'
+            f'{html.escape(q.status.label)}</span>')
 
-    helps = q.meta.get("helps") or []
-    supported_by = q.meta.get("supported_by") or []
+    helps = relations.helps_for(q) if relations else []
+    supported_by = relations.supported_by_for(q) if relations else []
     deps_html = ""
     if helps or supported_by:
         forward = _render_dep_line("Helps achieve", "dep-forward", helps)
@@ -105,7 +102,7 @@ def detail_page_quest(q, link_map, session_lookup=None):
 
     body = f"""<article class="detail">
   <h1>{html.escape(q.name)}</h1>
-  <p class="meta-line">{chip} <span class="muted">{html.escape(q.meta.get("section", ""))}</span></p>
+  <p class="meta-line">{chip} <span class="muted">{html.escape(q.meta["section"].one())}</span></p>
   {sessions_block}
   {deps_html}
   <div class="detail-body">

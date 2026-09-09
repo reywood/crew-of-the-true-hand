@@ -22,6 +22,7 @@ import warnings
 from pathlib import Path
 
 from ..adapters.ffmpeg import (
+    COLD_OPEN_HEARTH_DB,
     COLD_OPEN_OVERLAY_DB,
     HEARTH_BED_DB,
     concat_mp3s,
@@ -59,9 +60,6 @@ STING_BRIDGE_DB = -6.0
 
 
 STING_LOW_CHORD_DB = -3.0  # cold-open tag — wants to hit
-
-
-COLD_OPEN_HEARTH_DB = -42.0  # a touch quieter under the low-chord sting
 
 
 _D = lambda stab, sim, style, boost=True: {

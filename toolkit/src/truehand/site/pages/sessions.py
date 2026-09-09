@@ -5,7 +5,7 @@ import re
 
 from ...core.loaders import SESSION_LOCATIONS
 from ...core.markdown import md_inline, md_to_html
-from ...core.text import chunk_transcript, slugify
+from ...core.text import chunk_transcript
 from ..layout import base_url, page
 from ..linkify import linkify_html
 
@@ -13,8 +13,8 @@ from ..linkify import linkify_html
 def session_list_page(sessions, locations, link_map):
     loc_by_slug = {l.slug: l for l in locations}
     rows = []
-    for s in sorted(sessions, key=lambda x: x.meta.get("date", x.slug), reverse=True):
-        date = s.meta.get("date", s.slug)
+    for s in sorted(sessions, key=lambda x: x.date, reverse=True):
+        date = s.date
         loc_slugs = SESSION_LOCATIONS.get(date, [])
         loc_chips = []
         for slug in loc_slugs:
@@ -29,7 +29,7 @@ def session_list_page(sessions, locations, link_map):
             )
         locs_html = "".join(loc_chips)
         audio_badge = ('<span class="session-row-audio" title="Audio recap available" aria-label="Audio recap available">&#9836;</span>'
-                       if s.meta.get("has_audio") else '')
+                       if s.has_audio else '')
         rows.append(f"""
 <li class="session-row">
   <div class="session-row-meta">
@@ -38,7 +38,7 @@ def session_list_page(sessions, locations, link_map):
     </div>
     <div class="session-row-locs">{locs_html}</div>
   </div>
-  <p class="session-row-summary">{html.escape(s.summary or "")}</p>
+  <p class="session-row-summary">{html.escape(s.blurb)}</p>
 </li>""")
     body = ('<h1>Sessions</h1>\n'
             '<p class="subhead"><em>Newest to oldest. Click a date to read the full account.</em></p>\n'
@@ -53,49 +53,46 @@ def session_list_page(sessions, locations, link_map):
                 canonical="sessions.html")
 
 
-def _inject_beat_images(summary_html: str, date: str, beat_images: dict) -> str:
-    """After each <h2>Title</h2> in the rendered summary, insert a
-    <figure class="beat-image beat-{right,left}"> if we have an image whose
-    slug matches slugify(title). Alternates float side for a book feel."""
-    if not beat_images:
+def _inject_beat_images(summary_html: str, session) -> str:
+    """After each <h2> in the rendered summary, insert a
+    <figure class="beat-image beat-{right,left}"> if that beat has an image.
+    Alternates float side (across illustrated beats only) for a book feel.
+
+    The <h2> elements render one-for-one from the summary's Beats, in order, so
+    the beats are zipped onto them directly. This used to strip tags and
+    unescape entities out of each rendered <h2> to recover a title and re-slug
+    it — reconstructing, from HTML, knowledge the model already had.
+    """
+    if not session.artifacts.beats:
         return summary_html
 
-    pattern = re.compile(r"(<h2>)(.*?)(</h2>)", re.DOTALL)
+    beats = iter(session.summary.beats)
     side_iter = iter(["beat-right", "beat-left"] * 20)
 
     def replace(m):
-        opener, inner, closer = m.groups()
-        # inner is already HTML — strip tags AND unescape entities
-        # (linkified h2s carry <a>…</a> and apostrophes render as &#x27;).
-        title_text = re.sub(r"<[^>]+>", "", inner)
-        title_text = html.unescape(title_text).strip()
-        slug = slugify(title_text)
-        img_path = beat_images.get(slug)
+        beat = next(beats, None)
+        if beat is None:
+            return m.group(0)
+        img_path = session.beat_image(beat)
         if not img_path:
             return m.group(0)
-        side = next(side_iter)
-        img_name = img_path.name
         return (
-            f'{opener}{inner}{closer}'
-            f'<figure class="beat-image {side}">'
-            f'<img src="images/sessions/{date}/{html.escape(img_name)}" '
-            f'alt="{html.escape(title_text)}" loading="lazy">'
+            f'{m.group(0)}'
+            f'<figure class="beat-image {next(side_iter)}">'
+            f'<img src="images/sessions/{session.date}/{html.escape(img_path.name)}" '
+            f'alt="{html.escape(beat.title)}" loading="lazy">'
             f'</figure>'
         )
 
-    return pattern.sub(replace, summary_html)
+    return re.sub(r"<h2>.*?</h2>", replace, summary_html, flags=re.DOTALL)
 
 
 def detail_page_session(s, link_map, prev=None, nxt=None):
-    summary_md = s.meta.get("summary_md", "")
-    summary_html = (md_to_html(summary_md) if summary_md
+    summary_html = (md_to_html(s.summary.raw) if s.summary
                     else "<p><em>No summary available for this session.</em></p>")
-    summary_html = _inject_beat_images(
-        summary_html, s.meta.get("date", s.slug),
-        s.meta.get("beat_images") or {},
-    )
+    summary_html = _inject_beat_images(summary_html, s)
 
-    note_text = s.body or ""
+    note_text = s.notes
     notes_section = ""
     if note_text:
         notes_section = f"""
@@ -106,7 +103,7 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
   </details>
 </section>"""
 
-    transcript_text = s.meta.get("transcript", "")
+    transcript_text = s.transcript
     transcript_blocks = chunk_transcript(transcript_text)
     if transcript_blocks:
         ts_inner = "".join(f"<p>{html.escape(p)}</p>" for p in transcript_blocks)
@@ -122,30 +119,27 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
         ts_section = ""
 
     audio_html = ""
-    if s.meta.get("has_audio"):
-        audio_name = s.meta.get("audio_name", f"{s.meta.get('date', s.slug)}.mp3")
+    if s.has_audio:
         audio_html = (
             f'  <figure class="session-audio">\n'
             f'    <figcaption><span class="session-audio-badge no-link">Tales of the True Hand</span>'
             f' <span class="session-audio-caption no-link">Listen to this session as told by Vandal Lovelace.</span></figcaption>\n'
-            f'    <audio controls preload="none" src="audio/sessions/{html.escape(audio_name)}"></audio>\n'
+            f'    <audio controls preload="none" src="audio/sessions/{html.escape(s.audio_name)}"></audio>\n'
             f'  </figure>\n'
         )
 
     hero_html = ""
-    if s.meta.get("has_image"):
-        img_name = s.meta.get("image_name", f"{s.meta.get('date', s.slug)}.jpg")
+    if s.has_hero:
         hero_html = (
             f'  <figure class="session-hero">'
-            f'<img src="images/sessions/{html.escape(img_name)}" '
+            f'<img src="images/sessions/{html.escape(s.hero_name)}" '
             f'alt="Illustration for {html.escape(s.name)}" loading="lazy">'
             f'</figure>\n'
         )
 
-    carried = s.meta.get("carried") or []
     carried_html = ""
-    if carried:
-        items = "".join(f'<li>{md_inline(it)}</li>' for it in carried)
+    if s.carried:
+        items = "".join(f'<li>{md_inline(it)}</li>' for it in s.carried)
         carried_html = f"""
   <aside class="carried">
     <h2>Items acquired</h2>
@@ -167,15 +161,13 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
     # linkify so the neighbour dates don't get turned into entity self-links.
     body += _session_pager(prev, nxt)
     bc = f'<a href="sessions.html">Sessions</a> &rsaquo; {html.escape(s.name)}'
-    img_name = s.meta.get("image_name") or ""
-    audio_name = s.meta.get("audio_name") or ""
-    subtitle = s.meta.get("audio_subtitle") or ""
+    subtitle = s.artifacts.audio_subtitle
     share_title = f"{s.name} — {subtitle}" if subtitle else s.name
     return page(share_title, body, current_nav="sessions.html", breadcrumb=bc,
-                description=s.summary,
-                image=f"images/sessions/{img_name}" if img_name else None,
+                description=s.blurb,
+                image=f"images/sessions/{s.hero_name}" if s.has_hero else None,
                 canonical=s.href, og_type="article",
-                audio=f"audio/sessions/{audio_name}" if audio_name else None)
+                audio=f"audio/sessions/{s.audio_name}" if s.has_audio else None)
 
 
 def _session_pager(prev, nxt):
@@ -196,9 +188,9 @@ def _session_pager(prev, nxt):
             f'<span class="session-pager-dir">{arrow}&nbsp;{label}</span>',
             f'<span class="session-pager-title">{html.escape(entity.name)}</span>',
         ]
-        if entity.summary:
+        if entity.blurb:
             pieces.append(
-                f'<span class="session-pager-brief">{html.escape(entity.summary)}</span>')
+                f'<span class="session-pager-brief">{html.escape(entity.blurb)}</span>')
         return (f'<a class="session-pager-link {direction}" '
                 f'href="{entity.href}" rel="{rel}">' + "".join(pieces) + '</a>')
 

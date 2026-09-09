@@ -1,5 +1,6 @@
 """The one entity model every kind of page is built from."""
 
+from .frontmatter import Frontmatter
 
 
 class Entity:
@@ -10,10 +11,18 @@ class Entity:
         self.name = name
         self.aliases = aliases or []
         self.body = body
-        self.meta = meta or {}
+        # Always a Frontmatter, so every reader can ask a Field what shape it
+        # wants instead of testing what shape the dialect happened to produce.
+        self.meta = meta if isinstance(meta, Frontmatter) else Frontmatter(meta)
         self.image = image
         self.status = status
         self.summary = summary
+
+    @property
+    def blurb(self):
+        """The short line that stands for this entity in the graph and in
+        search results. Session has its own; both are read the same way."""
+        return self.summary or self.body
 
     @property
     def href(self):

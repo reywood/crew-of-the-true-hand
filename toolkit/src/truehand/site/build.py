@@ -1,6 +1,7 @@
 """Orchestration: load the archive, render every page, write the tree."""
 
 import json
+import sys
 
 from ..adapters.ffmpeg import probe_duration_seconds
 from ..core.entity import build_link_map
@@ -12,11 +13,12 @@ from ..core.loaders import (
     load_quests,
     load_sessions,
 )
+from ..core.relations import build_relations
 from .assets import setup_output, write_page
 from .feed import podcast_feed
 from .layout import DEFAULT_BASE_URL, configure
 from .pages.detail import detail_page_generic
-from .pages.index import _attach_item_expertise, _attach_quest_deps, index_page
+from .pages.index import index_page
 from .pages.items import item_list_page
 from .pages.locations import locations_chart_page
 from .pages.npcs import npc_table_page
@@ -44,18 +46,22 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
     locations = load_dir_entities("location", paths.locations)
     items = load_dir_entities("item", paths.items)
     quests = load_quests(paths)
-    _attach_quest_deps(quests)
-    _attach_item_expertise(items, npcs)
     sessions = load_sessions(paths)
     session_lookup = {s.slug: s for s in sessions}
+
+    # Derived joins (expertise, quest dependencies). Computed once and handed
+    # to everything that needs them, so no consumer depends on call order.
+    relations = build_relations(items, npcs, quests)
+    for warning in relations.warnings:
+        print(f"WARN: {warning}", file=sys.stderr)
 
     all_entities = pcs + npcs + locations + items + quests + sessions
     link_map = build_link_map(all_entities)
 
     graph = build_graph(pcs, npcs, locations, items, quests, sessions,
-                        session_lookup)
+                        session_lookup, relations)
 
-    setup_output(paths, out_dir)
+    setup_output(paths, out_dir, sessions)
 
     def write(filename, content):
         write_page(out_dir, filename, content)
@@ -72,11 +78,13 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
     write("search-index.json", json.dumps(search_index,
                                           ensure_ascii=False, sort_keys=True))
 
-    write("index.html", index_page(pcs, npcs, locations, quests, sessions))
+    write("index.html", index_page(pcs, npcs, locations, quests, sessions,
+                                   relations))
 
     state = load_campaign_state(paths)
     write("next.html", prep_page(pcs, npcs, locations, items, quests,
-                                  sessions, state, session_lookup, link_map))
+                                  sessions, state, session_lookup, link_map,
+                                  relations))
     write("threads.html", threads_page(sessions, session_lookup, link_map))
 
     write("characters.html", pc_list_page(pcs, link_map))
@@ -86,21 +94,21 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
     write("npcs.html", npc_table_page(npcs, link_map))
     for e in npcs:
         write(e.href, detail_page_generic(
-            e, "npcs.html", "NPCs", link_map, session_lookup, graph))
+            e, "npcs.html", "NPCs", link_map, session_lookup, graph, relations))
 
     write("locations.html", locations_chart_page(locations, link_map))
     for e in locations:
         write(e.href, detail_page_generic(
-            e, "locations.html", "Locations", link_map, session_lookup, graph))
+            e, "locations.html", "Locations", link_map, session_lookup, graph, relations))
 
     write("items.html", item_list_page(items, link_map))
     for e in items:
         write(e.href, detail_page_generic(
-            e, "items.html", "Items", link_map, session_lookup, graph))
+            e, "items.html", "Items", link_map, session_lookup, graph, relations))
 
-    write("quests.html", quest_list_page(quests, link_map))
+    write("quests.html", quest_list_page(quests, link_map, relations))
     for q in quests:
-        write(q.href, detail_page_quest(q, link_map, session_lookup))
+        write(q.href, detail_page_quest(q, link_map, session_lookup, relations))
 
     write("sessions.html", session_list_page(sessions, locations, link_map))
     # `sessions` is ordered oldest→newest; give each detail page its
@@ -111,7 +119,7 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
         write(s.href, detail_page_session(s, link_map, prev, nxt))
 
     write("feed.xml", podcast_feed(paths, sessions, probe))
-    n_episodes = sum(1 for s in sessions if s.meta.get("has_audio"))
+    n_episodes = sum(1 for s in sessions if s.has_audio)
 
     total = 9 + len(pcs) + len(npcs) + len(locations) + len(items) + len(quests) + len(sessions)
     return {

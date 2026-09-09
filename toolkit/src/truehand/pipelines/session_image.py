@@ -10,7 +10,6 @@ per-session change needed there.
 
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass
 
 from ..adapters.images import DEFAULT_IMAGE_MODEL, ImageBackend
@@ -23,7 +22,7 @@ from ..content.pc_identity import (
     PC_SLUGS,
     REFERENCE_USAGE,
 )
-from ..core.text import slugify
+from ..core.summary import SessionSummary
 from ..errors import UserError
 
 HERO_ASPECT = "16:9"
@@ -38,72 +37,14 @@ class ImageResult:
     detail: str = ""
 
 
-def load_summary(paths, date: str) -> str:
+def load_summary(paths, date: str) -> SessionSummary:
     path = paths.session_summary(date)
     if not path.exists():
         raise UserError(
             f"{path} does not exist.\n"
             f"  Generate the session summary first (see CLAUDE.md workflow)."
         )
-    return path.read_text(encoding="utf-8")
-
-
-# Section titles to skip when generating beat images. These sections tend to be
-# bullet lists of leads and status, not story beats worth illustrating.
-BEAT_SKIP_TITLES = {
-    "what's next", "whats next", "loose ends", "next steps",
-    "up next", "next", "leads", "loose threads",
-}
-
-
-def extract_beats(summary: str) -> list:
-    """Return a list of (title, slug, body_text) for each ## section in the
-    summary that is worth illustrating (i.e. not a "What's next" style list).
-    Order preserves document order."""
-    beats = []
-    current_title = None
-    current_body = []
-
-    def maybe_flush():
-        if current_title is None:
-            return
-        title_l = current_title.strip().lower()
-        if title_l in BEAT_SKIP_TITLES:
-            return
-        body = "\n".join(current_body).strip()
-        if not body:
-            return
-        # Skip sections whose body is entirely bullets — probably a list of
-        # leads, not a story beat.
-        non_bullet = [
-            ln for ln in body.splitlines()
-            if ln.strip() and not ln.strip().startswith(("-", "*"))
-        ]
-        if not non_bullet:
-            return
-        beats.append((current_title.strip(), slugify(current_title), body))
-
-    for raw in summary.splitlines():
-        m = re.match(r"^\s*##\s+(.*)$", raw)
-        if m:
-            maybe_flush()
-            current_title = m.group(1).strip()
-            current_body = []
-        elif current_title is not None:
-            current_body.append(raw)
-    maybe_flush()
-    return beats
-
-
-def extract_pivotal_moment(summary: str) -> str:
-    """Pull the '*In brief: ...*' one-liner from the summary. This is the
-    campaign author's own compressed statement of what the session was about,
-    and it's a much better prompt anchor than the whole prose recap."""
-    for line in summary.splitlines():
-        s = line.strip()
-        if s.startswith("*In brief:") and s.endswith("*"):
-            return s[len("*In brief:"):-1].strip()
-    return ""
+    return SessionSummary.parse(path.read_text(encoding="utf-8"))
 
 
 def _portrait_parts(backend, paths, refs_only: bool = False,
@@ -186,14 +127,14 @@ def _portrait_parts(backend, paths, refs_only: bool = False,
     return parts, warnings
 
 
-def build_contents(backend, paths, summary: str, refs_only: bool = False,
+def build_contents(backend, paths, summary: SessionSummary, refs_only: bool = False,
                    full_text: bool = False) -> list:
     """Multimodal input for the HERO image (session-level banner).
     Portraits + style + pivotal moment + full summary."""
     contents, warnings = _portrait_parts(backend, paths, refs_only, full_text)
     contents.append(STYLE_INSTRUCTIONS)
 
-    pivotal = extract_pivotal_moment(summary)
+    pivotal = summary.in_brief
     if pivotal:
         contents.append(
             "PIVOTAL MOMENT TO ILLUSTRATE (this is THE scene — everything "
@@ -207,12 +148,13 @@ def build_contents(backend, paths, summary: str, refs_only: bool = False,
         "which characters are in the scene, what the setting looks like, "
         "who else is there, and what props matter. Do NOT try to depict the "
         "whole summary. Illustrate ONLY the pivotal moment above:\n\n"
-        + summary
+        + summary.raw
     )
     return contents, warnings
 
 
-def build_beat_contents(backend, paths, title: str, body: str, summary: str,
+def build_beat_contents(backend, paths, title: str, body: str,
+                        summary: SessionSummary,
                         refs_only: bool = False,
                         full_text: bool = False) -> list:
     """Multimodal input for a BEAT image (one story beat within a session).
@@ -234,7 +176,7 @@ def build_beat_contents(backend, paths, title: str, body: str, summary: str,
     # before and after this beat (helps with continuity of costume, setting).
     contents.append(
         "Background context (do NOT depict — for continuity only):\n\n"
-        + summary
+        + summary.raw
     )
     return contents, warnings
 
@@ -267,14 +209,15 @@ def generate(paths, backend: ImageBackend, date: str, *, hero: bool = True,
                                hero_aspect, model, "hero", force))
 
     if beats:
-        found = extract_beats(summary)
+        found = summary.illustratable_beats
         if not found:
             warnings.append(f"no illustratable ## sections found in {date}/summary.md")
-        for title, slug, body in found:
-            contents, warn = build_beat_contents(backend, paths, title, body,
-                                                 summary, refs_only, full_text)
+        for beat in found:
+            contents, warn = build_beat_contents(backend, paths, beat.title,
+                                                 beat.body, summary, refs_only,
+                                                 full_text)
             warnings += warn
-            results.append(_render(backend, out_dir / f"{slug}.jpg", contents,
-                                   beat_aspect, model, f"beat: {title}", force))
+            results.append(_render(backend, out_dir / f"{beat.slug}.jpg", contents,
+                                   beat_aspect, model, f"beat: {beat.title}", force))
 
     return results, warnings

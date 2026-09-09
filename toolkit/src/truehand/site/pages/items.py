@@ -22,7 +22,7 @@ def item_list_page(items, link_map):
     """Group items by status, unresolved first so mysteries lead."""
     grouped = {}
     for it in items:
-        status = it.meta.get("status", "Active")
+        status = it.meta["status"].one("Active")
         if isinstance(status, list):
             status = status[0] if status else "Active"
         grouped.setdefault(status, []).append(it)
@@ -42,10 +42,10 @@ def item_list_page(items, link_map):
         )
         chunks.append('<ul class="item-list">')
         for it in sorted(bucket, key=lambda x: x.name.lower()):
-            holder = it.meta.get("holder", "")
+            holder = it.meta["holder"].one()
             if isinstance(holder, list):
                 holder = ", ".join(holder)
-            typ = it.meta.get("type", "")
+            typ = it.meta["type"].one()
             if isinstance(typ, list):
                 typ = typ[0] if typ else ""
             meta_bits = []

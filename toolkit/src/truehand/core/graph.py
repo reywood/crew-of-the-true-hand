@@ -1,30 +1,7 @@
 """The materialized entity graph behind graph.json and the Connections block."""
 
 from .loaders import SESSION_LOCATIONS, port_for
-from .text import _clean_blurb, _extract_session_dates, slugify
-
-
-def _meta_first(val):
-    """First scalar of a frontmatter field that may be a str, list, or None."""
-    if isinstance(val, list):
-        return val[0] if val else ""
-    if isinstance(val, str):
-        return val.strip()
-    return val or ""
-
-
-def _first_scalar(v):
-    if isinstance(v, list):
-        return v[0] if v else ""
-    return v or ""
-
-
-def _as_list(v):
-    if not v:
-        return []
-    if isinstance(v, list):
-        return [str(x).strip() for x in v if str(x).strip()]
-    return [x.strip() for x in str(v).split(",") if x.strip()]
+from .text import _clean_blurb, slugify
 
 
 class Graph:
@@ -49,7 +26,8 @@ class Graph:
         return {"nodes": self.nodes, "edges": self.edges}
 
 
-def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup):
+def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup,
+                relations):
     entities = pcs + npcs + locations + items + quests + sessions
     g = Graph()
 
@@ -79,7 +57,7 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup):
             "name": e.name,
             "aliases": list(e.aliases or []),
             "url": e.href,
-            "blurb": _clean_blurb(e.summary or e.body),
+            "blurb": _clean_blurb(e.blurb),
         }
         g.nodes.append(node)
         g.node_by_id[e.href] = node
@@ -96,9 +74,10 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup):
         return fid
 
     # --- edges ---
-    for e in entities:
-        # appears_in: entity -> session (materialized 'sessions:' field)
-        for d in _extract_session_dates(e.meta.get("sessions")):
+    # appears_in: entity -> session, from the materialized 'sessions:' field.
+    # Sessions themselves carry no such field — they are the target.
+    for e in pcs + npcs + locations + items + quests:
+        for d in e.meta["sessions"].many():
             s = session_lookup.get(d)
             if s:
                 g._edge(e.href, s.href, "appears_in")
@@ -111,49 +90,48 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup):
             if tgt and tgt.kind == "location":
                 g._edge(npc.href, tgt.href, "located_in")
         # affiliated_with: npc -> faction (synthetic node)
-        for aff in _as_list(npc.meta.get("affiliation")):
+        for aff in npc.meta["affiliation"].many():
             fid = faction_node(aff)
             g._edge(npc.href, fid, "affiliated_with")
             g.faction_members[fid].append(npc.href)
-        # can_help: npc -> item (expertise join, already attached)
-        for item in npc.meta.get("can_help_with") or []:
+        # can_help: npc -> item (expertise join, see core.relations)
+        for item in relations.can_help_with_for(npc):
             g._edge(npc.href, item.href, "can_help")
 
     for loc in locations:
         # within: loc -> loc, only when the referenced place is a known location
         for field in ("region", "location", "near"):
-            for ref in _as_list(loc.meta.get(field)):
+            for ref in loc.meta[field].many():
                 tgt = resolve(ref)
                 if tgt and tgt.kind == "location":
                     g._edge(loc.href, tgt.href, "within")
         # governs: loc's ruler/patron/captain -> this location
         for field in ("ruler", "patron", "captain"):
-            for ref in _as_list(loc.meta.get(field)):
+            for ref in loc.meta[field].many():
                 who = resolve(ref)
                 if who and who.kind in ("npc", "pc"):
                     g._edge(who.href, loc.href, "governs")
 
     for item in items:
         # held_by: item -> pc (skip "Party")
-        holder = _first_scalar(item.meta.get("holder"))
-        if holder and holder.strip().lower() != "party":
+        holder = item.meta["holder"].one()
+        if holder and holder.lower() != "party":
             who = resolve(holder)
             if who and who.kind == "pc":
                 g._edge(item.href, who.href, "held_by")
         # acquired_in: item -> session (origin date)
-        origin = _first_scalar(item.meta.get("origin"))
-        s = session_lookup.get(str(origin).strip())
+        origin = item.meta["origin"].one()
+        s = session_lookup.get(origin)
         if s:
             g._edge(item.href, s.href, "acquired_in")
         # gave: giver npc -> item
-        giver = _first_scalar(item.meta.get("giver"))
-        who = resolve(giver)
+        who = resolve(item.meta["giver"].one())
         if who and who.kind in ("npc", "pc"):
             g._edge(who.href, item.href, "gave")
 
     for q in quests:
-        # depends_on: quest -> quest (QUEST_DEPENDENCIES, already attached)
-        for tgt in q.meta.get("helps") or []:
+        # depends_on: quest -> quest (see data/quest_dependencies.toml)
+        for tgt in relations.helps_for(q):
             g._edge(q.href, tgt.href, "depends_on")
 
     for date, slugs in SESSION_LOCATIONS.items():
