@@ -8,7 +8,8 @@ map_image_alt = "A map of the Sword Coast"
 
 # On-chart pins: x%, y% of the map image (faerun.png, 1573x1000).
 # Coords are the brass dot position; "dir" nudges the label off the dot.
-# Region labels (no dot) are centred on the coord. Most positions come
+# A pin with region = true is a label with no dot, centred on the coord
+# (and it takes no "dir", having nothing to nudge away from). Most positions come
 # from faerun.csv (pixel coords divided by map size).
 # Entries with a "cartouche" key instead are off-chart: south of frame,
 # mythic, or fictional.
@@ -21,8 +22,8 @@ map_image_alt = "A map of the Sword Coast"
 "triboar" = { x = 42.2, y = 43.8 }
 "kryptgarden-forest" = { x = 36.7, y = 58.1 }
 "silverymoon" = { x = 58.4, y = 27.0 }
-"silver-marches" = { x = 71.8, y = 15.9 }  # region label
-"spine-of-the-world" = { x = 38.8, y = 9.3 }  # region label across top
+"silver-marches" = { x = 71.8, y = 15.9, region = true }
+"spine-of-the-world" = { x = 38.8, y = 9.3, region = true }  # across the top
 "bryn-shandar" = { x = 19.5, y = 11.1, dir = "se" }  # "Bryn Shander" in the source CSV
 
 # Not on the canon map — campaign-specific wreck site, placed offshore

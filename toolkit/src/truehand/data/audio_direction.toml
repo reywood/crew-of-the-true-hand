@@ -1,0 +1,130 @@
+# "Tales of the True Hand" audio direction.
+#
+# Show-design decisions: how each delivery cue is voiced, which library asset
+# each music/sting cue pulls, and how loud everything sits. These are choices
+# the archive's author makes while writing an episode, not program logic.
+#
+# WARNING — the [delivery] table is inside the TTS cache key. Each chunk hashes
+# sha256(voice, model, cue name, json.dumps(preset, sort_keys=True), text), so
+# editing ANY number here re-bills every cached chunk of every episode against
+# a paid ElevenLabs voice. tests/test_chunk_hash.py freezes that hash.
+
+[levels]
+# Relative to the speech track, which sits at 0 dB. Music and stings duck
+# under the narration rather than competing with it.
+music_mid = -8.0  # minor swell — pushed under the closing line
+music_outro = -4.0  # outro theme — full swell, closer to speech
+sting_chime = -5.0
+sting_bridge = -6.0
+sting_low_chord = -3.0  # cold-open tag — wants to hit
+
+# Sustained under-beds. These are ABSOLUTE target mean levels (dBFS), not
+# attenuations: each bed asset is normalized to hit its target whatever its own
+# loudness (Fireplace.mp3 is ~-42 dBFS raw, Rain ~-20). Speech sits at ~-22, so
+# a hearth bed at -40 reads ~18 dB under the voice — present in the gaps,
+# unobtrusive under narration. See adapters/ffmpeg.render_bed.
+hearth_bed = -40.0  # crackling fire under a full act of speech
+cold_open_hearth = -42.0  # a touch quieter under the low-chord sting
+cold_open_overlay = -36.0  # tavern/drip/bell overlay in cold-open ambience
+
+[signature]
+# The signature theme is a bed span, not an inline cue, so it plays through and
+# fades under the title line instead of cutting off. Same Britons track as the
+# outro, first 20 s.
+asset = "The Britons.mp3"
+start_sec = 0.0
+duration_sec = 20.0
+db = -12.0          # quiet enough to sit under Vandal's title line
+fade_out_sec = 6.0   # long tail, so it recedes gradually under narration
+headroom_ms = 2500    # play the intro alone this long before speech comes in
+
+hearth_asset = "Fireplace.mp3"  # the bed under every cold open
+
+[stings]
+# Matched against the [STING: ...] cue text, longest key first.
+"chime" = { asset = "Ship bell — two chimes.mp3", db = -5.0 }
+"bridge" = { asset = "Ascending harp bridge.mp3", db = -6.0 }
+"sharp low chord" = { asset = "Tension stinger — ambience.mp3", db = -3.0 }
+
+[music]
+# Discrete [MUSIC: ...] cues played inline at ducked volume. The signature
+# theme is NOT here (see [signature]); the outro plays after all narration, and
+# the minor swell right before the closing.
+"outro theme" = { asset = "The Britons.mp3", db = -4.0, start_sec = 300.0, duration_sec = 6.7 }
+"minor swell" = { asset = "Minor swell.mp3", db = -8.0 }
+
+[bed_overlays]
+# A [MUSIC: low ember bed; <flavor>] cue starts a hearth bed and layers one of
+# these on top, matched on the flavor keyword, longest key first. An unmatched
+# flavor gets hearth only. db_offset is relative to levels.cold_open_overlay,
+# so retuning that one number moves the whole family.
+"tavern" = { asset = "Tavern ambience.mp3" }
+"drip" = { asset = "Cave drip.mp3" }
+"bell tolling, urgent" = { asset = "Church bell — single (musical).mp3" }
+"bell tolling, faint" = { asset = "Church bell — single (film SFX).mp3", db_offset = -4.0 }
+"bell tolling" = { asset = "Church bell — single (film SFX).mp3", db_offset = -2.0 }
+"wheat" = { asset = "Wind over wheat.mp3" }
+"hissing" = { asset = "Hell-fire crackle.mp3" }
+"mist" = { asset = "Mist-damp wind.mp3" }
+"damp" = { asset = "Mist-damp wind.mp3" }
+"rain" = { asset = "Rain.mp3" }
+"pine" = { asset = "Wind through trees.mp3" }
+"wind" = { asset = "Wind through trees.mp3" }
+
+[delivery]
+# Cue word -> ElevenLabs voice settings. resolve_delivery scans the words of a
+# *(delivery cue)* and takes the first that appears here, else "default".
+# Editing any number re-bills every cached chunk — see the warning at the top.
+"default"       = { stability = 0.55, similarity_boost = 0.75, style = 0.4, use_speaker_boost = true }
+"hushed"        = { stability = 0.25, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"murmured"      = { stability = 0.2, similarity_boost = 0.75, style = 0.65, use_speaker_boost = true }
+"conspiratorial"= { stability = 0.25, similarity_boost = 0.75, style = 0.65, use_speaker_boost = true }
+"confidential"  = { stability = 0.3, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"quiet"         = { stability = 0.45, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"quieter"       = { stability = 0.45, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"softer"        = { stability = 0.55, similarity_boost = 0.75, style = 0.35, use_speaker_boost = true }
+"low"           = { stability = 0.4, similarity_boost = 0.75, style = 0.5, use_speaker_boost = true }
+"grave"         = { stability = 0.35, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"cold"          = { stability = 0.25, similarity_boost = 0.75, style = 0.65, use_speaker_boost = true }
+"chilling"      = { stability = 0.25, similarity_boost = 0.7, style = 0.7, use_speaker_boost = true }
+"dropping"      = { stability = 0.35, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"ominous"       = { stability = 0.35, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"darker"        = { stability = 0.35, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"bright"        = { stability = 0.65, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"theatrical"    = { stability = 0.45, similarity_boost = 0.75, style = 0.65, use_speaker_boost = true }
+"storyteller"   = { stability = 0.55, similarity_boost = 0.75, style = 0.5, use_speaker_boost = true }
+"signature"     = { stability = 0.65, similarity_boost = 0.75, style = 0.5, use_speaker_boost = true }
+"rising"        = { stability = 0.4, similarity_boost = 0.75, style = 0.65, use_speaker_boost = true }
+"quickening"    = { stability = 0.35, similarity_boost = 0.75, style = 0.65, use_speaker_boost = true }
+"urgent"        = { stability = 0.25, similarity_boost = 0.75, style = 0.7, use_speaker_boost = true }
+"quoted"        = { stability = 0.2, similarity_boost = 0.7, style = 0.75, use_speaker_boost = true }
+"reflective"    = { stability = 0.65, similarity_boost = 0.75, style = 0.35, use_speaker_boost = true }
+"warm"          = { stability = 0.6, similarity_boost = 0.75, style = 0.4, use_speaker_boost = true }
+"gently"        = { stability = 0.65, similarity_boost = 0.75, style = 0.35, use_speaker_boost = true }
+"closing"       = { stability = 0.65, similarity_boost = 0.75, style = 0.4, use_speaker_boost = true }
+"reverent"      = { stability = 0.6, similarity_boost = 0.75, style = 0.4, use_speaker_boost = true }
+"amused"        = { stability = 0.45, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"sly"           = { stability = 0.4, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"dry"           = { stability = 0.55, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"measured"      = { stability = 0.6, similarity_boost = 0.75, style = 0.35, use_speaker_boost = true }
+"steadier"      = { stability = 0.6, similarity_boost = 0.75, style = 0.35, use_speaker_boost = true }
+"plain"         = { stability = 0.6, similarity_boost = 0.75, style = 0.3, use_speaker_boost = true }
+"workmanlike"   = { stability = 0.6, similarity_boost = 0.75, style = 0.3, use_speaker_boost = true }
+"wondering"     = { stability = 0.45, similarity_boost = 0.75, style = 0.5, use_speaker_boost = true }
+"wonder"        = { stability = 0.45, similarity_boost = 0.75, style = 0.5, use_speaker_boost = true }
+"curious"       = { stability = 0.5, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"leaning"       = { stability = 0.45, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"shifting"      = { stability = 0.5, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"drawing"       = { stability = 0.5, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"drawn"         = { stability = 0.5, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"personal"      = { stability = 0.55, similarity_boost = 0.75, style = 0.4, use_speaker_boost = true }
+"unfolding"     = { stability = 0.55, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"telling"       = { stability = 0.55, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"admiring"      = { stability = 0.5, similarity_boost = 0.75, style = 0.5, use_speaker_boost = true }
+"revenant"      = { stability = 0.4, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"savoring"      = { stability = 0.5, similarity_boost = 0.75, style = 0.55, use_speaker_boost = true }
+"taut"          = { stability = 0.35, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"hoarse"        = { stability = 0.3, similarity_boost = 0.75, style = 0.6, use_speaker_boost = true }
+"gathering"     = { stability = 0.55, similarity_boost = 0.75, style = 0.45, use_speaker_boost = true }
+"beat"          = { stability = 0.55, similarity_boost = 0.75, style = 0.35, use_speaker_boost = true }
+"aside"         = { stability = 0.55, similarity_boost = 0.75, style = 0.4, use_speaker_boost = true }

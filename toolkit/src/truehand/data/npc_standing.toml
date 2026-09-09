@@ -1,0 +1,25 @@
+# How the crew stands with each NPC.
+#
+# An NPC's `type:` frontmatter field is campaign vocabulary — "Old shipmate",
+# "Politically uneasy" — and several phrasings collapse to one chip. The label
+# is what the reader sees; the class picks the chip colour in style.css.
+# A `type:` not listed here simply renders no chip.
+
+# Words in an NPC's `location:` that mean "we don't actually know where they
+# are" — such an NPC groups under Adrift rather than under a port.
+provisional = ["last known", "origin", "sought", "unknown", "wandering"]
+
+[standing]
+"Ally" = ["Ally", "standing-ally"]
+"Ally (sought)" = ["Ally", "standing-ally"]
+"Conditional ally" = ["Ally", "standing-ally"]
+"Reluctant ally" = ["Ally", "standing-ally"]
+"Lead" = ["Lead", "standing-lead"]
+"Bounty" = ["Foe", "standing-foe"]
+"Adversary" = ["Foe", "standing-foe"]
+"Enemy (slain)" = ["Foe", "standing-foe"]
+"Politically uneasy" = ["Foe", "standing-foe"]
+"Old shipmate" = ["Crew", "standing-crew"]
+"Acquaintance" = ["Acquaintance", "standing-other"]
+"Background figure" = ["Acquaintance", "standing-other"]
+"Deceased" = ["Ghost", "standing-ghost"]

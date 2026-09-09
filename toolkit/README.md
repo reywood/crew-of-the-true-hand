@@ -33,7 +33,8 @@ and `sessions/` together.
 | Package | Holds |
 |---|---|
 | `core/` | The archive model: the frontmatter dialect and its `Field`/`Frontmatter` reader, markdown, `Entity`, the `Session` aggregate, `SessionSummary`, `QuestStatus`, derived `Relations`, loaders, graph. Pure, stdlib, no HTML and no network. |
-| `content/` | Prompt prose — PC identity anchors and art direction. |
+| `content/` | Prompt prose — how the PCs LOOK, and art direction. Who they *are* is `data/party.toml`. |
+| `data/` | Campaign and show data as TOML: the party, the chart, session locations, NPC standing vocabulary, quest dependencies, audio direction. Edited while writing the campaign, so it is not code. |
 | `adapters/` | Everything external: Gemini, ElevenLabs, ffmpeg, Pillow. |
 | `site/` | HTML and RSS rendering. Depends on `core`; never the reverse — `core` takes what it needs (`Relations`, `Session`) as arguments rather than reading fields the site layer wrote. |
 | `pipelines/` | Orchestration — `core` + `content` + `adapters`, no CLI concerns. |

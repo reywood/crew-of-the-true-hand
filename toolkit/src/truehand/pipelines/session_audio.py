@@ -21,10 +21,8 @@ import tempfile
 import warnings
 from pathlib import Path
 
+from .. import data as _data
 from ..adapters.ffmpeg import (
-    COLD_OPEN_HEARTH_DB,
-    COLD_OPEN_OVERLAY_DB,
-    HEARTH_BED_DB,
     concat_mp3s,
     embed_chapters,
     mix_top_with_beds,
@@ -41,87 +39,25 @@ from ..adapters.tts import (
 )
 from ..errors import OperationFailed, UserError
 
-# Volume levels (in dB) for library assets relative to the speech track.
-# Speech chunks are left at 0 dB. Music / sting elements are ducked to sit
-# under the narration without competing.
-MUSIC_INTRO_DB = -6.0    # signature theme — brighter, near speech level
+#: Show direction — levels, cue-to-asset maps and delivery presets. Edited in
+#: truehand/data/audio_direction.toml, not here. The delivery table is inside
+#: the TTS cache key (see chunk_hash), so tweaking it costs real credits.
+_DIRECTION = _data.load("audio_direction")
+_LEVELS = _DIRECTION["levels"]
+_SIGNATURE = _DIRECTION["signature"]
 
+MUSIC_MID_DB = _LEVELS["music_mid"]
+MUSIC_OUTRO_DB = _LEVELS["music_outro"]
+STING_CHIME_DB = _LEVELS["sting_chime"]
+STING_BRIDGE_DB = _LEVELS["sting_bridge"]
+STING_LOW_CHORD_DB = _LEVELS["sting_low_chord"]
 
-MUSIC_MID_DB = -8.0      # minor swell — pushed under the closing line
+#: Absolute dBFS targets for the sustained beds, not attenuations.
+HEARTH_BED_DB = _LEVELS["hearth_bed"]
+COLD_OPEN_HEARTH_DB = _LEVELS["cold_open_hearth"]
+COLD_OPEN_OVERLAY_DB = _LEVELS["cold_open_overlay"]
 
-
-MUSIC_OUTRO_DB = -4.0    # outro theme — full swell, closer to speech level
-
-
-STING_CHIME_DB = -5.0
-
-
-STING_BRIDGE_DB = -6.0
-
-
-STING_LOW_CHORD_DB = -3.0  # cold-open tag — wants to hit
-
-
-_D = lambda stab, sim, style, boost=True: {
-    "stability": stab, "similarity_boost": sim, "style": style, "use_speaker_boost": boost,
-}
-
-
-DELIVERY_PRESETS = {
-    "default":         _D(0.55, 0.75, 0.40),
-    "hushed":          _D(0.25, 0.75, 0.60),
-    "murmured":        _D(0.20, 0.75, 0.65),
-    "conspiratorial":  _D(0.25, 0.75, 0.65),
-    "confidential":    _D(0.30, 0.75, 0.60),
-    "quiet":           _D(0.45, 0.75, 0.45),
-    "quieter":         _D(0.45, 0.75, 0.45),
-    "softer":          _D(0.55, 0.75, 0.35),
-    "low":             _D(0.40, 0.75, 0.50),
-    "grave":           _D(0.35, 0.75, 0.55),
-    "cold":            _D(0.25, 0.75, 0.65),
-    "chilling":        _D(0.25, 0.70, 0.70),
-    "dropping":        _D(0.35, 0.75, 0.55),
-    "ominous":         _D(0.35, 0.75, 0.60),
-    "darker":          _D(0.35, 0.75, 0.60),
-    "bright":          _D(0.65, 0.75, 0.55),
-    "theatrical":      _D(0.45, 0.75, 0.65),
-    "storyteller":     _D(0.55, 0.75, 0.50),
-    "signature":       _D(0.65, 0.75, 0.50),
-    "rising":          _D(0.40, 0.75, 0.65),
-    "quickening":      _D(0.35, 0.75, 0.65),
-    "urgent":          _D(0.25, 0.75, 0.70),
-    "quoted":          _D(0.20, 0.70, 0.75),
-    "reflective":      _D(0.65, 0.75, 0.35),
-    "warm":            _D(0.60, 0.75, 0.40),
-    "gently":          _D(0.65, 0.75, 0.35),
-    "closing":         _D(0.65, 0.75, 0.40),
-    "reverent":        _D(0.60, 0.75, 0.40),
-    "amused":          _D(0.45, 0.75, 0.55),
-    "sly":             _D(0.40, 0.75, 0.60),
-    "dry":             _D(0.55, 0.75, 0.45),
-    "measured":        _D(0.60, 0.75, 0.35),
-    "steadier":        _D(0.60, 0.75, 0.35),
-    "plain":           _D(0.60, 0.75, 0.30),
-    "workmanlike":     _D(0.60, 0.75, 0.30),
-    "wondering":       _D(0.45, 0.75, 0.50),
-    "wonder":          _D(0.45, 0.75, 0.50),
-    "curious":         _D(0.50, 0.75, 0.45),
-    "leaning":         _D(0.45, 0.75, 0.55),
-    "shifting":        _D(0.50, 0.75, 0.45),
-    "drawing":         _D(0.50, 0.75, 0.45),
-    "drawn":           _D(0.50, 0.75, 0.45),
-    "personal":        _D(0.55, 0.75, 0.40),
-    "unfolding":       _D(0.55, 0.75, 0.45),
-    "telling":         _D(0.55, 0.75, 0.45),
-    "admiring":        _D(0.50, 0.75, 0.50),
-    "revenant":        _D(0.40, 0.75, 0.55),
-    "savoring":        _D(0.50, 0.75, 0.55),
-    "taut":            _D(0.35, 0.75, 0.60),
-    "hoarse":          _D(0.30, 0.75, 0.60),
-    "gathering":       _D(0.55, 0.75, 0.45),
-    "beat":            _D(0.55, 0.75, 0.35),
-    "aside":           _D(0.55, 0.75, 0.40),
-}
+DELIVERY_PRESETS = _DIRECTION["delivery"]
 
 
 def resolve_delivery(cue: str):
@@ -134,41 +70,29 @@ def resolve_delivery(cue: str):
     return "default", DELIVERY_PRESETS["default"]
 
 
-STING_ASSETS = {
-    # match keyword → (asset filename, mix volume in dB, use full clip?
-    #                  or (start_sec, dur_sec) segment)
-    "chime":            ("Ship bell — two chimes.mp3",  STING_CHIME_DB,     None),
-    "bridge":           ("Ascending harp bridge.mp3",   STING_BRIDGE_DB,    None),
-    "sharp low chord":  ("Tension stinger — ambience.mp3", STING_LOW_CHORD_DB, None),
-}
+def _cue_asset(entry, default_db=None):
+    """One cue's TOML entry as the (filename, volume_db, segment_or_None)
+    triple the resolvers hand back. `db_offset` is relative to default_db, so
+    retuning one level moves a whole family of cues with it."""
+    db = entry["db"] if "db" in entry else default_db + entry.get("db_offset", 0.0)
+    segment = ((entry["start_sec"], entry["duration_sec"])
+               if "start_sec" in entry else None)
+    return entry["asset"], db, segment
 
 
-# Music cues that we handle inline (v2/v3). The signature theme is NOT here —
-# it's rendered as a bed span so it can fade under the title line instead of
-# cutting off abruptly. The outro theme stays inline because it plays after
-# all narration is done. The minor swell plays inline right before the closing.
-MUSIC_ASSETS = {
-    "outro theme":     ("The Britons.mp3", MUSIC_OUTRO_DB, (300.0, 6.7)),  # last swell
-    "minor swell":     ("Minor swell.mp3", MUSIC_MID_DB,   None),
-}
+#: Cue keyword -> (asset filename, mix volume in dB, full clip or (start, dur)).
+STING_ASSETS = {k: _cue_asset(v) for k, v in _DIRECTION["stings"].items()}
 
+#: Discrete music cues played inline. The signature theme is NOT here: it is
+#: rendered as a bed span so it fades under the title line instead of cutting
+#: off. The outro plays after all narration; the minor swell before the closing.
+MUSIC_ASSETS = {k: _cue_asset(v) for k, v in _DIRECTION["music"].items()}
 
-# Signature theme is rendered as its own bed span so it can play through and
-# fade under the title line rather than ending abruptly. Uses the same Britons
-# track, first 20 s.
-SIGNATURE_ASSET = "The Britons.mp3"
-
-
-SIGNATURE_SEGMENT = (0.0, 20.0)
-
-
-SIGNATURE_DB = -12.0        # quiet enough to sit under Vandal's title line
-
-
-SIGNATURE_FADE_OUT = 6.0    # long tail so it recedes gradually under narration
-
-
-SIGNATURE_HEADROOM_MS = 2500  # play intro alone this long before speech comes in
+SIGNATURE_ASSET = _SIGNATURE["asset"]
+SIGNATURE_SEGMENT = (_SIGNATURE["start_sec"], _SIGNATURE["duration_sec"])
+SIGNATURE_DB = _SIGNATURE["db"]
+SIGNATURE_FADE_OUT = _SIGNATURE["fade_out_sec"]
+SIGNATURE_HEADROOM_MS = _SIGNATURE["headroom_ms"]
 
 
 def resolve_sting_cue(library: Path, label: str):
@@ -193,28 +117,14 @@ def resolve_music_cue(library: Path, label: str):
     return None
 
 
-HEARTH_ASSET = "Fireplace.mp3"
+HEARTH_ASSET = _SIGNATURE["hearth_asset"]
 
-
-# Cold-open ambience overlays. When a [MUSIC: low ember bed; <flavor>] cue
-# appears, we start a hearth bed AND layer one of these on top per the flavor
-# keyword. Unmatched flavors fall back to hearth-only.
+#: Cold-open ambience overlays. A `[MUSIC: low ember bed; <flavor>]` cue starts
+#: a hearth bed AND layers one of these per the flavor keyword; an unmatched
+#: flavor falls back to hearth-only.
 BED_OVERLAY_ASSETS = {
-    "tavern":               ("Tavern ambience.mp3",                COLD_OPEN_OVERLAY_DB),
-    "drip":                 ("Cave drip.mp3",                      COLD_OPEN_OVERLAY_DB),
-    "bell tolling, urgent": ("Church bell — single (musical).mp3", COLD_OPEN_OVERLAY_DB),
-    "bell tolling, faint":  ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 4.0),
-    "bell tolling":         ("Church bell — single (film SFX).mp3", COLD_OPEN_OVERLAY_DB - 2.0),
-    "wheat":                ("Wind over wheat.mp3",                COLD_OPEN_OVERLAY_DB),
-    "hissing":              ("Hell-fire crackle.mp3",              COLD_OPEN_OVERLAY_DB),
-    "mist":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
-    "damp":                 ("Mist-damp wind.mp3",                 COLD_OPEN_OVERLAY_DB),
-    "rain":                 ("Rain.mp3",                           COLD_OPEN_OVERLAY_DB),
-    "pine":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
-    "wind":                 ("Wind through trees.mp3",             COLD_OPEN_OVERLAY_DB),
-    # All Tier-2 cold-open overlays now covered. Optional layers (distant voice
-    # for mist-damp, thunder for rain, distant wing-beats) are secondary and
-    # not yet wired.
+    k: _cue_asset(v, COLD_OPEN_OVERLAY_DB)[:2]
+    for k, v in _DIRECTION["bed_overlays"].items()
 }
 
 

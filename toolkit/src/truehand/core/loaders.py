@@ -14,24 +14,10 @@ from .session import IMAGE_SUFFIXES, Session, SessionArtifacts
 from .summary import SessionSummary
 from .text import read, slugify
 
-STANDING_MAP = {
-    "Ally":              ("Ally",         "standing-ally"),
-    "Ally (sought)":     ("Ally",         "standing-ally"),
-    "Conditional ally":  ("Ally",         "standing-ally"),
-    "Reluctant ally":    ("Ally",         "standing-ally"),
-    "Lead":              ("Lead",         "standing-lead"),
-    "Bounty":            ("Foe",          "standing-foe"),
-    "Adversary":         ("Foe",          "standing-foe"),
-    "Enemy (slain)":     ("Foe",          "standing-foe"),
-    "Politically uneasy":("Foe",          "standing-foe"),
-    "Old shipmate":      ("Crew",         "standing-crew"),
-    "Acquaintance":      ("Acquaintance", "standing-other"),
-    "Background figure": ("Acquaintance", "standing-other"),
-    "Deceased":          ("Ghost",        "standing-ghost"),
-}
-
-
-PROVISIONAL = ("last known", "origin", "sought", "unknown", "wandering")
+#: Campaign vocabulary, edited in truehand/data/npc_standing.toml, not here.
+_STANDING = _data.load("npc_standing")
+STANDING_MAP = {k: tuple(v) for k, v in _STANDING["standing"].items()}
+PROVISIONAL = tuple(_STANDING["provisional"])
 
 
 def chip_for(type_str):
@@ -54,32 +40,8 @@ def port_for(npc, location_names):
     return best
 
 
-PC_DEFS = {
-    "fiz": {
-        "name": "Fiz",
-        "full_name": "Hisfiz \"Fiz\" Spinfizzler",
-        "aliases": ["Fiz", "Hisfiz", "Hisfiz Spinfizzler", "Spinfizzler"],
-        "summary": "Rock Gnome Artificer (Artillerist) from Halruaa. Stole a flying ship to see the world.",
-    },
-    "hal": {
-        "name": "Hal",
-        "full_name": "Hal Stormguard",
-        "aliases": ["Hal", "Hal Stormguard", "Stormguard"],
-        "summary": "Variant Human Paladin, Oath of Vengeance. Ex-militia of the Silver Marches.",
-    },
-    "toz": {
-        "name": "Toz",
-        "full_name": "Tozlo \"Toz\" Greenbottle",
-        "aliases": ["Toz", "Tozlo", "Tozlo Greenbottle"],
-        "summary": "Lightfoot Halfling Storm Sorcerer. Captain of the lost True Hand; his family adopted Eno as a brother.",
-    },
-    "eno": {
-        "name": "Eno",
-        "full_name": "Enoril \"Eno\" Wazek",
-        "aliases": ["Eno", "Woz", "Eno Woz", "Enoril", "Enoril Wazek", "Wazek"],
-        "summary": "Half-Elf Nature Cleric of Eldath. Raised in the wilds; adopted by the Greenbottles.",
-    },
-}
+#: The crew, edited in truehand/data/party.toml, not here.
+PC_DEFS = _data.load("party")["pcs"]
 
 
 def load_pcs(paths):

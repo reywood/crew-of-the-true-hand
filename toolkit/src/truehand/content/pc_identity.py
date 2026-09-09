@@ -11,8 +11,12 @@ PC_ANCHORS is the full description. LEAN_CAST is a deliberately shorter
 gear-only variant for crowded scenes, not a drifted copy — keep both.
 """
 
+from .. import data as _data
+
 #: Slugs in party order; also the order portraits are fed to the model.
-PC_SLUGS = ("fiz", "hal", "toz", "eno")
+#: Derived from data/party.toml so the roster is stated once — this file
+#: describes how the crew LOOK, not who they are.
+PC_SLUGS = tuple(_data.load("party")["pcs"])
 
 PC_ANCHORS = {
     "fiz": (

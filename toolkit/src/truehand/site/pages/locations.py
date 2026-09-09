@@ -21,7 +21,8 @@ def locations_chart_page(locations, link_map):
     for loc in locations:
         data = LOCATION_MAP_DATA.get(loc.slug, {})
         if "x" in data:
-            pins.append((loc, data["x"], data["y"], data.get("dir", "e")))
+            pins.append((loc, data["x"], data["y"], data.get("dir", "e"),
+                         data.get("region", False)))
         elif "cartouche" in data:
             cartouches[data["cartouche"]].append(loc)
 
@@ -31,8 +32,7 @@ def locations_chart_page(locations, link_map):
         '<div class="map-plate">',
         MAP_IMAGE,
     ]
-    for loc, x, y, label_dir in pins:
-        is_region = loc.slug in ("spine-of-the-world", "silver-marches")
+    for loc, x, y, label_dir, is_region in pins:
         classes = ["map-pin"]
         if is_region:
             classes.append("map-pin-region")

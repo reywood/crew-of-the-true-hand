@@ -6,6 +6,10 @@ scripts/generate-session-audio.py.
 
 probe_duration_seconds() also replaces the site generator's private
 _mp3_duration_seconds(), which shelled out to the same ffprobe command.
+
+Mix levels are NOT here: how loud a bed sits under the narration is show
+direction, not an ffmpeg concern. They live in data/audio_direction.toml and
+arrive as arguments.
 """
 
 from __future__ import annotations
@@ -14,16 +18,6 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-
-# Sustained under-beds sit well below the narration. These are ABSOLUTE target
-# mean levels (dBFS), not relative attenuations: each bed asset is normalized
-# to hit its target regardless of its own inherent loudness (Fireplace.mp3 is
-# ~-42 dBFS raw, Rain ~-20). Speech sits at ~-22 dBFS, so a hearth bed at -40
-# reads ~18 dB under the voice — present in the gaps, unobtrusive under
-# narration. See render_bed().
-HEARTH_BED_DB = -40.0        # crackling fire under a full act of speech
-COLD_OPEN_HEARTH_DB = -42.0  # a touch quieter under the low-chord sting
-COLD_OPEN_OVERLAY_DB = -36.0 # tavern/drip/bell overlay in cold-open ambience
 
 
 def probe_duration_seconds(path) -> float:
@@ -111,8 +105,7 @@ def _asset_mean_dbfs(path: Path) -> float:
 
 
 def render_bed(hearth_path: Path, overlay_path, duration_sec: float,
-                out_path: Path, hearth_db: float = HEARTH_BED_DB,
-                overlay_db: float = COLD_OPEN_OVERLAY_DB) -> Path:
+                out_path: Path, hearth_db: float, overlay_db: float) -> Path:
     """Build a bed of the given duration by looping the hearth asset (and,
     if provided, an overlay), normalizing each track to its ABSOLUTE target
     level (hearth_db / overlay_db are dBFS targets, not attenuations), applying
