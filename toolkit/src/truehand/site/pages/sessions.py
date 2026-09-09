@@ -22,12 +22,13 @@ def session_list_page(sessions, locations, link_map):
                     f'<a class="session-row-loc" href="{loc.href}">{html.escape(loc.name)}</a>'
                 )
         if not loc_chips:
-            loc_chips.append(
-                '<span class="session-row-loc session-row-loc-none">—</span>'
-            )
+            loc_chips.append('<span class="session-row-loc session-row-loc-none">—</span>')
         locs_html = "".join(loc_chips)
-        audio_badge = ('<span class="session-row-audio" title="Audio recap available" aria-label="Audio recap available">&#9836;</span>'
-                       if s.has_audio else '')
+        audio_badge = (
+            '<span class="session-row-audio" title="Audio recap available" aria-label="Audio recap available">&#9836;</span>'
+            if s.has_audio
+            else ""
+        )
         rows.append(f"""
 <li class="session-row">
   <div class="session-row-meta">
@@ -38,17 +39,22 @@ def session_list_page(sessions, locations, link_map):
   </div>
   <p class="session-row-summary">{html.escape(s.blurb)}</p>
 </li>""")
-    body = ('<h1>Sessions</h1>\n'
-            '<p class="subhead"><em>Newest to oldest. Click a date to read the full account.</em></p>\n'
-            '<p class="podcast-cta"><span class="copy-feed-wrap">'
-            f'<a href="feed.xml" class="podcast-link js-copy-feed" data-feed-url="{base_url()}/feed.xml">'
-            '<span aria-hidden="true">&#9836;</span> Subscribe to the podcast'
-            '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it into your podcast app of choice.</span></p>\n'
-            '<ol class="session-log">' + "".join(rows) + '</ol>')
-    return page("Sessions", linkify_html(body, "sessions.html", link_map),
-                current_nav="sessions.html",
-                description='Every session of the campaign, newest first — each with a recap, illustrations, a narrated audio retelling, and the original notes and transcript.',
-                canonical="sessions.html")
+    body = (
+        "<h1>Sessions</h1>\n"
+        '<p class="subhead"><em>Newest to oldest. Click a date to read the full account.</em></p>\n'
+        '<p class="podcast-cta"><span class="copy-feed-wrap">'
+        f'<a href="feed.xml" class="podcast-link js-copy-feed" data-feed-url="{base_url()}/feed.xml">'
+        '<span aria-hidden="true">&#9836;</span> Subscribe to the podcast'
+        '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it into your podcast app of choice.</span></p>\n'
+        '<ol class="session-log">' + "".join(rows) + "</ol>"
+    )
+    return page(
+        "Sessions",
+        linkify_html(body, "sessions.html", link_map),
+        current_nav="sessions.html",
+        description="Every session of the campaign, newest first — each with a recap, illustrations, a narrated audio retelling, and the original notes and transcript.",
+        canonical="sessions.html",
+    )
 
 
 def _inject_beat_images(summary_html: str, session) -> str:
@@ -75,19 +81,22 @@ def _inject_beat_images(summary_html: str, session) -> str:
         if not img_path:
             return m.group(0)
         return (
-            f'{m.group(0)}'
+            f"{m.group(0)}"
             f'<figure class="beat-image {next(side_iter)}">'
             f'<img src="images/sessions/{session.date}/{html.escape(img_path.name)}" '
             f'alt="{html.escape(beat.title)}" loading="lazy">'
-            f'</figure>'
+            f"</figure>"
         )
 
     return re.sub(r"<h2>.*?</h2>", replace, summary_html, flags=re.DOTALL)
 
 
 def detail_page_session(s, link_map, prev=None, nxt=None):
-    summary_html = (md_to_html(s.summary.raw) if s.summary
-                    else "<p><em>No summary available for this session.</em></p>")
+    summary_html = (
+        md_to_html(s.summary.raw)
+        if s.summary
+        else "<p><em>No summary available for this session.</em></p>"
+    )
     summary_html = _inject_beat_images(summary_html, s)
 
     note_text = s.notes
@@ -123,7 +132,7 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
             f'    <figcaption><span class="session-audio-badge no-link">Tales of the True Hand</span>'
             f' <span class="session-audio-caption no-link">Listen to this session as told by Vandal Lovelace.</span></figcaption>\n'
             f'    <audio controls preload="none" src="audio/sessions/{html.escape(s.audio_name)}"></audio>\n'
-            f'  </figure>\n'
+            f"  </figure>\n"
         )
 
     hero_html = ""
@@ -132,12 +141,12 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
             f'  <figure class="session-hero">'
             f'<img src="images/sessions/{html.escape(s.hero_name)}" '
             f'alt="Illustration for {html.escape(s.name)}" loading="lazy">'
-            f'</figure>\n'
+            f"</figure>\n"
         )
 
     carried_html = ""
     if s.carried:
-        items = "".join(f'<li>{md_inline(it)}</li>' for it in s.carried)
+        items = "".join(f"<li>{md_inline(it)}</li>" for it in s.carried)
         carried_html = f"""
   <aside class="carried">
     <h2>Items acquired</h2>
@@ -161,11 +170,17 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
     bc = f'<a href="sessions.html">Sessions</a> &rsaquo; {html.escape(s.name)}'
     subtitle = s.artifacts.episode_title
     share_title = f"{s.name} — {subtitle}" if subtitle else s.name
-    return page(share_title, body, current_nav="sessions.html", breadcrumb=bc,
-                description=s.blurb,
-                image=f"images/sessions/{s.hero_name}" if s.has_hero else None,
-                canonical=s.href, og_type="article",
-                audio=f"audio/sessions/{s.audio_name}" if s.has_audio else None)
+    return page(
+        share_title,
+        body,
+        current_nav="sessions.html",
+        breadcrumb=bc,
+        description=s.blurb,
+        image=f"images/sessions/{s.hero_name}" if s.has_hero else None,
+        canonical=s.href,
+        og_type="article",
+        audio=f"audio/sessions/{s.audio_name}" if s.has_audio else None,
+    )
 
 
 def _session_pager(prev, nxt):
@@ -187,14 +202,15 @@ def _session_pager(prev, nxt):
             f'<span class="session-pager-title">{html.escape(entity.name)}</span>',
         ]
         if entity.blurb:
-            pieces.append(
-                f'<span class="session-pager-brief">{html.escape(entity.blurb)}</span>')
-        return (f'<a class="session-pager-link {direction}" '
-                f'href="{entity.href}" rel="{rel}">' + "".join(pieces) + '</a>')
+            pieces.append(f'<span class="session-pager-brief">{html.escape(entity.blurb)}</span>')
+        return (
+            f'<a class="session-pager-link {direction}" '
+            f'href="{entity.href}" rel="{rel}">' + "".join(pieces) + "</a>"
+        )
 
     return (
         '\n<nav class="session-pager" aria-label="Session navigation">\n'
-        f'  {slot(prev, "prev", "Previous session")}\n'
-        f'  {slot(nxt, "next", "Next session")}\n'
-        '</nav>\n'
+        f"  {slot(prev, 'prev', 'Previous session')}\n"
+        f"  {slot(nxt, 'next', 'Next session')}\n"
+        "</nav>\n"
     )

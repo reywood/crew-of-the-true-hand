@@ -19,16 +19,25 @@ refs_app = typer.Typer(help="Character reference plates.", no_args_is_help=True)
 @refs_app.command("build")
 def build(
     ctx: typer.Context,
-    only: Annotated[str | None, typer.Option("--only", help=f"One PC slug: {', '.join(PC_SLUGS)}.")] = None,
-    plate: Annotated[int | None, typer.Option("--plate", min=1, max=2, help="Render only plate 1 or 2.")] = None,
-    force: Annotated[bool, typer.Option("--force", help="Regenerate even if the plate exists.")] = False,
-    model: Annotated[str, typer.Option("--model", help="Gemini image model.")] = DEFAULT_IMAGE_MODEL,
+    only: Annotated[
+        str | None, typer.Option("--only", help=f"One PC slug: {', '.join(PC_SLUGS)}.")
+    ] = None,
+    plate: Annotated[
+        int | None, typer.Option("--plate", min=1, max=2, help="Render only plate 1 or 2.")
+    ] = None,
+    force: Annotated[
+        bool, typer.Option("--force", help="Regenerate even if the plate exists.")
+    ] = False,
+    model: Annotated[
+        str, typer.Option("--model", help="Gemini image model.")
+    ] = DEFAULT_IMAGE_MODEL,
 ) -> None:
     """Generate characters/references/<slug>-ref-<n>.jpg."""
     paths = resolve_paths(ctx)
     load_dotenv(paths.env_file)
-    results = character_refs.generate(paths, GeminiImageBackend(), only=only,
-                                      plate=plate, force=force, model=model)
+    results = character_refs.generate(
+        paths, GeminiImageBackend(), only=only, plate=plate, force=force, model=model
+    )
     failures = 0
     for r in results:
         if r.status == "failed":

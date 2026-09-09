@@ -16,8 +16,7 @@ COVER_SIZE = (1400, 1400)
 JPEG_QUALITY = 88
 
 
-def normalize_square_jpeg(data: bytes, dest: Path,
-                          size: tuple[int, int] = COVER_SIZE) -> str:
+def normalize_square_jpeg(data: bytes, dest: Path, size: tuple[int, int] = COVER_SIZE) -> str:
     """Write *data* to *dest* as a square RGB JPEG. Returns a status note.
 
     Falls back to writing the bytes unchanged if Pillow is not installed.
@@ -27,9 +26,11 @@ def normalize_square_jpeg(data: bytes, dest: Path,
         from PIL import Image
     except ImportError:
         dest.write_bytes(data)
-        return (f"{len(data) / 1024:.0f} KB, RAW — install Pillow "
-                f"(pip install -e 'toolkit[image]') to normalize to "
-                f"{size[0]}x{size[1]} JPEG")
+        return (
+            f"{len(data) / 1024:.0f} KB, RAW — install Pillow "
+            f"(pip install -e 'toolkit[image]') to normalize to "
+            f"{size[0]}x{size[1]} JPEG"
+        )
 
     im = Image.open(io.BytesIO(data)).convert("RGB")
     if im.size != size:

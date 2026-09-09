@@ -85,8 +85,7 @@ def _cue_asset(entry, default_db=None):
     triple the resolvers hand back. `db_offset` is relative to default_db, so
     retuning one level moves a whole family of cues with it."""
     db = entry["db"] if "db" in entry else default_db + entry.get("db_offset", 0.0)
-    segment = ((entry["start_sec"], entry["duration_sec"])
-               if "start_sec" in entry else None)
+    segment = (entry["start_sec"], entry["duration_sec"]) if "start_sec" in entry else None
     return entry["asset"], db, segment
 
 
@@ -133,8 +132,7 @@ HEARTH_ASSET = _SIGNATURE["hearth_asset"]
 #: a hearth bed AND layers one of these per the flavor keyword; an unmatched
 #: flavor falls back to hearth-only.
 BED_OVERLAY_ASSETS = {
-    k: _cue_asset(v, COLD_OPEN_OVERLAY_DB)[:2]
-    for k, v in _DIRECTION["bed_overlays"].items()
+    k: _cue_asset(v, COLD_OPEN_OVERLAY_DB)[:2] for k, v in _DIRECTION["bed_overlays"].items()
 }
 
 
@@ -198,8 +196,7 @@ def load_manifest(path: Path) -> dict:
 
 
 def save_manifest(path: Path, data: dict) -> None:
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-                    encoding="utf-8")
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 @contextmanager
@@ -223,9 +220,9 @@ def _keep_paid_chunks(manifest_path: Path, manifest_out: dict, existing: dict):
     try:
         yield
     except BaseException:
-        save_manifest(manifest_path,
-                      {**manifest_out,
-                       "chunks": {**existing, **manifest_out["chunks"]}})
+        save_manifest(
+            manifest_path, {**manifest_out, "chunks": {**existing, **manifest_out["chunks"]}}
+        )
         raise
 
 
@@ -234,7 +231,7 @@ class EpisodeResult:
     """What a build did. The CLI decides how to say it — every other pipeline
     in the package already returns its outcome instead of printing it."""
 
-    status: str                  # "written" | "skipped" | "dry-run"
+    status: str  # "written" | "skipped" | "dry-run"
     path: Path
     detail: str = ""
     size_kb: float = 0.0
@@ -255,7 +252,7 @@ class EpisodeResult:
 class BedSpan:
     """A sustained under-bed running beneath a stretch of narration."""
 
-    kind: str          # "cold_open" | "hearth" | "signature"
+    kind: str  # "cold_open" | "hearth" | "signature"
     label: str
     start_ms: int
     end_ms: int
@@ -292,9 +289,7 @@ def resolve_bed_spans(markers, total_ms: int) -> list[BedSpan]:
     for marker in markers:
         close(marker["at_ms"])
         if marker["kind"] in _BED_OPENERS:
-            open_at, kind, label = (marker["at_ms"],
-                                    _BED_OPENERS[marker["kind"]],
-                                    marker["label"])
+            open_at, kind, label = (marker["at_ms"], _BED_OPENERS[marker["kind"]], marker["label"])
         else:
             open_at = None
     close(total_ms)
@@ -323,8 +318,14 @@ def _render_bed_span(library: Path, span: BedSpan, asset_cache: Path):
             overlay = resolve_bed_overlay(library, span.label)
             if overlay is not None:
                 overlay_path, overlay_db = overlay
-        render_bed(hearth_path, overlay_path, duration_sec, out_path,
-                   hearth_db=hearth_db, overlay_db=overlay_db)
+        render_bed(
+            hearth_path,
+            overlay_path,
+            duration_sec,
+            out_path,
+            hearth_db=hearth_db,
+            overlay_db=overlay_db,
+        )
     return (out_path, span.start_ms)
 
 
@@ -338,22 +339,33 @@ def _render_signature_bed(library: Path, duration_sec: float, out_path: Path) ->
     fade_out = min(SIGNATURE_FADE_OUT, max(1.5, segment * 0.6))
     fade_out_start = max(0.0, segment - fade_out)
     render_segment(
-        source, out_path,
-        start_offset=start_offset, segment=segment,
-        afilters=(f"volume={SIGNATURE_DB}dB",
-                  f"afade=t=in:st=0:d={fade_in}",
-                  f"afade=t=out:st={fade_out_start}:d={fade_out}"),
+        source,
+        out_path,
+        start_offset=start_offset,
+        segment=segment,
+        afilters=(
+            f"volume={SIGNATURE_DB}dB",
+            f"afade=t=in:st=0:d={fade_in}",
+            f"afade=t=out:st={fade_out_start}:d={fade_out}",
+        ),
     )
     return out_path
 
 
-def build_episode(paths, backend: TTSBackend, date: str, *,
-                  voice_id: str = DEFAULT_VOICE_ID,
-                  model_id: str = DEFAULT_MODEL_ID,
-                  force: bool = False, force_tts: bool = False,
-                  no_music: bool = False, no_beds: bool = False,
-                  dry_run: bool = False,
-                  on_progress=None) -> EpisodeResult:
+def build_episode(
+    paths,
+    backend: TTSBackend,
+    date: str,
+    *,
+    voice_id: str = DEFAULT_VOICE_ID,
+    model_id: str = DEFAULT_MODEL_ID,
+    force: bool = False,
+    force_tts: bool = False,
+    no_music: bool = False,
+    no_beds: bool = False,
+    dry_run: bool = False,
+    on_progress=None,
+) -> EpisodeResult:
     """Render sessions/<date>/audio/final.mp3 from its script.md.
 
     Progress goes to *on_progress* rather than stdout, so a caller can stay
@@ -371,8 +383,9 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
     final_path = session_dir / "final.mp3"
 
     if final_path.exists() and not force and not force_tts and not dry_run:
-        return EpisodeResult("skipped", final_path,
-                             detail="already exists — use --force to rebuild")
+        return EpisodeResult(
+            "skipped", final_path, detail="already exists — use --force to rebuild"
+        )
 
     session_dir.mkdir(parents=True, exist_ok=True)
     chunks_dir.mkdir(parents=True, exist_ok=True)
@@ -381,26 +394,34 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
     events = script.events
     spoken = script.spoken_lines
     total_chars = script.character_count
-    report(f"[{date}] parsed {len(spoken)} speech chunks "
-          f"({total_chars} chars), "
-          f"{script.count(StingCue)} stings, "
-          f"{script.count(MusicCue)} music cues")
+    report(
+        f"[{date}] parsed {len(spoken)} speech chunks "
+        f"({total_chars} chars), "
+        f"{script.count(StingCue)} stings, "
+        f"{script.count(MusicCue)} music cues"
+    )
 
     if dry_run:
         for e in events[:30]:
             report(f"  {e}")
-        return EpisodeResult("dry-run", final_path, events=len(events),
-                             spoken_lines=len(spoken), characters=total_chars)
+        return EpisodeResult(
+            "dry-run",
+            final_path,
+            events=len(events),
+            spoken_lines=len(spoken),
+            characters=total_chars,
+        )
 
     manifest = load_manifest(manifest_path)
     if force_tts:
         manifest = {}
-    existing_chunks = manifest.get("chunks", {})   # hash -> chunk_id
-    manifest_out = {"date": date, "voice_id": voice_id,
-                    "model_id": model_id, "chunks": {}}
+    existing_chunks = manifest.get("chunks", {})  # hash -> chunk_id
+    manifest_out = {"date": date, "voice_id": voice_id, "model_id": model_id, "chunks": {}}
 
-    with tempfile.TemporaryDirectory(prefix="tales-") as tmp, \
-            _keep_paid_chunks(manifest_path, manifest_out, existing_chunks):
+    with (
+        tempfile.TemporaryDirectory(prefix="tales-") as tmp,
+        _keep_paid_chunks(manifest_path, manifest_out, existing_chunks),
+    ):
         tmp_dir = Path(tmp)
         silence_cache = tmp_dir / "silences"
         silence_cache.mkdir()
@@ -433,24 +454,34 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
                     cached_path = chunks_dir / f"{cached_id}.mp3"
                     if cached_id != chunk_id:
                         shutil.copy2(cached_path, chunk_path)
-                    report(f"  [{speech_idx + 1}/{len(speech_texts)}] "
-                          f"({delivery_key}) [cache hit] "
-                          f"{txt[:50].replace(chr(10), ' ')}...")
+                    report(
+                        f"  [{speech_idx + 1}/{len(speech_texts)}] "
+                        f"({delivery_key}) [cache hit] "
+                        f"{txt[:50].replace(chr(10), ' ')}..."
+                    )
                 else:
                     prev_txt = speech_texts[speech_idx - 1] if speech_idx > 0 else ""
-                    next_txt = (speech_texts[speech_idx + 1]
-                                if speech_idx + 1 < len(speech_texts) else "")
-                    report(f"  [{speech_idx + 1}/{len(speech_texts)}] "
-                          f"({delivery_key}) [TTS] "
-                          f"{txt[:50].replace(chr(10), ' ')}...")
+                    next_txt = (
+                        speech_texts[speech_idx + 1] if speech_idx + 1 < len(speech_texts) else ""
+                    )
+                    report(
+                        f"  [{speech_idx + 1}/{len(speech_texts)}] "
+                        f"({delivery_key}) [TTS] "
+                        f"{txt[:50].replace(chr(10), ' ')}..."
+                    )
                     try:
-                        chunk_path.write_bytes(backend.synthesize(
-                            txt, voice_id=voice_id, model_id=model_id,
-                            settings=voice_settings,
-                            previous_text=prev_txt, next_text=next_txt))
+                        chunk_path.write_bytes(
+                            backend.synthesize(
+                                txt,
+                                voice_id=voice_id,
+                                model_id=model_id,
+                                settings=voice_settings,
+                                previous_text=prev_txt,
+                                next_text=next_txt,
+                            )
+                        )
                     except Exception as exc:
-                        raise OperationFailed(
-                            f"TTS failed on chunk {chunk_id}: {exc}") from exc
+                        raise OperationFailed(f"TTS failed on chunk {chunk_id}: {exc}") from exc
 
                 manifest_out["chunks"][h] = chunk_id
                 dur_ms = probe_duration_ms(chunk_path)
@@ -503,33 +534,37 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
                 # advancing for any inline element the cue may also carry.
                 if not no_music and not no_beds:
                     if is_cold_open_bed_cue(label):
-                        bed_markers.append({"at_ms": cursor_ms,
-                                             "kind": "start_cold_open",
-                                             "label": label})
+                        bed_markers.append(
+                            {"at_ms": cursor_ms, "kind": "start_cold_open", "label": label}
+                        )
                     elif is_hearth_bed_start_cue(label):
-                        bed_markers.append({"at_ms": cursor_ms,
-                                             "kind": "start_hearth",
-                                             "label": label})
+                        bed_markers.append(
+                            {"at_ms": cursor_ms, "kind": "start_hearth", "label": label}
+                        )
                     elif is_signature_bed_cue(label):
                         # Transition: closes the cold-open bed and opens the
                         # signature bed at the same position. Then inject a
                         # short silence into the top layer so the intro theme
                         # plays alone for a beat before the title-line speech
                         # comes in.
-                        bed_markers.append({"at_ms": cursor_ms,
-                                             "kind": "start_signature",
-                                             "label": label})
-                        headroom_path = silence_cache / f"signature-headroom-{SIGNATURE_HEADROOM_MS}.mp3"
+                        bed_markers.append(
+                            {"at_ms": cursor_ms, "kind": "start_signature", "label": label}
+                        )
+                        headroom_path = (
+                            silence_cache / f"signature-headroom-{SIGNATURE_HEADROOM_MS}.mp3"
+                        )
                         if not headroom_path.exists():
                             synth_silence(SIGNATURE_HEADROOM_MS, headroom_path)
-                        top_layer.append({"path": headroom_path,
-                                           "dur_ms": SIGNATURE_HEADROOM_MS,
-                                           "kind": "silence"})
+                        top_layer.append(
+                            {
+                                "path": headroom_path,
+                                "dur_ms": SIGNATURE_HEADROOM_MS,
+                                "kind": "silence",
+                            }
+                        )
                         cursor_ms += SIGNATURE_HEADROOM_MS
                     elif is_bed_end_cue(label):
-                        bed_markers.append({"at_ms": cursor_ms,
-                                             "kind": "end",
-                                             "label": label})
+                        bed_markers.append({"at_ms": cursor_ms, "kind": "end", "label": label})
 
                 if no_music:
                     continue
@@ -554,8 +589,10 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
         bed_specs = []  # list of (bed_path, delay_ms) for the final mix
         if not no_music and not no_beds:
             for span in resolve_bed_spans(bed_markers, cursor_ms):
-                report(f"  bed span: {span.kind} — {span.duration_sec:.1f}s "
-                       f"@ {span.start_ms / 1000:.1f}s")
+                report(
+                    f"  bed span: {span.kind} — {span.duration_sec:.1f}s "
+                    f"@ {span.start_ms / 1000:.1f}s"
+                )
                 bed_specs.append(_render_bed_span(library, span, asset_cache))
 
         # --- Pass 3: concat the top layer to top.mp3, then mix in the
@@ -575,12 +612,18 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
         if chapters:
             total_ms = probe_duration_ms(final_path)
             embed_chapters(final_path, chapters, total_ms, tmp_dir)
-            report(f"  Embedded {len(chapters)} chapter marker(s): "
-                  f"{', '.join(c['title'] for c in chapters)}")
+            report(
+                f"  Embedded {len(chapters)} chapter marker(s): "
+                f"{', '.join(c['title'] for c in chapters)}"
+            )
 
-    return EpisodeResult("written", final_path,
-                         size_kb=final_path.stat().st_size / 1024,
-                         chunks=len(manifest_out["chunks"]),
-                         chunks_dir=chunks_dir,
-                         events=len(events), spoken_lines=len(spoken),
-                         characters=total_chars)
+    return EpisodeResult(
+        "written",
+        final_path,
+        size_kb=final_path.stat().st_size / 1024,
+        chunks=len(manifest_out["chunks"]),
+        chunks_dir=chunks_dir,
+        events=len(events),
+        spoken_lines=len(spoken),
+        characters=total_chars,
+    )

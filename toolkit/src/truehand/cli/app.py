@@ -43,8 +43,12 @@ def main(
     ] = None,
     _version: Annotated[
         bool,
-        typer.Option("--version", callback=_version_callback, is_eager=True,
-                     help="Show the version and exit."),
+        typer.Option(
+            "--version",
+            callback=_version_callback,
+            is_eager=True,
+            help="Show the version and exit.",
+        ),
     ] = False,
 ) -> None:
     """Resolve the archive root once, for every subcommand."""

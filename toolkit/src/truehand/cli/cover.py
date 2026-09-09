@@ -17,8 +17,12 @@ cover_app = typer.Typer(help="Podcast cover art.", no_args_is_help=True)
 @cover_app.command("build")
 def build(
     ctx: typer.Context,
-    force: Annotated[bool, typer.Option("--force", help="Regenerate even if the cover exists.")] = False,
-    model: Annotated[str, typer.Option("--model", help="Gemini image model.")] = DEFAULT_IMAGE_MODEL,
+    force: Annotated[
+        bool, typer.Option("--force", help="Regenerate even if the cover exists.")
+    ] = False,
+    model: Annotated[
+        str, typer.Option("--model", help="Gemini image model.")
+    ] = DEFAULT_IMAGE_MODEL,
 ) -> None:
     """Generate website/static/podcast-cover.jpg (1400x1400)."""
     paths = resolve_paths(ctx)

@@ -58,8 +58,7 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
     all_entities = pcs + npcs + locations + items + quests + sessions
     link_map = build_link_map(all_entities)
 
-    graph = build_graph(pcs, npcs, locations, items, quests, sessions,
-                        session_lookup, relations)
+    graph = build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup, relations)
 
     setup_output(paths, out_dir, sessions)
 
@@ -68,23 +67,38 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
 
     # Materialize the graph + a slim search index. graph.json is for tooling
     # and reasoning; search-index.json powers the client-side site search.
-    write("graph.json", json.dumps(graph.as_dict(), indent=1,
-                                   ensure_ascii=False, sort_keys=True))
+    write("graph.json", json.dumps(graph.as_dict(), indent=1, ensure_ascii=False, sort_keys=True))
     search_index = [
-        {"name": n["name"], "aliases": n["aliases"], "kind": n["kind"],
-         "url": n["url"], "blurb": n["blurb"]}
-        for n in graph.nodes if n["url"]
+        {
+            "name": n["name"],
+            "aliases": n["aliases"],
+            "kind": n["kind"],
+            "url": n["url"],
+            "blurb": n["blurb"],
+        }
+        for n in graph.nodes
+        if n["url"]
     ]
-    write("search-index.json", json.dumps(search_index,
-                                          ensure_ascii=False, sort_keys=True))
+    write("search-index.json", json.dumps(search_index, ensure_ascii=False, sort_keys=True))
 
-    write("index.html", index_page(pcs, npcs, locations, quests, sessions,
-                                   relations))
+    write("index.html", index_page(pcs, npcs, locations, quests, sessions, relations))
 
     state = load_campaign_state(paths)
-    write("next.html", prep_page(pcs, npcs, locations, items, quests,
-                                  sessions, state, session_lookup, link_map,
-                                  relations))
+    write(
+        "next.html",
+        prep_page(
+            pcs,
+            npcs,
+            locations,
+            items,
+            quests,
+            sessions,
+            state,
+            session_lookup,
+            link_map,
+            relations,
+        ),
+    )
     write("threads.html", threads_page(sessions, session_lookup, link_map))
 
     write("characters.html", pc_list_page(pcs, link_map))
@@ -93,18 +107,28 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
 
     write("npcs.html", npc_table_page(npcs, link_map))
     for e in npcs:
-        write(e.href, detail_page_generic(
-            e, "npcs.html", "NPCs", link_map, session_lookup, graph, relations))
+        write(
+            e.href,
+            detail_page_generic(e, "npcs.html", "NPCs", link_map, session_lookup, graph, relations),
+        )
 
     write("locations.html", locations_chart_page(locations, link_map))
     for e in locations:
-        write(e.href, detail_page_generic(
-            e, "locations.html", "Locations", link_map, session_lookup, graph, relations))
+        write(
+            e.href,
+            detail_page_generic(
+                e, "locations.html", "Locations", link_map, session_lookup, graph, relations
+            ),
+        )
 
     write("items.html", item_list_page(items, link_map))
     for e in items:
-        write(e.href, detail_page_generic(
-            e, "items.html", "Items", link_map, session_lookup, graph, relations))
+        write(
+            e.href,
+            detail_page_generic(
+                e, "items.html", "Items", link_map, session_lookup, graph, relations
+            ),
+        )
 
     write("quests.html", quest_list_page(quests, link_map, relations))
     for q in quests:
@@ -127,7 +151,11 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
         "total": total,
         "episodes": n_episodes,
         "counts": {
-            "pcs": len(pcs), "npcs": len(npcs), "locations": len(locations),
-            "items": len(items), "quests": len(quests), "sessions": len(sessions),
+            "pcs": len(pcs),
+            "npcs": len(npcs),
+            "locations": len(locations),
+            "items": len(items),
+            "quests": len(quests),
+            "sessions": len(sessions),
         },
     }

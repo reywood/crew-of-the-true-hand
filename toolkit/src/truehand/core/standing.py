@@ -41,8 +41,7 @@ _APPROACHABLE = frozenset({"standing-ally", "standing-lead", "standing-crew"})
 #: Campaign vocabulary, edited in truehand/data/npc_standing.toml, not here.
 _DATA = _data.load("npc_standing")
 
-BY_TYPE = {name: Standing(label, css)
-           for name, (label, css) in _DATA["standing"].items()}
+BY_TYPE = {name: Standing(label, css) for name, (label, css) in _DATA["standing"].items()}
 
 #: Words in a `location:` meaning "we don't really know" — such an NPC groups
 #: under Adrift rather than under a port.

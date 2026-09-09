@@ -66,8 +66,7 @@ SECTION_TO_STATUS = {
 }
 
 #: Quest-log section order.
-DISPLAY_ORDER = sorted(set(SECTION_TO_STATUS.values()),
-                       key=lambda s: s.display_order)
+DISPLAY_ORDER = sorted(set(SECTION_TO_STATUS.values()), key=lambda s: s.display_order)
 
 
 def for_section(section: str) -> QuestStatus:

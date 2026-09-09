@@ -50,15 +50,21 @@ def load_pcs(paths):
         body = read(md_path) if md_path.exists() else ""
         img_path = paths.characters / f"{slug}.jpeg"
         image = f"images/characters/{slug}.jpeg" if img_path.exists() else None
-        battle_card = (f"battle-cards/{slug}.html"
-                       if (paths.battle_cards / f"{slug}.html").exists() else None)
-        entities.append(Entity(
-            kind="pc", slug=slug, name=defn["name"],
-            aliases=defn["aliases"], body=body, image=image,
-            summary=defn["summary"],
-            meta=Frontmatter({"full_name": defn["full_name"],
-                              "battle_card": battle_card}),
-        ))
+        battle_card = (
+            f"battle-cards/{slug}.html" if (paths.battle_cards / f"{slug}.html").exists() else None
+        )
+        entities.append(
+            Entity(
+                kind="pc",
+                slug=slug,
+                name=defn["name"],
+                aliases=defn["aliases"],
+                body=body,
+                image=image,
+                summary=defn["summary"],
+                meta=Frontmatter({"full_name": defn["full_name"], "battle_card": battle_card}),
+            )
+        )
     return entities
 
 
@@ -79,10 +85,17 @@ def load_dir_entities(kind, directory):
             first = next((ln.strip() for ln in body.split("\n") if ln.strip()), "")
             first = re.split(r"(?<=[.!?])\s", first, maxsplit=1)[0]
             summary = first
-        out.append(Entity(
-            kind=kind, slug=slugify(path.stem), name=name,
-            aliases=aliases, body=body, meta=meta, summary=summary,
-        ))
+        out.append(
+            Entity(
+                kind=kind,
+                slug=slugify(path.stem),
+                name=name,
+                aliases=aliases,
+                body=body,
+                meta=meta,
+                summary=summary,
+            )
+        )
     return out
 
 
@@ -108,13 +121,18 @@ def load_quests(paths):
         name = m.group(1).strip().rstrip(".")
         desc = m.group(2).strip()
         first_sentence = re.split(r"(?<=[.!?])\s", desc, maxsplit=1)[0]
-        out.append(Entity(
-            kind="quest", slug=slugify(name), name=name,
-            aliases=[name], body=desc,
-            meta=Frontmatter({"section": section}),
-            status=for_section(section),
-            summary=first_sentence,
-        ))
+        out.append(
+            Entity(
+                kind="quest",
+                slug=slugify(name),
+                name=name,
+                aliases=[name],
+                body=desc,
+                meta=Frontmatter({"section": section}),
+                status=for_section(section),
+                summary=first_sentence,
+            )
+        )
     return out
 
 
@@ -218,14 +236,15 @@ def load_sessions(paths):
         summary_fm, summary_doc = read_document(summary_text)
         carried = Field(summary_fm.get("carried")).many()
 
-        out.append(Session(
-            date=sdir.name,
-            notes=notes,
-            transcript=transcript,
-            summary=summary_doc,
-            carried=tuple(carried),
-            locations=tuple(SESSION_LOCATIONS.get(sdir.name, ())),
-            artifacts=_load_artifacts(sdir),
-        ))
+        out.append(
+            Session(
+                date=sdir.name,
+                notes=notes,
+                transcript=transcript,
+                summary=summary_doc,
+                carried=tuple(carried),
+                locations=tuple(SESSION_LOCATIONS.get(sdir.name, ())),
+                artifacts=_load_artifacts(sdir),
+            )
+        )
     return out
-

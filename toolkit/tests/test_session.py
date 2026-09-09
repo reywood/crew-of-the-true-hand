@@ -24,11 +24,14 @@ class TestInvariant:
         with pytest.raises(ValueError, match="at least one of"):
             Session("2026-01-01")
 
-    @pytest.mark.parametrize("kwargs", [
-        {"notes": "n"},
-        {"transcript": "t"},
-        {"summary": SessionSummary.parse("*In brief: x*")},
-    ])
+    @pytest.mark.parametrize(
+        "kwargs",
+        [
+            {"notes": "n"},
+            {"transcript": "t"},
+            {"summary": SessionSummary.parse("*In brief: x*")},
+        ],
+    )
     def test_any_one_source_is_enough(self, kwargs):
         assert Session("2026-01-01", **kwargs).date == "2026-01-01"
 
@@ -49,9 +52,14 @@ class TestDerivedArtifactState:
         assert not s.has_hero and s.hero_name == ""
 
     def test_published_names_are_date_based_whatever_the_source_is_called(self):
-        s = Session("2026-06-16", notes="x", artifacts=SessionArtifacts(
-            hero=pathlib.Path("sessions/2026-06-16/images/hero.png"),
-            audio=pathlib.Path("sessions/2026-06-16/audio/final.mp3")))
+        s = Session(
+            "2026-06-16",
+            notes="x",
+            artifacts=SessionArtifacts(
+                hero=pathlib.Path("sessions/2026-06-16/images/hero.png"),
+                audio=pathlib.Path("sessions/2026-06-16/audio/final.mp3"),
+            ),
+        )
         assert s.audio_name == "2026-06-16.mp3"
         assert s.hero_name == "2026-06-16.png"
         assert s.has_audio and s.has_hero
@@ -60,8 +68,7 @@ class TestDerivedArtifactState:
         doc = SessionSummary.parse("## Fog on the docks\n\nProse.\n")
         beat = doc.beats[0]
         path = pathlib.Path(f"images/{beat.slug}.jpg")
-        s = Session("2026-06-16", summary=doc,
-                    artifacts=SessionArtifacts(beats={beat.slug: path}))
+        s = Session("2026-06-16", summary=doc, artifacts=SessionArtifacts(beats={beat.slug: path}))
         assert s.beat_image(beat) == path
         assert s.beat_image(SessionSummary.parse("## Elsewhere\n\np\n").beats[0]) is None
 
@@ -75,13 +82,13 @@ class TestLocations:
         assert s.locations == () and s.in_transit
 
     def test_locations_keep_their_authored_order(self):
-        s = Session("2026-06-16", notes="x",
-                    locations=("nightstone", "ardeep-forest"))
+        s = Session("2026-06-16", notes="x", locations=("nightstone", "ardeep-forest"))
         assert s.locations[0] == "nightstone"
         assert not s.in_transit
 
     def test_the_real_archive_agrees_with_the_toml(self, paths, sessions):
         from truehand.core.loaders import SESSION_LOCATIONS
+
         for s in sessions:
             assert list(s.locations) == list(SESSION_LOCATIONS.get(s.date, []))
 
@@ -93,8 +100,11 @@ class TestLocations:
 
 class TestBlurb:
     def test_prefers_the_summary_in_brief(self):
-        s = Session("2026-06-16", notes="notes first line",
-                    summary=SessionSummary.parse("*In brief: The lead line.*"))
+        s = Session(
+            "2026-06-16",
+            notes="notes first line",
+            summary=SessionSummary.parse("*In brief: The lead line.*"),
+        )
         assert s.blurb == "The lead line."
 
     def test_falls_back_to_the_first_line_of_notes(self):
@@ -116,8 +126,9 @@ class TestAgainstTheRealArchive:
 
     def test_every_discovered_artifact_exists_on_disk(self, sessions):
         for s in sessions:
-            for path in filter(None, [s.artifacts.audio, s.artifacts.hero,
-                                      *s.artifacts.beats.values()]):
+            for path in filter(
+                None, [s.artifacts.audio, s.artifacts.hero, *s.artifacts.beats.values()]
+            ):
                 assert path.exists(), path
 
     def test_hero_is_never_filed_as_a_beat(self, sessions):
@@ -130,6 +141,7 @@ class TestAgainstTheRealArchive:
 class TestStagingCopiesWhatTheAggregateReports:
     def test_staged_names_match_the_aggregate(self, paths, tmp_path):
         from truehand.site.assets import _stage_session_media
+
         sessions = load_sessions(paths)
         _stage_session_media(sessions, tmp_path)
         for s in sessions:
@@ -143,6 +155,7 @@ class TestStagingCopiesWhatTheAggregateReports:
     def test_staging_writes_nothing_the_aggregate_did_not_report(self, paths, tmp_path):
         sessions = load_sessions(paths)
         from truehand.site.assets import _stage_session_media
+
         _stage_session_media(sessions, tmp_path)
         expected = set()
         for s in sessions:

@@ -4,8 +4,18 @@ from .frontmatter import Frontmatter
 
 
 class Entity:
-    def __init__(self, kind, slug, name, aliases=None, body="",
-                 meta=None, image=None, status=None, summary=None):
+    def __init__(
+        self,
+        kind,
+        slug,
+        name,
+        aliases=None,
+        body="",
+        meta=None,
+        image=None,
+        status=None,
+        summary=None,
+    ):
         self.kind = kind  # 'pc', 'npc', 'location', 'item', 'quest'
         self.slug = slug
         self.name = name
@@ -26,8 +36,14 @@ class Entity:
 
     @property
     def href(self):
-        prefix = {"pc": "pc", "npc": "npc", "location": "loc", "item": "item",
-                  "quest": "quest", "session": "session"}[self.kind]
+        prefix = {
+            "pc": "pc",
+            "npc": "npc",
+            "location": "loc",
+            "item": "item",
+            "quest": "quest",
+            "session": "session",
+        }[self.kind]
         return f"{prefix}-{self.slug}.html"
 
 

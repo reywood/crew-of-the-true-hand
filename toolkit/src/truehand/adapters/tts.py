@@ -28,9 +28,16 @@ ELEVENLABS_API_KEY = "ELEVENLABS_API_KEY"
 
 @runtime_checkable
 class TTSBackend(Protocol):
-    def synthesize(self, text: str, *, voice_id: str, model_id: str,
-                   settings: dict[str, Any], previous_text: str | None,
-                   next_text: str | None) -> bytes:
+    def synthesize(
+        self,
+        text: str,
+        *,
+        voice_id: str,
+        model_id: str,
+        settings: dict[str, Any],
+        previous_text: str | None,
+        next_text: str | None,
+    ) -> bytes:
         """Return MP3 bytes for one spoken line."""
         ...
 
@@ -42,28 +49,36 @@ class ElevenLabsBackend:
     neither the package nor an API key.
     """
 
-    def __init__(self, api_key: str | None = None,
-                 output_format: str = DEFAULT_OUTPUT_FORMAT):
+    def __init__(self, api_key: str | None = None, output_format: str = DEFAULT_OUTPUT_FORMAT):
         self._api_key = api_key
         self._output_format = output_format
         self._client = None
 
     def _ensure(self):
         if self._client is None:
-            mod = require("elevenlabs.client", extra="audio",
-                          why="Audio generation")
-            key = self._api_key or require_env(ELEVENLABS_API_KEY,
-                                               why="Audio generation")
+            mod = require("elevenlabs.client", extra="audio", why="Audio generation")
+            key = self._api_key or require_env(ELEVENLABS_API_KEY, why="Audio generation")
             self._client = mod.ElevenLabs(api_key=key)
         return self._client
 
-    def synthesize(self, text, *, voice_id=DEFAULT_VOICE_ID,
-                   model_id=DEFAULT_MODEL_ID, settings=None,
-                   previous_text=None, next_text=None) -> bytes:
+    def synthesize(
+        self,
+        text,
+        *,
+        voice_id=DEFAULT_VOICE_ID,
+        model_id=DEFAULT_MODEL_ID,
+        settings=None,
+        previous_text=None,
+        next_text=None,
+    ) -> bytes:
         client = self._ensure()
-        kwargs = {"text": text, "voice_id": voice_id, "model_id": model_id,
-                  "output_format": self._output_format,
-                  "voice_settings": settings or {}}
+        kwargs = {
+            "text": text,
+            "voice_id": voice_id,
+            "model_id": model_id,
+            "output_format": self._output_format,
+            "voice_settings": settings or {},
+        }
         # Omitted entirely when empty, and truncated — matching the original
         # call exactly, because either change would alter the rendered audio.
         if previous_text:

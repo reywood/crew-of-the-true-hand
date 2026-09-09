@@ -30,10 +30,19 @@ _BULLET = re.compile(r"^\s*[-*]\s+(.*)$")
 
 #: Headings that close a summary rather than narrate it. These list leads and
 #: status; they feed the open-threads board and are never illustrated.
-FORWARD_HEADINGS = frozenset({
-    "what's next", "whats next", "next steps", "up next", "next",
-    "loose ends", "loose end", "loose threads", "leads",
-})
+FORWARD_HEADINGS = frozenset(
+    {
+        "what's next",
+        "whats next",
+        "next steps",
+        "up next",
+        "next",
+        "loose ends",
+        "loose end",
+        "loose threads",
+        "leads",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -54,17 +63,20 @@ class Beat:
 
     @property
     def bullets(self) -> list[str]:
-        return [m.group(1).strip()
-                for line in self.body.split("\n")
-                if (m := _BULLET.match(line.rstrip()))]
+        return [
+            m.group(1).strip()
+            for line in self.body.split("\n")
+            if (m := _BULLET.match(line.rstrip()))
+        ]
 
     @property
     def is_illustratable(self) -> bool:
         """A story beat worth an image: narrative prose, not a list of leads."""
         if self.is_forward_looking or not self.body:
             return False
-        return any(ln.strip() and not ln.strip().startswith(("-", "*"))
-                   for ln in self.body.splitlines())
+        return any(
+            ln.strip() and not ln.strip().startswith(("-", "*")) for ln in self.body.splitlines()
+        )
 
 
 @dataclass(frozen=True)
@@ -100,7 +112,7 @@ class SessionSummary:
         for line in self.raw.split("\n"):
             s = line.strip()
             if s.startswith("*In brief:") and s.endswith("*"):
-                return s[len("*In brief:"):-1].strip()
+                return s[len("*In brief:") : -1].strip()
         return ""
 
     @property
@@ -116,7 +128,7 @@ class SessionSummary:
             if not s or s.startswith("#"):
                 continue
             if s.startswith("*In brief:") and s.endswith("*"):
-                return s[len("*In brief:"):-1].strip()
+                return s[len("*In brief:") : -1].strip()
             return s.strip("*").strip()
         return ""
 

@@ -30,10 +30,10 @@ class Relations:
     empty list for an entity with no such relation, which is the common case.
     """
 
-    helpers: dict[str, list] = field(default_factory=dict)        # item href -> [npc]
+    helpers: dict[str, list] = field(default_factory=dict)  # item href -> [npc]
     can_help_with: dict[str, list] = field(default_factory=dict)  # npc href  -> [item]
-    helps: dict[str, list] = field(default_factory=dict)          # quest href -> [quest]
-    supported_by: dict[str, list] = field(default_factory=dict)   # quest href -> [quest]
+    helps: dict[str, list] = field(default_factory=dict)  # quest href -> [quest]
+    supported_by: dict[str, list] = field(default_factory=dict)  # quest href -> [quest]
     warnings: list[str] = field(default_factory=list)
 
     def helpers_for(self, item) -> list:
@@ -77,8 +77,8 @@ def build_relations(items, npcs, quests) -> Relations:
             tgt = by_name.get(tgt_name)
             if tgt is None:
                 rel.warnings.append(
-                    f"dep target quest not found: {tgt_name!r} "
-                    f"(referenced by {src_name!r})")
+                    f"dep target quest not found: {tgt_name!r} (referenced by {src_name!r})"
+                )
                 continue
             rel.helps.setdefault(src.href, []).append(tgt)
             rel.supported_by.setdefault(tgt.href, []).append(src)

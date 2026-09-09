@@ -18,8 +18,7 @@ class TestResolveBedSpans:
         assert resolve_bed_spans([], 10_000) == []
 
     def test_an_end_marker_closes_the_open_span(self):
-        spans = resolve_bed_spans(
-            [marker("start_hearth", 0, "fire"), marker("end", 4_000)], 10_000)
+        spans = resolve_bed_spans([marker("start_hearth", 0, "fire"), marker("end", 4_000)], 10_000)
         assert spans == [BedSpan("hearth", "fire", 0, 4_000)]
 
     def test_a_span_left_open_closes_at_the_end_of_the_show(self):
@@ -28,24 +27,29 @@ class TestResolveBedSpans:
 
     def test_an_opener_replaces_whatever_was_playing(self):
         spans = resolve_bed_spans(
-            [marker("start_cold_open", 0, "ember"),
-             marker("start_hearth", 3_000, "fire")], 8_000)
-        assert spans == [BedSpan("cold_open", "ember", 0, 3_000),
-                         BedSpan("hearth", "fire", 3_000, 8_000)]
+            [marker("start_cold_open", 0, "ember"), marker("start_hearth", 3_000, "fire")], 8_000
+        )
+        assert spans == [
+            BedSpan("cold_open", "ember", 0, 3_000),
+            BedSpan("hearth", "fire", 3_000, 8_000),
+        ]
 
     def test_zero_length_spans_are_dropped(self):
         """Two markers at the same cursor position render nothing."""
         spans = resolve_bed_spans(
-            [marker("start_hearth", 5_000, "fire"), marker("end", 5_000)], 9_000)
+            [marker("start_hearth", 5_000, "fire"), marker("end", 5_000)], 9_000
+        )
         assert spans == []
 
     def test_an_end_with_nothing_open_is_harmless(self):
         assert resolve_bed_spans([marker("end", 3_000)], 9_000) == []
 
     def test_every_span_kind_is_recognised(self):
-        for kind, expected in [("start_cold_open", "cold_open"),
-                               ("start_hearth", "hearth"),
-                               ("start_signature", "signature")]:
+        for kind, expected in [
+            ("start_cold_open", "cold_open"),
+            ("start_hearth", "hearth"),
+            ("start_signature", "signature"),
+        ]:
             spans = resolve_bed_spans([marker(kind, 0, "x")], 1_000)
             assert spans[0].kind == expected
 
@@ -58,6 +62,7 @@ class TestEpisodeResult:
         import pathlib
 
         from truehand.pipelines.session_audio import EpisodeResult
+
         result = EpisodeResult("dry-run", pathlib.Path("x.mp3"), characters=8880)
         assert round(result.estimated_minutes) == 10
 
@@ -66,4 +71,5 @@ class TestEpisodeResult:
         import inspect
 
         from truehand.pipelines import session_audio
+
         assert "print(" not in inspect.getsource(session_audio)

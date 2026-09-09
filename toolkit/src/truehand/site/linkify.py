@@ -6,16 +6,31 @@ import re
 #: class token, so it works in any position among several classes — the earlier
 #: implementation tested four fixed substrings and silently missed
 #: class="no-link extra".
-NO_LINK_RE = re.compile(r"""class\s*=\s*["'][^"']*(?<![\w-])no-link(?![\w-])[^"']*["']""",
-                        re.IGNORECASE)
+NO_LINK_RE = re.compile(
+    r"""class\s*=\s*["'][^"']*(?<![\w-])no-link(?![\w-])[^"']*["']""", re.IGNORECASE
+)
 
 TAG_RE = re.compile(r"^<\s*(/?)\s*([A-Za-z][A-Za-z0-9-]*)")
 
 #: Elements with no closing tag; they never open a region.
-VOID_ELEMENTS = frozenset({
-    "area", "base", "br", "col", "embed", "hr", "img", "input",
-    "link", "meta", "param", "source", "track", "wbr",
-})
+VOID_ELEMENTS = frozenset(
+    {
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr",
+    }
+)
 
 
 def _compile(aliases):
@@ -64,11 +79,9 @@ class LinkIndex:
             if outer_href in overlapping:
                 continue
             for inner, inner_href in self.link_map.items():
-                if (len(inner) >= len(outer) or inner_href == outer_href
-                        or inner not in outer):
+                if len(inner) >= len(outer) or inner_href == outer_href or inner not in outer:
                     continue
-                if re.search(r"(?<![A-Za-z0-9])" + re.escape(inner)
-                             + r"(?![A-Za-z0-9])", outer):
+                if re.search(r"(?<![A-Za-z0-9])" + re.escape(inner) + r"(?![A-Za-z0-9])", outer):
                     overlapping.add(outer_href)
                     break
         return overlapping
@@ -116,8 +129,8 @@ def linkify_html(rendered, current_href, link_map):
     parts = re.split(r"(<[^>]+>)", rendered)
     in_anchor = False
     in_code = False
-    open_tags = []          # names of currently open elements
-    no_link_depth = None    # len(open_tags) of the no-link element, if inside one
+    open_tags = []  # names of currently open elements
+    no_link_depth = None  # len(open_tags) of the no-link element, if inside one
 
     def repl(m):
         alias = m.group(1)

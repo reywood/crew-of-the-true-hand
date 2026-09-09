@@ -13,13 +13,11 @@ from truehand.core.relations import Relations, build_relations
 
 
 def _item(slug, needs=None):
-    return Entity("item", slug, slug.title(),
-                  meta={"expertise_needed": needs} if needs else {})
+    return Entity("item", slug, slug.title(), meta={"expertise_needed": needs} if needs else {})
 
 
 def _npc(slug, expertise=None):
-    return Entity("npc", slug, slug.title(),
-                  meta={"expertise": expertise} if expertise else {})
+    return Entity("npc", slug, slug.title(), meta={"expertise": expertise} if expertise else {})
 
 
 def _quest(name):
@@ -55,6 +53,7 @@ class TestQuestDependencies:
     def test_real_table_resolves_against_the_real_quest_log(self, paths):
         """Every name in quest_dependencies.toml matches a quest in quests.md."""
         from truehand.core.loaders import load_quests
+
         rel = build_relations([], [], load_quests(paths))
         assert rel.warnings == []
         assert rel.helps, "expected at least one dependency edge"
@@ -75,11 +74,13 @@ class TestGraphTakesRelationsExplicitly:
     def test_build_graph_requires_relations(self):
         """The ordering trap is gone: graph cannot be built without the joins."""
         from truehand.core.graph import build_graph
+
         with pytest.raises(TypeError):
             build_graph([], [], [], [], [], [], {})
 
     def test_can_help_edges_come_from_relations(self):
         from truehand.core.graph import build_graph
+
         item, npc = _item("horn", "giants"), _npc("harshnag", "giants")
         rel = build_relations([item], [npc], [])
         g = build_graph([], [npc], [], [item], [], [], {}, rel)
@@ -87,6 +88,7 @@ class TestGraphTakesRelationsExplicitly:
 
     def test_empty_relations_yield_no_derived_edges(self):
         from truehand.core.graph import build_graph
+
         item, npc = _item("horn", "giants"), _npc("harshnag", "giants")
         g = build_graph([], [npc], [], [item], [], [], {}, Relations())
         assert not [e for e in g.edges if e["rel"] in ("can_help", "depends_on")]

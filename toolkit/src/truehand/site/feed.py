@@ -11,9 +11,11 @@ from .layout import base_url
 
 def podcast_feed(paths, sessions, probe):
     channel_title = "Tales of the True Hand"
-    channel_desc = ("Weekly recaps of the Crew of the True Hand — a D&D 5e "
-                    "campaign following Storm King's Thunder — told by "
-                    "Vandal Lovelace, bard and hearth-storyteller.")
+    channel_desc = (
+        "Weekly recaps of the Crew of the True Hand — a D&D 5e "
+        "campaign following Storm King's Thunder — told by "
+        "Vandal Lovelace, bard and hearth-storyteller."
+    )
     channel_link = f"{base_url()}/sessions.html"
     feed_url = f"{base_url()}/feed.xml"
     cover_url = f"{base_url()}/static/podcast-cover.jpg"
@@ -55,9 +57,7 @@ def podcast_feed(paths, sessions, probe):
         if credits:
             content_html_parts.append("<p><strong>Music &amp; SFX credits:</strong></p>")
             if credits.required:
-                lis = "".join(
-                    f"<li>{html.escape(c)}</li>" for c in credits.required
-                )
+                lis = "".join(f"<li>{html.escape(c)}</li>" for c in credits.required)
                 content_html_parts.append(f"<ul>{lis}</ul>")
             if credits.voluntary:
                 vol = "; ".join(html.escape(v) for v in credits.voluntary)

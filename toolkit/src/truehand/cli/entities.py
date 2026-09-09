@@ -9,8 +9,7 @@ import typer
 from ..pipelines.entity_sessions import sync
 from .app import resolve_paths
 
-entities_app = typer.Typer(help="Maintain NPC / location / item frontmatter.",
-                           no_args_is_help=True)
+entities_app = typer.Typer(help="Maintain NPC / location / item frontmatter.", no_args_is_help=True)
 
 
 @entities_app.command("sync")

@@ -48,8 +48,7 @@ def load_summary(paths, date: str) -> SessionSummary:
     return summary
 
 
-def _portrait_parts(backend, paths, refs_only: bool = False,
-                    full_text: bool = False) -> list:
+def _portrait_parts(backend, paths, refs_only: bool = False, full_text: bool = False) -> list:
     """The shared PC-reference block appended to every generation.
 
     Three modes (the reference plates are fed in all three):
@@ -88,7 +87,8 @@ def _portrait_parts(backend, paths, refs_only: bool = False,
                     f"{slug}. If {slug} is in this scene, keep their identity "
                     f"(face, hair, colouring, costume, gear) matching these "
                     f"plates — but draw them in a FRESH pose and action for "
-                    f"the scene; do not copy the plate's pose or background.")
+                    f"the scene; do not copy the plate's pose or background."
+                )
             else:
                 warnings.append(f"no references for {slug} (refs-only)")
             continue
@@ -103,9 +103,8 @@ def _portrait_parts(backend, paths, refs_only: bool = False,
 
         # Text for this PC: lean cast line by default, full anchor with
         # --full-text. Both keep identity to the plates but re-pose freshly.
-        cast_text = (description if full_text
-                     else LEAN_CAST.get(slug, description))
-        anchor_label = ("Identity anchor" if full_text else "Character")
+        cast_text = description if full_text else LEAN_CAST.get(slug, description)
+        anchor_label = "Identity anchor" if full_text else "Character"
         if refs:
             parts.append(
                 f"The image(s) immediately above are the identity reference "
@@ -114,8 +113,11 @@ def _portrait_parts(backend, paths, refs_only: bool = False,
                 f"colouring, costume and gear — matching these plates, but "
                 f"pose and place them FRESHLY for this scene (do not copy the "
                 f"plate's pose, framing, or background)"
-                + (", using the photo portrait after them only for likeness. "
-                   if has_portrait else ". ")
+                + (
+                    ", using the photo portrait after them only for likeness. "
+                    if has_portrait
+                    else ". "
+                )
                 + f"{anchor_label} ({slug}): {cast_text}"
             )
         else:
@@ -128,8 +130,9 @@ def _portrait_parts(backend, paths, refs_only: bool = False,
     return parts, warnings
 
 
-def build_contents(backend, paths, summary: SessionSummary, refs_only: bool = False,
-                   full_text: bool = False) -> list:
+def build_contents(
+    backend, paths, summary: SessionSummary, refs_only: bool = False, full_text: bool = False
+) -> list:
     """Multimodal input for the HERO image (session-level banner).
     Portraits + style + pivotal moment + full summary."""
     contents, warnings = _portrait_parts(backend, paths, refs_only, full_text)
@@ -140,24 +143,27 @@ def build_contents(backend, paths, summary: SessionSummary, refs_only: bool = Fa
         contents.append(
             "PIVOTAL MOMENT TO ILLUSTRATE (this is THE scene — everything "
             "else in the summary below is context for characters, setting, "
-            "and props):\n\n"
-            + pivotal
+            "and props):\n\n" + pivotal
         )
 
     contents.append(
         "Supporting context — the fuller session summary. Use this to know "
         "which characters are in the scene, what the setting looks like, "
         "who else is there, and what props matter. Do NOT try to depict the "
-        "whole summary. Illustrate ONLY the pivotal moment above:\n\n"
-        + summary.raw
+        "whole summary. Illustrate ONLY the pivotal moment above:\n\n" + summary.raw
     )
     return contents, warnings
 
 
-def build_beat_contents(backend, paths, title: str, body: str,
-                        summary: SessionSummary,
-                        refs_only: bool = False,
-                        full_text: bool = False) -> list:
+def build_beat_contents(
+    backend,
+    paths,
+    title: str,
+    body: str,
+    summary: SessionSummary,
+    refs_only: bool = False,
+    full_text: bool = False,
+) -> list:
     """Multimodal input for a BEAT image (one story beat within a session).
     Portraits + style + this beat only, with a smaller-scale directive."""
     contents, warnings = _portrait_parts(backend, paths, refs_only, full_text)
@@ -169,33 +175,36 @@ def build_beat_contents(backend, paths, title: str, body: str,
         "figures, more focus. Only include PCs actually named in THIS BEAT's "
         "text below."
     )
-    contents.append(
-        f"BEAT TITLE: {title}\n\n"
-        f"BEAT TEXT — illustrate ONLY this moment:\n\n{body}"
-    )
+    contents.append(f"BEAT TITLE: {title}\n\nBEAT TEXT — illustrate ONLY this moment:\n\n{body}")
     # Give the model the broader summary as background so it knows what came
     # before and after this beat (helps with continuity of costume, setting).
-    contents.append(
-        "Background context (do NOT depict — for continuity only):\n\n"
-        + summary.raw
-    )
+    contents.append("Background context (do NOT depict — for continuity only):\n\n" + summary.raw)
     return contents, warnings
+
 
 def _render(backend, dest, contents, aspect, model, label, force):
     if dest.exists() and not force:
-        return ImageResult(label, dest, "skipped",
-                           "already exists (--force to regenerate)")
+        return ImageResult(label, dest, "skipped", "already exists (--force to regenerate)")
     data = backend.generate(contents, model=model, aspect=aspect)
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_bytes(data)
     return ImageResult(label, dest, "written", f"{len(data) / 1024:.0f} KB")
 
 
-def generate(paths, backend: ImageBackend, date: str, *, hero: bool = True,
-             beats: bool = True, force: bool = False,
-             model: str = DEFAULT_IMAGE_MODEL, hero_aspect: str = HERO_ASPECT,
-             beat_aspect: str = BEAT_ASPECT, refs_only: bool = False,
-             lean: bool = False) -> tuple[list[ImageResult], list[str]]:
+def generate(
+    paths,
+    backend: ImageBackend,
+    date: str,
+    *,
+    hero: bool = True,
+    beats: bool = True,
+    force: bool = False,
+    model: str = DEFAULT_IMAGE_MODEL,
+    hero_aspect: str = HERO_ASPECT,
+    beat_aspect: str = BEAT_ASPECT,
+    refs_only: bool = False,
+    lean: bool = False,
+) -> tuple[list[ImageResult], list[str]]:
     """Render the hero image and/or one image per beat for *date*."""
     summary = load_summary(paths, date)
     out_dir = paths.session_images(date)
@@ -206,19 +215,29 @@ def generate(paths, backend: ImageBackend, date: str, *, hero: bool = True,
     if hero:
         contents, warn = build_contents(backend, paths, summary, refs_only, full_text)
         warnings += warn
-        results.append(_render(backend, out_dir / "hero.jpg", contents,
-                               hero_aspect, model, "hero", force))
+        results.append(
+            _render(backend, out_dir / "hero.jpg", contents, hero_aspect, model, "hero", force)
+        )
 
     if beats:
         found = summary.illustratable_beats
         if not found:
             warnings.append(f"no illustratable ## sections found in {date}/summary.md")
         for beat in found:
-            contents, warn = build_beat_contents(backend, paths, beat.title,
-                                                 beat.body, summary, refs_only,
-                                                 full_text)
+            contents, warn = build_beat_contents(
+                backend, paths, beat.title, beat.body, summary, refs_only, full_text
+            )
             warnings += warn
-            results.append(_render(backend, out_dir / f"{beat.slug}.jpg", contents,
-                                   beat_aspect, model, f"beat: {beat.title}", force))
+            results.append(
+                _render(
+                    backend,
+                    out_dir / f"{beat.slug}.jpg",
+                    contents,
+                    beat_aspect,
+                    model,
+                    f"beat: {beat.title}",
+                    force,
+                )
+            )
 
     return results, warnings

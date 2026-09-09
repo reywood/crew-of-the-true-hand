@@ -32,8 +32,7 @@ def md_to_html(text):
     def flush_list():
         nonlocal list_items
         if list_items is not None:
-            out.append("<ul>" + "".join(
-                f"<li>{md_inline(it)}</li>" for it in list_items) + "</ul>")
+            out.append("<ul>" + "".join(f"<li>{md_inline(it)}</li>" for it in list_items) + "</ul>")
             list_items = None
 
     def flush():

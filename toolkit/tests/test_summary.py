@@ -7,7 +7,6 @@ only lowercased. A `## What's next` typed either way must now behave the same
 everywhere.
 """
 
-
 import pytest
 
 from truehand.core.summary import SessionSummary
@@ -56,7 +55,10 @@ class TestInBrief:
 class TestBeats:
     def test_beats_are_in_document_order(self, doc):
         assert [b.title for b in doc.beats] == [
-            "Fog on the docks", "The Bells and the Warning", "What's next"]
+            "Fog on the docks",
+            "The Bells and the Warning",
+            "What's next",
+        ]
 
     def test_slug_matches_the_beat_image_filename(self, doc):
         assert doc.beats[1].slug == "the-bells-and-the-warning"
@@ -82,16 +84,26 @@ class TestBeats:
         """Beats must line up 1:1 with the <h2>s md_to_html renders, since that
         is how beat images are placed."""
         from truehand.core.markdown import md_to_html
+
         md = "  ## Indented\n\nProse.\n"
         assert SessionSummary.parse(md).beats == ()
         assert "<h2>" not in md_to_html(md)
 
 
 class TestForwardHeadingsAgreeEverywhere:
-    @pytest.mark.parametrize("heading", [
-        "What's next", "what's next", "Whats next", "Next steps",
-        "Loose ends", "Loose Ends", "What's next:", "What’s next",
-    ])
+    @pytest.mark.parametrize(
+        "heading",
+        [
+            "What's next",
+            "what's next",
+            "Whats next",
+            "Next steps",
+            "Loose ends",
+            "Loose Ends",
+            "What's next:",
+            "What’s next",
+        ],
+    )
     def test_variants_are_all_forward_looking(self, heading):
         doc = SessionSummary.parse(f"## {heading}\n\n- a lead\n")
         assert doc.beats[0].is_forward_looking
@@ -109,9 +121,11 @@ class TestForwardHeadingsAgreeEverywhere:
 
 class TestAgainstTheRealArchive:
     def test_every_summary_leads_with_an_in_brief(self, paths):
-        missing = [p.parent.name
-                   for p in sorted(paths.sessions.glob("*/summary.md"))
-                   if not SessionSummary.parse(p.read_text(encoding="utf-8")).in_brief]
+        missing = [
+            p.parent.name
+            for p in sorted(paths.sessions.glob("*/summary.md"))
+            if not SessionSummary.parse(p.read_text(encoding="utf-8")).in_brief
+        ]
         assert missing == []
 
     def test_every_beat_image_on_disk_matches_a_beat_slug(self, paths):
@@ -122,8 +136,9 @@ class TestAgainstTheRealArchive:
                 continue
             doc = SessionSummary.parse(summary_path.read_text(encoding="utf-8"))
             slugs = {b.slug for b in doc.beats} | {"hero"}
-            stray = {p.stem for p in images.iterdir()
-                     if p.suffix in (".jpg", ".jpeg", ".png", ".webp")} - slugs
+            stray = {
+                p.stem for p in images.iterdir() if p.suffix in (".jpg", ".jpeg", ".png", ".webp")
+            } - slugs
             if stray:
                 orphans[images.parent.name] = stray
         assert orphans == {}

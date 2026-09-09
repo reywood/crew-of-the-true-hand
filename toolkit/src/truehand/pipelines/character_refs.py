@@ -33,8 +33,7 @@ class PlateResult:
     detail: str = ""
 
 
-def build_contents(backend: ImageBackend, paths, slug: str, anchor: str,
-                   plate_prompt: str) -> list:
+def build_contents(backend: ImageBackend, paths, slug: str, anchor: str, plate_prompt: str) -> list:
     """Assemble the prompt parts for one reference plate."""
     parts: list = []
     portrait = paths.characters / f"{slug}.jpeg"
@@ -48,9 +47,15 @@ def build_contents(backend: ImageBackend, paths, slug: str, anchor: str,
     return parts
 
 
-def generate(paths, backend: ImageBackend, *, only: str | None = None,
-             plate: int | None = None, force: bool = False,
-             model: str = DEFAULT_IMAGE_MODEL) -> list[PlateResult]:
+def generate(
+    paths,
+    backend: ImageBackend,
+    *,
+    only: str | None = None,
+    plate: int | None = None,
+    force: bool = False,
+    model: str = DEFAULT_IMAGE_MODEL,
+) -> list[PlateResult]:
     """Render reference plates. One failure does not abort the rest."""
     slugs = [only] if only else list(PC_SLUGS)
     numbers = [plate] if plate else sorted(PLATES)
@@ -63,18 +68,19 @@ def generate(paths, backend: ImageBackend, *, only: str | None = None,
         for n in numbers:
             dest = out_dir / f"{slug}-ref-{n}.jpg"
             if dest.exists() and not force:
-                results.append(PlateResult(slug, n, dest, "skipped",
-                                           "already exists (--force to regenerate)"))
+                results.append(
+                    PlateResult(slug, n, dest, "skipped", "already exists (--force to regenerate)")
+                )
                 continue
             aspect, plate_prompt = PLATES[n]
             try:
                 data = backend.generate(
                     build_contents(backend, paths, slug, anchor, plate_prompt),
-                    model=model, aspect=aspect,
+                    model=model,
+                    aspect=aspect,
                 )
                 dest.write_bytes(data)
-                results.append(PlateResult(slug, n, dest, "written",
-                                           f"{len(data) / 1024:.0f} KB"))
+                results.append(PlateResult(slug, n, dest, "written", f"{len(data) / 1024:.0f} KB"))
             except Exception as exc:  # noqa: BLE001 — report and keep going
                 results.append(PlateResult(slug, n, dest, "failed", str(exc)))
     return results

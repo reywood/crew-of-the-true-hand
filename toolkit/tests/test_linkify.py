@@ -10,8 +10,10 @@ def link(html, current="index.html", link_map=None):
 
 
 def test_links_a_bare_mention():
-    assert link("<p>Toz waves.</p>") == \
-        '<p><a class="entity-link" href="pc-toz.html">Toz</a> waves.</p>'
+    assert (
+        link("<p>Toz waves.</p>")
+        == '<p><a class="entity-link" href="pc-toz.html">Toz</a> waves.</p>'
+    )
 
 
 def test_only_the_first_mention_of_an_entity_is_linked():
@@ -52,8 +54,7 @@ class TestNoLink:
         assert link(html) == html
 
     def test_protection_survives_several_nested_tags(self):
-        html = ('<div class="no-link"><p>Toz</p><p><strong>Hal</strong></p>'
-                '<p>Halruaa</p></div>')
+        html = '<div class="no-link"><p>Toz</p><p><strong>Hal</strong></p><p>Halruaa</p></div>'
         assert link(html) == html
 
     def test_protection_ends_at_the_right_closing_tag(self):
@@ -65,8 +66,7 @@ class TestNoLink:
     def test_class_may_appear_in_any_position(self):
         """Regression: the old substring test only caught no-link when it was
         the whole class list or the last entry."""
-        for cls in ("no-link", "no-link extra", "extra no-link",
-                    "a no-link b"):
+        for cls in ("no-link", "no-link extra", "extra no-link", "a no-link b"):
             html = f'<p><span class="{cls}">Toz</span></p>'
             assert link(html) == html, cls
 
@@ -96,13 +96,13 @@ class TestSharedPatternEquivalence:
     def naive(rendered, current_href, link_map):
         """The original approach: recompile per page, excluding own aliases."""
         import re
+
         aliases = [a for a, h in link_map.items() if h != current_href]
         if not aliases:
             return rendered
         aliases.sort(key=lambda x: -len(x))
         pattern = re.compile(
-            r"(?<![A-Za-z0-9])(" + "|".join(re.escape(a) for a in aliases)
-            + r")(?![A-Za-z0-9])"
+            r"(?<![A-Za-z0-9])(" + "|".join(re.escape(a) for a in aliases) + r")(?![A-Za-z0-9])"
         )
         linked = set()
         parts = re.split(r"(<[^>]+>)", rendered)
@@ -124,8 +124,7 @@ class TestSharedPatternEquivalence:
     def test_overlapping_page_still_links_the_inner_name(self):
         """The case the optimization must NOT break: on the item's own page,
         the NPC's plain name inside the item's alias still links."""
-        lm = {"Umberlee": "npc-umberlee.html",
-              "Umberlee eye-coin": "item-umberlee-eye-coin.html"}
+        lm = {"Umberlee": "npc-umberlee.html", "Umberlee eye-coin": "item-umberlee-eye-coin.html"}
         html = "<p>The Umberlee eye-coin sat there.</p>"
         out = linkify_html(html, "item-umberlee-eye-coin.html", lm)
         assert 'href="npc-umberlee.html"' in out
@@ -140,18 +139,24 @@ class TestSharedPatternEquivalence:
             load_quests,
             load_sessions,
         )
-        entities = (load_pcs(paths)
-                    + load_dir_entities("npc", paths.npcs)
-                    + load_dir_entities("location", paths.locations)
-                    + load_dir_entities("item", paths.items)
-                    + load_quests(paths)
-                    + load_sessions(paths))
+
+        entities = (
+            load_pcs(paths)
+            + load_dir_entities("npc", paths.npcs)
+            + load_dir_entities("location", paths.locations)
+            + load_dir_entities("item", paths.items)
+            + load_quests(paths)
+            + load_sessions(paths)
+        )
         link_map = build_link_map(entities)
-        sample = ("<p>The Umberlee eye-coin and the Waterdeep Wazoo, plus "
-                  "Xolkin's gift and the Umberlee priestess at the Plinth. "
-                  "Toz and Hal walked from Waterdeep to Nightstone.</p>")
+        sample = (
+            "<p>The Umberlee eye-coin and the Waterdeep Wazoo, plus "
+            "Xolkin's gift and the Umberlee priestess at the Plinth. "
+            "Toz and Hal walked from Waterdeep to Nightstone.</p>"
+        )
         hrefs = ["index.html", "sessions.html"] + [e.href for e in entities]
         assert len(hrefs) > 100
         for href in hrefs:
-            assert linkify_html(sample, href, link_map) == \
-                self.naive(sample, href, link_map), f"diverged on {href}"
+            assert linkify_html(sample, href, link_map) == self.naive(sample, href, link_map), (
+                f"diverged on {href}"
+            )

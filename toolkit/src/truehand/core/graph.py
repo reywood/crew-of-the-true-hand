@@ -7,13 +7,14 @@ from .text import _clean_blurb, slugify
 class Graph:
     """Materialized entity graph. Nodes/edges are JSON-serializable; the
     adjacency dicts and faction index drive the Connections block."""
+
     def __init__(self):
-        self.nodes = []                 # list of node dicts
-        self.edges = []                 # list of {source, target, rel}
-        self.node_by_id = {}            # id -> node dict
-        self.out_adj = {}               # id -> [(rel, target_id)]
-        self.in_adj = {}                # id -> [(rel, source_id)]
-        self.faction_members = {}       # faction_id -> [npc id, ...]
+        self.nodes = []  # list of node dicts
+        self.edges = []  # list of {source, target, rel}
+        self.node_by_id = {}  # id -> node dict
+        self.out_adj = {}  # id -> [(rel, target_id)]
+        self.in_adj = {}  # id -> [(rel, source_id)]
+        self.faction_members = {}  # faction_id -> [npc id, ...]
 
     def _edge(self, src, tgt, rel):
         if not src or not tgt or src == tgt:
@@ -26,8 +27,7 @@ class Graph:
         return {"nodes": self.nodes, "edges": self.edges}
 
 
-def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup,
-                relations):
+def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup, relations):
     entities = pcs + npcs + locations + items + quests + sessions
     g = Graph()
 
@@ -66,8 +66,14 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup,
         """Get-or-create a synthetic faction node (no page). Returns its id."""
         fid = "faction-" + slugify(name)
         if fid not in g.node_by_id:
-            node = {"id": fid, "kind": "faction", "name": name,
-                    "aliases": [name], "url": "", "blurb": ""}
+            node = {
+                "id": fid,
+                "kind": "faction",
+                "name": name,
+                "aliases": [name],
+                "url": "",
+                "blurb": "",
+            }
             g.nodes.append(node)
             g.node_by_id[fid] = node
             g.faction_members[fid] = []

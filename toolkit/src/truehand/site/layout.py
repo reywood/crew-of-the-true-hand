@@ -121,13 +121,21 @@ def share_meta(title, description, image, canonical, og_type, audio=None):
     return "\n".join(t)
 
 
-def page(title, body, current_nav=None, breadcrumb=None,
-         description=None, image=None, canonical=None,
-         og_type="website", audio=None, share_title=None):
+def page(
+    title,
+    body,
+    current_nav=None,
+    breadcrumb=None,
+    description=None,
+    image=None,
+    canonical=None,
+    og_type="website",
+    audio=None,
+    share_title=None,
+):
     nav = render_nav(current_nav)
     bc = f'<div class="breadcrumb">{breadcrumb}</div>' if breadcrumb else ""
-    meta = share_meta(share_title or title, description, image,
-                      canonical, og_type, audio)
+    meta = share_meta(share_title or title, description, image, canonical, og_type, audio)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,9 +144,9 @@ def page(title, body, current_nav=None, breadcrumb=None,
 <title>{html.escape(title)} — Crew of the True Hand</title>
 {meta}
 <link rel="alternate" type="application/rss+xml" title="Tales of the True Hand" href="feed.xml">
-<link rel="stylesheet" href="{static_url('style.css')}">
-<script defer src="{static_url('podcast-subscribe.js')}"></script>
-<script defer src="{static_url('search.js')}"></script>
+<link rel="stylesheet" href="{static_url("style.css")}">
+<script defer src="{static_url("podcast-subscribe.js")}"></script>
+<script defer src="{static_url("search.js")}"></script>
 </head>
 <body>
 <header class="site-header">

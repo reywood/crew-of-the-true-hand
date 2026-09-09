@@ -34,16 +34,16 @@ class AudioCredits:
         lines = ["Music & SFX credits:"]
         lines += [f"\u2022 {c}" for c in self.required]
         if self.voluntary:
-            lines.append("Additional sound effects & ambience (Pixabay Content "
-                         "License, attribution not required): "
-                         + "; ".join(self.voluntary) + ".")
+            lines.append(
+                "Additional sound effects & ambience (Pixabay Content "
+                "License, attribution not required): " + "; ".join(self.voluntary) + "."
+            )
         return "\n".join(lines)
 
     @classmethod
     def load(cls, paths) -> AudioCredits:
         parsed = _parse(paths)
-        return cls(required=tuple(parsed["required"]),
-                   voluntary=tuple(parsed["voluntary"]))
+        return cls(required=tuple(parsed["required"]), voluntary=tuple(parsed["voluntary"]))
 
 
 def _parse(paths):
@@ -71,16 +71,17 @@ def _parse(paths):
         name = sections[i].strip()
         body = sections[i + 1] if i + 1 < len(sections) else ""
 
-        lic_m = re.search(r"^\s*[-*]\s*\*\*License\*\*:\s*(.+?)\s*$",
-                          body, flags=re.MULTILINE)
+        lic_m = re.search(r"^\s*[-*]\s*\*\*License\*\*:\s*(.+?)\s*$", body, flags=re.MULTILINE)
         license_line = lic_m.group(1).strip() if lic_m else ""
         # Strip markdown link syntax <...> from the trailing license URL.
         license_line = re.sub(r"\s*—\s*<[^>]+>\s*$", "", license_line).strip()
 
         # Attribution is required when the license itself demands it. Pixabay's
         # Content License does not; Creative Commons "Attribution" (CC BY) does.
-        requires = bool(re.search(r"attribution", license_line, re.IGNORECASE)) \
+        requires = (
+            bool(re.search(r"attribution", license_line, re.IGNORECASE))
             and "pixabay" not in license_line.lower()
+        )
 
         if requires:
             # Pull the required-attribution blockquote (the ``> ...`` lines that
@@ -102,8 +103,7 @@ def _parse(paths):
             result["required"].append(f"{wording}  (used in {name})")
         else:
             # Voluntary credit: use the plain-text fallback line if present.
-            fb_m = re.search(r"Plain-text fallback:\s*\*?(.+?)\*?\s*$",
-                             body, flags=re.MULTILINE)
+            fb_m = re.search(r"Plain-text fallback:\s*\*?(.+?)\*?\s*$", body, flags=re.MULTILINE)
             if fb_m:
                 result["voluntary"].append(fb_m.group(1).strip().rstrip("."))
 

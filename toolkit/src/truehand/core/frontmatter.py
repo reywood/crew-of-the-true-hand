@@ -36,7 +36,7 @@ def parse_frontmatter(text):
     m = re.match(r"^---\s*\n(.*?)\n---\s*\n?", text, re.DOTALL)
     if not m:
         return {}, text
-    body = text[m.end():]
+    body = text[m.end() :]
     fm = {}
     lines = m.group(1).split("\n")
     i = 0
@@ -163,4 +163,4 @@ class Frontmatter(Mapping):
         return len(self._fields)
 
     def __repr__(self) -> str:
-        return f"Frontmatter({ {k: f.raw for k, f in self._fields.items()} !r})"
+        return f"Frontmatter({ {k: f.raw for k, f in self._fields.items()}!r})"

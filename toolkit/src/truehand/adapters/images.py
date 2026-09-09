@@ -76,8 +76,9 @@ class GeminiImageBackend:
     def part_from_bytes(self, data: bytes, mime_type: str = "image/jpeg"):
         return self._types.Part.from_bytes(data=data, mime_type=mime_type)
 
-    def generate(self, contents: list[Any], *, model: str = DEFAULT_IMAGE_MODEL,
-                 aspect: str = "16:9") -> bytes:
+    def generate(
+        self, contents: list[Any], *, model: str = DEFAULT_IMAGE_MODEL, aspect: str = "16:9"
+    ) -> bytes:
         response = self._client.models.generate_content(
             model=model,
             contents=contents,

@@ -16,6 +16,7 @@ def test_plain_value(tmp_path, monkeypatch):
     monkeypatch.delenv("T_KEY", raising=False)
     load_dotenv(_write(tmp_path, "T_KEY=abc\n"))
     import os
+
     assert os.environ["T_KEY"] == "abc"
 
 
@@ -26,6 +27,7 @@ def test_surrounding_quotes_are_stripped(tmp_path, monkeypatch, quote):
     monkeypatch.delenv("T_KEY", raising=False)
     load_dotenv(_write(tmp_path, f"T_KEY={quote}abc{quote}\n"))
     import os
+
     assert os.environ["T_KEY"] == "abc"
 
 
@@ -33,6 +35,7 @@ def test_comments_and_blank_lines_are_skipped(tmp_path, monkeypatch):
     monkeypatch.delenv("T_KEY", raising=False)
     load_dotenv(_write(tmp_path, "# a comment\n\nT_KEY=abc\n"))
     import os
+
     assert os.environ["T_KEY"] == "abc"
 
 
@@ -40,6 +43,7 @@ def test_a_value_containing_equals_is_preserved(tmp_path, monkeypatch):
     monkeypatch.delenv("T_KEY", raising=False)
     load_dotenv(_write(tmp_path, "T_KEY=a=b=c\n"))
     import os
+
     assert os.environ["T_KEY"] == "a=b=c"
 
 
@@ -47,6 +51,7 @@ def test_the_real_environment_wins(tmp_path, monkeypatch):
     monkeypatch.setenv("T_KEY", "from-env")
     load_dotenv(_write(tmp_path, "T_KEY=from-file\n"))
     import os
+
     assert os.environ["T_KEY"] == "from-env"
 
 

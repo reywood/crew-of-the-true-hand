@@ -11,10 +11,10 @@ ITEM_STATUS_ORDER = ["Unresolved", "Active", "Consumed", "Lost", "Sold"]
 
 ITEM_STATUS_CLASS = {
     "Unresolved": "unresolved",
-    "Active":     "active",
-    "Consumed":   "completed",
-    "Lost":       "completed",
-    "Sold":       "completed",
+    "Active": "active",
+    "Consumed": "completed",
+    "Lost": "completed",
+    "Sold": "completed",
 }
 
 
@@ -26,7 +26,7 @@ def item_list_page(items, link_map):
         grouped.setdefault(status, []).append(it)
 
     chunks = [
-        '<h1>The Ledger</h1>',
+        "<h1>The Ledger</h1>",
         '<p class="subhead"><em>Everything the crew has hauled ashore. Unresolved mysteries lead.</em></p>',
     ]
     order = ITEM_STATUS_ORDER + [s for s in grouped if s not in ITEM_STATUS_ORDER]
@@ -47,17 +47,22 @@ def item_list_page(items, link_map):
                 meta_bits.append(f'<span class="item-type">{html.escape(typ)}</span>')
             if holder:
                 meta_bits.append(f'<span class="item-holder">held by {html.escape(holder)}</span>')
-            meta_line = f'<span class="item-meta">{" · ".join(meta_bits)}</span>' if meta_bits else ""
+            meta_line = (
+                f'<span class="item-meta">{" · ".join(meta_bits)}</span>' if meta_bits else ""
+            )
             summary = md_inline(it.summary or "")
             chunks.append(
                 f'<li><a class="item-name" href="{it.href}">{html.escape(it.name)}</a>'
-                f'{meta_line}'
+                f"{meta_line}"
                 f'<p class="item-blurb">{summary}</p></li>'
             )
-        chunks.append('</ul>')
+        chunks.append("</ul>")
 
     body = "\n".join(chunks)
-    return page("Items", linkify_html(body, "items.html", link_map),
-                current_nav="items.html",
-                description='The magical, mysterious and merely sentimental things the crew is carrying — and who might be able to explain them.',
-                canonical="items.html")
+    return page(
+        "Items",
+        linkify_html(body, "items.html", link_map),
+        current_nav="items.html",
+        description="The magical, mysterious and merely sentimental things the crew is carrying — and who might be able to explain them.",
+        canonical="items.html",
+    )

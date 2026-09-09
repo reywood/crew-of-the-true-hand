@@ -28,11 +28,15 @@ def linkify_timestamps(s: str) -> str:
     """Wrap each [HH:MM:SS] in a play-from-here anchor. Runs on already-escaped,
     already-inline-formatted HTML; timestamps contain no HTML-special chars so
     ordering versus code/bold/italic is safe."""
+
     def repl(m: re.Match) -> str:
         h, mm, ss = int(m.group(1)), int(m.group(2)), int(m.group(3))
         secs = h * 3600 + mm * 60 + ss
-        return (f'<a class="ts" data-t="{secs}" role="button" tabindex="0" '
-                f'title="Play from {m.group(0)[1:-1]}">{m.group(0)}</a>')
+        return (
+            f'<a class="ts" data-t="{secs}" role="button" tabindex="0" '
+            f'title="Play from {m.group(0)[1:-1]}">{m.group(0)}</a>'
+        )
+
     return TS_RE.sub(repl, s)
 
 
@@ -85,9 +89,10 @@ def render(md: str) -> str:
             # A worksheet table whose last column is the ✔/✘ verdict is reviewable.
             reviewable = bool(header) and ("✔" in header[-1] or "✘" in header[-1])
             ncols = len(header)
-            out.append('<table>')
-            out.append("<thead><tr>" + "".join(
-                f"<th>{inline(c)}</th>" for c in header) + "</tr></thead>")
+            out.append("<table>")
+            out.append(
+                "<thead><tr>" + "".join(f"<th>{inline(c)}</th>" for c in header) + "</tr></thead>"
+            )
             out.append("<tbody>")
             for cells in body:
                 row_id = re.sub(r"[^0-9A-Za-z]+", "", cells[0]) if cells else ""
@@ -100,10 +105,11 @@ def render(md: str) -> str:
                         out.append(
                             f'<td class="verdict">'
                             f'<button class="mark" data-state="{seed}">'
-                            f'{seed or "—"}</button>'
+                            f"{seed or '—'}</button>"
                             f'<button class="notebtn" title="Add correction / note"'
                             f' aria-label="Add correction or note">✎</button>'
-                            f'</td>')
+                            f"</td>"
+                        )
                     else:
                         out.append(f"<td>{inline(c)}</td>")
                 out.append("</tr>")
@@ -113,7 +119,8 @@ def render(md: str) -> str:
                         f'<td colspan="{ncols}">'
                         f'<textarea class="corr" '
                         f'placeholder="Correction for row {rid} — what is wrong '
-                        f'and what it should say"></textarea></td></tr>')
+                        f'and what it should say"></textarea></td></tr>'
+                    )
             out.append("</tbody></table>")
             continue
 
@@ -130,8 +137,7 @@ def render(md: str) -> str:
         # Paragraph (gather until blank)
         para = [stripped]
         i += 1
-        while i < n and lines[i].strip() and not lines[i].strip().startswith(
-                ("|", "#", "-", "*")):
+        while i < n and lines[i].strip() and not lines[i].strip().startswith(("|", "#", "-", "*")):
             para.append(lines[i].strip())
             i += 1
         out.append(f"<p>{inline(' '.join(para))}</p>")
@@ -409,6 +415,7 @@ PAGE = """<!doctype html>
 </html>
 """
 
+
 def render_review(paths, date: str) -> pathlib.Path:
     """Render the worksheet for *date*. Returns the written HTML path."""
     src = paths.session(date) / FACTCHECK_NAME
@@ -417,9 +424,10 @@ def render_review(paths, date: str) -> pathlib.Path:
             f"no fact-check worksheet at {src}\n"
             f"  It is produced by the distillation step (see CLAUDE.md 1.5)."
         )
-    dest = src.with_suffix(".html")   # transcript-distilled.factcheck.html
-    dest.write_text(PAGE.format(date=date, body=render(src.read_text(encoding="utf-8"))),
-                    encoding="utf-8")
+    dest = src.with_suffix(".html")  # transcript-distilled.factcheck.html
+    dest.write_text(
+        PAGE.format(date=date, body=render(src.read_text(encoding="utf-8"))), encoding="utf-8"
+    )
     return dest
 
 

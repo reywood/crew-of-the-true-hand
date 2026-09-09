@@ -24,10 +24,10 @@ def share_text(raw, limit=280):
     """
     if not raw:
         return ""
-    txt = re.sub(r"<[^>]+>", "", str(raw))            # tags
-    txt = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", txt)     # images
+    txt = re.sub(r"<[^>]+>", "", str(raw))  # tags
+    txt = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", txt)  # images
     txt = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", txt)  # links → text
-    txt = re.sub(r"[*_`#>]+", "", txt)                 # emphasis / headings
+    txt = re.sub(r"[*_`#>]+", "", txt)  # emphasis / headings
     txt = html.unescape(txt)
     txt = re.sub(r"\s+", " ", txt).strip()
     if len(txt) > limit:
@@ -43,7 +43,7 @@ def chunk_transcript(text):
     sentences = re.split(r"(?<=[.!?])\s+", text_n)
     out = []
     for i in range(0, len(sentences), 6):
-        chunk = " ".join(sentences[i:i+6]).strip()
+        chunk = " ".join(sentences[i : i + 6]).strip()
         if chunk:
             out.append(chunk)
     return out
@@ -68,8 +68,8 @@ def _clean_blurb(text, limit=200):
     if not text:
         return ""
     s = text.strip().split("\n", 1)[0].strip()
-    s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)   # [txt](url) -> txt
-    s = re.sub(r"[*`_]", "", s)                        # emphasis / code marks
+    s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)  # [txt](url) -> txt
+    s = re.sub(r"[*`_]", "", s)  # emphasis / code marks
     s = re.sub(r"\s+", " ", s).strip()
     if len(s) > limit:
         s = s[:limit].rsplit(" ", 1)[0] + "…"

@@ -22,7 +22,7 @@ COVER_FILENAME = "podcast-cover.jpg"
 @dataclass
 class CoverResult:
     path: object
-    status: str          # "written" | "skipped"
+    status: str  # "written" | "skipped"
     detail: str = ""
     missing_portraits: tuple[str, ...] = ()
 
@@ -42,8 +42,9 @@ def build_contents(backend: ImageBackend, paths) -> tuple[list, list[str]]:
     return parts, missing
 
 
-def generate(paths, backend: ImageBackend, *, force: bool = False,
-             model: str = DEFAULT_IMAGE_MODEL) -> CoverResult:
+def generate(
+    paths, backend: ImageBackend, *, force: bool = False, model: str = DEFAULT_IMAGE_MODEL
+) -> CoverResult:
     dest = paths.static / COVER_FILENAME
     if dest.exists() and not force:
         return CoverResult(dest, "skipped", "already exists (--force to regenerate)")

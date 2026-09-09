@@ -79,7 +79,7 @@ def _chapter_title(heading: str) -> str | None:
     the episode title and the short `[TITLE]` card are not chapters.
     """
     m = re.match(r"^(#+)\s*(.*)$", heading.strip())
-    if not m or len(m.group(1)) != 2:          # only H2 headings are sections
+    if not m or len(m.group(1)) != 2:  # only H2 headings are sections
         return None
     text = m.group(2).strip()
     # Some scripts bracket their section headings and some don't. Unwrap, then
@@ -92,15 +92,15 @@ def _chapter_title(heading: str) -> str | None:
     if keyword == "CLOSING":
         return "Closing"
     if keyword == "TITLE":
-        return None                            # the title card is too short
+        return None  # the title card is too short
     # \b matters: an episode called "Acts of the Deep Speaker" is not an act.
     if re.match(r"^ACT\b", text, re.IGNORECASE):
         parts = re.split(r"\s*[—–]\s*", text, maxsplit=1)
-        label = parts[0].strip().title()       # "ACT ONE" -> "Act One"
+        label = parts[0].strip().title()  # "ACT ONE" -> "Act One"
         if len(parts) == 2 and parts[1].strip():
             return f"{label} — {parts[1].strip()}"
         return label
-    return None                                # the episode title, etc.
+    return None  # the episode title, etc.
 
 
 @dataclass(frozen=True)
@@ -140,7 +140,7 @@ class EpisodeScript:
                         title = candidate
                 continue
 
-            if set(line) == {"-"}:             # a horizontal rule
+            if set(line) == {"-"}:  # a horizontal rule
                 continue
 
             if line.startswith("[") and line.endswith("]"):
@@ -159,7 +159,7 @@ class EpisodeScript:
                 continue
 
             if line.startswith(f"{NARRATOR}:"):
-                content = line[len(NARRATOR) + 1:].strip()
+                content = line[len(NARRATOR) + 1 :].strip()
                 if m := re.match(r"^\*\((.+?)\)\*\s*(.*)$", content):
                     delivery, spoken = m.group(1), m.group(2).strip()
                 else:

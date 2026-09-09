@@ -27,9 +27,10 @@ def test_frozen_hash_for_a_known_line():
     """Captured from the pre-migration script, so this pins equivalence
     with the code that produced every committed manifest — not merely with
     whatever the current implementation happens to do."""
-    assert chunk_hash(
-        "Well met, friend. Draw close to the fire.", VOICE, MODEL, "storyteller"
-    ) == "88c000309ecec24d4df054b87ecfb8f8c05783f6cf34d84bde398b3c869b82d6"
+    assert (
+        chunk_hash("Well met, friend. Draw close to the fire.", VOICE, MODEL, "storyteller")
+        == "88c000309ecec24d4df054b87ecfb8f8c05783f6cf34d84bde398b3c869b82d6"
+    )
 
 
 def test_hash_is_stable_across_calls():
@@ -40,13 +41,13 @@ def test_hash_is_stable_across_calls():
 
 @pytest.mark.parametrize("field", ["text", "voice", "model", "delivery"])
 def test_every_input_participates(field):
-    base = {"text": "x", "voice_id": VOICE, "model_id": MODEL,
-            "delivery_key": "storyteller"}
+    base = {"text": "x", "voice_id": VOICE, "model_id": MODEL, "delivery_key": "storyteller"}
     other = dict(base)
-    other[{"text": "text", "voice": "voice_id", "model": "model_id",
-           "delivery": "delivery_key"}[field]] = {
-        "text": "y", "voice": "OTHERVOICE", "model": "other_model",
-        "delivery": "hushed"}[field]
+    other[
+        {"text": "text", "voice": "voice_id", "model": "model_id", "delivery": "delivery_key"}[
+            field
+        ]
+    ] = {"text": "y", "voice": "OTHERVOICE", "model": "other_model", "delivery": "hushed"}[field]
     assert chunk_hash(**base) != chunk_hash(**other)
 
 
@@ -69,10 +70,10 @@ def test_every_committed_manifest_still_resolves(paths):
             continue
         data = json.loads(manifest_path.read_text(encoding="utf-8"))
         live = {
-            chunk_hash(line.text, data["voice_id"], data["model_id"],
-                       resolve_delivery(line.delivery)[0])
-            for line in EpisodeScript.parse(
-                script.read_text(encoding="utf-8")).spoken_lines
+            chunk_hash(
+                line.text, data["voice_id"], data["model_id"], resolve_delivery(line.delivery)[0]
+            )
+            for line in EpisodeScript.parse(script.read_text(encoding="utf-8")).spoken_lines
         }
         orphaned = set(data["chunks"]) - live
         assert not orphaned, (
@@ -113,8 +114,7 @@ class FlakyBackend:
         self.calls = []
         self.fail_on = fail_on
 
-    def synthesize(self, text, *, voice_id, model_id, settings,
-                   previous_text="", next_text=""):
+    def synthesize(self, text, *, voice_id, model_id, settings, previous_text="", next_text=""):
         self.calls.append(text)
         if self.fail_on is not None and len(self.calls) == self.fail_on:
             raise RuntimeError("quota exceeded")
@@ -128,6 +128,7 @@ def mp3_bytes(tmp_path_factory):
     if shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None:
         pytest.skip("ffmpeg/ffprobe not installed")
     from truehand.adapters.ffmpeg import synth_silence
+
     return synth_silence(120, tmp_path_factory.mktemp("tone") / "s.mp3").read_bytes()
 
 
@@ -135,6 +136,7 @@ def mp3_bytes(tmp_path_factory):
 def episode(tmp_path):
     """A minimal archive holding one session with a script, aimed at tmp."""
     from truehand.paths import Paths
+
     for marker in ("campaign-state.md", "quests.md"):
         (tmp_path / marker).write_text("")
     audio = tmp_path / "sessions" / "2099-01-01" / "audio"
@@ -145,9 +147,17 @@ def episode(tmp_path):
 
 def _run(paths, backend, force=False):
     from truehand.pipelines.session_audio import build_episode
-    return build_episode(paths, backend, "2099-01-01",
-                         voice_id=VOICE, model_id=MODEL,
-                         no_music=True, no_beds=True, force=force)
+
+    return build_episode(
+        paths,
+        backend,
+        "2099-01-01",
+        voice_id=VOICE,
+        model_id=MODEL,
+        no_music=True,
+        no_beds=True,
+        force=force,
+    )
 
 
 def test_a_crash_records_every_chunk_already_paid_for(episode, mp3_bytes):
@@ -173,8 +183,9 @@ def test_a_retry_after_a_crash_does_not_re_bill(episode, mp3_bytes):
 
     retry = FlakyBackend(mp3_bytes)
     _run(paths, retry)
-    assert retry.calls == ["Line three.", "Line four."], \
+    assert retry.calls == ["Line three.", "Line four."], (
         "lines one and two were already paid for and must come from the cache"
+    )
 
 
 def test_a_crash_does_not_drop_chunks_the_run_had_not_reached(episode, mp3_bytes):
@@ -182,23 +193,25 @@ def test_a_crash_does_not_drop_chunks_the_run_had_not_reached(episode, mp3_bytes
     so persisting it alone would strand every chunk from a previous run that
     this run died before revisiting — re-billing those too."""
     from truehand.pipelines.session_audio import chunk_hash
+
     paths, audio = episode
 
-    _run(paths, FlakyBackend(mp3_bytes))          # a complete previous run
+    _run(paths, FlakyBackend(mp3_bytes))  # a complete previous run
     assert len(json.loads((audio / "manifest.json").read_text())["chunks"]) == 4
 
     # Edit the opening line, so this run must voice it and can die on it
     # before ever reaching the three lines it would have taken from cache.
     (audio / "script.md").write_text(
-        SCRIPT.replace("Line one.", "A rewritten line."), encoding="utf-8")
+        SCRIPT.replace("Line one.", "A rewritten line."), encoding="utf-8"
+    )
     with pytest.raises(OperationFailed):
         _run(paths, FlakyBackend(mp3_bytes, fail_on=1), force=True)
 
     chunks = json.loads((audio / "manifest.json").read_text())["chunks"]
-    for text, cue in [("Line two.", "hushed"), ("Line three.", "grave"),
-                      ("Line four.", "warm")]:
-        assert chunk_hash(text, VOICE, MODEL, cue) in chunks, \
+    for text, cue in [("Line two.", "hushed"), ("Line three.", "grave"), ("Line four.", "warm")]:
+        assert chunk_hash(text, VOICE, MODEL, cue) in chunks, (
             f"{text!r} was paid for by the earlier run and must survive"
+        )
 
 
 def test_a_clean_run_writes_only_the_current_scripts_chunks(episode, mp3_bytes):

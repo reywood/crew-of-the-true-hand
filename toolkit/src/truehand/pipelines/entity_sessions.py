@@ -71,7 +71,7 @@ def write_sessions_field(path: Path, sessions: list[str], dry_run: bool) -> str:
     if not m:
         return "unchanged"
     open_delim, fm_body, close_delim = m.groups()
-    rest = text[m.end():]
+    rest = text[m.end() :]
 
     # Work line-wise so the order of the other fields is preserved.
     fm_lines = fm_body.split("\n")
@@ -102,13 +102,11 @@ def write_sessions_field(path: Path, sessions: list[str], dry_run: bool) -> str:
         tag = "added"
 
     if tag != "unchanged" and not dry_run:
-        path.write_text(open_delim + "\n".join(fm_lines) + close_delim + rest,
-                        encoding="utf-8")
+        path.write_text(open_delim + "\n".join(fm_lines) + close_delim + rest, encoding="utf-8")
     return tag
 
 
-def sync_directory(directory: Path, session_texts: dict[str, str],
-                   dry_run: bool) -> SyncResult:
+def sync_directory(directory: Path, session_texts: dict[str, str], dry_run: bool) -> SyncResult:
     """Refresh every ``*.md`` in *directory*."""
     result = SyncResult(directory=directory)
     for entity_path in sorted(directory.glob("*.md")):

@@ -22,14 +22,22 @@ DATE_ARG = typer.Argument(..., metavar="DATE", help="Session date, YYYY-MM-DD.")
 def image(
     ctx: typer.Context,
     date: Annotated[str, DATE_ARG],
-    force: Annotated[bool, typer.Option("--force", help="Regenerate even if the file exists.")] = False,
-    model: Annotated[str, typer.Option("--model", help="Gemini image model.")] = DEFAULT_IMAGE_MODEL,
+    force: Annotated[
+        bool, typer.Option("--force", help="Regenerate even if the file exists.")
+    ] = False,
+    model: Annotated[
+        str, typer.Option("--model", help="Gemini image model.")
+    ] = DEFAULT_IMAGE_MODEL,
     hero: Annotated[bool, typer.Option("--hero", help="Hero banner only.")] = False,
     beats: Annotated[bool, typer.Option("--beats", help="Beat illustrations only.")] = False,
     hero_aspect: Annotated[str, typer.Option("--hero-aspect", help="Hero aspect ratio.")] = "16:9",
     beat_aspect: Annotated[str, typer.Option("--beat-aspect", help="Beat aspect ratio.")] = "3:2",
-    refs_only: Annotated[bool, typer.Option("--refs-only", help="Reference plates only, no cast prose.")] = False,
-    lean: Annotated[bool, typer.Option("--lean", help="Lean cast lines instead of full identity anchors.")] = False,
+    refs_only: Annotated[
+        bool, typer.Option("--refs-only", help="Reference plates only, no cast prose.")
+    ] = False,
+    lean: Annotated[
+        bool, typer.Option("--lean", help="Lean cast lines instead of full identity anchors.")
+    ] = False,
 ) -> None:
     """Generate the hero banner and beat illustrations for a session."""
     if refs_only and lean:
@@ -40,9 +48,17 @@ def image(
     want_hero, want_beats = (hero, beats) if (hero or beats) else (True, True)
     backend = GeminiImageBackend()
     results, warnings = session_image.generate(
-        paths, backend, date, hero=want_hero, beats=want_beats, force=force,
-        model=model, hero_aspect=hero_aspect, beat_aspect=beat_aspect,
-        refs_only=refs_only, lean=lean,
+        paths,
+        backend,
+        date,
+        hero=want_hero,
+        beats=want_beats,
+        force=force,
+        model=model,
+        hero_aspect=hero_aspect,
+        beat_aspect=beat_aspect,
+        refs_only=refs_only,
+        lean=lean,
     )
     for w in warnings:
         typer.secho(f"  WARN: {w}", fg="yellow", err=True)
@@ -55,27 +71,51 @@ def image(
 def audio(
     ctx: typer.Context,
     date: Annotated[str, DATE_ARG],
-    voice: Annotated[str, typer.Option("--voice", help="ElevenLabs voice_id (default: Cormac).")] = DEFAULT_VOICE_ID,
+    voice: Annotated[
+        str, typer.Option("--voice", help="ElevenLabs voice_id (default: Cormac).")
+    ] = DEFAULT_VOICE_ID,
     model: Annotated[str, typer.Option("--model", help="ElevenLabs model_id.")] = DEFAULT_MODEL_ID,
-    force: Annotated[bool, typer.Option("--force", help="Rebuild final.mp3 even if it exists. Chunks stay cached.")] = False,
-    force_tts: Annotated[bool, typer.Option("--force-tts", help="Invalidate the TTS cache and re-call for every chunk.")] = False,
-    no_music: Annotated[bool, typer.Option("--no-music", help="Voice only — skip all layering. Implies --no-beds.")] = False,
-    no_beds: Annotated[bool, typer.Option("--no-beds", help="Skip sustained under-beds; inline cues still play.")] = False,
-    dry_run: Annotated[bool, typer.Option("--dry-run", help="Parse the script without calling TTS or stitching.")] = False,
+    force: Annotated[
+        bool,
+        typer.Option("--force", help="Rebuild final.mp3 even if it exists. Chunks stay cached."),
+    ] = False,
+    force_tts: Annotated[
+        bool,
+        typer.Option("--force-tts", help="Invalidate the TTS cache and re-call for every chunk."),
+    ] = False,
+    no_music: Annotated[
+        bool, typer.Option("--no-music", help="Voice only — skip all layering. Implies --no-beds.")
+    ] = False,
+    no_beds: Annotated[
+        bool, typer.Option("--no-beds", help="Skip sustained under-beds; inline cues still play.")
+    ] = False,
+    dry_run: Annotated[
+        bool, typer.Option("--dry-run", help="Parse the script without calling TTS or stitching.")
+    ] = False,
 ) -> None:
     """Render the Tales of the True Hand episode for a session."""
     paths = resolve_paths(ctx)
     load_dotenv(paths.env_file)
     result = session_audio.build_episode(
-        paths, ElevenLabsBackend(), date, voice_id=voice, model_id=model,
-        force=force, force_tts=force_tts, no_music=no_music,
-        no_beds=no_beds, dry_run=dry_run, on_progress=typer.echo,
+        paths,
+        ElevenLabsBackend(),
+        date,
+        voice_id=voice,
+        model_id=model,
+        force=force,
+        force_tts=force_tts,
+        no_music=no_music,
+        no_beds=no_beds,
+        dry_run=dry_run,
+        on_progress=typer.echo,
     )
     if result.status == "skipped":
         typer.echo(f"{result.path} {result.detail}")
     elif result.status == "dry-run":
-        typer.echo(f"  {result.spoken_lines} spoken lines, {result.characters} chars "
-                   f"(~{result.estimated_minutes:.0f} min)")
+        typer.echo(
+            f"  {result.spoken_lines} spoken lines, {result.characters} chars "
+            f"(~{result.estimated_minutes:.0f} min)"
+        )
     elif result.status == "written":
         typer.echo(f"Wrote {result.path} ({result.size_kb:.0f} KB)")
         typer.echo(f"  Cached {result.chunks} speech chunks under {result.chunks_dir}")
@@ -88,8 +128,12 @@ def factcheck(
 ) -> None:
     """Render the fact-check worksheet as a reviewable HTML page."""
     from ..pipelines import factcheck as pipeline
+
     paths = resolve_paths(ctx)
     dest = pipeline.render_review(paths, date)
-    note = "" if pipeline.recording_present(paths, date) else \
-        "  (warning: recording.m4a not found beside it)"
+    note = (
+        ""
+        if pipeline.recording_present(paths, date)
+        else "  (warning: recording.m4a not found beside it)"
+    )
     typer.echo(f"wrote {dest.relative_to(paths.root)}{note}")

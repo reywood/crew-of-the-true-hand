@@ -43,8 +43,7 @@ def find_root(start: Path | None = None) -> Path:
         root = Path(override).expanduser().resolve()
         if not is_archive_root(root):
             raise UserError(
-                f"{ROOT_ENV_VAR}={override} is not a campaign archive "
-                f"(needs {', '.join(MARKERS)})"
+                f"{ROOT_ENV_VAR}={override} is not a campaign archive (needs {', '.join(MARKERS)})"
             )
         return root
 

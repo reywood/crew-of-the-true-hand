@@ -13,86 +13,85 @@ def quest_list_page(quests, link_map, relations):
     grouped = {}
     for q in quests:
         grouped.setdefault(q.status, []).append(q)
-    chunks = ["<h1>Quest Log</h1>",
-              '<p class="subhead"><em>See also <a href="next.html">Prep — Where We Left Off</a> '
-              'and the <a href="threads.html">Open Threads</a> board.</em></p>']
+    chunks = [
+        "<h1>Quest Log</h1>",
+        '<p class="subhead"><em>See also <a href="next.html">Prep — Where We Left Off</a> '
+        'and the <a href="threads.html">Open Threads</a> board.</em></p>',
+    ]
     for status in sorted(grouped, key=lambda s: s.display_order):
         items = grouped[status]
         chunks.append(
             f'<h2 class="status-heading">'
             f'<span class="status-chip status-{status.css_class}">'
-            f'{html.escape(status.label)}</span></h2>')
+            f"{html.escape(status.label)}</span></h2>"
+        )
         chunks.append("<ul class='quest-list'>")
         for q in items:
             helps = relations.helps_for(q)
             supported_by = relations.supported_by_for(q)
             dep_lines = []
             if helps:
-                links = " · ".join(
-                    f'<a href="{d.href}">{html.escape(d.name)}</a>'
-                    for d in helps
-                )
+                links = " · ".join(f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in helps)
                 dep_lines.append(
                     f'<span class="quest-dep quest-dep-helps">'
                     f'<span class="dep-arrow">&rarr;</span> helps: {links}'
-                    f'</span>'
+                    f"</span>"
                 )
             if supported_by:
                 links = " · ".join(
-                    f'<a href="{d.href}">{html.escape(d.name)}</a>'
-                    for d in supported_by
+                    f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in supported_by
                 )
                 dep_lines.append(
                     f'<span class="quest-dep quest-dep-supports">'
                     f'<span class="dep-arrow">&larr;</span> steps toward this: {links}'
-                    f'</span>'
+                    f"</span>"
                 )
             deps_html = (
-                f'<div class="quest-list-deps">{"".join(dep_lines)}</div>'
-                if dep_lines else ""
+                f'<div class="quest-list-deps">{"".join(dep_lines)}</div>' if dep_lines else ""
             )
             chunks.append(
                 f'<li><a href="{q.href}"><strong>{html.escape(q.name)}</strong></a> — '
-                f'{md_inline(q.summary or "")}{deps_html}</li>'
+                f"{md_inline(q.summary or '')}{deps_html}</li>"
             )
         chunks.append("</ul>")
     body = "\n".join(chunks)
-    return page("Quests", linkify_html(body, "quests.html", link_map),
-                current_nav="quests.html",
-                description='Every thread the crew is pulling: the main arc, allies to recruit, giant hotspots, and the leads still dangling.',
-                canonical="quests.html")
+    return page(
+        "Quests",
+        linkify_html(body, "quests.html", link_map),
+        current_nav="quests.html",
+        description="Every thread the crew is pulling: the main arc, allies to recruit, giant hotspots, and the leads still dangling.",
+        canonical="quests.html",
+    )
 
 
 def _render_dep_line(label, arrow_class, deps):
     """Render one directional dependency line, e.g.
-       → Helps achieve: [Reach the Oracle]"""
+    → Helps achieve: [Reach the Oracle]"""
     if not deps:
         return ""
-    links = ", ".join(
-        f'<a href="{d.href}">{html.escape(d.name)}</a>'
-        for d in deps
-    )
+    links = ", ".join(f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in deps)
     return (
         f'<p class="dep-line">'
         f'<span class="dep-arrow {arrow_class}">&rarr;</span> '
         f'<span class="dep-label">{html.escape(label)}:</span> {links}'
-        f'</p>'
+        f"</p>"
     )
 
 
 def detail_page_quest(q, link_map, session_lookup=None, relations=None):
     rendered = md_to_html(q.body)
     linked = linkify_html(rendered, q.href, link_map)
-    chip = (f'<span class="status-chip status-{q.status.css_class}">'
-            f'{html.escape(q.status.label)}</span>')
+    chip = (
+        f'<span class="status-chip status-{q.status.css_class}">'
+        f"{html.escape(q.status.label)}</span>"
+    )
 
     helps = relations.helps_for(q) if relations else []
     supported_by = relations.supported_by_for(q) if relations else []
     deps_html = ""
     if helps or supported_by:
         forward = _render_dep_line("Helps achieve", "dep-forward", helps)
-        backward = _render_dep_line("Steps toward this", "dep-backward",
-                                    supported_by)
+        backward = _render_dep_line("Steps toward this", "dep-backward", supported_by)
         deps_html = f'<aside class="quest-deps">{forward}{backward}</aside>'
 
     # Quests carry their session dates inline in the body as (YYYY-MM-DD)
@@ -110,6 +109,12 @@ def detail_page_quest(q, link_map, session_lookup=None, relations=None):
   </div>
 </article>"""
     bc = f'<a href="quests.html">Quests</a> &rsaquo; {html.escape(q.name)}'
-    return page(q.name, body, current_nav="quests.html", breadcrumb=bc,
-                description=q.summary or q.body,
-                canonical=q.href, og_type="article")
+    return page(
+        q.name,
+        body,
+        current_nav="quests.html",
+        breadcrumb=bc,
+        description=q.summary or q.body,
+        canonical=q.href,
+        og_type="article",
+    )

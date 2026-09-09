@@ -23,9 +23,7 @@ BINARY_SUFFIXES = {".mp3", ".jpg", ".jpeg", ".png", ".webp", ".ico"}
 @pytest.fixture(scope="module")
 def frozen_probe(repo_root):
     """Durations captured from the real ffprobe, keyed by repo-relative path."""
-    table = json.loads(
-        (pathlib.Path(__file__).parent / "fixtures" / "durations.json").read_text()
-    )
+    table = json.loads((pathlib.Path(__file__).parent / "fixtures" / "durations.json").read_text())
 
     def probe(path):
         rel = pathlib.Path(path).resolve().relative_to(repo_root).as_posix()

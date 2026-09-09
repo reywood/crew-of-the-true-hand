@@ -38,7 +38,7 @@ def _render_quest_li(q, relations):
     if recency:
         last_touched = (
             f'<a class="home-quest-touch" href="session-{recency}.html">'
-            f'last touched · session {recency}</a>'
+            f"last touched · session {recency}</a>"
         )
     summary = md_inline(q.summary or "")
 
@@ -46,19 +46,18 @@ def _render_quest_li(q, relations):
     helps = relations.helps_for(q)
     supported_by = relations.supported_by_for(q)
     if helps:
-        links = " · ".join(
-            f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in helps)
+        links = " · ".join(f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in helps)
         dep_lines.append(
             f'<span class="home-quest-dep"><span class="dep-arrow">&rarr;</span> '
-            f'helps: {links}</span>')
+            f"helps: {links}</span>"
+        )
     if supported_by:
-        links = " · ".join(
-            f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in supported_by)
+        links = " · ".join(f'<a href="{d.href}">{html.escape(d.name)}</a>' for d in supported_by)
         dep_lines.append(
             f'<span class="home-quest-dep"><span class="dep-arrow">&larr;</span> '
-            f'steps toward this: {links}</span>')
-    deps_html = (f'<p class="home-quest-deps">{" ".join(dep_lines)}</p>'
-                 if dep_lines else "")
+            f"steps toward this: {links}</span>"
+        )
+    deps_html = f'<p class="home-quest-deps">{" ".join(dep_lines)}</p>' if dep_lines else ""
 
     return f"""
     <li class="home-quest">
@@ -101,7 +100,9 @@ def index_page(pcs, npcs, locations, quests, sessions, relations):
     if recent:
         cards += "<section class='recent'><h2>Most recent sessions</h2><ul class='session-list'>"
         for s in recent:
-            cards += f'<li><a href="{s.href}">{html.escape(s.name)}</a> — {html.escape(s.blurb)}</li>'
+            cards += (
+                f'<li><a href="{s.href}">{html.escape(s.name)}</a> — {html.escape(s.blurb)}</li>'
+            )
         cards += "</ul></section>"
 
     # Directory / navigation grid — moved beneath the actionable content so
@@ -135,10 +136,15 @@ def index_page(pcs, npcs, locations, quests, sessions, relations):
 </div>
 </section>
 """
-    return page("Home", cards, current_nav="index.html",
-                share_title=SITE_NAME,
-                description=(
-                    "The player-side archive of a Storm King's Thunder campaign — "
-                    "session recaps and a narrated audio retelling, the crew, the folk "
-                    "they've met, and every thread still hanging."),
-                canonical="index.html")
+    return page(
+        "Home",
+        cards,
+        current_nav="index.html",
+        share_title=SITE_NAME,
+        description=(
+            "The player-side archive of a Storm King's Thunder campaign — "
+            "session recaps and a narrated audio retelling, the crew, the folk "
+            "they've met, and every thread still hanging."
+        ),
+        canonical="index.html",
+    )

@@ -62,7 +62,8 @@ class Session:
         if not (self.notes or self.transcript or self.summary):
             raise ValueError(
                 f"session {self.date}: needs at least one of notes, transcript "
-                f"or summary to be a session at all")
+                f"or summary to be a session at all"
+            )
 
     # -- identity, shared with Entity so pages and the graph treat both alike --
     kind = "session"
