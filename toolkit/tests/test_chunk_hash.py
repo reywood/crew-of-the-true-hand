@@ -11,11 +11,11 @@ import shutil
 
 import pytest
 
+from truehand.core.episode_script import EpisodeScript
 from truehand.errors import OperationFailed
 from truehand.pipelines.session_audio import (
     DELIVERY_PRESETS,
     chunk_hash,
-    parse_script,
     resolve_delivery,
 )
 
@@ -69,10 +69,10 @@ def test_every_committed_manifest_still_resolves(paths):
             continue
         data = json.loads(manifest_path.read_text(encoding="utf-8"))
         live = {
-            chunk_hash(text, data["voice_id"], data["model_id"],
-                       resolve_delivery(delivery)[0])
-            for kind, text, delivery in
-            (e for e in parse_script(script.read_text(encoding="utf-8")) if e[0] == "speak")
+            chunk_hash(line.text, data["voice_id"], data["model_id"],
+                       resolve_delivery(line.delivery)[0])
+            for line in EpisodeScript.parse(
+                script.read_text(encoding="utf-8")).spoken_lines
         }
         orphaned = set(data["chunks"]) - live
         assert not orphaned, (

@@ -31,14 +31,15 @@ class SessionArtifacts:
 
     `hero` is the 16:9 banner (`images/hero.<ext>`); `beats` maps a summary
     beat's slug to its illustration; `audio` is the stitched "Tales of the True
-    Hand" recap, and `audio_subtitle` is line 2 of its script — the podcast
-    episode title.
+    Hand" recap, and `episode_title` is what that episode is called — line 2
+    of its script. CLAUDE.md calls it the episode title, so this does too; it
+    was `audio_subtitle` here, which it never was.
     """
 
     hero: Path | None = None
     beats: dict[str, Path] = field(default_factory=dict)
     audio: Path | None = None
-    audio_subtitle: str = ""
+    episode_title: str = ""
 
 
 @dataclass(eq=False)
@@ -50,6 +51,11 @@ class Session:
     transcript: str = ""
     summary: SessionSummary = field(default_factory=lambda: SessionSummary("", ()))
     carried: tuple[str, ...] = ()
+    #: Location slugs, most important first. Authored out-of-band in
+    #: data/session_locations.toml because it is an annotation, not something
+    #: extractable from the summary — but it is Session state all the same,
+    #: not ambient config for three modules to reach for independently.
+    locations: tuple[str, ...] = ()
     artifacts: SessionArtifacts = field(default_factory=SessionArtifacts)
 
     def __post_init__(self):
@@ -88,6 +94,11 @@ class Session:
             if line.strip():
                 return line.strip()
         return "Transcript only — no written notes." if self.transcript else "No content."
+
+    @property
+    def in_transit(self) -> bool:
+        """No fixed place — the sessions list shows a dashed em-dash chip."""
+        return not self.locations
 
     # -- artifacts: one set of naming rules, derived, never stored -------------
     @property

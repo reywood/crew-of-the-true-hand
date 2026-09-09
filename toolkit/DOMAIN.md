@@ -94,8 +94,8 @@ pre-migration script, and `test_every_committed_manifest_still_resolves`
 asserts no committed episode would re-bill. Treat that hash as a published
 contract with past money already spent.
 
-Also inside this context, though it currently lives in `site/feed.py`, is a
-small sub-domain: **audio licensing**. `sessions/library/audio/CREDITS.md`
+Also inside this context is a small sub-domain: **audio licensing**, now
+`core/audio_credits.py`. `sessions/library/audio/CREDITS.md`
 distinguishes assets whose licence *requires* attribution (CC-BY: The Britons)
 from those where it is a courtesy (Pixabay). That is a legal fact about the
 show, not a rendering choice.
@@ -123,13 +123,13 @@ about.
 | Archive says | Code says | Where | Verdict |
 |---|---|---|---|
 | **episode** (of a podcast) | `session audio`, `build_episode`, `paths.session_audio()`, `site/audio/sessions/` | `cli/session.py`, `paths.py`, `pipelines/session_audio.py` | Accepted drift. The CLI verb is muscle memory; leave it. But the *aggregate* is an Episode, and internal names should say so. |
-| **episode title** | `audio_subtitle` | `core/session.py`, `core/loaders.py`, `site/feed.py`, `site/pages/sessions.py` | Real mismatch. It is a title, not a subtitle. |
+| **episode title** | `episode_title` | `core/session.py`, `core/episode_script.py` | Fixed. Was `audio_subtitle`, which it never was. |
 | **beat** (a `##` section of a summary) | `Beat` | `core/summary.py` | Correct. Keep. |
-| **act** (a `## ACT ONE` of a script) | *(nothing — a bracket-matching branch in `_chapter_title`)* | `pipelines/session_audio.py` | Missing. An Act is a first-class structural unit of a script and is not the same thing as a Beat; the two do not correspond 1:1. |
-| **standing** (how the crew stands with an NPC) | `chip_for()` returning `(label, css_class)` | `core/loaders.py` | Mismatch, and a layering one: `core` names a concept after its CSS chip and hands back a CSS class. Compare `QuestStatus`, which got this right. |
+| **act** (a `## ACT ONE` of a script) | `ChapterMark`, via `_chapter_title` | `core/episode_script.py` | Modelled as the chapter it produces. An Act is not a Beat and the two do not correspond 1:1. |
+| **standing** (how the crew stands with an NPC) | `Standing` | `core/standing.py` | Fixed. `core` no longer hands out CSS classes as a domain answer, and `is_approachable` replaces a string match on chip classes. |
 | **carried** (session frontmatter) | `carried` in core; "Items acquired" on the page | `core/loaders.py`, `site/pages/sessions.py` | Two names, one thing. Harmless; noted. |
-| **current objective / open questions** | `state` dict, `state.get("objective")` | `core/loaders.py`, `site/pages/prep.py` | Anemic. `CampaignState` is a value object with two fields and an override. |
-| **where the session took place** | `SESSION_LOCATIONS`, a module-level dict | `core/loaders.py`, read by `core/graph.py`, `site/pages/sessions.py`, `site/pages/prep.py` | Real problem. This is Session state, not ambient config. |
+| **current objective / open questions** | `CampaignState` | `core/campaign_state.py` | Fixed. Was a dict of three `.get()`s with defaults. |
+| **where the session took place** | `Session.locations` | `core/session.py` | Fixed. Was a module-level dict three modules reached for; the TOML is now read once, by the loader. |
 | **Vandal Lovelace** (the narrator) | the literal `"VANDAL:"` | `pipelines/session_audio.py` | Fine for a one-narrator show. Name the constant. |
 | **crew / characters / PCs** | `kind="pc"`, `[pcs.*]`, nav "Characters", page "The Crew" | everywhere | Accepted synonyms. The archive uses all three too. |
 
@@ -152,8 +152,11 @@ about.
   `hero_name`, `beat_image(beat)`. The published-URL naming rules live here and
   nowhere else; `site/assets.py:_stage_session_media` copies what the aggregate
   reports rather than re-walking the tree.
-- **Missing from the aggregate:** where it took place, and any notion of *how
-  far through the pipeline it is*.
+- `locations` carries where it happened, authored out-of-band in
+  `data/session_locations.toml` because it is an annotation rather than
+  something extractable from the summary — but Session state all the same.
+  `in_transit` is the derived question the sessions list asks.
+- **Still missing:** any notion of *how far through the pipeline it is*.
 
 **`SessionSummary` / `Beat`** — value objects. `core/summary.py`.
 
@@ -207,8 +210,8 @@ the Connections block.
 
 ### 3.2 Podcast Production
 
-Nothing in this context is currently modelled. What the domain actually
-contains:
+Partly modelled. `core/episode_script.py` holds the document; the value objects
+below marked *(open)* do not exist yet.
 
 **`Episode`** — aggregate root, identity = the session date. Invariants:
 
@@ -220,16 +223,20 @@ contains:
 - Chapter marks are monotonic in ms.
 - The manifest's chunk hashes are exactly the set the current script produces.
 
-**`EpisodeScript`** — value object. The parsed `script.md`: title, episode
-title, ordered `Act`s, ordered events. The direct analogue of `SessionSummary`,
-and it does not exist. Two different parsers read this document today
-(`parse_script`, and `core/loaders._read_audio_subtitle` reaching into the
-Archive context to grab line 2 with `fh.readline()`).
+**`EpisodeScript`** — value object, `core/episode_script.py`. The parsed
+`script.md`: episode title plus ordered events. The direct analogue of
+`SessionSummary`, and the reason there is now one parser instead of two.
 
-**`Act`** — entity within the script (ordered, titled, may become a chapter).
+**`Speak` / `Silence` / `MusicCue` / `StingCue` / `ChapterMark`** — value
+objects, the script's event vocabulary. Were heterogeneous tuples where `ev[1]`
+meant three different things depending on `ev[0]`.
 
-**`SpokenLine`** — value object: `(text, delivery_cue)`. Currently the tuple
-`("speak", text, delivery)`.
+*Why in `core/` rather than beside the audio pipeline:* `core/` is where the
+archive's documents are read, and `script.md` is one of them. Putting the
+parser in `pipelines/` would make `core` import from `pipelines` to learn an
+episode's title, inverting the package's one enforced dependency rule. What
+stays in `pipelines/session_audio.py` is everything that *produces* an episode:
+what a cue means for the mix, which asset it pulls, how loud it sits, the TTS.
 
 **`DeliveryCue` -> `VoicePreset`** — value objects. `resolve_delivery` returns
 a `(key, dict)` tuple; the key is inside the cache hash, the dict is the
@@ -238,21 +245,31 @@ settings.
 **`Cue`** (`[MUSIC: ...]` / `[STING: ...]`) -> **`AssetClip(path, db, segment)`**
 — value objects. Currently 3-tuples out of the three `resolve_*` functions.
 
-**`BedSpan(start_ms, end_ms, kind, label)`** — value object. Currently a dict
-built by an inline state machine.
+**`BedSpan`** — value object, `pipelines/session_audio.py`, with
+`resolve_bed_spans` as the pure state machine over the marker list. Both used
+to be inline at the bottom of `build_episode`, so the logic could only run
+after money had been spent.
 
-**`ChapterMark(title, at_ms)`**, **`TimelineElement(path, dur_ms, kind)`** —
-value objects. Currently dicts.
+**`EpisodeResult`** — the outcome value returned to the CLI, matching
+`ImageResult` / `PlateResult` / `CoverResult`. Progress reaches the caller
+through an `on_progress` callback; the pipeline no longer prints.
 
-**`ShowDirection`** — value object loaded from `data/audio_direction.toml`.
-Currently ~15 module-level constants unpacked at import time.
+**`TimelineElement(path, dur_ms, kind)`** *(open)* — still a dict.
+
+**`ShowDirection`** *(open)* — would wrap `data/audio_direction.toml`, today
+~15 module-level constants unpacked at import time. Deliberately left alone:
+`DELIVERY_PRESETS` is read by `chunk_hash` as a module global and pinned that
+way by `test_chunk_hash.py`, and the purity gain does not justify risking a
+re-bill.
 
 **`ChunkCache` / `Manifest`** — an *entity* (it has identity and a lifecycle
 across runs, unlike everything else here). Owns `chunk_hash`, the manifest
 read/write, chunk filenames, and the cache-hit copy.
 
-**`AudioLibrary` + `AssetCredit`** — the shared music library and its licence
-obligations. Currently parsed inside `site/feed.py` behind a module global.
+**`AudioCredits`** — value object, `core/audio_credits.py`. Which licences
+*require* attribution (CC-BY) versus which make it a courtesy (Pixabay) is a
+legal fact about the show. It was decided inside the RSS renderer behind a
+process-global cache keyed on nothing.
 
 ### 3.3 Illustration
 
@@ -338,19 +355,18 @@ Conformist.** `site/` consumes `Session`, `Entity`, `Relations`, `Graph`,
 language and an ACL would be pure ceremony. The one-way dependency is stated in
 `toolkit/README.md` and holds.
 
-**Campaign Archive -> Illustration: shared kernel on `SessionSummary`.** Right
-idea; `pipelines/session_image.load_summary` bypasses `load_sessions` and so
-applies *different* document rules.
+**Campaign Archive -> Illustration: shared kernel on `SessionSummary`.**
+`core.summary.read_document` is now the single way to get one off disk, so both
+readers strip the frontmatter block identically. The image pipeline used to
+skip that and ship the raw `carried:` list to Gemini as prose.
 
-**Podcast Production -> Campaign Archive: an upstream leak.**
-`core/loaders._read_audio_subtitle` opens the podcast script and slices line 2.
-The Archive should not know the show's script format. This is the one place a
-genuine translator is warranted, and it belongs on the Podcast side.
+**Podcast Production -> Campaign Archive: the leak is closed.** Both readers of
+`script.md` go through `core/episode_script.EpisodeScript`.
 
 **Podcast Production -> Website Publishing: Published Language = `feed.xml`.**
-`site/feed.py` is the translator. It currently translates from `Session` +
-`SessionArtifacts` rather than from an `Episode`, and it additionally hosts the
-whole audio-licensing sub-domain (`_parse_audio_credits`).
+`site/feed.py` is the translator, and now only that: it renders from `Session` +
+`SessionArtifacts` + `AudioCredits`. An `Episode` aggregate would be the next
+step and is not obviously worth it.
 
 **`adapters/` is the infrastructure layer for all four downstream contexts.**
 The `Protocol`s are used sparingly and for the right reason, and each says so:

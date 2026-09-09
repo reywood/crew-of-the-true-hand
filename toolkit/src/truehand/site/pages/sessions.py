@@ -3,7 +3,6 @@
 import html
 import re
 
-from ...core.loaders import SESSION_LOCATIONS
 from ...core.markdown import md_inline, md_to_html
 from ...core.text import chunk_transcript
 from ..layout import base_url, page
@@ -15,9 +14,8 @@ def session_list_page(sessions, locations, link_map):
     rows = []
     for s in sorted(sessions, key=lambda x: x.date, reverse=True):
         date = s.date
-        loc_slugs = SESSION_LOCATIONS.get(date, [])
         loc_chips = []
-        for slug in loc_slugs:
+        for slug in s.locations:
             loc = loc_by_slug.get(slug)
             if loc:
                 loc_chips.append(
@@ -161,7 +159,7 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
     # linkify so the neighbour dates don't get turned into entity self-links.
     body += _session_pager(prev, nxt)
     bc = f'<a href="sessions.html">Sessions</a> &rsaquo; {html.escape(s.name)}'
-    subtitle = s.artifacts.audio_subtitle
+    subtitle = s.artifacts.episode_title
     share_title = f"{s.name} — {subtitle}" if subtitle else s.name
     return page(share_title, body, current_nav="sessions.html", breadcrumb=bc,
                 description=s.blurb,

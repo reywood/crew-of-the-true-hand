@@ -69,13 +69,16 @@ def audio(
     result = session_audio.build_episode(
         paths, ElevenLabsBackend(), date, voice_id=voice, model_id=model,
         force=force, force_tts=force_tts, no_music=no_music,
-        no_beds=no_beds, dry_run=dry_run,
+        no_beds=no_beds, dry_run=dry_run, on_progress=typer.echo,
     )
-    if result["status"] == "skipped":
-        typer.echo(f"{result['path']} {result['detail']}")
-    elif result["status"] == "written":
-        typer.echo(f"Wrote {result['path']} ({result['size_kb']:.0f} KB)")
-        typer.echo(f"  Cached {result['chunks']} speech chunks under {result['chunks_dir']}")
+    if result.status == "skipped":
+        typer.echo(f"{result.path} {result.detail}")
+    elif result.status == "dry-run":
+        typer.echo(f"  {result.spoken_lines} spoken lines, {result.characters} chars "
+                   f"(~{result.estimated_minutes:.0f} min)")
+    elif result.status == "written":
+        typer.echo(f"Wrote {result.path} ({result.size_kb:.0f} KB)")
+        typer.echo(f"  Cached {result.chunks} speech chunks under {result.chunks_dir}")
 
 
 @session_app.command("factcheck")

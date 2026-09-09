@@ -66,6 +66,31 @@ class TestDerivedArtifactState:
         assert s.beat_image(SessionSummary.parse("## Elsewhere\n\np\n").beats[0]) is None
 
 
+class TestLocations:
+    """Where a session happened is Session state, not ambient config three
+    modules reach for independently."""
+
+    def test_a_session_with_no_entry_is_in_transit(self):
+        s = Session("2026-06-16", notes="x")
+        assert s.locations == () and s.in_transit
+
+    def test_locations_keep_their_authored_order(self):
+        s = Session("2026-06-16", notes="x",
+                    locations=("nightstone", "ardeep-forest"))
+        assert s.locations[0] == "nightstone"
+        assert not s.in_transit
+
+    def test_the_real_archive_agrees_with_the_toml(self, paths, sessions):
+        from truehand.core.loaders import SESSION_LOCATIONS
+        for s in sessions:
+            assert list(s.locations) == list(SESSION_LOCATIONS.get(s.date, []))
+
+    def test_every_slug_names_a_real_location(self, paths, sessions):
+        known = {p.stem for p in paths.locations.glob("*.md")}
+        for s in sessions:
+            assert set(s.locations) <= known, s.date
+
+
 class TestBlurb:
     def test_prefers_the_summary_in_brief(self):
         s = Session("2026-06-16", notes="notes first line",

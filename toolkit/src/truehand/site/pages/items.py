@@ -23,8 +23,6 @@ def item_list_page(items, link_map):
     grouped = {}
     for it in items:
         status = it.meta["status"].one("Active")
-        if isinstance(status, list):
-            status = status[0] if status else "Active"
         grouped.setdefault(status, []).append(it)
 
     chunks = [
@@ -43,11 +41,7 @@ def item_list_page(items, link_map):
         chunks.append('<ul class="item-list">')
         for it in sorted(bucket, key=lambda x: x.name.lower()):
             holder = it.meta["holder"].one()
-            if isinstance(holder, list):
-                holder = ", ".join(holder)
             typ = it.meta["type"].one()
-            if isinstance(typ, list):
-                typ = typ[0] if typ else ""
             meta_bits = []
             if typ:
                 meta_bits.append(f'<span class="item-type">{html.escape(typ)}</span>')

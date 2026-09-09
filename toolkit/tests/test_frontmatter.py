@@ -121,7 +121,7 @@ def test_campaign_objective_reaches_the_prep_page(paths):
     returns it as a list; load_campaign_state used to accept only a str and
     silently fall back to "", so next.html rendered no objective at all."""
     from truehand.core.loaders import load_campaign_state
-    objective = load_campaign_state(paths)["objective"]
+    objective = load_campaign_state(paths).objective
     assert objective, "objective is empty despite being set in campaign-state.md"
     assert ", " in objective, "prose should be rejoined, not left as fragments"
 

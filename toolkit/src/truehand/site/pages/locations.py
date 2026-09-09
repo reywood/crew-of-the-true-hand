@@ -66,8 +66,6 @@ def locations_chart_page(locations, link_map):
     chunks.append('<ul class="location-list">')
     for loc in sorted(locations, key=lambda l: l.name.lower()):
         loc_type = loc.meta["type"].one()
-        if isinstance(loc_type, list):
-            loc_type = loc_type[0] if loc_type else ""
         type_html = (f'<span class="loc-type">{html.escape(loc_type)}</span>'
                      if loc_type else "")
         chunks.append(

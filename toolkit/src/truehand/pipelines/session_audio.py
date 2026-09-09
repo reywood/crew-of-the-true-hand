@@ -20,6 +20,7 @@ import shutil
 import tempfile
 import warnings
 from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 
 from .. import data as _data
@@ -37,6 +38,14 @@ from ..adapters.tts import (
     DEFAULT_MODEL_ID,
     DEFAULT_VOICE_ID,
     TTSBackend,
+)
+from ..core.episode_script import (
+    ChapterMark,
+    EpisodeScript,
+    MusicCue,
+    Silence,
+    Speak,
+    StingCue,
 )
 from ..errors import OperationFailed, UserError
 
@@ -164,101 +173,6 @@ def is_bed_end_cue(label: str) -> bool:
     return "minor swell" in lo or "outro theme" in lo
 
 
-def _chapter_title(heading_line: str):
-    """Map a script section heading to a podcast chapter title, or None if the
-    heading isn't a chapter boundary. Chapters are the cold open, each ACT, and
-    the closing. Skips the H1 show title, the episode subtitle (## on line 2),
-    and the short [TITLE] card."""
-    m = re.match(r"^(#+)\s*(.*)$", heading_line.strip())
-    if not m or len(m.group(1)) != 2:      # only H2 (##) headings are sections
-        return None
-    text = m.group(2).strip()
-    # Some scripts wrap section headings in brackets — [ACT ONE — …],
-    # [COLD OPEN — …], [TITLE — 8s] — and some don't. Unwrap, then treat alike.
-    bracket = re.match(r"^\[(.+?)\]$", text)
-    if bracket:
-        text = bracket.group(1).strip()
-    keyword = re.split(r"\s*[—–-]\s*", text, maxsplit=1)[0].strip().upper()
-    if keyword == "COLD OPEN":
-        return "Cold Open"
-    if keyword == "CLOSING":
-        return "Closing"
-    if keyword == "TITLE":
-        return None                        # [TITLE] card is too short to chapter
-    if re.match(r"^ACT\b", text, re.IGNORECASE):
-        parts = re.split(r"\s*[—–]\s*", text, maxsplit=1)
-        label = parts[0].strip().title()   # "ACT ONE" -> "Act One"
-        if len(parts) == 2 and parts[1].strip():
-            return f"{label} — {parts[1].strip()}"
-        return label
-    return None                            # episode subtitle, etc.
-
-
-def parse_script(text: str):
-    """Turn the storyteller script into a linear list of events:
-        ("speak",  text, delivery_cue)
-        ("sting",  cue_label)          — replaced with asset if resolvable
-        ("music",  cue_label)          — same, for MUSIC cues
-        ("silence", duration_ms)
-        ("chapter", title)             — zero-duration ID3 chapter marker
-    """
-    events = []
-
-    def add_silence(ms: int):
-        if events and events[-1][0] == "silence":
-            events[-1] = ("silence", events[-1][1] + ms)
-        else:
-            events.append(("silence", ms))
-
-    for raw in text.split("\n"):
-        line = raw.strip()
-        if not line:
-            continue
-        if line.startswith("#"):
-            title = _chapter_title(line)
-            if title:
-                events.append(("chapter", title))
-            continue
-        if set(line) == {"-"}:
-            continue
-
-        if line.startswith("[") and line.endswith("]"):
-            inner = line[1:-1].strip()
-            key = inner.split(":", 1)[0].split()[0].upper()
-            label = inner.split(":", 1)[1].strip() if ":" in inner else ""
-            if key == "MUSIC":
-                events.append(("music", label))
-                continue
-            if key == "STING":
-                events.append(("sting", label))
-                continue
-            if key == "SFX":
-                add_silence(350)
-                continue
-            if key == "PAUSE":
-                m = re.search(r"(\d+(?:\.\d+)?)\s*s", inner)
-                dur_ms = int(float(m.group(1)) * 1000) if m else 500
-                add_silence(dur_ms)
-                continue
-            continue
-
-        if line.startswith("VANDAL:"):
-            content = line[len("VANDAL:"):].strip()
-            m = re.match(r"^\*\((.+?)\)\*\s*(.*)$", content)
-            if m:
-                delivery = m.group(1)
-                spoken = m.group(2).strip()
-            else:
-                delivery = ""
-                spoken = content
-            spoken = re.sub(r"\*+", "", spoken).strip()
-            if spoken:
-                events.append(("speak", spoken, delivery))
-                events.append(("silence", 250))
-
-    return events
-
-
 def chunk_hash(text: str, voice_id: str, model_id: str, delivery_key: str) -> str:
     h = hashlib.sha256()
     h.update(voice_id.encode("utf-8"))
@@ -315,15 +229,86 @@ def _keep_paid_chunks(manifest_path: Path, manifest_out: dict, existing: dict):
         raise
 
 
-def _render_bed_span(library: Path, span: dict, asset_cache: Path):
+@dataclass(frozen=True)
+class EpisodeResult:
+    """What a build did. The CLI decides how to say it — every other pipeline
+    in the package already returns its outcome instead of printing it."""
+
+    status: str                  # "written" | "skipped" | "dry-run"
+    path: Path
+    detail: str = ""
+    size_kb: float = 0.0
+    chunks: int = 0
+    chunks_dir: Path | None = None
+    events: int = 0
+    spoken_lines: int = 0
+    characters: int = 0
+
+    @property
+    def estimated_minutes(self) -> float:
+        """Calibration across every episode to date is ~888 characters per
+        finished minute, music and stings included."""
+        return self.characters / 888.0
+
+
+@dataclass(frozen=True)
+class BedSpan:
+    """A sustained under-bed running beneath a stretch of narration."""
+
+    kind: str          # "cold_open" | "hearth" | "signature"
+    label: str
+    start_ms: int
+    end_ms: int
+
+    @property
+    def duration_sec(self) -> float:
+        return (self.end_ms - self.start_ms) / 1000.0
+
+
+#: Marker kind -> the bed it opens. Anything else closes whatever is open.
+_BED_OPENERS = {
+    "start_cold_open": "cold_open",
+    "start_hearth": "hearth",
+    "start_signature": "signature",
+}
+
+
+def resolve_bed_spans(markers, total_ms: int) -> list[BedSpan]:
+    """Turn the ordered bed markers into concrete spans.
+
+    An opener closes whatever was playing and starts its own; an end marker
+    just closes. A span still open when the show runs out is closed at the end
+    (well-formed scripts do not do this). Zero-length spans are dropped.
+
+    Pure, so it can be tested without ElevenLabs or ffmpeg — it used to sit at
+    the bottom of build_episode and could only run after money had been spent.
+    """
+    spans, open_at, kind, label = [], None, None, None
+
+    def close(at_ms):
+        if open_at is not None and at_ms > open_at:
+            spans.append(BedSpan(kind, label, open_at, at_ms))
+
+    for marker in markers:
+        close(marker["at_ms"])
+        if marker["kind"] in _BED_OPENERS:
+            open_at, kind, label = (marker["at_ms"],
+                                    _BED_OPENERS[marker["kind"]],
+                                    marker["label"])
+        else:
+            open_at = None
+    close(total_ms)
+    return spans
+
+
+def _render_bed_span(library: Path, span: BedSpan, asset_cache: Path):
     """Render a single bed span (dict with start_ms, end_ms, type, label)
     into an MP3 in asset_cache. Returns (bed_path, delay_ms) for the mix."""
-    duration_sec = (span["end_ms"] - span["start_ms"]) / 1000.0
-    slug = span["type"]
+    duration_sec = span.duration_sec
+    slug = span.kind
     out_path = asset_cache / f"bed-{slug}-{int(duration_sec)}s.mp3"
-    print(f"  bed span: {slug} — {duration_sec:.1f}s @ {span['start_ms'] / 1000:.1f}s")
 
-    if span["type"] == "signature":
+    if span.kind == "signature":
         # Signature theme intro: play from the start of Britons, extend across
         # the title line, and fade out over the tail so it recedes gradually
         # under narration instead of ending abruptly.
@@ -333,14 +318,14 @@ def _render_bed_span(library: Path, span: dict, asset_cache: Path):
         overlay_path = None
         overlay_db = COLD_OPEN_OVERLAY_DB
         hearth_db = HEARTH_BED_DB
-        if span["type"] == "cold_open":
+        if span.kind == "cold_open":
             hearth_db = COLD_OPEN_HEARTH_DB
-            overlay = resolve_bed_overlay(library, span["label"])
+            overlay = resolve_bed_overlay(library, span.label)
             if overlay is not None:
                 overlay_path, overlay_db = overlay
         render_bed(hearth_path, overlay_path, duration_sec, out_path,
                    hearth_db=hearth_db, overlay_db=overlay_db)
-    return (out_path, span["start_ms"])
+    return (out_path, span.start_ms)
 
 
 def _render_signature_bed(library: Path, duration_sec: float, out_path: Path) -> Path:
@@ -367,8 +352,14 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
                   model_id: str = DEFAULT_MODEL_ID,
                   force: bool = False, force_tts: bool = False,
                   no_music: bool = False, no_beds: bool = False,
-                  dry_run: bool = False) -> dict:
-    """Render sessions/<date>/audio/final.mp3 from its script.md."""
+                  dry_run: bool = False,
+                  on_progress=None) -> EpisodeResult:
+    """Render sessions/<date>/audio/final.mp3 from its script.md.
+
+    Progress goes to *on_progress* rather than stdout, so a caller can stay
+    quiet, capture it, or render it however it likes.
+    """
+    report = on_progress or (lambda _msg: None)
     library = paths.audio_library
     session_dir = paths.session_audio(date)
     script_path = session_dir / "script.md"
@@ -380,26 +371,26 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
     final_path = session_dir / "final.mp3"
 
     if final_path.exists() and not force and not force_tts and not dry_run:
-        return {"status": "skipped", "path": final_path,
-                "detail": "already exists — use --force to rebuild"}
+        return EpisodeResult("skipped", final_path,
+                             detail="already exists — use --force to rebuild")
 
     session_dir.mkdir(parents=True, exist_ok=True)
     chunks_dir.mkdir(parents=True, exist_ok=True)
 
-    events = parse_script(script_path.read_text(encoding="utf-8"))
-    speak_events = [e for e in events if e[0] == "speak"]
-    total_chars = sum(len(e[1]) for e in speak_events)
-    print(f"[{date}] parsed {len(speak_events)} speech chunks "
+    script = EpisodeScript.parse(script_path.read_text(encoding="utf-8"))
+    events = script.events
+    spoken = script.spoken_lines
+    total_chars = script.character_count
+    report(f"[{date}] parsed {len(spoken)} speech chunks "
           f"({total_chars} chars), "
-          f"{sum(1 for e in events if e[0] == 'sting')} stings, "
-          f"{sum(1 for e in events if e[0] == 'music')} music cues")
+          f"{script.count(StingCue)} stings, "
+          f"{script.count(MusicCue)} music cues")
 
     if dry_run:
         for e in events[:30]:
-            print(f"  {e}")
-        return {"status": "dry-run", "path": final_path,
-                "events": len(events), "speech": len(speak_events),
-                "chars": total_chars}
+            report(f"  {e}")
+        return EpisodeResult("dry-run", final_path, events=len(events),
+                             spoken_lines=len(spoken), characters=total_chars)
 
     manifest = load_manifest(manifest_path)
     if force_tts:
@@ -416,7 +407,7 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
         asset_cache = tmp_dir / "assets"
         asset_cache.mkdir()
 
-        speech_texts = [ev[1] for ev in events if ev[0] == "speak"]
+        speech_texts = [line.text for line in spoken]
 
         # --- Pass 1: resolve every event to a concrete audio element on
         # disk (speech chunk from cache or new TTS, silence, sting, inline
@@ -430,10 +421,9 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
         speech_idx = 0
 
         for i, ev in enumerate(events):
-            kind = ev[0]
-            if kind == "speak":
-                _, txt, delivery = ev
-                delivery_key, voice_settings = resolve_delivery(delivery)
+            if isinstance(ev, Speak):
+                txt = ev.text
+                delivery_key, voice_settings = resolve_delivery(ev.delivery)
                 h = chunk_hash(txt, voice_id, model_id, delivery_key)
                 chunk_id = f"{speech_idx + 1:04d}"
                 chunk_path = chunks_dir / f"{chunk_id}.mp3"
@@ -443,14 +433,14 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
                     cached_path = chunks_dir / f"{cached_id}.mp3"
                     if cached_id != chunk_id:
                         shutil.copy2(cached_path, chunk_path)
-                    print(f"  [{speech_idx + 1}/{len(speech_texts)}] "
+                    report(f"  [{speech_idx + 1}/{len(speech_texts)}] "
                           f"({delivery_key}) [cache hit] "
                           f"{txt[:50].replace(chr(10), ' ')}...")
                 else:
                     prev_txt = speech_texts[speech_idx - 1] if speech_idx > 0 else ""
                     next_txt = (speech_texts[speech_idx + 1]
                                 if speech_idx + 1 < len(speech_texts) else "")
-                    print(f"  [{speech_idx + 1}/{len(speech_texts)}] "
+                    report(f"  [{speech_idx + 1}/{len(speech_texts)}] "
                           f"({delivery_key}) [TTS] "
                           f"{txt[:50].replace(chr(10), ' ')}...")
                     try:
@@ -468,21 +458,21 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
                 cursor_ms += dur_ms
                 speech_idx += 1
 
-            elif kind == "chapter":
+            elif isinstance(ev, ChapterMark):
                 # Zero-duration marker: record the current timeline position;
                 # embedded as an ID3 chapter after the final mix.
-                chapters.append({"title": ev[1], "at_ms": cursor_ms})
+                chapters.append({"title": ev.title, "at_ms": cursor_ms})
 
-            elif kind == "silence":
-                dur = ev[1]
+            elif isinstance(ev, Silence):
+                dur = ev.duration_ms
                 sil_path = silence_cache / f"silence-{dur}.mp3"
                 if not sil_path.exists():
                     synth_silence(dur, sil_path)
                 top_layer.append({"path": sil_path, "dur_ms": dur, "kind": "silence"})
                 cursor_ms += dur
 
-            elif kind == "sting":
-                label = ev[1]
+            elif isinstance(ev, StingCue):
+                label = ev.label
                 if no_music:
                     fb = silence_cache / "sting-fallback.mp3"
                     if not fb.exists():
@@ -506,8 +496,8 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
                 top_layer.append({"path": asset_path, "dur_ms": dur_ms, "kind": "sting"})
                 cursor_ms += dur_ms
 
-            elif kind == "music":
-                label = ev[1]
+            elif isinstance(ev, MusicCue):
+                label = ev.label
 
                 # Register bed markers at THIS cursor position, before
                 # advancing for any inline element the cue may also carry.
@@ -563,56 +553,34 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
         # this position before opening the new one.
         bed_specs = []  # list of (bed_path, delay_ms) for the final mix
         if not no_music and not no_beds:
-            active = None
-            marker_kind_to_type = {
-                "start_cold_open": "cold_open",
-                "start_hearth":    "hearth",
-                "start_signature": "signature",
-            }
-            for m in bed_markers:
-                if m["kind"] in marker_kind_to_type:
-                    if active is not None:
-                        active["end_ms"] = m["at_ms"]
-                        if active["end_ms"] > active["start_ms"]:
-                            bed_specs.append(_render_bed_span(library, active, asset_cache))
-                    active = {
-                        "start_ms": m["at_ms"],
-                        "type": marker_kind_to_type[m["kind"]],
-                        "label": m["label"],
-                    }
-                elif m["kind"] == "end":
-                    if active is not None:
-                        active["end_ms"] = m["at_ms"]
-                        if active["end_ms"] > active["start_ms"]:
-                            bed_specs.append(_render_bed_span(library, active, asset_cache))
-                        active = None
-            # If a span is still open at end of show, close it at total
-            # cursor position (this shouldn't happen in well-formed scripts).
-            if active is not None:
-                active["end_ms"] = cursor_ms
-                if active["end_ms"] > active["start_ms"]:
-                    bed_specs.append(_render_bed_span(library, active, asset_cache))
+            for span in resolve_bed_spans(bed_markers, cursor_ms):
+                report(f"  bed span: {span.kind} — {span.duration_sec:.1f}s "
+                       f"@ {span.start_ms / 1000:.1f}s")
+                bed_specs.append(_render_bed_span(library, span, asset_cache))
 
         # --- Pass 3: concat the top layer to top.mp3, then mix in the
         # rendered beds at their offsets.
         top_path = tmp_dir / "top.mp3"
         top_paths = [e["path"] for e in top_layer]
-        print(f"Concatenating {len(top_paths)} top-layer elements")
+        report(f"Concatenating {len(top_paths)} top-layer elements")
         concat_mp3s(top_paths, top_path)
 
         if bed_specs:
-            print(f"Mixing {len(bed_specs)} under-bed span(s) → {final_path.name}")
+            report(f"Mixing {len(bed_specs)} under-bed span(s) → {final_path.name}")
             mix_top_with_beds(top_path, bed_specs, final_path)
         else:
-            print(f"No under-beds → {final_path.name}")
+            report(f"No under-beds → {final_path.name}")
             shutil.copy2(top_path, final_path)
 
         if chapters:
             total_ms = probe_duration_ms(final_path)
             embed_chapters(final_path, chapters, total_ms, tmp_dir)
-            print(f"  Embedded {len(chapters)} chapter marker(s): "
+            report(f"  Embedded {len(chapters)} chapter marker(s): "
                   f"{', '.join(c['title'] for c in chapters)}")
 
-    return {"status": "written", "path": final_path,
-            "size_kb": final_path.stat().st_size / 1024,
-            "chunks": len(manifest_out["chunks"]), "chunks_dir": chunks_dir}
+    return EpisodeResult("written", final_path,
+                         size_kb=final_path.stat().st_size / 1024,
+                         chunks=len(manifest_out["chunks"]),
+                         chunks_dir=chunks_dir,
+                         events=len(events), spoken_lines=len(spoken),
+                         characters=total_chars)

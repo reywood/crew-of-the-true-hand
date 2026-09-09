@@ -2,35 +2,28 @@
 
 import html
 
-from ...core.loaders import SESSION_LOCATIONS, chip_for
 from ...core.markdown import md_inline
+from ...core.standing import for_type
 from ..layout import page
 from ..linkify import linkify_html
 from .index import _render_quest_li, _top_active_quests
 
 
 def _current_location(state, sessions, locations):
-    """Resolve the party's current location: the campaign-state override if set,
-    else the most recent session that has a SESSION_LOCATIONS entry (walking back
-    past in-transit sessions). Returns (location_entity_or_None, as_of_date)."""
+    """Where the party is: the campaign-state override if set, else the most
+    recent session that happened somewhere, walking back past ones spent in
+    transit. Returns (location_entity_or_None, as_of_date)."""
     loc_by_slug = {l.slug: l for l in locations}
-    dates = sorted((s.date for s in sessions), reverse=True)
-    as_of = dates[0] if dates else ""
-    slug = state.get("current_location")
+    newest_first = sorted(sessions, key=lambda s: s.date, reverse=True)
+    as_of = newest_first[0].date if newest_first else ""
+    slug = state.location_override
     if not slug:
-        for d in dates:
-            here = SESSION_LOCATIONS.get(d, [])
-            if here:
-                slug = here[0]
-                break
+        slug = next((s.locations[0] for s in newest_first if s.locations), None)
     return (loc_by_slug.get(slug) if slug else None), as_of
 
 
 def _npc_at_location(npc, loc):
-    val = npc.meta["location"].prose()
-    if isinstance(val, list):
-        val = " ".join(val)
-    val = (val or "").lower()
+    val = npc.meta["location"].prose().lower()
     if not val:
         return False
     return loc.name.lower() in val or loc.slug.replace("-", " ") in val
@@ -67,8 +60,8 @@ def prep_page(pcs, npcs, locations, items, quests, sessions, state,
 
     # 2. Do this next
     sec = ['<section class="prep-block"><h2>Do this next</h2>']
-    if state.get("objective"):
-        sec.append(f'<p class="prep-objective">{md_inline(state["objective"])}</p>')
+    if state.has_objective:
+        sec.append(f'<p class="prep-objective">{md_inline(state.objective)}</p>')
     top = _top_active_quests(quests, limit=5)
     if top:
         sec.append('<ul class="home-quest-list">')
@@ -94,8 +87,7 @@ def prep_page(pcs, npcs, locations, items, quests, sessions, state,
     if loc:
         here = [n for n in npcs
                 if _npc_at_location(n, loc)
-                and (chip_for(n.meta["type"].one()) or ("", ""))[1]
-                in ("standing-ally", "standing-lead", "standing-crew")]
+                and (s := for_type(n.meta["type"].one())) and s.is_approachable]
         if here:
             sec = [f'<section class="prep-block"><h2>People &amp; leads at {html.escape(loc.name)}</h2>',
                    '<ul class="prep-leads">']
@@ -129,7 +121,7 @@ def prep_page(pcs, npcs, locations, items, quests, sessions, state,
         parts.append("".join(sec))
 
     # 6. Open questions
-    oq = state.get("open_questions") or []
+    oq = state.open_questions
     if oq:
         sec = ['<section class="prep-block"><h2>Open questions</h2>', '<ul class="prep-questions">']
         sec += [f'<li>{md_inline(q)}</li>' for q in oq]

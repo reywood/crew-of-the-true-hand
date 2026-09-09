@@ -2,104 +2,11 @@
 
 import datetime as _dt
 import html
-import re
 from email.utils import format_datetime
 
+from ..core.audio_credits import AudioCredits
 from ..core.text import _hms
 from .layout import base_url
-
-# Cache for the parsed audio-library credits so we only read CREDITS.md once.
-_AUDIO_CREDITS_CACHE = None
-
-
-def _parse_audio_credits(paths):
-    """Parse sessions/library/audio/CREDITS.md into a list of asset dicts.
-
-    Each asset is a ``## <name>`` section carrying a ``**License**:`` line.
-    We split the required-attribution assets (CC-BY and friends, whose license
-    is a license condition) from the voluntary ones (Pixabay Content License,
-    where attribution is a courtesy, not a requirement).
-
-    Returns a dict with two lists of plain-text credit strings:
-      {"required": [...], "voluntary": [...]}
-    Both are ordered as they appear in CREDITS.md.
-    """
-    global _AUDIO_CREDITS_CACHE
-    if _AUDIO_CREDITS_CACHE is not None:
-        return _AUDIO_CREDITS_CACHE
-
-    result = {"required": [], "voluntary": []}
-    try:
-        text = paths.audio_credits.read_text(encoding="utf-8")
-    except OSError:
-        _AUDIO_CREDITS_CACHE = result
-        return result
-
-    # Split into ``## <name>`` sections (skip the file's own preamble).
-    sections = re.split(r"^##\s+(.+?)\s*$", text, flags=re.MULTILINE)
-    # re.split with one capture group yields: [preamble, name1, body1, name2, body2, ...]
-    for i in range(1, len(sections), 2):
-        name = sections[i].strip()
-        body = sections[i + 1] if i + 1 < len(sections) else ""
-
-        lic_m = re.search(r"^\s*[-*]\s*\*\*License\*\*:\s*(.+?)\s*$",
-                          body, flags=re.MULTILINE)
-        license_line = lic_m.group(1).strip() if lic_m else ""
-        # Strip markdown link syntax <...> from the trailing license URL.
-        license_line = re.sub(r"\s*—\s*<[^>]+>\s*$", "", license_line).strip()
-
-        # Attribution is required when the license itself demands it. Pixabay's
-        # Content License does not; Creative Commons "Attribution" (CC BY) does.
-        requires = bool(re.search(r"attribution", license_line, re.IGNORECASE)) \
-            and "pixabay" not in license_line.lower()
-
-        if requires:
-            # Pull the required-attribution blockquote (the ``> ...`` lines that
-            # follow the "Required attribution wording" note).
-            quote_lines = []
-            capture = False
-            for ln in body.split("\n"):
-                if re.search(r"required attribution wording", ln, re.IGNORECASE):
-                    capture = True
-                    continue
-                if capture:
-                    m = re.match(r"^\s*>\s?(.*)$", ln)
-                    if m:
-                        if m.group(1).strip():
-                            quote_lines.append(m.group(1).strip())
-                    elif quote_lines:
-                        break
-            wording = " — ".join(quote_lines) if quote_lines else name
-            result["required"].append(f"{wording}  (used in {name})")
-        else:
-            # Voluntary credit: use the plain-text fallback line if present.
-            fb_m = re.search(r"Plain-text fallback:\s*\*?(.+?)\*?\s*$",
-                             body, flags=re.MULTILINE)
-            if fb_m:
-                result["voluntary"].append(fb_m.group(1).strip().rstrip("."))
-
-    _AUDIO_CREDITS_CACHE = result
-    return result
-
-
-def _audio_credits_text(paths):
-    """Human-readable attribution block appended to every podcast episode.
-
-    CC-BY (and similar) assets carry their license-mandated attribution wording;
-    Pixabay assets get a single courtesy roll-up line (attribution not required).
-    Returns a plain-text string (no trailing newline) or "" if nothing to credit.
-    """
-    credits = _parse_audio_credits(paths)
-    lines = []
-    if credits["required"] or credits["voluntary"]:
-        lines.append("Music & SFX credits:")
-    for c in credits["required"]:
-        lines.append(f"• {c}")
-    if credits["voluntary"]:
-        lines.append("Additional sound effects & ambience (Pixabay Content "
-                     "License, attribution not required): "
-                     + "; ".join(credits["voluntary"]) + ".")
-    return "\n".join(lines)
 
 
 def podcast_feed(paths, sessions, probe):
@@ -117,8 +24,8 @@ def podcast_feed(paths, sessions, probe):
     # License-mandated + courtesy attribution for the shared audio library.
     # The music/SFX library is common to every episode, so the same credit
     # block is carried on every item's <description>/<content:encoded>.
-    credits_text = _audio_credits_text(paths)
-    credits = _parse_audio_credits(paths)
+    credits = AudioCredits.load(paths)
+    credits_text = credits.as_text()
 
     items_xml = []
     latest_pub = None
@@ -132,7 +39,7 @@ def podcast_feed(paths, sessions, probe):
             size = 0
         duration = int(probe(audio_path)) if audio_path else 0
 
-        subtitle = s.artifacts.audio_subtitle
+        subtitle = s.artifacts.episode_title
         ep_title = f"{date} — {subtitle}" if subtitle else f"{date}"
         in_brief = s.summary.in_brief
         ep_blurb = in_brief or s.blurb
@@ -145,15 +52,15 @@ def podcast_feed(paths, sessions, probe):
         content_html_parts = []
         if ep_blurb:
             content_html_parts.append(f"<p>{html.escape(ep_blurb)}</p>")
-        if credits["required"] or credits["voluntary"]:
+        if credits:
             content_html_parts.append("<p><strong>Music &amp; SFX credits:</strong></p>")
-            if credits["required"]:
+            if credits.required:
                 lis = "".join(
-                    f"<li>{html.escape(c)}</li>" for c in credits["required"]
+                    f"<li>{html.escape(c)}</li>" for c in credits.required
                 )
                 content_html_parts.append(f"<ul>{lis}</ul>")
-            if credits["voluntary"]:
-                vol = "; ".join(html.escape(v) for v in credits["voluntary"])
+            if credits.voluntary:
+                vol = "; ".join(html.escape(v) for v in credits.voluntary)
                 content_html_parts.append(
                     "<p>Additional sound effects &amp; ambience (Pixabay Content "
                     f"License, attribution not required): {vol}.</p>"

@@ -7,22 +7,21 @@ import re
 from pathlib import Path
 
 from .. import data as _data
+from . import standing
+from .campaign_state import CampaignState
 from .entity import Entity
+from .episode_script import EpisodeScript
 from .frontmatter import Field, Frontmatter, parse_frontmatter
 from .quest_status import for_section
 from .session import IMAGE_SUFFIXES, Session, SessionArtifacts
-from .summary import SessionSummary
+from .summary import read_document
 from .text import read, slugify
 
-#: Campaign vocabulary, edited in truehand/data/npc_standing.toml, not here.
-_STANDING = _data.load("npc_standing")
-STANDING_MAP = {k: tuple(v) for k, v in _STANDING["standing"].items()}
-PROVISIONAL = tuple(_STANDING["provisional"])
-
-
-def chip_for(type_str):
-    """Standing chip for an NPC's `type:`. Takes the resolved scalar."""
-    return STANDING_MAP.get(type_str.strip()) if type_str else None
+#: Campaign vocabulary lives in core/standing.py, backed by
+#: truehand/data/npc_standing.toml.
+STANDING_MAP = standing.BY_TYPE
+PROVISIONAL = standing.PROVISIONAL
+chip_for = standing.for_type
 
 
 def port_for(npc, location_names):
@@ -119,34 +118,34 @@ def load_quests(paths):
     return out
 
 
-def load_campaign_state(paths):
-    """Small hand-maintained record of the party's current objective and the
-    open questions worth investigating — the one bit of 'where are we / what's
-    the goal' data the archive doesn't otherwise capture. Current *location* is
-    derived from SESSION_LOCATIONS unless the file overrides it. Returns
-    {'objective': str, 'open_questions': [str], 'current_location': str|None}."""
+def load_campaign_state(paths) -> CampaignState:
+    """The party's current objective and the open questions worth chasing —
+    the one bit of 'where are we / what's the goal' the archive doesn't
+    otherwise capture. The current *location* is derived from the latest
+    session unless this file overrides it."""
     if not paths.campaign_state_file.exists():
-        return {"objective": "", "open_questions": [], "current_location": None}
+        return CampaignState()
     fm, _ = parse_frontmatter(paths.campaign_state_file.read_text(encoding="utf-8"))
     fm = Frontmatter(fm)
-    return {
-        # The objective is a sentence, so it must be rejoined: the dialect
-        # split it on its own commas into a list of fragments.
-        "objective": fm["objective"].prose(),
-        "open_questions": fm["open_questions"].many(),
-        "current_location": fm["current_location"].one() or None,
-    }
+    return CampaignState(
+        objective=fm["objective"].prose(),
+        open_questions=tuple(fm["open_questions"].many()),
+        location_override=fm["current_location"].one() or None,
+    )
 
 
-def _read_audio_subtitle(script: Path) -> str:
-    """Line 2 of an audio script (`## <subtitle>`) — the podcast episode title."""
+#: Which locations each session took place in, most important first.
+#: Edited in truehand/data/session_locations.toml, not here.
+SESSION_LOCATIONS = _data.load("session_locations")["sessions"]
+
+
+def _read_episode_title(script: Path) -> str:
+    """What this session's episode is called, per its script."""
     try:
-        with open(script, encoding="utf-8") as fh:
-            fh.readline()  # the "# Tales of the True Hand — DATE" H1
-            line2 = fh.readline().strip()
+        text = script.read_text(encoding="utf-8")
     except OSError:
         return ""
-    return line2[3:].strip() if line2.startswith("## ") else ""
+    return EpisodeScript.parse(text).episode_title
 
 
 def _load_artifacts(sdir: Path) -> SessionArtifacts:
@@ -175,7 +174,7 @@ def _load_artifacts(sdir: Path) -> SessionArtifacts:
         hero=hero,
         beats=beats,
         audio=final if final.exists() else None,
-        audio_subtitle=_read_audio_subtitle(script) if script.exists() else "",
+        episode_title=_read_episode_title(script) if script.exists() else "",
     )
 
 
@@ -216,24 +215,17 @@ def load_sessions(paths):
         if not (notes or transcript or summary_text):
             continue
 
-        # A summary may lead with a `---` frontmatter block (currently used to
-        # declare a `carried:` list of items acquired that session). Split it
-        # off so the rendered body doesn't show the raw block.
-        summary_fm, summary_body = (parse_frontmatter(summary_text)
-                                    if summary_text else ({}, ""))
+        summary_fm, summary_doc = read_document(summary_text)
         carried = Field(summary_fm.get("carried")).many()
 
         out.append(Session(
             date=sdir.name,
             notes=notes,
             transcript=transcript,
-            summary=SessionSummary.parse(summary_body if summary_fm else summary_text),
+            summary=summary_doc,
             carried=tuple(carried),
+            locations=tuple(SESSION_LOCATIONS.get(sdir.name, ())),
             artifacts=_load_artifacts(sdir),
         ))
     return out
 
-
-#: Which locations each session took place in, most important first.
-#: Edited in truehand/data/session_locations.toml, not here.
-SESSION_LOCATIONS = _data.load("session_locations")["sessions"]

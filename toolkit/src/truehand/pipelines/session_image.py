@@ -22,7 +22,7 @@ from ..content.pc_identity import (
     PC_SLUGS,
     REFERENCE_USAGE,
 )
-from ..core.summary import SessionSummary
+from ..core.summary import SessionSummary, read_document
 from ..errors import UserError
 
 HERO_ASPECT = "16:9"
@@ -44,7 +44,8 @@ def load_summary(paths, date: str) -> SessionSummary:
             f"{path} does not exist.\n"
             f"  Generate the session summary first (see CLAUDE.md workflow)."
         )
-    return SessionSummary.parse(path.read_text(encoding="utf-8"))
+    _frontmatter, summary = read_document(path.read_text(encoding="utf-8"))
+    return summary
 
 
 def _portrait_parts(backend, paths, refs_only: bool = False,

@@ -18,6 +18,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from .frontmatter import parse_frontmatter
 from .text import _norm_heading, slugify
 
 # Deliberately as strict as core.markdown.md_to_html's own heading rule: the
@@ -104,15 +105,19 @@ class SessionSummary:
 
     @property
     def lead_line(self) -> str:
-        """The first line that says anything: the `*In brief:*` one-liner when
-        it leads (it always does today), else the first line of prose. This is
-        the row blurb on sessions.html."""
+        """The first line that says anything — the row blurb on sessions.html.
+
+        The `*In brief:*` one-liner when the summary leads with it (they all
+        do today), else the first line of prose. Note this stops at the first
+        line that says anything, where `in_brief` scans the whole document.
+        """
         for line in self.raw.split("\n"):
             s = line.strip()
+            if not s or s.startswith("#"):
+                continue
             if s.startswith("*In brief:") and s.endswith("*"):
                 return s[len("*In brief:"):-1].strip()
-            if s and not s.startswith("#"):
-                return s.strip("*").strip()
+            return s.strip("*").strip()
         return ""
 
     @property
@@ -126,3 +131,17 @@ class SessionSummary:
 
     def __bool__(self) -> bool:
         return bool(self.raw.strip())
+
+
+def read_document(text: str):
+    """A `summary.md` file's full text as ``(frontmatter, SessionSummary)``.
+
+    The file may lead with a `---` block — currently a `carried:` list of items
+    acquired that session. Both readers of summary.md must strip it the same
+    way, and they used not to: the site split it off, while the image pipeline
+    called `SessionSummary.parse` on the whole file and shipped the raw block
+    to Gemini as "the fuller session summary". Eleven of twelve summaries carry
+    one.
+    """
+    fm, body = parse_frontmatter(text)
+    return fm, SessionSummary.parse(body if fm else text)

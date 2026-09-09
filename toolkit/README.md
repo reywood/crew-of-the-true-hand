@@ -32,12 +32,12 @@ and `sessions/` together.
 
 | Package | Holds |
 |---|---|
-| `core/` | The archive model: the frontmatter dialect and its `Field`/`Frontmatter` reader, markdown, `Entity`, the `Session` aggregate, `SessionSummary`, `QuestStatus`, derived `Relations`, loaders, graph. Pure, stdlib, no HTML and no network. |
+| `core/` | The archive model: the frontmatter dialect and its `Field`/`Frontmatter` reader, markdown, `Entity`, the `Session` aggregate, `SessionSummary`, `EpisodeScript`, `QuestStatus`, `Standing`, `CampaignState`, `AudioCredits`, derived `Relations`, loaders, graph. Every archive *document* is read here. Pure, stdlib, no HTML and no network. |
 | `content/` | Prompt prose — how the PCs LOOK, and art direction. Who they *are* is `data/party.toml`. |
 | `data/` | Campaign and show data as TOML: the party, the chart, session locations, NPC standing vocabulary, quest dependencies, audio direction. Edited while writing the campaign, so it is not code. |
 | `adapters/` | Everything external: Gemini, ElevenLabs, ffmpeg, Pillow. |
 | `site/` | HTML and RSS rendering. Depends on `core`; never the reverse — `core` takes what it needs (`Relations`, `Session`) as arguments rather than reading fields the site layer wrote. |
-| `pipelines/` | Orchestration — `core` + `content` + `adapters`, no CLI concerns. |
+| `pipelines/` | Orchestration — `core` + `content` + `adapters`, no CLI concerns. Each returns a result value and reports progress through a callback; none of them print. |
 | `cli/` | Typer only. Parses flags, builds `Paths`, calls a pipeline. |
 
 ## Dependencies
@@ -66,6 +66,9 @@ Two are load-bearing:
 
 `test_frontmatter.py` pins the archive's frontmatter dialect, which resembles
 YAML but is not — see its `TestThisIsNotYaml`.
+
+`DOMAIN.md` describes the bounded contexts these packages implement, the
+aggregates and their invariants, and what is deliberately left unmodelled.
 
 The model tests each pin one invariant that used to be spread across modules
 and could drift silently: `test_relations.py` (derived joins are built in

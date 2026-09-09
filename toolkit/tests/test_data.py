@@ -77,11 +77,22 @@ class TestCampaignContentLivesInData:
             assert (paths.characters / f"{slug}.md").exists(), slug
 
     def test_standing_vocabulary_resolves(self):
-        from truehand.core.loaders import PROVISIONAL, chip_for
-        assert chip_for("Old shipmate") == ("Crew", "standing-crew")
-        assert chip_for("Not a standing") is None
-        assert chip_for("") is None
+        from truehand.core.standing import PROVISIONAL, for_type
+        crew = for_type("Old shipmate")
+        assert (crew.label, crew.css_class) == ("Crew", "standing-crew")
+        assert for_type("Not a standing") is None
+        assert for_type("") is None
         assert "last known" in PROVISIONAL
+
+    def test_approachability_is_a_standing_not_a_css_string_match(self):
+        """The prep hub's "people worth seeing here" question."""
+        from truehand.core.standing import for_type
+        assert for_type("Ally").is_approachable
+        assert for_type("Lead").is_approachable
+        assert for_type("Old shipmate").is_approachable
+        assert not for_type("Adversary").is_approachable
+        assert not for_type("Deity").is_approachable
+        assert not for_type("Deceased").is_approachable
 
     def test_every_npc_type_in_the_archive_has_a_chip(self, paths):
         """A `type:` missing from the vocabulary renders no chip at all and
@@ -95,8 +106,8 @@ class TestCampaignContentLivesInData:
         """An unstyled standing-* class renders as unpainted text."""
         from truehand.core.loaders import STANDING_MAP
         css = (repo_root / "website" / "static" / "style.css").read_text(encoding="utf-8")
-        for _label, cls in STANDING_MAP.values():
-            assert f".{cls}" in css, cls
+        for standing in STANDING_MAP.values():
+            assert f".{standing.css_class}" in css, standing.css_class
 
     def test_region_pins_are_declared_on_the_chart_not_in_the_renderer(self):
         from truehand import data

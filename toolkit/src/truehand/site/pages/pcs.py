@@ -50,14 +50,3 @@ def detail_page_pc(pc, link_map, graph=None):
                 description=pc.summary, image=pc.image,
                 canonical=pc.href, og_type="profile")
 
-
-def list_page_generic(title, current, items, link_map, kind):
-    cards = []
-    for e in sorted(items, key=lambda x: x.name.lower()):
-        cards.append(f"""
-<a class="card {kind}-card" href="{e.href}">
-  <h3>{html.escape(e.name)}</h3>
-  <p>{html.escape(e.summary or "")}</p>
-</a>""")
-    body = f"<h1>{html.escape(title)}</h1>\n<section class='grid grid-3'>" + "".join(cards) + "</section>"
-    return page(title, linkify_html(body, current, link_map), current_nav=current)

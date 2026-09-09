@@ -6,7 +6,7 @@ from .frontmatter import Frontmatter
 class Entity:
     def __init__(self, kind, slug, name, aliases=None, body="",
                  meta=None, image=None, status=None, summary=None):
-        self.kind = kind  # 'pc', 'npc', 'location', 'quest', 'session'
+        self.kind = kind  # 'pc', 'npc', 'location', 'item', 'quest'
         self.slug = slug
         self.name = name
         self.aliases = aliases or []

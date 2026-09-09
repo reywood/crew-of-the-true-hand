@@ -1,6 +1,6 @@
 """The materialized entity graph behind graph.json and the Connections block."""
 
-from .loaders import SESSION_LOCATIONS, port_for
+from .loaders import port_for
 from .text import _clean_blurb, slugify
 
 
@@ -134,11 +134,8 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup,
         for tgt in relations.helps_for(q):
             g._edge(q.href, tgt.href, "depends_on")
 
-    for date, slugs in SESSION_LOCATIONS.items():
-        s = session_lookup.get(date)
-        if not s:
-            continue
-        for slug in slugs:
+    for s in sessions:
+        for slug in s.locations:
             loc = loc_by_slug.get(slug)
             if loc:
                 g._edge(s.href, loc.href, "session_at")
