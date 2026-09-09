@@ -1423,6 +1423,7 @@ a.chart-port-name:hover {
 .standing-crew  { background: #355c79; }
 .standing-other { background: #7a6a4f; }
 .standing-ghost { background: #8a8378; opacity: 0.85; }
+.standing-deity { background: #5b3a7a; }
 
 /* ---------- The Roster (NPC table) ---------- */
 .roster-wrap {

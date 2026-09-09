@@ -83,15 +83,20 @@ class TestCampaignContentLivesInData:
         assert chip_for("") is None
         assert "last known" in PROVISIONAL
 
-    def test_the_npc_types_with_no_chip_are_exactly_the_known_two(self, paths):
-        """A `type:` missing from the vocabulary renders no chip and says
-        nothing about it. Two in the archive are unmapped today — Brindle's
-        "Antagonist" and Umberlee's "Deity" — so pin that set: a third should
-        be a decision, not an accident."""
+    def test_every_npc_type_in_the_archive_has_a_chip(self, paths):
+        """A `type:` missing from the vocabulary renders no chip at all and
+        says nothing about it, so every type in use must be mapped."""
         from truehand.core.loaders import STANDING_MAP, load_dir_entities
         unmapped = {e.meta["type"].one() for e in load_dir_entities("npc", paths.npcs)
                     if e.meta["type"].one()} - set(STANDING_MAP)
-        assert unmapped == {"Antagonist", "Deity"}
+        assert unmapped == set()
+
+    def test_every_chip_class_is_styled(self, repo_root):
+        """An unstyled standing-* class renders as unpainted text."""
+        from truehand.core.loaders import STANDING_MAP
+        css = (repo_root / "website" / "static" / "style.css").read_text(encoding="utf-8")
+        for _label, cls in STANDING_MAP.values():
+            assert f".{cls}" in css, cls
 
     def test_region_pins_are_declared_on_the_chart_not_in_the_renderer(self):
         from truehand import data
