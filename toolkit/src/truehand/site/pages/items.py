@@ -27,8 +27,10 @@ def item_list_page(items, link_map):
 
     chunks = [
         "<h1>The Ledger</h1>",
-        '<p class="subhead"><em>Everything the crew has hauled ashore. Unresolved mysteries '
-        "lead.</em></p>",
+        (
+            '<p class="subhead"><em>Everything the crew has hauled ashore. Unresolved mysteries '
+            "lead.</em></p>"
+        ),
     ]
     order = ITEM_STATUS_ORDER + [s for s in grouped if s not in ITEM_STATUS_ORDER]
     for status in order:

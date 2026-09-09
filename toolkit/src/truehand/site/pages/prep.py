@@ -39,8 +39,10 @@ def prep_page(
     latest = session_lookup.get(as_of)
     parts = [
         "<h1>Where We Left Off</h1>",
-        '<p class="subhead"><em>Open the site before a session and start here: where the crew '
-        "stands, and what to do next.</em></p>",
+        (
+            '<p class="subhead"><em>Open the site before a session and start here: where the crew '
+            "stands, and what to do next.</em></p>"
+        ),
     ]
 
     # 1. Where we are
@@ -87,8 +89,10 @@ def prep_page(
     if fwd:
         sec = [
             '<section class="prep-block"><h2>Loose threads</h2>',
-            f'<p class="muted small">Left dangling as of <a href="session-{as_of}.html">session '
-            f"{as_of}</a>.</p>",
+            (
+                f'<p class="muted small">Left dangling as of '
+                f'<a href="session-{as_of}.html">session {as_of}</a>.</p>'
+            ),
         ]
         for beat in fwd:
             sec.append('<ul class="prep-threads">')
@@ -111,8 +115,10 @@ def prep_page(
         ]
         if here:
             sec = [
-                f'<section class="prep-block"><h2>People &amp; leads at '
-                f"{html.escape(loc.name)}</h2>",
+                (
+                    f'<section class="prep-block"><h2>People &amp; leads at '
+                    f"{html.escape(loc.name)}</h2>"
+                ),
                 '<ul class="prep-leads">',
             ]
             for npc in sorted(here, key=lambda n: n.name.lower()):
@@ -208,8 +214,10 @@ def threads_page(sessions, session_lookup, link_map):
     first — the soft dangling threats the quest log doesn't track."""
     parts = [
         "<h1>Open Threads</h1>",
-        '<p class="subhead"><em>Every loose end and stated next step the crew has left in its '
-        "wake — newest first.</em></p>",
+        (
+            '<p class="subhead"><em>Every loose end and stated next step the crew has left in its '
+            "wake — newest first.</em></p>"
+        ),
     ]
     any_threads = False
     for s in sorted(sessions, key=lambda x: x.date, reverse=True):

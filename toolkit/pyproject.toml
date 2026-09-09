@@ -44,8 +44,16 @@ line-length = 100
 src = ["src"]
 
 [tool.ruff.lint]
-select = [
-    "E", "W",   # pycodestyle
+# extend-select, not select: these families sit ON TOP of ruff's own defaults
+# rather than replacing them. The default set is broad (413 rules under 0.16.5,
+# not the E4/E7/E9/F the docs describe) and catches SIM, PIE, ISC, PLW and RUF
+# findings this archive has relied on — the per-file-ignores below are for
+# exactly those. Naming these seven anyway pins the ones we care about, so a
+# future ruff that drops one from its defaults does not quietly stop checking
+# it. The cost is that the rest of the set still moves with each ruff release.
+extend-select = [
+    "E", "W",   # pycodestyle — E501 line length in particular, which the
+                # defaults omit and [tool.ruff] line-length = 100 wants
     "F",        # pyflakes
     "I",        # isort
     "B",        # flake8-bugbear
