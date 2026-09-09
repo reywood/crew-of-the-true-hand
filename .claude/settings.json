@@ -2,5 +2,19 @@
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
     "github@claude-plugins-official": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // .tool_response.filePath // empty' | { read -r f; case \"$f\" in *.py) \"${CLAUDE_PROJECT_DIR:-.}/.venv/bin/ruff\" check --fix -q \"$f\"; \"${CLAUDE_PROJECT_DIR:-.}/.venv/bin/ruff\" format -q \"$f\";; esac; } 2>/dev/null || true",
+            "statusMessage": "ruff check --fix && ruff format"
+          }
+        ]
+      }
+    ]
   }
 }
