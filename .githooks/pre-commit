@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# Refuse a commit whose staged Python would fail ruff.
+#
+# Claude Code runs ruff on every file it edits (see .claude/settings.json), but
+# that only covers files Claude touched. This is the backstop for everything
+# else — your own editor, a merge, a rebase.
+#
+# Checks only; it never rewrites what you staged. `ruff check --fix` and
+# `ruff format` mutate files, and a hook that silently changes the content of a
+# commit you already reviewed is worse than one that stops and tells you.
+#
+# Installed by pointing git at this directory:
+#     git config core.hooksPath .githooks
+# Skip it once with `git commit --no-verify`.
+
+set -uo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+RUFF="${REPO_ROOT}/.venv/bin/ruff"
+
+# NUL-delimited: this repo has paths with spaces in them.
+staged=()
+while IFS= read -r -d '' f; do
+    staged+=("$f")
+done < <(git diff --cached --name-only --diff-filter=ACM -z -- '*.py')
+
+[ ${#staged[@]} -eq 0 ] && exit 0
+
+if [ ! -x "$RUFF" ]; then
+    echo "pre-commit: ${RUFF} not found — skipping the ruff check." >&2
+    echo "            Set the venv up per CLAUDE.md to enable it." >&2
+    exit 0
+fi
+
+status=0
+"$RUFF" check "${staged[@]}" || status=1
+"$RUFF" format --check "${staged[@]}" || status=1
+
+if [ $status -ne 0 ]; then
+    cat >&2 <<'MSG'
+
+pre-commit: staged Python does not satisfy ruff. To fix and re-stage:
+
+    .venv/bin/ruff check --fix toolkit/ && .venv/bin/ruff format toolkit/
+    git add -u
+
+Commit anyway with --no-verify.
+MSG
+fi
+exit $status

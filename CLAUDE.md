@@ -56,6 +56,16 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 
   It is installed in **editable mode**, so edits under `toolkit/src/truehand/` take effect immediately with no reinstall. The `.venv/` is git-ignored. Typer is the only hard dependency; `google-genai`, `pillow` and `elevenlabs` are extras (`[image]`, `[audio]`, `[media]`) imported lazily — `truehand site build` works without them. Run `.venv/bin/truehand …`, or just `truehand …` with the venv on your PATH.
 
+- **Formatting.** `ruff check` and `ruff format` gate the Python. Two things run them:
+  - Claude Code formats each `.py` file it edits, via the `PostToolUse` hook in `.claude/settings.json`.
+  - `.githooks/pre-commit` refuses a commit whose staged Python would fail either. It only *checks* — it never rewrites what you staged. Enable it once per clone (git can't do this for you, `core.hooksPath` is local config):
+
+    ```bash
+    git config core.hooksPath .githooks
+    ```
+
+    When it stops you: `.venv/bin/ruff check --fix toolkit/ && .venv/bin/ruff format toolkit/`, then `git add -u`. `git commit --no-verify` skips it.
+
 ## Adding a new session
 
 When new session material arrives (notes from the player, a fresh transcript, or both), the steps are always the same. Follow them in order — the site won't look right until the summary exists and the location annotation is set.
