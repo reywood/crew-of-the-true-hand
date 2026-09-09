@@ -10,7 +10,7 @@ from ..linkify import linkify_html
 
 
 def session_list_page(sessions, locations, link_map):
-    loc_by_slug = {l.slug: l for l in locations}
+    loc_by_slug = {loc.slug: loc for loc in locations}
     rows = []
     for s in sorted(sessions, key=lambda x: x.date, reverse=True):
         date = s.date
@@ -25,7 +25,8 @@ def session_list_page(sessions, locations, link_map):
             loc_chips.append('<span class="session-row-loc session-row-loc-none">—</span>')
         locs_html = "".join(loc_chips)
         audio_badge = (
-            '<span class="session-row-audio" title="Audio recap available" aria-label="Audio recap available">&#9836;</span>'
+            '<span class="session-row-audio" title="Audio recap available" aria-label="Audio '
+            'recap available">&#9836;</span>'
             if s.has_audio
             else ""
         )
@@ -42,17 +43,22 @@ def session_list_page(sessions, locations, link_map):
     body = (
         "<h1>Sessions</h1>\n"
         '<p class="subhead"><em>Newest to oldest. Click a date to read the full account.</em></p>\n'
-        '<p class="podcast-cta"><span class="copy-feed-wrap">'
-        f'<a href="feed.xml" class="podcast-link js-copy-feed" data-feed-url="{base_url()}/feed.xml">'
+        '<p class="podcast-cta"><span '
+        'class="copy-feed-wrap">'
+        f'<a href="feed.xml" class="podcast-link js-copy-feed" '
+        f'data-feed-url="{base_url()}/feed.xml">'
         '<span aria-hidden="true">&#9836;</span> Subscribe to the podcast'
-        '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it into your podcast app of choice.</span></p>\n'
+        '</a></span> <span class="podcast-cta-tail">— copies the feed link so you can paste it '
+        "into your podcast app of choice.</span></p>\n"
         '<ol class="session-log">' + "".join(rows) + "</ol>"
     )
     return page(
         "Sessions",
         linkify_html(body, "sessions.html", link_map),
         current_nav="sessions.html",
-        description="Every session of the campaign, newest first — each with a recap, illustrations, a narrated audio retelling, and the original notes and transcript.",
+        description="Every session of the campaign, newest first — each with a recap, "
+        "illustrations, a narrated audio retelling, and the original notes and "
+        "transcript.",
         canonical="sessions.html",
     )
 
@@ -128,10 +134,14 @@ def detail_page_session(s, link_map, prev=None, nxt=None):
     audio_html = ""
     if s.has_audio:
         audio_html = (
-            f'  <figure class="session-audio">\n'
-            f'    <figcaption><span class="session-audio-badge no-link">Tales of the True Hand</span>'
-            f' <span class="session-audio-caption no-link">Listen to this session as told by Vandal Lovelace.</span></figcaption>\n'
-            f'    <audio controls preload="none" src="audio/sessions/{html.escape(s.audio_name)}"></audio>\n'
+            f"  <figure "
+            f'class="session-audio">\n'
+            f'    <figcaption><span class="session-audio-badge no-link">Tales of the True '
+            f"Hand</span>"
+            f' <span class="session-audio-caption no-link">Listen to this session as told by '
+            f"Vandal Lovelace.</span></figcaption>\n"
+            f'    <audio controls preload="none" '
+            f'src="audio/sessions/{html.escape(s.audio_name)}"></audio>\n'
             f"  </figure>\n"
         )
 

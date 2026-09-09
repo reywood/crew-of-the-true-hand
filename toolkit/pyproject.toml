@@ -43,11 +43,31 @@ testpaths = ["tests"]
 line-length = 100
 src = ["src"]
 
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort
+    "B",        # flake8-bugbear
+    "C4",       # flake8-comprehensions
+    "UP",       # pyupgrade
+]
+
 # These three bodies moved verbatim out of the old website/generate.py and
 # carry its pre-existing style nits. Quarantined rather than rewritten during
 # the migration, so every diff stays provably output-neutral; they get fixed
 # with the other behavior changes once the golden test is established.
 [tool.ruff.lint.per-file-ignores]
+# The sub-command modules import `app` from here, so they can only be
+# imported once it exists. The late imports are the point, not an oversight.
+"src/truehand/cli/app.py" = ["E402"]
+
+# These two hold long lines of HTML inside triple-quoted templates, where a
+# source newline is a newline in the emitted page — so the line cannot be
+# wrapped, and `# noqa` would render as literal text. Every other over-long
+# line in the package was a real string literal and has been split.
+"src/truehand/site/layout.py" = ["E501"]
+"src/truehand/site/pages/index.py" = ["E501"]
 "src/truehand/core/loaders.py" = ["SIM102"]
 "src/truehand/site/linkify.py" = ["PIE810"]
 "src/truehand/site/pages/quests.py" = ["ISC004"]

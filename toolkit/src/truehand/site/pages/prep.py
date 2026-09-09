@@ -13,7 +13,7 @@ def _current_location(state, sessions, locations):
     """Where the party is: the campaign-state override if set, else the most
     recent session that happened somewhere, walking back past ones spent in
     transit. Returns (location_entity_or_None, as_of_date)."""
-    loc_by_slug = {l.slug: l for l in locations}
+    loc_by_slug = {loc.slug: loc for loc in locations}
     newest_first = sorted(sessions, key=lambda s: s.date, reverse=True)
     as_of = newest_first[0].date if newest_first else ""
     slug = state.location_override
@@ -39,7 +39,8 @@ def prep_page(
     latest = session_lookup.get(as_of)
     parts = [
         "<h1>Where We Left Off</h1>",
-        '<p class="subhead"><em>Open the site before a session and start here: where the crew stands, and what to do next.</em></p>',
+        '<p class="subhead"><em>Open the site before a session and start here: where the crew '
+        "stands, and what to do next.</em></p>",
     ]
 
     # 1. Where we are
@@ -59,7 +60,8 @@ def prep_page(
         sec.append(f'<p class="prep-inbrief">“{md_inline(latest.blurb)}”</p>')
     if latest and latest.has_audio:
         sec.append(
-            f'<p class="prep-audio"><a href="session-{as_of}.html">▸ Listen to the recap of session {as_of}</a></p>'
+            f'<p class="prep-audio"><a href="session-{as_of}.html">▸ Listen to the recap of '
+            f"session {as_of}</a></p>"
         )
     sec.append("</section>")
     parts.append("".join(sec))
@@ -74,7 +76,8 @@ def prep_page(
         for _i, _r, q in top:
             sec.append(_render_quest_li(q, relations))
         sec.append(
-            '</ul><p class="home-more"><a href="quests.html">See the full quest log &rsaquo;</a></p>'
+            '</ul><p class="home-more"><a href="quests.html">See the full quest log '
+            "&rsaquo;</a></p>"
         )
     sec.append("</section>")
     parts.append("".join(sec))
@@ -84,14 +87,16 @@ def prep_page(
     if fwd:
         sec = [
             '<section class="prep-block"><h2>Loose threads</h2>',
-            f'<p class="muted small">Left dangling as of <a href="session-{as_of}.html">session {as_of}</a>.</p>',
+            f'<p class="muted small">Left dangling as of <a href="session-{as_of}.html">session '
+            f"{as_of}</a>.</p>",
         ]
         for beat in fwd:
             sec.append('<ul class="prep-threads">')
             sec += [f"<li>{md_inline(b)}</li>" for b in beat.bullets]
             sec.append("</ul>")
         sec.append(
-            '<p class="home-more"><a href="threads.html">See all open threads across the campaign &rsaquo;</a></p></section>'
+            '<p class="home-more"><a href="threads.html">See all open threads across the campaign '
+            "&rsaquo;</a></p></section>"
         )
         parts.append("".join(sec))
 
@@ -106,7 +111,8 @@ def prep_page(
         ]
         if here:
             sec = [
-                f'<section class="prep-block"><h2>People &amp; leads at {html.escape(loc.name)}</h2>',
+                f'<section class="prep-block"><h2>People &amp; leads at '
+                f"{html.escape(loc.name)}</h2>",
                 '<ul class="prep-leads">',
             ]
             for npc in sorted(here, key=lambda n: n.name.lower()):
@@ -202,7 +208,8 @@ def threads_page(sessions, session_lookup, link_map):
     first — the soft dangling threats the quest log doesn't track."""
     parts = [
         "<h1>Open Threads</h1>",
-        '<p class="subhead"><em>Every loose end and stated next step the crew has left in its wake — newest first.</em></p>',
+        '<p class="subhead"><em>Every loose end and stated next step the crew has left in its '
+        "wake — newest first.</em></p>",
     ]
     any_threads = False
     for s in sorted(sessions, key=lambda x: x.date, reverse=True):
@@ -227,6 +234,7 @@ def threads_page(sessions, session_lookup, link_map):
         "Open Threads",
         linkify_html(body, "threads.html", link_map),
         current_nav="next.html",
-        description="Every loose end the archive knows about, harvested from each session's what's-next and loose-ends notes.",
+        description="Every loose end the archive knows about, harvested from each session's "
+        "what's-next and loose-ends notes.",
         canonical="threads.html",
     )

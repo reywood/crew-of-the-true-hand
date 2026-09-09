@@ -59,7 +59,8 @@ def quest_list_page(quests, link_map, relations):
         "Quests",
         linkify_html(body, "quests.html", link_map),
         current_nav="quests.html",
-        description="Every thread the crew is pulling: the main arc, allies to recruit, giant hotspots, and the leads still dangling.",
+        description="Every thread the crew is pulling: the main arc, allies to recruit, giant "
+        "hotspots, and the leads still dangling.",
         canonical="quests.html",
     )
 

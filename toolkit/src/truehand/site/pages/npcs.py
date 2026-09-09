@@ -44,7 +44,8 @@ def npc_table_page(npcs, link_map):
 
     body = (
         "<h1>The Roster</h1>\n"
-        '<p class="subhead"><em>Everyone the crew has met, heard tell of, or owes a debt to.</em></p>\n'
+        '<p class="subhead"><em>Everyone the crew has met, heard tell of, or owes a debt '
+        "to.</em></p>\n"
         '<div class="roster-wrap">\n'
         '<table class="roster-table">\n'
         "<thead><tr>"
@@ -60,7 +61,8 @@ def npc_table_page(npcs, link_map):
         "NPCs",
         linkify_html(body, "npcs.html", link_map),
         current_nav="npcs.html",
-        description="Everyone the crew has met, been threatened by, or been sent to find — allies, antagonists, dragons and gods.",
+        description="Everyone the crew has met, been threatened by, or been sent to find — "
+        "allies, antagonists, dragons and gods.",
         canonical="npcs.html",
     )
 

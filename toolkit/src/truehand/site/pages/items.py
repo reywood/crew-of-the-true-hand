@@ -27,7 +27,8 @@ def item_list_page(items, link_map):
 
     chunks = [
         "<h1>The Ledger</h1>",
-        '<p class="subhead"><em>Everything the crew has hauled ashore. Unresolved mysteries lead.</em></p>',
+        '<p class="subhead"><em>Everything the crew has hauled ashore. Unresolved mysteries '
+        "lead.</em></p>",
     ]
     order = ITEM_STATUS_ORDER + [s for s in grouped if s not in ITEM_STATUS_ORDER]
     for status in order:
@@ -36,7 +37,8 @@ def item_list_page(items, link_map):
             continue
         cls = ITEM_STATUS_CLASS.get(status, "active")
         chunks.append(
-            f'<h2 class="status-heading"><span class="status-chip status-{cls}">{html.escape(status)}</span></h2>'
+            f'<h2 class="status-heading"><span class="status-chip '
+            f'status-{cls}">{html.escape(status)}</span></h2>'
         )
         chunks.append('<ul class="item-list">')
         for it in sorted(bucket, key=lambda x: x.name.lower()):
@@ -63,6 +65,7 @@ def item_list_page(items, link_map):
         "Items",
         linkify_html(body, "items.html", link_map),
         current_nav="items.html",
-        description="The magical, mysterious and merely sentimental things the crew is carrying — and who might be able to explain them.",
+        description="The magical, mysterious and merely sentimental things the crew is carrying — "
+        "and who might be able to explain them.",
         canonical="items.html",
     )

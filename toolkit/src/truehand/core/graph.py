@@ -46,8 +46,8 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup, r
             return None
         return alias_lookup.get(str(name).strip().lower())
 
-    loc_by_slug = {l.slug: l for l in locations}
-    location_names = [l.name for l in locations]
+    loc_by_slug = {loc.slug: loc for loc in locations}
+    location_names = [loc.name for loc in locations]
 
     # --- nodes (one per real entity) ---
     for e in entities:

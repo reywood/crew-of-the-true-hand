@@ -436,12 +436,14 @@ def build_episode(
         # markers with no audio element attached — they're consumed in
         # pass 2 to find the sustained under-bed spans.
         top_layer = []  # list of dicts: {"path": Path, "dur_ms": int, "kind": str, "label": str}
-        bed_markers = []  # list of dicts: {"at_ms": int, "kind": "start_hearth"|"start_cold_open"|"end", "label": str}
+        # dicts: {"at_ms": int, "label": str,
+        #         "kind": "start_hearth" | "start_cold_open" | "end"}
+        bed_markers = []
         chapters = []  # list of dicts: {"title": str, "at_ms": int} — ID3 chapter marks
         cursor_ms = 0
         speech_idx = 0
 
-        for i, ev in enumerate(events):
+        for ev in events:
             if isinstance(ev, Speak):
                 txt = ev.text
                 delivery_key, voice_settings = resolve_delivery(ev.delivery)

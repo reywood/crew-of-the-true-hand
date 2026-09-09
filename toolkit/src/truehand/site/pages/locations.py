@@ -58,7 +58,7 @@ def locations_chart_page(locations, link_map):
         chunks.append('<div class="cartouche">')
         chunks.append(f"<h4>{html.escape(cname)}</h4>")
         chunks.append("<ul>")
-        for loc in sorted(members, key=lambda l: l.name.lower()):
+        for loc in sorted(members, key=lambda x: x.name.lower()):
             chunks.append(f'<li><a href="{loc.href}">{html.escape(loc.name)}</a></li>')
         chunks.append("</ul>")
         chunks.append("</div>")
@@ -67,7 +67,7 @@ def locations_chart_page(locations, link_map):
     chunks.append('<section class="location-roster">')
     chunks.append("<h2>All Locations</h2>")
     chunks.append('<ul class="location-list">')
-    for loc in sorted(locations, key=lambda l: l.name.lower()):
+    for loc in sorted(locations, key=lambda x: x.name.lower()):
         loc_type = loc.meta["type"].one()
         type_html = f'<span class="loc-type">{html.escape(loc_type)}</span>' if loc_type else ""
         chunks.append(f'<li><a href="{loc.href}">{html.escape(loc.name)}</a>{type_html}</li>')
@@ -79,7 +79,8 @@ def locations_chart_page(locations, link_map):
         "Locations",
         linkify_html(body, "locations.html", link_map),
         current_nav="locations.html",
-        description="Everywhere the crew has been or heard of, from Nightstone to Waterdeep to the Spine of the World.",
+        description="Everywhere the crew has been or heard of, from Nightstone to Waterdeep to "
+        "the Spine of the World.",
         canonical="locations.html",
     )
 

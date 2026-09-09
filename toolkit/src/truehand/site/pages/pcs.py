@@ -27,7 +27,8 @@ def pc_list_page(pcs, link_map):
         "The Crew",
         linkify_html(body, "characters.html", link_map),
         current_nav="characters.html",
-        description="Four adventurers out of a wrecked ship: Fiz the artificer, Hal the paladin, Toz the storm sorcerer, and Eno the nature cleric.",
+        description="Four adventurers out of a wrecked ship: Fiz the artificer, Hal the paladin, "
+        "Toz the storm sorcerer, and Eno the nature cleric.",
         canonical="characters.html",
     )
 
