@@ -7,9 +7,11 @@ ElevenLabs voice for ~366 lines.
 """
 
 import json
+import shutil
 
 import pytest
 
+from truehand.errors import OperationFailed
 from truehand.pipelines.session_audio import (
     DELIVERY_PRESETS,
     chunk_hash,
@@ -79,3 +81,128 @@ def test_every_committed_manifest_still_resolves(paths):
         )
         checked += 1
     assert checked >= 10, f"only checked {checked} episodes"
+
+
+# --------------------------------------------------------------------------
+# Crash safety: a run that dies partway must not re-bill what it already paid
+# for. Chunks are written to disk as they are synthesized, but the manifest —
+# the only record of which hash is in which file — used to be saved after the
+# whole pass. A failure in between stranded every paid chunk.
+# --------------------------------------------------------------------------
+
+SCRIPT = """# Tales of the True Hand — 2099-01-01
+## A Test Episode
+
+[COLD OPEN — 25s]
+
+VANDAL: *(storyteller)* Line one.
+
+VANDAL: *(hushed)* Line two.
+
+VANDAL: *(grave)* Line three.
+
+VANDAL: *(warm)* Line four.
+"""
+
+
+class FlakyBackend:
+    """Counts synthesize() calls and fails on the nth, like a quota error."""
+
+    def __init__(self, audio, fail_on=None):
+        self.audio = audio
+        self.calls = []
+        self.fail_on = fail_on
+
+    def synthesize(self, text, *, voice_id, model_id, settings,
+                   previous_text="", next_text=""):
+        self.calls.append(text)
+        if self.fail_on is not None and len(self.calls) == self.fail_on:
+            raise RuntimeError("quota exceeded")
+        return self.audio
+
+
+@pytest.fixture(scope="module")
+def mp3_bytes(tmp_path_factory):
+    """A real, decodable mp3 — the stitch shells out to ffmpeg for the runs
+    that are meant to succeed, so placeholder bytes will not do."""
+    if shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None:
+        pytest.skip("ffmpeg/ffprobe not installed")
+    from truehand.adapters.ffmpeg import synth_silence
+    return synth_silence(120, tmp_path_factory.mktemp("tone") / "s.mp3").read_bytes()
+
+
+@pytest.fixture
+def episode(tmp_path):
+    """A minimal archive holding one session with a script, aimed at tmp."""
+    from truehand.paths import Paths
+    for marker in ("campaign-state.md", "quests.md"):
+        (tmp_path / marker).write_text("")
+    audio = tmp_path / "sessions" / "2099-01-01" / "audio"
+    audio.mkdir(parents=True)
+    (audio / "script.md").write_text(SCRIPT, encoding="utf-8")
+    return Paths.at(tmp_path), audio
+
+
+def _run(paths, backend, force=False):
+    from truehand.pipelines.session_audio import build_episode
+    return build_episode(paths, backend, "2099-01-01",
+                         voice_id=VOICE, model_id=MODEL,
+                         no_music=True, no_beds=True, force=force)
+
+
+def test_a_crash_records_every_chunk_already_paid_for(episode, mp3_bytes):
+    paths, audio = episode
+    backend = FlakyBackend(mp3_bytes, fail_on=3)
+
+    with pytest.raises(OperationFailed, match="TTS failed on chunk"):
+        _run(paths, backend)
+
+    assert len(backend.calls) == 3, "should have died on the third line"
+    manifest = json.loads((audio / "manifest.json").read_text())
+    # The two that succeeded are recorded and their files are on disk.
+    assert len(manifest["chunks"]) == 2
+    for chunk_id in manifest["chunks"].values():
+        assert (audio / "chunks" / f"{chunk_id}.mp3").exists()
+
+
+def test_a_retry_after_a_crash_does_not_re_bill(episode, mp3_bytes):
+    """The whole point: the retry pays only for what was never voiced."""
+    paths, _audio = episode
+    with pytest.raises(OperationFailed):
+        _run(paths, FlakyBackend(mp3_bytes, fail_on=3))
+
+    retry = FlakyBackend(mp3_bytes)
+    _run(paths, retry)
+    assert retry.calls == ["Line three.", "Line four."], \
+        "lines one and two were already paid for and must come from the cache"
+
+
+def test_a_crash_does_not_drop_chunks_the_run_had_not_reached(episode, mp3_bytes):
+    """The subtle half. `manifest_out` starts empty and fills in script order,
+    so persisting it alone would strand every chunk from a previous run that
+    this run died before revisiting — re-billing those too."""
+    from truehand.pipelines.session_audio import chunk_hash
+    paths, audio = episode
+
+    _run(paths, FlakyBackend(mp3_bytes))          # a complete previous run
+    assert len(json.loads((audio / "manifest.json").read_text())["chunks"]) == 4
+
+    # Edit the opening line, so this run must voice it and can die on it
+    # before ever reaching the three lines it would have taken from cache.
+    (audio / "script.md").write_text(
+        SCRIPT.replace("Line one.", "A rewritten line."), encoding="utf-8")
+    with pytest.raises(OperationFailed):
+        _run(paths, FlakyBackend(mp3_bytes, fail_on=1), force=True)
+
+    chunks = json.loads((audio / "manifest.json").read_text())["chunks"]
+    for text, cue in [("Line two.", "hushed"), ("Line three.", "grave"),
+                      ("Line four.", "warm")]:
+        assert chunk_hash(text, VOICE, MODEL, cue) in chunks, \
+            f"{text!r} was paid for by the earlier run and must survive"
+
+
+def test_a_clean_run_writes_only_the_current_scripts_chunks(episode, mp3_bytes):
+    """The guard must not turn the manifest into an append-only pile."""
+    paths, audio = episode
+    _run(paths, FlakyBackend(mp3_bytes))
+    assert len(json.loads((audio / "manifest.json").read_text())["chunks"]) == 4

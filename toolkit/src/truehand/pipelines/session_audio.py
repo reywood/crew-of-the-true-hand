@@ -19,6 +19,7 @@ import re
 import shutil
 import tempfile
 import warnings
+from contextlib import contextmanager
 from pathlib import Path
 
 from .. import data as _data
@@ -287,6 +288,33 @@ def save_manifest(path: Path, data: dict) -> None:
                     encoding="utf-8")
 
 
+@contextmanager
+def _keep_paid_chunks(manifest_path: Path, manifest_out: dict, existing: dict):
+    """Persist the TTS cache even when a run dies partway through.
+
+    Chunks are written to disk and recorded in `manifest_out` as they are
+    synthesized, but the manifest is only saved once the whole pass completes.
+    A quota error or a dropped connection on chunk 40 of 60 propagated straight
+    out, leaving 39 freshly-billed mp3s on disk that no manifest mentioned — so
+    the next run missed the cache on every one of them and paid again.
+
+    On the way out of a failure, write the union of what the previous run knew
+    and what this one recorded. The union is the point: `manifest_out` starts
+    empty and fills in script order, so saving it alone would *drop* the
+    entries for chunks this run had not reached yet and re-bill those too.
+
+    Catches BaseException deliberately — Ctrl-C partway through a long episode
+    is exactly the case worth protecting.
+    """
+    try:
+        yield
+    except BaseException:
+        save_manifest(manifest_path,
+                      {**manifest_out,
+                       "chunks": {**existing, **manifest_out["chunks"]}})
+        raise
+
+
 def _render_bed_span(library: Path, span: dict, asset_cache: Path):
     """Render a single bed span (dict with start_ms, end_ms, type, label)
     into an MP3 in asset_cache. Returns (bed_path, delay_ms) for the mix."""
@@ -380,7 +408,8 @@ def build_episode(paths, backend: TTSBackend, date: str, *,
     manifest_out = {"date": date, "voice_id": voice_id,
                     "model_id": model_id, "chunks": {}}
 
-    with tempfile.TemporaryDirectory(prefix="tales-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="tales-") as tmp, \
+            _keep_paid_chunks(manifest_path, manifest_out, existing_chunks):
         tmp_dir = Path(tmp)
         silence_cache = tmp_dir / "silences"
         silence_cache.mkdir()
