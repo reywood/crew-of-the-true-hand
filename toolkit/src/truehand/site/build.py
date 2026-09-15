@@ -9,6 +9,7 @@ from ..core.graph import build_graph
 from ..core.loaders import (
     load_campaign_state,
     load_dir_entities,
+    load_items,
     load_pcs,
     load_quests,
     load_sessions,
@@ -44,7 +45,7 @@ def build_site(paths, *, base_url=None, out_dir=None, probe=None):
     pcs = load_pcs(paths)
     npcs = load_dir_entities("npc", paths.npcs)
     locations = load_dir_entities("location", paths.locations)
-    items = load_dir_entities("item", paths.items)
+    items = load_items(paths)
     quests = load_quests(paths)
     sessions = load_sessions(paths)
     session_lookup = {s.slug: s for s in sessions}

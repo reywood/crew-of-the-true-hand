@@ -12,6 +12,7 @@ from .campaign_state import CampaignState
 from .entity import Entity
 from .episode_script import EpisodeScript
 from .frontmatter import Field, Frontmatter, parse_frontmatter
+from .item_status import for_label
 from .quest_status import for_section
 from .session import IMAGE_SUFFIXES, Session, SessionArtifacts
 from .summary import read_document
@@ -97,6 +98,19 @@ def load_dir_entities(kind, directory):
             )
         )
     return out
+
+
+def load_items(paths):
+    """The ledger, each item carrying what its `status:` means.
+
+    Items are the one other kind whose frontmatter states a status, so — like
+    quests — they get it resolved once here rather than re-parsed by every page
+    that asks a question of it.
+    """
+    items = load_dir_entities("item", paths.items)
+    for item in items:
+        item.status = for_label(item.meta["status"].one())
+    return items
 
 
 def load_quests(paths):

@@ -1,5 +1,6 @@
 """The materialized entity graph behind graph.json and the Connections block."""
 
+from .item_status import holder_of
 from .loaders import port_for
 from .text import _clean_blurb, slugify
 
@@ -119,9 +120,9 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup, r
                     g._edge(who.href, loc.href, "governs")
 
     for item in items:
-        # held_by: item -> pc (skip "Party")
-        holder = item.meta["holder"].one()
-        if holder and holder.lower() != "party":
+        # held_by: item -> pc; nothing is drawn for what the party holds in common
+        holder = holder_of(item)
+        if holder:
             who = resolve(holder)
             if who and who.kind == "pc":
                 g._edge(item.href, who.href, "held_by")

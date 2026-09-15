@@ -6,24 +6,16 @@ from ...core.markdown import md_inline
 from ..layout import page
 from ..linkify import linkify_html
 
-ITEM_STATUS_ORDER = ["Unresolved", "Active", "Consumed", "Lost", "Sold"]
-
-
-ITEM_STATUS_CLASS = {
-    "Unresolved": "unresolved",
-    "Active": "active",
-    "Consumed": "completed",
-    "Lost": "completed",
-    "Sold": "completed",
-}
-
 
 def item_list_page(items, link_map):
-    """Group items by status, unresolved first so mysteries lead."""
+    """Group items by status, unresolved first so mysteries lead.
+
+    The vocabulary and its order live on ItemStatus (see core/item_status.py),
+    not here — this page only renders what a status says about itself.
+    """
     grouped = {}
     for it in items:
-        status = it.meta["status"].one("Active")
-        grouped.setdefault(status, []).append(it)
+        grouped.setdefault(it.status, []).append(it)
 
     chunks = [
         "<h1>The Ledger</h1>",
@@ -32,18 +24,16 @@ def item_list_page(items, link_map):
             "lead.</em></p>"
         ),
     ]
-    order = ITEM_STATUS_ORDER + [s for s in grouped if s not in ITEM_STATUS_ORDER]
-    for status in order:
-        bucket = grouped.get(status, [])
-        if not bucket:
-            continue
-        cls = ITEM_STATUS_CLASS.get(status, "active")
+    for status in sorted(grouped, key=lambda s: (s.display_order, s.label)):
+        bucket = grouped[status]
         chunks.append(
             f'<h2 class="status-heading"><span class="status-chip '
-            f'status-{cls}">{html.escape(status)}</span></h2>'
+            f'status-{status.css_class}">{html.escape(status.label)}</span></h2>'
         )
         chunks.append('<ul class="item-list">')
         for it in sorted(bucket, key=lambda x: x.name.lower()):
+            # As written, "Party" included — the ledger names who holds it,
+            # which is a different question from who is carrying it.
             holder = it.meta["holder"].one()
             typ = it.meta["type"].one()
             meta_bits = []

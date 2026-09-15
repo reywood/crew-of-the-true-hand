@@ -2,6 +2,7 @@
 
 import html
 
+from ...core.item_status import holder_of
 from ...core.markdown import md_inline
 from ...core.standing import for_type
 from ..layout import page
@@ -133,9 +134,7 @@ def prep_page(
             parts.append("".join(sec))
 
     # 5. Unresolved items & who can crack them
-    unresolved = [
-        it for it in items if it.meta["status"].one() == "Unresolved" and relations.helpers_for(it)
-    ]
+    unresolved = [it for it in items if it.status.is_open and relations.helpers_for(it)]
     if unresolved:
         sec = [
             '<section class="prep-block"><h2>Unresolved items &amp; who can crack them</h2>',
@@ -167,12 +166,7 @@ def prep_page(
     # 7. The crew at a glance
     sec = ['<section class="prep-block"><h2>The crew at a glance</h2>', '<div class="grid grid-2">']
     for pc in sorted(pcs, key=lambda p: p.meta["full_name"].one(p.name).lower()):
-        holdings = [
-            it
-            for it in items
-            if it.meta["holder"].one() == pc.name
-            and it.meta["status"].one() in ("Active", "Unresolved")
-        ]
+        holdings = [it for it in items if holder_of(it) in pc.aliases and it.status.is_carried]
         hold_html = ""
         if holdings:
             links = " · ".join(

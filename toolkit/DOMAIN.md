@@ -187,6 +187,17 @@ hang off the status, so a label is only ever a label. Note one dead branch:
 `PERSONAL` can never be produced, because `load_quests` filters the Personal
 section out before `for_section` is reached.
 
+**`ItemStatus`** — value object. `core/item_status.py`. `QuestStatus`'s move
+applied to the ledger, which had the same disease: the status vocabulary and
+its CSS lived on the items page while the prep hub independently tested the
+same literals (`== "Unresolved"`, `in ("Active", "Unresolved")`) to pick out
+mysteries worth an expert and a PC's holdings. `is_open` and `is_carried` are
+those two questions, and `load_items` resolves the label once — items are now
+the second kind to fill `Entity.status`. `holder_of` lives here too: `holder:`
+was read exactly against a PC's name by the prep hub and through the alias
+table by the graph, so `holder: Hisfiz` drew a `held_by` edge but never showed
+under Fiz's Carrying line. One reading, alias-matched, `Party` meaning nobody.
+
 **`Frontmatter` / `Field`** — value objects. `core/frontmatter.py`. `Field` is
 "read by intent, not by isinstance" — `one()`, `many()`, `prose()`, `tags()`.
 `Frontmatter` lookup is total, so no reader branches on absence.
