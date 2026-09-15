@@ -14,7 +14,7 @@ from .episode_script import EpisodeScript
 from .frontmatter import Field, Frontmatter, parse_frontmatter
 from .item_status import for_label
 from .quest_status import for_section
-from .session import IMAGE_SUFFIXES, Session, SessionArtifacts
+from .session import IMAGE_SUFFIXES, Session, SessionArtifacts, is_session_date
 from .summary import read_document
 from .text import read, slugify
 
@@ -208,16 +208,18 @@ def _player_notes_file(sdir: Path):
 def load_sessions(paths):
     """Every session in the archive, oldest first.
 
-    A folder under sessions/ that holds none of notes, transcript or summary is
-    not a session and is skipped — the Session aggregate refuses to exist
-    without one of them.
+    A folder under sessions/ whose name is not a date does not identify a
+    session (sessions/library/ holds the shared audio assets), and one holding
+    none of notes, transcript or summary is not a session either — the Session
+    aggregate refuses to exist without one of them. Both are skipped here
+    rather than constructed and caught.
     """
     if not paths.sessions.exists():
         return []
 
     out = []
     for sdir in sorted(paths.sessions.iterdir()):
-        if not sdir.is_dir() or sdir.name == "library":
+        if not sdir.is_dir() or not is_session_date(sdir.name):
             continue
 
         notes_file = _player_notes_file(sdir)

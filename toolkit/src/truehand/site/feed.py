@@ -67,11 +67,7 @@ def podcast_feed(paths, sessions, probe):
                 )
         content_html = "".join(content_html_parts)
 
-        try:
-            y, m, d = [int(x) for x in date.split("-")]
-            pub_dt = _dt.datetime(y, m, d, 12, 0, 0, tzinfo=_dt.UTC)
-        except (ValueError, TypeError):
-            pub_dt = _dt.datetime.now(_dt.UTC)
+        pub_dt = s.published_at
         pub_str = format_datetime(pub_dt)
         if latest_pub is None or pub_dt > latest_pub:
             latest_pub = pub_dt

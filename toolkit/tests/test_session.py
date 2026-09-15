@@ -5,6 +5,7 @@ duplicating state that `x is not None` already told you, and a second copy of
 the artifact-discovery rules in the site's asset staging.
 """
 
+import datetime as _dt
 import pathlib
 
 import pytest
@@ -34,6 +35,19 @@ class TestInvariant:
     )
     def test_any_one_source_is_enough(self, kwargs):
         assert Session("2026-01-01", **kwargs).date == "2026-01-01"
+
+    @pytest.mark.parametrize(
+        "name", ["library", "whisply-scratch", "2026-6-16", "20260616", "", "2026-06-16 copy"]
+    )
+    def test_identity_must_be_shaped_like_a_date(self, name):
+        """A scratch folder holding a summary.md would otherwise have become
+        `Session whisply-scratch` with a page of its own."""
+        with pytest.raises(ValueError, match="real-world date"):
+            Session(name, notes="n")
+
+    def test_identity_must_be_a_real_calendar_date(self):
+        with pytest.raises(ValueError):
+            Session("2026-13-40", notes="n")
 
 
 class TestIdentity:
@@ -136,6 +150,23 @@ class TestAgainstTheRealArchive:
 
     def test_the_library_folder_is_not_a_session(self, sessions):
         assert "library" not in {s.date for s in sessions}
+
+
+class TestWhenItWasPlayed:
+    def test_held_on_is_the_calendar_date(self):
+        assert Session("2026-06-16", notes="x").held_on == _dt.date(2026, 6, 16)
+
+    def test_published_at_is_noon_utc_that_day(self):
+        """The podcast item's pubDate. The feed used to parse this itself and
+        substitute datetime.now() when it failed, which would have made
+        feed.xml differ on every build instead of raising."""
+        assert Session("2026-06-16", notes="x").published_at == _dt.datetime(
+            2026, 6, 16, 12, 0, tzinfo=_dt.UTC
+        )
+
+    def test_publication_order_follows_play_order(self, sessions):
+        dates = [s.published_at for s in sessions]
+        assert dates == sorted(dates)
 
 
 class TestStagingCopiesWhatTheAggregateReports:

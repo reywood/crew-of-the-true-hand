@@ -143,9 +143,17 @@ about.
 
 - Identity: the real-world date. Not a slug. (`slug` is a *property* returning
   the date, which is the right compromise for uniform treatment with `Entity`.)
-- Invariant, enforced in `__post_init__`: a folder holding none of notes,
-  transcript or summary is not a session. `load_sessions` skips such folders
-  rather than constructing and catching.
+- Invariants, enforced in `__post_init__`: the identity is shaped like a
+  real-world date (`YYYY-MM-DD`, and a real calendar day), and a folder holding
+  none of notes, transcript or summary is not a session. `load_sessions` skips
+  such folders rather than constructing and catching — by shape now, not by
+  naming `library` specifically, so a scratch folder with a `summary.md` in it
+  can no longer become `Session whisply-scratch` with a page of its own.
+- `held_on` and `published_at` derive the calendar value from that identity.
+  `site/feed.py` used to parse the date itself and fall back to
+  `datetime.now()` on a bad one, which would have made `feed.xml` differ on
+  every build and failed the golden test with a confusing diff instead of
+  raising where the problem was.
 - Contains: `SessionSummary` (VO), `SessionArtifacts` (VO), `carried`
   (tuple of strings — a VO list), raw `notes` / `transcript` strings.
 - Derived, never stored: `blurb`, `has_audio`, `audio_name`, `has_hero`,

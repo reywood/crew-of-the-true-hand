@@ -16,6 +16,8 @@ copies the files.
 
 from __future__ import annotations
 
+import datetime as _dt
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -23,6 +25,17 @@ from .summary import SessionSummary
 
 #: Image extensions the archive publishes, in the order they are discovered.
 IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
+
+#: A session's identity is the real-world date its folder is named for. The
+#: loader skips anything under sessions/ that is not shaped like one, which is
+#: how sessions/library/ and any scratch folder stay out of the archive.
+DATE_SHAPE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def is_session_date(name: str) -> bool:
+    """Whether *name* could identify a session. Shape only — the aggregate
+    checks that it is a real calendar date."""
+    return bool(DATE_SHAPE.match(name))
 
 
 @dataclass(frozen=True)
@@ -59,6 +72,14 @@ class Session:
     artifacts: SessionArtifacts = field(default_factory=SessionArtifacts)
 
     def __post_init__(self):
+        if not is_session_date(self.date):
+            raise ValueError(
+                f"session {self.date!r}: a session is identified by the real-world "
+                f"date it was played, as YYYY-MM-DD"
+            )
+        # Rejects 2026-13-40 with a clear message, here, rather than letting a
+        # downstream reader quietly substitute today's date for it.
+        _dt.date.fromisoformat(self.date)
         if not (self.notes or self.transcript or self.summary):
             raise ValueError(
                 f"session {self.date}: needs at least one of notes, transcript "
@@ -95,6 +116,18 @@ class Session:
             if line.strip():
                 return line.strip()
         return "Transcript only — no written notes." if self.transcript else "No content."
+
+    @property
+    def held_on(self) -> _dt.date:
+        """The day it was played, as a date. Valid by construction."""
+        return _dt.date.fromisoformat(self.date)
+
+    @property
+    def published_at(self) -> _dt.datetime:
+        """Noon UTC on the day of play — the podcast item's pubDate. The feed
+        used to parse the date itself and fall back to datetime.now() on a bad
+        one, which would have made feed.xml differ on every build."""
+        return _dt.datetime.combine(self.held_on, _dt.time(12), tzinfo=_dt.UTC)
 
     @property
     def in_transit(self) -> bool:
