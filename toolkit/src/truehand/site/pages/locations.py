@@ -1,7 +1,6 @@
 """The locations sea-chart and its pins."""
 
 import html
-import re
 
 from ... import data as _data
 from ..layout import page
@@ -83,10 +82,3 @@ def locations_chart_page(locations, link_map):
         "the Spine of the World.",
         canonical="locations.html",
     )
-
-
-def _location_strip_qualifier(loc):
-    """'Silverymoon (last known)' -> 'Silverymoon'; 'Waterdeep, Trades Ward' kept."""
-    if not loc:
-        return ""
-    return re.sub(r"\s*\([^)]*\)\s*", "", loc).strip()

@@ -1,8 +1,8 @@
 """The materialized entity graph behind graph.json and the Connections block."""
 
 from .item_status import holder_of
-from .loaders import port_for
 from .text import _clean_blurb, slugify
+from .whereabouts import Whereabouts
 
 
 class Graph:
@@ -48,7 +48,6 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup, r
         return alias_lookup.get(str(name).strip().lower())
 
     loc_by_slug = {loc.slug: loc for loc in locations}
-    location_names = [loc.name for loc in locations]
 
     # --- nodes (one per real entity) ---
     for e in entities:
@@ -90,12 +89,11 @@ def build_graph(pcs, npcs, locations, items, quests, sessions, session_lookup, r
                 g._edge(e.href, s.href, "appears_in")
 
     for npc in npcs:
-        # located_in: npc -> location (port_for normalizes the free-text field)
-        port = port_for(npc, location_names)
+        # located_in: npc -> location. Whereabouts reads the free-text field;
+        # an NPC whose whereabouts are provisional is Adrift and draws no edge.
+        port = Whereabouts.of(npc).resolve(locations)
         if port:
-            tgt = resolve(port)
-            if tgt and tgt.kind == "location":
-                g._edge(npc.href, tgt.href, "located_in")
+            g._edge(npc.href, port.href, "located_in")
         # affiliated_with: npc -> faction (synthetic node)
         for aff in npc.meta["affiliation"].many():
             fid = faction_node(aff)

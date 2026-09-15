@@ -5,6 +5,7 @@ import html
 from ...core.item_status import holder_of
 from ...core.markdown import md_inline
 from ...core.standing import for_type
+from ...core.whereabouts import Whereabouts
 from ..layout import page
 from ..linkify import linkify_html
 from .index import _render_quest_li, _top_active_quests
@@ -21,13 +22,6 @@ def _current_location(state, sessions, locations):
     if not slug:
         slug = next((s.locations[0] for s in newest_first if s.locations), None)
     return (loc_by_slug.get(slug) if slug else None), as_of
-
-
-def _npc_at_location(npc, loc):
-    val = npc.meta["location"].prose().lower()
-    if not val:
-        return False
-    return loc.name.lower() in val or loc.slug.replace("-", " ") in val
 
 
 def prep_page(
@@ -110,7 +104,7 @@ def prep_page(
         here = [
             n
             for n in npcs
-            if _npc_at_location(n, loc)
+            if Whereabouts.of(n).is_at(loc)
             and (s := for_type(n.meta["type"].one()))
             and s.is_approachable
         ]

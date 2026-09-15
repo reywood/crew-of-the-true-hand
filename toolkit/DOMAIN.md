@@ -198,6 +198,22 @@ was read exactly against a PC's name by the prep hub and through the alias
 table by the graph, so `holder: Hisfiz` drew a `held_by` edge but never showed
 under Fiz's Carrying line. One reading, alias-matched, `Party` meaning nobody.
 
+**`Whereabouts`** — value object. `core/whereabouts.py`. An NPC's `location:`
+is free text with conventions, and three modules each read it differently
+without being able to see the others — the loader's `port_for` (first
+fragment, provisional stripped, longest match), the prep hub's
+`_npc_at_location` (substring over the whole line, name or slug) and the
+roster's `_location_strip_qualifier`. They disagreed on the field's *shape*
+too, `one()` against `prose()`. The three answers still differ, because the
+three questions do; what changed is that they differ on purpose in one place.
+`resolve` reads the **port** — the first fragment, since the archive writes a
+comma-list broad-to-specific and Trades Ward is itself a location, so matching
+the whole line would move a chart edge off Waterdeep onto the ward. `is_at`
+reads the whole line, provisional wording included, because a "last known"
+lead is who you would ask after there. `place` is the roster column. Putting
+the rule in `core` is also what stopped `core.graph` having to import
+`core.loaders` to draw an edge.
+
 **`Frontmatter` / `Field`** — value objects. `core/frontmatter.py`. `Field` is
 "read by intent, not by isinstance" — `one()`, `many()`, `prose()`, `tags()`.
 `Frontmatter` lookup is total, so no reader branches on absence.

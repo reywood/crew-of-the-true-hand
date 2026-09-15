@@ -3,9 +3,9 @@
 import html
 
 from ...core.standing import for_type
+from ...core.whereabouts import Whereabouts
 from ..layout import page
 from ..linkify import linkify_html
-from .locations import _location_strip_qualifier
 
 
 def npc_table_page(npcs, link_map):
@@ -18,8 +18,7 @@ def npc_table_page(npcs, link_map):
                 f'<span class="standing-chip {standing.css_class}">'
                 f"{html.escape(standing.label)}</span>"
             )
-        loc = npc.meta["location"].prose()
-        met = _location_strip_qualifier(loc)
+        met = Whereabouts.of(npc).place
         affiliations = npc.meta["affiliation"].many()
         aff_html = (
             html.escape(", ".join(affiliations)) if affiliations else '<span class="muted">—</span>'
@@ -76,7 +75,7 @@ def _npc_card(npc, show_last_seen):
         )
     last_seen_html = ""
     if show_last_seen:
-        loc = npc.meta["location"].prose() or "—"
+        loc = str(Whereabouts.of(npc)) or "—"
         last_seen_html = f'<p class="last-seen">Last seen: {html.escape(loc)}</p>'
     summary = html.escape(npc.summary or "")
     return (

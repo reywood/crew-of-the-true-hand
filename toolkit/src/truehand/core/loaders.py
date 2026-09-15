@@ -21,23 +21,6 @@ from .text import read, slugify
 #: Campaign vocabulary lives in core/standing.py, backed by
 #: truehand/data/npc_standing.toml.
 STANDING_MAP = standing.BY_TYPE
-PROVISIONAL = standing.PROVISIONAL
-chip_for = standing.for_type
-
-
-def port_for(npc, location_names):
-    """Return canonical port name for grouping, or None for Adrift."""
-    loc = npc.meta["location"].one()
-    if not loc:
-        return None
-    if any(p in loc.lower() for p in PROVISIONAL):
-        return None
-    best = None
-    for name in location_names:
-        if name.lower() in loc.lower():
-            if best is None or len(name) > len(best):
-                best = name
-    return best
 
 
 #: The crew, edited in truehand/data/party.toml, not here.
