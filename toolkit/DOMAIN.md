@@ -36,8 +36,8 @@ Own every derived join that is a *fact about the fiction* rather than a
 rendering decision.
 
 Its language: *session, beat, in brief, loose ends, carried, PC / crew, NPC,
-standing, location, port, item, holder, expertise, quest, arc, objective, open
-question, alias.*
+standing, location, whereabouts, port, adrift, item, status, holder, expertise,
+quest, arc, objective, open question, alias.*
 
 It is deliberately pure: stdlib only, no HTML, no network. That constraint is
 what makes it the shared kernel every other context is allowed to depend on.
@@ -130,7 +130,7 @@ about.
 | **carried** (session frontmatter) | `carried` in core; "Items acquired" on the page | `core/loaders.py`, `site/pages/sessions.py` | Two names, one thing. Harmless; noted. |
 | **current objective / open questions** | `CampaignState` | `core/campaign_state.py` | Fixed. Was a dict of three `.get()`s with defaults. |
 | **where the session took place** | `Session.locations` | `core/session.py` | Fixed. Was a module-level dict three modules reached for; the TOML is now read once, by the loader. |
-| **Vandal Lovelace** (the narrator) | the literal `"VANDAL:"` | `pipelines/session_audio.py` | Fine for a one-narrator show. Name the constant. |
+| **Vandal Lovelace** (the narrator) | `NARRATOR` | `core/episode_script.py` | Fixed. Was the bare literal `"VANDAL:"` at the parse site. Still one narrator; the show simply names him once. |
 | **crew / characters / PCs** | `kind="pc"`, `[pcs.*]`, nav "Characters", page "The Crew" | everywhere | Accepted synonyms. The archive uses all three too. |
 
 ---
@@ -228,14 +228,46 @@ the rule in `core` is also what stopped `core.graph` having to import
 `parse_frontmatter` *is the dialect* — it defines what a file means;
 `TestThisIsNotYaml` documents why real YAML cannot be substituted.
 
-**`CampaignState`** — should be a value object (objective, open questions,
-optional location override). Is a `dict`.
+**`CampaignState`** — value object, `core/campaign_state.py`. Objective, open
+questions, optional location override. Was a `dict` of three `.get()`s with
+defaults, one of which had already produced a silent empty: the dialect splits
+any comma-bearing value into a list, so a str-only guard discarded the
+objective and `next.html` rendered none. A singleton value rather than an
+aggregate — nothing else refers to it.
 
 **`Relations`** — a derived read model, `core/relations.py`. Not an aggregate;
 a frozen bundle of joins computed once per build and passed explicitly. These
 joins used to be mutated onto `Entity.meta` by the site layer while
 `core.graph` read them back, so correctness depended on statement order in
 `build_site`.
+
+**The `sessions:` projection** *(open)* — "which session summaries mention
+this entity" is a Campaign Archive relation, computed by `truehand entities
+sync` and written back into each entity's frontmatter. Persisting a read model
+into the source documents is sanctioned here: it keeps the archive
+self-describing without the tool, and it shows up in `git diff`. What is not
+sanctioned is that `pipelines/entity_sessions.py` computes it without going
+through the model — it re-parses each file and restates two rules differently
+from `core`.
+
+First, it treats an entity's name as one of its aliases only when `aliases:` is
+absent entirely, where `load_dir_entities` always prepends it. **This is not
+hypothetical: `npcs/garret-ox-dorn.md` is wrong on the site today.** His
+`name:` is `Garret "Ox" Dorn`, his three aliases are the unquoted spellings,
+and the 2025-09-23 summary calls him only `Garret "Ox" Dorn` — so the site
+links that mention (the link map has his name) while the sync does not count
+it. His page carries no chip for the session he first appears in, and the graph
+draws no `appears_in` edge for it. `items/waterdeep-wazoo-issue.md` has the
+same shape and is saved only by no summary spelling its full name.
+
+Second, it greps the whole `summary.md`, frontmatter included, where `Session`
+strips that into `carried` — two definitions of "the summary", differing on
+every file that has frontmatter (11 of 12 today). That one changes no result
+yet, because an item named in `carried:` should count as mentioned either way.
+
+The fix is one naming rule shared with the loader and a
+`Session.mentions(aliases)` on the aggregate that owns the text, spanning
+`summary.raw` and `carried` so the second rule stays deliberate.
 
 **`Graph`** — the other derived read model, `core/graph.py`. Closed edge
 vocabulary (`appears_in`, `located_in`, `within`, `held_by`, `acquired_in`,
