@@ -38,6 +38,12 @@ LINE_GAP_MS = 250
 _SFX_MS = 350
 _DEFAULT_PAUSE_MS = 500
 
+#: Measured across every episode to date: finished audio runs about 888
+#: characters of Vandal's spoken text per minute, music and stings included.
+#: Scripts are written to a runtime target, so this is what turns that target
+#: into a character budget.
+CHARS_PER_MINUTE = 888
+
 
 @dataclass(frozen=True)
 class Speak:
@@ -177,8 +183,13 @@ class EpisodeScript:
 
     @property
     def character_count(self) -> int:
-        """Billable characters. Calibration is ~888 per finished minute."""
+        """Billable characters: spoken text only, no cues or delivery marks."""
         return sum(len(line.text) for line in self.spoken_lines)
+
+    @property
+    def estimated_minutes(self) -> float:
+        """How long this script will run once voiced and mixed."""
+        return self.character_count / CHARS_PER_MINUTE
 
     def count(self, event_type) -> int:
         return sum(1 for e in self.events if isinstance(e, event_type))

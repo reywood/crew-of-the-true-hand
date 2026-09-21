@@ -317,9 +317,29 @@ after money had been spent.
 
 **`EpisodeResult`** — the outcome value returned to the CLI, matching
 `ImageResult` / `PlateResult` / `CoverResult`. Progress reaches the caller
-through an `on_progress` callback; the pipeline no longer prints.
+through an `on_progress` callback; the pipeline no longer prints. Its
+`estimated_minutes` defers to `episode_script.CHARS_PER_MINUTE`: the ~888
+chars-per-finished-minute calibration was written out twice, here and in a
+docstring on the document it actually describes.
 
-**`TimelineElement(path, dur_ms, kind)`** *(open)* — still a dict.
+**`MixPlan`** and its elements (`SpeechSlot`, `Gap`, `AssetPlay`,
+`BedMarker`, `Chapter`) — value objects, `pipelines/session_audio.py`. What the
+show direction decides about a script: what plays, in what order, where the
+beds open, where the chapters fall. `plan_mix(script, library, music=, beds=)`
+is a pure function of the script and the two mute flags, so the policy can be
+tested with no ElevenLabs key, no ffmpeg and no credit spent — the argument
+`resolve_bed_spans` had already made for itself, applied to the rest of the
+pass. `build_episode` went from 277 lines to 190 and now decides only one
+thing: cache hit or TTS call.
+
+Positions are deliberately *not* in the plan. Where a bed opens depends on how
+long the narration before it turned out to be, which is unknowable until the
+audio exists, so the plan fixes the order and the executor stamps the clock —
+which is why `resolve_bed_spans` still takes the marker dicts it always did.
+
+The old `TimelineElement(path, dur_ms, kind)` dict is gone with it; `kind` and
+`label` turned out to be write-only, so the top layer is now just a list of
+paths.
 
 **`ShowDirection`** *(open)* — would wrap `data/audio_direction.toml`, today
 ~15 module-level constants unpacked at import time. Deliberately left alone:

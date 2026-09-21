@@ -40,6 +40,7 @@ from ..adapters.tts import (
     TTSBackend,
 )
 from ..core.episode_script import (
+    CHARS_PER_MINUTE,
     ChapterMark,
     EpisodeScript,
     MusicCue,
@@ -243,9 +244,150 @@ class EpisodeResult:
 
     @property
     def estimated_minutes(self) -> float:
-        """Calibration across every episode to date is ~888 characters per
-        finished minute, music and stings included."""
-        return self.characters / 888.0
+        """Runtime for the characters billed. The calibration itself lives on
+        EpisodeScript, which is what a script is written against."""
+        return self.characters / CHARS_PER_MINUTE
+
+
+# --- The mix plan -------------------------------------------------------------
+# What the show direction decides about a script: what plays, in what order,
+# where the beds open and close, where the chapters fall. All of it is a pure
+# function of the script and the two mute flags, so it can be tested without an
+# ElevenLabs key, without ffmpeg and without spending a credit. The executor
+# below walks the plan and is the only half that does I/O.
+#
+# Positions are deliberately absent. Where a bed opens depends on how long the
+# narration before it turned out to be, which is not knowable until the audio
+# exists — so the plan fixes the *order* of events and the executor stamps the
+# clock onto it.
+
+
+@dataclass(frozen=True)
+class SpeechSlot:
+    """One line to voice. `index` is its position among spoken lines, which is
+    what names its chunk file."""
+
+    index: int
+    text: str
+    delivery_key: str
+    settings: dict
+
+
+@dataclass(frozen=True)
+class Gap:
+    """Silence. `reason` says why, and names its file in the silence cache."""
+
+    duration_ms: int
+    reason: str
+
+
+@dataclass(frozen=True)
+class AssetPlay:
+    """A sting or a discrete music cue, played inline at a ducked level."""
+
+    kind: str  # "sting" | "music"
+    label: str
+    source: Path
+    db: float
+    segment: tuple | None
+
+
+@dataclass(frozen=True)
+class BedMarker:
+    """Opens or closes a sustained under-bed at wherever the cursor has got to.
+    Consumed by resolve_bed_spans once the durations are known."""
+
+    kind: str  # "start_cold_open" | "start_hearth" | "start_signature" | "end"
+    label: str
+
+
+@dataclass(frozen=True)
+class Chapter:
+    """A zero-duration ID3 chapter mark."""
+
+    title: str
+
+
+@dataclass(frozen=True)
+class MixPlan:
+    elements: tuple[object, ...]
+
+    @property
+    def speech(self) -> list[SpeechSlot]:
+        return [e for e in self.elements if isinstance(e, SpeechSlot)]
+
+    def count(self, kind) -> int:
+        return sum(1 for e in self.elements if isinstance(e, kind))
+
+
+def plan_mix(script: EpisodeScript, library: Path, *, music: bool = True, beds: bool = True):
+    """Decide what this script sounds like, without making any of it.
+
+    *music* False mutes every cue; *beds* False keeps the discrete cues but
+    lays down no sustained under-bed (and so no signature headroom either).
+    """
+    out: list[object] = []
+    speech_index = 0
+
+    for ev in script.events:
+        if isinstance(ev, Speak):
+            delivery_key, settings = resolve_delivery(ev.delivery)
+            out.append(SpeechSlot(speech_index, ev.text, delivery_key, settings))
+            speech_index += 1
+
+        elif isinstance(ev, ChapterMark):
+            out.append(Chapter(ev.title))
+
+        elif isinstance(ev, Silence):
+            out.append(Gap(ev.duration_ms, f"silence-{ev.duration_ms}"))
+
+        elif isinstance(ev, StingCue):
+            if not music:
+                out.append(Gap(400, "sting-fallback"))
+                continue
+            resolved = resolve_sting_cue(library, ev.label)
+            if resolved is None:
+                # A cue the library has no asset for still costs its beat of
+                # silence, so the pacing around it survives the miss.
+                out.append(Gap(500, "sting-unknown"))
+                continue
+            src, db, segment = resolved
+            out.append(AssetPlay("sting", ev.label, src, db, segment))
+
+        elif isinstance(ev, MusicCue):
+            label = ev.label
+            # Bed markers register at THIS position, before anything the cue
+            # may also play inline advances the clock.
+            if music and beds:
+                if is_cold_open_bed_cue(label):
+                    out.append(BedMarker("start_cold_open", label))
+                elif is_hearth_bed_start_cue(label):
+                    out.append(BedMarker("start_hearth", label))
+                elif is_signature_bed_cue(label):
+                    # Closes the cold-open bed and opens the signature bed at
+                    # the same instant, then holds the top layer quiet for a
+                    # beat so the theme plays alone before the title line.
+                    out.append(BedMarker("start_signature", label))
+                    headroom = f"signature-headroom-{SIGNATURE_HEADROOM_MS}"
+                    out.append(Gap(SIGNATURE_HEADROOM_MS, headroom))
+                elif is_bed_end_cue(label):
+                    out.append(BedMarker("end", label))
+
+            if not music:
+                continue
+            resolved = resolve_music_cue(library, label)
+            if resolved is None:
+                # Either an unknown cue or a sustained bed, which is not an
+                # inline element — it was handled as a marker above.
+                continue
+            src, db, segment = resolved
+            out.append(AssetPlay("music", label, src, db, segment))
+
+    return MixPlan(tuple(out))
+
+
+def _asset_slug(label: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", label.lower())[:40].strip("-")
 
 
 @dataclass(frozen=True)
@@ -428,56 +570,42 @@ def build_episode(
         asset_cache = tmp_dir / "assets"
         asset_cache.mkdir()
 
-        speech_texts = [line.text for line in spoken]
+        plan = plan_mix(script, library, music=not no_music, beds=not no_beds)
+        speech_texts = [slot.text for slot in plan.speech]
 
-        # --- Pass 1: resolve every event to a concrete audio element on
-        # disk (speech chunk from cache or new TTS, silence, sting, inline
-        # music) and capture its duration in ms. Bed cues are left as
-        # markers with no audio element attached — they're consumed in
-        # pass 2 to find the sustained under-bed spans.
-        top_layer = []  # list of dicts: {"path": Path, "dur_ms": int, "kind": str, "label": str}
-        # dicts: {"at_ms": int, "label": str,
-        #         "kind": "start_hearth" | "start_cold_open" | "end"}
-        bed_markers = []
-        chapters = []  # list of dicts: {"title": str, "at_ms": int} — ID3 chapter marks
+        # --- Pass 1: walk the plan, turning each element into a concrete file
+        # on disk and stamping the clock onto it. The decisions were all made
+        # in plan_mix; the only judgement left here is cache hit or TTS call.
+        top_paths = []
+        bed_markers = []  # dicts for resolve_bed_spans: at_ms, kind, label
+        chapters = []  # dicts for embed_chapters: title, at_ms
         cursor_ms = 0
-        speech_idx = 0
 
-        for ev in events:
-            if isinstance(ev, Speak):
-                txt = ev.text
-                delivery_key, voice_settings = resolve_delivery(ev.delivery)
-                h = chunk_hash(txt, voice_id, model_id, delivery_key)
-                chunk_id = f"{speech_idx + 1:04d}"
+        for el in plan.elements:
+            if isinstance(el, SpeechSlot):
+                h = chunk_hash(el.text, voice_id, model_id, el.delivery_key)
+                chunk_id = f"{el.index + 1:04d}"
                 chunk_path = chunks_dir / f"{chunk_id}.mp3"
+                progress = f"  [{el.index + 1}/{len(speech_texts)}] ({el.delivery_key})"
+                preview = el.text[:50].replace(chr(10), " ")
 
                 if h in existing_chunks and (chunks_dir / f"{existing_chunks[h]}.mp3").exists():
                     cached_id = existing_chunks[h]
-                    cached_path = chunks_dir / f"{cached_id}.mp3"
                     if cached_id != chunk_id:
-                        shutil.copy2(cached_path, chunk_path)
-                    report(
-                        f"  [{speech_idx + 1}/{len(speech_texts)}] "
-                        f"({delivery_key}) [cache hit] "
-                        f"{txt[:50].replace(chr(10), ' ')}..."
-                    )
+                        shutil.copy2(chunks_dir / f"{cached_id}.mp3", chunk_path)
+                    report(f"{progress} [cache hit] {preview}...")
                 else:
-                    prev_txt = speech_texts[speech_idx - 1] if speech_idx > 0 else ""
-                    next_txt = (
-                        speech_texts[speech_idx + 1] if speech_idx + 1 < len(speech_texts) else ""
-                    )
-                    report(
-                        f"  [{speech_idx + 1}/{len(speech_texts)}] "
-                        f"({delivery_key}) [TTS] "
-                        f"{txt[:50].replace(chr(10), ' ')}..."
-                    )
+                    report(f"{progress} [TTS] {preview}...")
+                    prev_txt = speech_texts[el.index - 1] if el.index > 0 else ""
+                    nxt = el.index + 1
+                    next_txt = speech_texts[nxt] if nxt < len(speech_texts) else ""
                     try:
                         chunk_path.write_bytes(
                             backend.synthesize(
-                                txt,
+                                el.text,
                                 voice_id=voice_id,
                                 model_id=model_id,
-                                settings=voice_settings,
+                                settings=el.settings,
                                 previous_text=prev_txt,
                                 next_text=next_txt,
                             )
@@ -486,100 +614,28 @@ def build_episode(
                         raise OperationFailed(f"TTS failed on chunk {chunk_id}: {exc}") from exc
 
                 manifest_out["chunks"][h] = chunk_id
-                dur_ms = probe_duration_ms(chunk_path)
-                top_layer.append({"path": chunk_path, "dur_ms": dur_ms, "kind": "speak"})
-                cursor_ms += dur_ms
-                speech_idx += 1
+                top_paths.append(chunk_path)
+                cursor_ms += probe_duration_ms(chunk_path)
 
-            elif isinstance(ev, ChapterMark):
-                # Zero-duration marker: record the current timeline position;
-                # embedded as an ID3 chapter after the final mix.
-                chapters.append({"title": ev.title, "at_ms": cursor_ms})
+            elif isinstance(el, Chapter):
+                # Zero-duration: just note where the clock stands.
+                chapters.append({"title": el.title, "at_ms": cursor_ms})
 
-            elif isinstance(ev, Silence):
-                dur = ev.duration_ms
-                sil_path = silence_cache / f"silence-{dur}.mp3"
+            elif isinstance(el, BedMarker):
+                bed_markers.append({"at_ms": cursor_ms, "kind": el.kind, "label": el.label})
+
+            elif isinstance(el, Gap):
+                sil_path = silence_cache / f"{el.reason}.mp3"
                 if not sil_path.exists():
-                    synth_silence(dur, sil_path)
-                top_layer.append({"path": sil_path, "dur_ms": dur, "kind": "silence"})
-                cursor_ms += dur
+                    synth_silence(el.duration_ms, sil_path)
+                top_paths.append(sil_path)
+                cursor_ms += el.duration_ms
 
-            elif isinstance(ev, StingCue):
-                label = ev.label
-                if no_music:
-                    fb = silence_cache / "sting-fallback.mp3"
-                    if not fb.exists():
-                        synth_silence(400, fb)
-                    top_layer.append({"path": fb, "dur_ms": 400, "kind": "sting"})
-                    cursor_ms += 400
-                    continue
-                resolved = resolve_sting_cue(library, label)
-                if resolved is None:
-                    fallback = silence_cache / "sting-unknown.mp3"
-                    if not fallback.exists():
-                        synth_silence(500, fallback)
-                    top_layer.append({"path": fallback, "dur_ms": 500, "kind": "sting"})
-                    cursor_ms += 500
-                    continue
-                src, db, segment = resolved
-                slug = re.sub(r"[^a-z0-9]+", "-", label.lower())[:40].strip("-")
-                asset_path = asset_cache / f"sting-{slug}.mp3"
-                render_asset(src, asset_path, db, segment)
-                dur_ms = probe_duration_ms(asset_path)
-                top_layer.append({"path": asset_path, "dur_ms": dur_ms, "kind": "sting"})
-                cursor_ms += dur_ms
-
-            elif isinstance(ev, MusicCue):
-                label = ev.label
-
-                # Register bed markers at THIS cursor position, before
-                # advancing for any inline element the cue may also carry.
-                if not no_music and not no_beds:
-                    if is_cold_open_bed_cue(label):
-                        bed_markers.append(
-                            {"at_ms": cursor_ms, "kind": "start_cold_open", "label": label}
-                        )
-                    elif is_hearth_bed_start_cue(label):
-                        bed_markers.append(
-                            {"at_ms": cursor_ms, "kind": "start_hearth", "label": label}
-                        )
-                    elif is_signature_bed_cue(label):
-                        # Transition: closes the cold-open bed and opens the
-                        # signature bed at the same position. Then inject a
-                        # short silence into the top layer so the intro theme
-                        # plays alone for a beat before the title-line speech
-                        # comes in.
-                        bed_markers.append(
-                            {"at_ms": cursor_ms, "kind": "start_signature", "label": label}
-                        )
-                        headroom_path = (
-                            silence_cache / f"signature-headroom-{SIGNATURE_HEADROOM_MS}.mp3"
-                        )
-                        if not headroom_path.exists():
-                            synth_silence(SIGNATURE_HEADROOM_MS, headroom_path)
-                        top_layer.append(
-                            {
-                                "path": headroom_path,
-                                "dur_ms": SIGNATURE_HEADROOM_MS,
-                                "kind": "silence",
-                            }
-                        )
-                        cursor_ms += SIGNATURE_HEADROOM_MS
-                    elif is_bed_end_cue(label):
-                        bed_markers.append({"at_ms": cursor_ms, "kind": "end", "label": label})
-
-                if no_music:
-                    continue
-                resolved = resolve_music_cue(library, label)
-                if resolved is None:
-                    continue
-                src, db, segment = resolved
-                slug = re.sub(r"[^a-z0-9]+", "-", label.lower())[:40].strip("-")
-                asset_path = asset_cache / f"music-{slug}.mp3"
-                render_asset(src, asset_path, db, segment)
-                dur_ms = probe_duration_ms(asset_path)
-                top_layer.append({"path": asset_path, "dur_ms": dur_ms, "kind": "music"})
-                cursor_ms += dur_ms
+            elif isinstance(el, AssetPlay):
+                asset_path = asset_cache / f"{el.kind}-{_asset_slug(el.label)}.mp3"
+                render_asset(el.source, asset_path, el.db, el.segment)
+                top_paths.append(asset_path)
+                cursor_ms += probe_duration_ms(asset_path)
 
         save_manifest(manifest_path, manifest_out)
 
@@ -600,7 +656,6 @@ def build_episode(
         # --- Pass 3: concat the top layer to top.mp3, then mix in the
         # rendered beds at their offsets.
         top_path = tmp_dir / "top.mp3"
-        top_paths = [e["path"] for e in top_layer]
         report(f"Concatenating {len(top_paths)} top-layer elements")
         concat_mp3s(top_paths, top_path)
 
