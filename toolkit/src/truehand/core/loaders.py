@@ -52,6 +52,24 @@ def load_pcs(paths):
     return entities
 
 
+def entity_names(meta, path):
+    """What an entity file is called, and every phrasing that links to it.
+
+    The one rule: a file's `name:` is always among its own aliases, whether or
+    not the author repeated it in `aliases:` (website/README.md promises the
+    generator adds it). Shared with `truehand entities sync`, which used to
+    fold the name in only when `aliases:` was absent entirely — so an entity
+    whose name was spelled differently from its aliases, as
+    `Garret "Ox" Dorn` is, was linked on its name across the site but never
+    counted as mentioned by a summary that used it.
+    """
+    name = meta["name"].one() or path.stem.replace("-", " ").title()
+    aliases = meta["aliases"].many()
+    if name not in aliases:
+        aliases = [name] + aliases
+    return name, aliases
+
+
 def load_dir_entities(kind, directory):
     out = []
     if not directory.exists():
@@ -60,10 +78,7 @@ def load_dir_entities(kind, directory):
         text = read(path)
         fm, body = parse_frontmatter(text)
         meta = Frontmatter(fm)
-        name = meta["name"].one() or path.stem.replace("-", " ").title()
-        aliases = meta["aliases"].many()
-        if name not in aliases:
-            aliases = [name] + aliases
+        name, aliases = entity_names(meta, path)
         summary = meta["summary"].prose()
         if not summary and body.strip():
             first = next((ln.strip() for ln in body.split("\n") if ln.strip()), "")

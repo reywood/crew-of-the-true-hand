@@ -9,6 +9,11 @@ parse_frontmatter that understood neither YAML-style bullet lists nor the
 comma-splitting its own docstring claimed. It now uses the canonical parser in
 core/frontmatter.py, and reads its values through Field rather than carrying a
 fourth copy of the str-or-list coercion.
+
+It also used to carry its own copies of two rules `core` already owned — what
+an entity is called (`entity_names`) and what a session says (`Session`) — and
+both had drifted. Writing a projection back into the source documents is this
+module's job; deciding what the projection means is not.
 """
 
 from __future__ import annotations
@@ -17,7 +22,8 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from ..core.frontmatter import Field, parse_frontmatter
+from ..core.frontmatter import Frontmatter, parse_frontmatter
+from ..core.loaders import entity_names, load_sessions
 
 #: Change tags, in the order they are reported.
 TAGS = ("added", "updated", "removed", "unchanged")
@@ -40,22 +46,12 @@ class SyncResult:
         return sum(self.counts.values())
 
 
-def load_session_summaries(paths) -> dict[str, str]:
-    """Return ``{date: summary_text}`` for every session summary on disk."""
-    out: dict[str, str] = {}
-    if not paths.sessions.exists():
-        return out
-    for p in sorted(paths.sessions.glob("*/summary.md")):
-        out[p.parent.name] = p.read_text(encoding="utf-8")
-    return out
+def find_sessions(aliases: list[str], sessions) -> list[str]:
+    """Dates of the sessions that mention any of *aliases*, oldest first.
 
-
-def find_sessions(aliases: list[str], session_texts: dict[str, str]) -> list[str]:
-    """Session dates whose summary mentions any alias (word-boundary, case-sensitive)."""
-    if not aliases:
-        return []
-    pattern = re.compile(r"\b(?:" + "|".join(re.escape(a) for a in aliases) + r")\b")
-    return sorted(date for date, text in session_texts.items() if pattern.search(text))
+    The match itself belongs to the Session aggregate, which owns the text.
+    """
+    return sorted(s.date for s in sessions if s.mentions(aliases))
 
 
 def write_sessions_field(path: Path, sessions: list[str], dry_run: bool) -> str:
@@ -106,29 +102,23 @@ def write_sessions_field(path: Path, sessions: list[str], dry_run: bool) -> str:
     return tag
 
 
-def sync_directory(directory: Path, session_texts: dict[str, str], dry_run: bool) -> SyncResult:
+def sync_directory(directory: Path, sessions, dry_run: bool) -> SyncResult:
     """Refresh every ``*.md`` in *directory*."""
     result = SyncResult(directory=directory)
     for entity_path in sorted(directory.glob("*.md")):
         fm, _ = parse_frontmatter(entity_path.read_text(encoding="utf-8"))
-        aliases = Field(fm.get("aliases")).many()
-        if not aliases:
-            # Nothing declared: fall back to the filename so the entity is at
-            # least checked against something.
-            aliases = [entity_path.stem.replace("-", " ").title()]
-
-        sessions = find_sessions(aliases, session_texts)
-        tag = write_sessions_field(entity_path, sessions, dry_run)
+        _name, aliases = entity_names(Frontmatter(fm), entity_path)
+        mentioned = find_sessions(aliases, sessions)
+        tag = write_sessions_field(entity_path, mentioned, dry_run)
         result.counts[tag] += 1
         if tag != "unchanged":
-            result.changes.append((tag, entity_path.name, sessions))
+            result.changes.append((tag, entity_path.name, mentioned))
     return result
 
 
 def sync(paths, *, dry_run: bool = False) -> list[SyncResult]:
-    """Refresh npcs/, locations/ and items/ against every session summary."""
-    session_texts = load_session_summaries(paths)
+    """Refresh npcs/, locations/ and items/ against every session."""
+    sessions = load_sessions(paths)
     return [
-        sync_directory(d, session_texts, dry_run)
-        for d in (paths.npcs, paths.locations, paths.items)
+        sync_directory(d, sessions, dry_run) for d in (paths.npcs, paths.locations, paths.items)
     ]

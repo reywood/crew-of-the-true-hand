@@ -1,6 +1,7 @@
 ---
 name: Garret "Ox" Dorn
 aliases: Garret Ox Dorn, Garret Dorn, Ox Dorn
+sessions: 2025-09-23
 type: Old shipmate
 role: Sailor
 first_seen: 2025-09-23

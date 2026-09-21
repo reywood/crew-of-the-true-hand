@@ -241,33 +241,31 @@ joins used to be mutated onto `Entity.meta` by the site layer while
 `core.graph` read them back, so correctness depended on statement order in
 `build_site`.
 
-**The `sessions:` projection** *(open)* — "which session summaries mention
-this entity" is a Campaign Archive relation, computed by `truehand entities
-sync` and written back into each entity's frontmatter. Persisting a read model
-into the source documents is sanctioned here: it keeps the archive
-self-describing without the tool, and it shows up in `git diff`. What is not
-sanctioned is that `pipelines/entity_sessions.py` computes it without going
-through the model — it re-parses each file and restates two rules differently
-from `core`.
+**The `sessions:` projection** — "which session summaries mention this
+entity" is a Campaign Archive relation, computed by `truehand entities sync`
+and written back into each entity's frontmatter. Persisting a read model into
+the source documents is sanctioned: it keeps the archive self-describing
+without the tool, and it shows up in `git diff`. What was not sanctioned was
+computing it outside the model — `pipelines/entity_sessions.py` re-parsed each
+file and restated two of `core`'s rules, both drifted.
 
-First, it treats an entity's name as one of its aliases only when `aliases:` is
-absent entirely, where `load_dir_entities` always prepends it. **This is not
-hypothetical: `npcs/garret-ox-dorn.md` is wrong on the site today.** His
-`name:` is `Garret "Ox" Dorn`, his three aliases are the unquoted spellings,
-and the 2025-09-23 summary calls him only `Garret "Ox" Dorn` — so the site
-links that mention (the link map has his name) while the sync does not count
-it. His page carries no chip for the session he first appears in, and the graph
-draws no `appears_in` edge for it. `items/waterdeep-wazoo-issue.md` has the
-same shape and is saved only by no summary spelling its full name.
+It folded an entity's name into its aliases only when `aliases:` was absent
+entirely, where `load_dir_entities` always prepends it — and that was wrong on
+the site, not merely in theory. `npcs/garret-ox-dorn.md` is named
+`Garret "Ox" Dorn`, its aliases are the unquoted spellings, and the 2025-09-23
+summary uses only the quoted form: the site linked that mention while the sync
+missed it, so his page carried no chip for the session he first appears in and
+the graph drew no `appears_in` edge for it. And it grepped the whole
+`summary.md`, frontmatter included, where `Session` strips that into `carried`
+— a second definition of "the summary" differing on 11 of 12 files, though one
+that changed no result, since an item named in `carried:` should count either
+way.
 
-Second, it greps the whole `summary.md`, frontmatter included, where `Session`
-strips that into `carried` — two definitions of "the summary", differing on
-every file that has frontmatter (11 of 12 today). That one changes no result
-yet, because an item named in `carried:` should count as mentioned either way.
-
-The fix is one naming rule shared with the loader and a
-`Session.mentions(aliases)` on the aggregate that owns the text, spanning
-`summary.raw` and `carried` so the second rule stays deliberate.
+Fixed. `loaders.entity_names` is the one naming rule, shared by the loader and
+the sync; `Session.mentions(aliases)` is the one match, spanning `summary.raw`
+and `carried` so that second rule stays deliberate. Applying it added
+`sessions: 2025-09-23` to Garret's file — the first change in this series that
+was *not* byte-identical, and the point of the exercise.
 
 **`Graph`** — the other derived read model, `core/graph.py`. Closed edge
 vocabulary (`appears_in`, `located_in`, `within`, `held_by`, `acquired_in`,

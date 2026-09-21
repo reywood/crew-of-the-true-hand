@@ -155,6 +155,20 @@ class Session:
         hero = self.artifacts.hero
         return f"{self.date}{hero.suffix}" if hero else ""
 
+    def mentions(self, aliases) -> bool:
+        """Whether this session names any of *aliases* — word-boundary,
+        case-sensitive. The rule behind every entity's `sessions:` field.
+
+        Reads the summary's prose plus the `carried:` list, which is the whole
+        of what the session says in its own voice. `truehand entities sync`
+        used to grep the raw summary.md instead, frontmatter delimiters and
+        all — a second definition of "the summary" that only happened to agree.
+        """
+        if not aliases or not self.summary:
+            return False
+        pattern = re.compile(r"\b(?:" + "|".join(re.escape(a) for a in aliases) + r")\b")
+        return any(pattern.search(text) for text in (self.summary.raw, *self.carried))
+
     def beat_image(self, beat) -> Path | None:
         """The illustration for a summary beat, if one was generated."""
         return self.artifacts.beats.get(beat.slug)
