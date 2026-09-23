@@ -37,7 +37,7 @@ VANDAL: *(quoted, hushed)* "To speak my name is to unmake chains."
 
 VANDAL: *(warm)* And here is the mundane miracle of it: the bottle had a delivery on it. A fat fee, promised by one Molak — a retired adventurer of some renown — who kept the inn at Nightstone, a small, well-kept village at the edge of Ardeep Forest, where the nobility of Waterdeep ride to hunt. So inland they walked, salt still in their boots.
 
-VANDAL: *(dry, amused)* On the road, two goblins stepped from the brush and demanded a toll. Fiz answered with a Fire Bolt, and one goblin paid the toll instead. A single burst of flame, and a small life ended — and it sat ill with the tinker afterwards, friend. Mark that. The first blood is remembered long after the hundredth is forgotten.
+VANDAL: *(dry, amused)* On the road, two goblins stepped from the brush and demanded a toll. Fiz answered with a little device of his own making — it took up a stone and flung it faster than any arm could throw, and one goblin paid the toll instead. A rock, friend, and a small life ended — and it sat ill with the tinker afterwards. Mark that. The first blood is remembered long after the hundredth is forgotten.
 
 [STING: chime — 1s]
 
@@ -59,7 +59,11 @@ VANDAL: *(dropping)* The bell stopped. For one minute — one exact minute, frie
 
 VANDAL: *(quickening)* So under cover of that mad, ceaseless clanging, the four slipped past the feeding wargs and into the temple. And at the top of the tower they found no desperate villager. They found two goblins. One swinging from the bell rope, whooping, gleeful as a child on a swing. The other turning Fiz's talking pebble over and over in its claws, frowning at it.
 
-VANDAL: *(dry)* Neither goblin left the tower.
+VANDAL: *(dry)* And the crew looked at them — and left them to it.
+
+VANDAL: *(telling)* They had not come for goblins. They had come to put a bottle in a man's hand, and that man was plainly not here. So while the bells covered them, Toz went through the church instead, and his fingers found a cutaway panel in the altar itself: the priest's own hidden stash. A fine pipe. A packet of tobacco under a lion's seal. Twenty pieces of silver.
+
+VANDAL: *(sly)* Fiz knew the seal — the Lion Share Mercantile Group, who keep a store in that very village. Remember it, friend. A priest of the Morninglord, hiding a merchant's tobacco beneath his own altar. Small secrets have long roots.
 
 [STING: chime — 1s]
 
@@ -67,15 +71,17 @@ VANDAL: *(dry)* Neither goblin left the tower.
 
 ## ACT THREE — The warg on the drawbridge
 
-VANDAL: *(taut)* Then came the leaving, and the leaving nearly ended everything. Eno called up a Fog Cloud — a grey mercy of Eldath, rolled across the courtyard to blind the beasts. It bought them heartbeats, no more. One warg caught a scent at the drawbridge, and charged.
+VANDAL: *(taut)* Then came the leaving, and the leaving nearly ended everything. Toz called up a Fog Cloud — the storm in his blood turned to grey weather, rolled across the courtyard to blind the beasts. It bought them heartbeats, no more. One warg caught a scent at the drawbridge, and charged.
 
 VANDAL: *(grave)* Friend, I will tell it plain, as it was told to me. Eno went down on the timbers of that bridge. The cleric of the goddess of peace, bleeding out in the first hour of the tale, with a monster standing over him fit to finish it.
 
 VANDAL: *(conspiratorial)* And in that panic, hands went to the bottle. *Should we open it?* someone said. *It seems we have no other choice.* Speak the unknown name. Unmake the chains. Loose whatever slept inside, blind, and hope it was kindly. That is how close it came.
 
-VANDAL: *(quickening)* But Toz — quick Toz, with his brother dying on the planks — sent his Mage Hand to the tower winch instead, and cranked the drawbridge up mid-fight. The bridge groaned skyward with the warg still on it, stranded on the tilting timber. And Hal Stormguard, in his armour, threw himself into the moat and swam. He reached the rising bridge where Eno hung dangling from its edge, laid one hand upon him — and the paladin's gift did the rest. Lay on Hands, friend. The oldest magic the Oath carries: a touch, and the dying breathe.
+VANDAL: *(quickening)* But Fiz sent that little clockwork bird of his back to the tower — and found the truth of the thing: one winch would not move that bridge. It wanted both. So he worked the one, and then the other, and the drawbridge began to climb, a third of its height at a time, with the warg still upon it, stranded on the tilting timber.
 
-VANDAL: *(softer)* The warg toppled dead down the ramp. The bridge slammed home behind them. And on the far side of the wall, four strangers sat in the mud and learned what they now owed one another.
+VANDAL: *(taut)* Fiz lunged to drag his friend clear of it — and missed, and went into the moat. It was Hal Stormguard, in all his armour, who threw himself into that water and swam. He reached the rising bridge where Eno hung dangling from its edge, laid one hand upon him — and the paladin's gift did the rest. Lay on Hands, friend. The oldest magic the Oath carries: a touch, and the dying breathe.
+
+VANDAL: *(softer)* And it was Toz who finished it — a crossbow bolt through the beast at the last, with his brother bleeding on the planks below. The warg toppled dead down the ramp. The bridge slammed home behind them. And on the far side of the wall, four strangers sat in the mud and learned what they now owed one another.
 
 [STING: bridge — 2s]
 
@@ -87,7 +93,9 @@ VANDAL: *(warm, unfolding)* They were still catching their breath when the hoofb
 
 VANDAL: *(measured)* He rode in shouting a woman's name at the ruined walls — *Kayla! Kella!* — thinking her the one who had rung the bell. He was hunting, he said, a blonde agent of the Zhentarim called Kella, gone to ground somewhere in Nightstone — or in a cave in the Ardeep beyond.
 
-VANDAL: *(plain)* Two battered companies, one emptied village. They threw in together. Down came the drawbridge, and they swept Nightstone room by ruined room, and every goblin they found, they finished. But of the townsfolk themselves — nothing. No bodies in the houses. No bones in the pit. As if the whole village had been lifted, wholesale, out of its own life. Mark that, friend, and hold it.
+VANDAL: *(plain)* Two battered companies, one emptied village. They threw in together. Down came the drawbridge, and they swept Nightstone room by ruined room, and every goblin they found, they finished. The two in the bell tower among them — Toz took the first where it stood, and the gleeful one on the rope came down out of the air with a javelin and a crossbow bolt in it. And at last, friend, after all those hours — the bell stopped.
+
+VANDAL: *(dropping)* But of the townsfolk themselves — nothing. No bodies in the houses. No bones in the pit. As if the whole village had been lifted, wholesale, out of its own life. Mark that, friend, and hold it.
 
 [STING: bridge — 2s]
 
@@ -97,7 +105,7 @@ VANDAL: *(plain)* Two battered companies, one emptied village. They threw in tog
 
 VANDAL: *(measured, telling)* Last, they pushed into the Nightstone Inn — Molak's own house, the man they had crossed a coastline to find. A goblin lay dead across a table, a crossbow bolt in its chest that none of them had fired. Another rummaged in the kitchen, and was quickly finished. And upstairs, in what could only be Molak's private quarters — a tapestry of a mountain landscape on the wall, and a heavy wooden chest. Of Molak himself, no sign at all.
 
-VANDAL: *(amused)* Fiz, being Fiz, knelt to the lock and set to work.
+VANDAL: *(amused)* Fish Hook Finn knelt to the lock first and got nowhere. Then Fiz, being Fiz, took his turn at it — and got no further. And then Hal, being Hal, swung at the thing. They heard something break inside it. The chest stayed shut.
 
 VANDAL: *(dropping into serious, quickening)* And before it yielded, the shout went up from the watchtowers. An orc warband at the drawbridge — twenty strong, javelins out, led by a brute of a chieftain already carved half to pieces by some earlier battle, with a shaman at his elbow working to knit him back together. The orcs made their terms known at a bellow.
 
@@ -113,7 +121,7 @@ VANDAL: *(taut)* The crew and the riders took to the walls, and the bridge staye
 
 ## [CLOSING — 30s]
 
-VANDAL: *(reflective, drawing to a close)* And so the first chapter closes, friend, with more questions than blood. A village emptied of its people. An innkeeper unaccounted for, and his chest half-picked in an upstairs room. A woman named Kella, and a trail running into Ardeep Forest. And somewhere beyond the walls, something that throws boulders — at ships, at villages, at the world as it was. I could tell you what I know of giants, and of the great ordering called the Ordning that once held them all in their places. But that, friend, is for the nights ahead.
+VANDAL: *(reflective, drawing to a close)* And so the first chapter closes, friend, with more questions than blood. A village emptied of its people. An innkeeper unaccounted for, and his chest still locked in an upstairs room with something broken inside it. A woman named Kella, and a trail running into Ardeep Forest. And somewhere beyond the walls, something that throws boulders — at ships, at villages, at the world as it was. I could tell you what I know of giants, and of the great ordering called the Ordning that once held them all in their places. But that, friend, is for the nights ahead.
 
 VANDAL: *(dropping, personal)* And in a pack, wrapped in oilcloth — a bottle. Etched in the first tongue of the world. Waiting for its name. Waiting, friend, for someone desperate enough to speak it blind.
 
