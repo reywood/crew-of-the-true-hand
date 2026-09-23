@@ -43,6 +43,7 @@ A D&D 5e campaign archive for **Crew of the True Hand** — the player-side note
 
 - When summarizing a transcript into session notes, match the existing terse, bullet/short-paragraph voice rather than producing a polished prose recap.
 - Keep proper-noun spellings consistent across files; the notes are inconsistent in places (e.g. "Nighstone" vs "Nightstone", "Halrua" vs "Halruaa") — don't silently "correct" a name without checking how it's spelled elsewhere first, because some are typos and some are deliberate.
+- **State-of-the-campaign documents follow the newest session.** `campaign-state.md`, `quests.md`, and anything else describing where the crew *currently* stands must agree with the most recent session, not with whichever session you happen to be working on. Backfilling or revising an older session often surfaces facts that were later superseded; add them only where they don't contradict a later session, and never let them roll the recorded position backwards. Before editing one of these files, re-read the latest session's `summary.md` (its `## What's next` / `## Loose ends` especially) and make the doc match that.
 - Class-feature blocks in character files quote sourcebook page numbers (e.g. `(TCoE, pg. 13)`); preserve these citations when editing.
 - Transcripts are too large to read whole — use `Read` with `offset`/`limit` or `grep` for specific names/events rather than loading them in full.
 - After adding a new session note, transcript, NPC, location, or quest, re-run `truehand site build` so the site picks it up. The generator wipes `website/site/` and rebuilds from scratch — never hand-edit files under `website/site/`.
@@ -232,6 +233,7 @@ Pass through the summary one more time and check:
 - **New locations visited or named?** Add `locations/<slug>.md` files. If the location should appear on the chart on `locations.html`, also add a `"<slug>" = { x = ..., y = ... }` entry to the `[locations]` table in `toolkit/src/truehand/data/map.toml`.
 - **New leads, completed objectives, or quest status changes?** Edit `quests.md`. The website parses each `- **Name**` bullet under each `## section`; section headings determine status.
 - **Arc moved forward?** Update `campaign-state.md` — refresh `objective:` and `open_questions:` to match where the crew now stands (and set `current_location:` only to override the auto-derived location, e.g. mid-journey). This keeps the `next.html` prep hub current. The new session's `## What's next` / `## Loose ends` bullets flow into `threads.html` automatically.
+  If the session you just added is **not** the latest one on file (a backfill, or a late-arriving recap), leave `quests.md` and `campaign-state.md` describing the *latest* session's position — record the older session's developments only where they don't contradict it. See "State-of-the-campaign documents follow the newest session" above.
 
 ### 5. Regenerate the site
 
